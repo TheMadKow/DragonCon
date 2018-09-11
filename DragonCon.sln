@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2047
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragonCon.App", "Dragoncon.App\DragonCon.App.csproj", "{8474FA5F-C9D3-4065-ABE6-9096F2AC634B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonCon.Logic.Tests", "DragonCon.Tests\DragonCon.Logic.Tests.csproj", "{4A2EF32A-AA56-4459-9B2F-8BE1ACB4C1E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AEA8F518-0248-40F9-8DF9-5CB96D13A4A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonCon.Modeling", "DragonCon.Modeling\DragonCon.Modeling.csproj", "{2151C7AC-A6B7-479B-B96A-CB13791D5779}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonCon.Logic", "DragonCon.Logic\DragonCon.Logic.csproj", "{49117508-F92A-47A0-AFA3-78E90E867CCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonCon.Gateway", "DragonCon.Gateway\DragonCon.Gateway.csproj", "{3F8DC034-744A-41F9-85C7-E3ACC9978338}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8474FA5F-C9D3-4065-ABE6-9096F2AC634B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8474FA5F-C9D3-4065-ABE6-9096F2AC634B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8474FA5F-C9D3-4065-ABE6-9096F2AC634B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8474FA5F-C9D3-4065-ABE6-9096F2AC634B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A2EF32A-AA56-4459-9B2F-8BE1ACB4C1E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A2EF32A-AA56-4459-9B2F-8BE1ACB4C1E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A2EF32A-AA56-4459-9B2F-8BE1ACB4C1E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A2EF32A-AA56-4459-9B2F-8BE1ACB4C1E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2151C7AC-A6B7-479B-B96A-CB13791D5779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2151C7AC-A6B7-479B-B96A-CB13791D5779}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2151C7AC-A6B7-479B-B96A-CB13791D5779}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2151C7AC-A6B7-479B-B96A-CB13791D5779}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49117508-F92A-47A0-AFA3-78E90E867CCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49117508-F92A-47A0-AFA3-78E90E867CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49117508-F92A-47A0-AFA3-78E90E867CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49117508-F92A-47A0-AFA3-78E90E867CCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F8DC034-744A-41F9-85C7-E3ACC9978338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F8DC034-744A-41F9-85C7-E3ACC9978338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F8DC034-744A-41F9-85C7-E3ACC9978338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F8DC034-744A-41F9-85C7-E3ACC9978338}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4A2EF32A-AA56-4459-9B2F-8BE1ACB4C1E6} = {AEA8F518-0248-40F9-8DF9-5CB96D13A4A6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B1934379-A22B-4239-B57B-A4EB560DFA9C}
+	EndGlobalSection
+EndGlobal
