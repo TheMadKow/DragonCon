@@ -1,13 +1,13 @@
 ## Welcome DragonCon project
 
 ### About DragonCon
-[DragonCon](http://dragoncon.co.il) is an Israeli convention for gaming.
+[DragonCon](http://dragoncon.co.il) is an Israeli convention for gaming.<br>
 We have Roleplaying games, Live action games, board games and so much more
 
 ### About the system
 
-At some point, we needed a better system to keep this convention working.
-We offer user management (as participants), tickets pairing, event registration and more.
+At some point, we needed a better system to keep this convention working.<br>
+We want to offer user management, event registrations, ticket pairing and simpler UX both to participants and content managers.<br>
 This code is under GPL-2.0 liecnce, so feel free to poke around while we build the code.
 
 ### Version
@@ -16,7 +16,7 @@ At this point in time, we don't have anything functional. As we make progress, w
 
 ### Trello Priorities
 
-You can follow public [DragonCon trello board](https://trello.com/b/9Q1iSoSB/dragoncon) here.
+You can follow public [DragonCon Trello](https://trello.com/b/9Q1iSoSB/dragoncon) here.
 
 ### Jekyll
 ```
