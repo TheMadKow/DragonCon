@@ -1,5 +1,6 @@
-## Welcome DragonCON project
+## Welcome DragonCon project
 
+### About DragonCon
 [DragonCon](http://dragoncon.co.il) is an Israeli convention for gaming.
 We have Roleplaying games, Live action games, board games and so much more
 
