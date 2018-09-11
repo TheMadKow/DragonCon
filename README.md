@@ -1,4 +1,8 @@
-## Welcome to GitHub Pages
+## Welcome DragonCON project
+
+We are still building this page, please be patiant :)
+
+
 
 You can use the [editor on GitHub](https://github.com/TheMadKow/DragonCon/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
