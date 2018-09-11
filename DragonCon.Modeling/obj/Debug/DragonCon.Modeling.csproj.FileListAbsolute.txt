@@ -1,0 +1,10 @@
+D:\GIT\DragonCon\DragonCon\DragonCon.Modeling\bin\Debug\DragonCon.Modeling.dll
+D:\GIT\DragonCon\DragonCon\DragonCon.Modeling\bin\Debug\DragonCon.Modeling.pdb
+D:\GIT\DragonCon\DragonCon\DragonCon.Modeling\bin\Debug\NodaTime.dll
+D:\GIT\DragonCon\DragonCon\DragonCon.Modeling\bin\Debug\NodaTime.pdb
+D:\GIT\DragonCon\DragonCon\DragonCon.Modeling\bin\Debug\NodaTime.xml
+D:\GIT\DragonCon\DragonCon\DragonCon.Modeling\obj\Debug\DragonCon.Modeling.csproj.CoreCompileInputs.cache
+D:\GIT\DragonCon\DragonCon\DragonCon.Modeling\obj\Debug\DragonCon.Modeling.csproj.CopyComplete
+D:\GIT\DragonCon\DragonCon\DragonCon.Modeling\obj\Debug\DragonCon.Modeling.dll
+D:\GIT\DragonCon\DragonCon\DragonCon.Modeling\obj\Debug\DragonCon.Modeling.pdb
+D:\GIT\DragonCon\DragonCon\DragonCon.Modeling\obj\Debug\DragonCon.Modeling.csprojAssemblyReference.cache

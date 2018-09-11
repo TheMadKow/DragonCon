@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DragonCon.Gateway\DragonCon.Gateway.csproj" />
-    <ProjectReference Include="..\DragonCon.Logic\DragonCon.Logic.csproj" />
+    <ProjectReference Include="..\DragonCon.Logical\DragonCon.Logical.csproj" />
     <ProjectReference Include="..\DragonCon.Modeling\DragonCon.Modeling.csproj" />
   </ItemGroup>
 

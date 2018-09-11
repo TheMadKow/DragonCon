@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using DragonCon.Logic.Convention;
-using DragonCon.Logic.Factories;
+using DragonCon.Logical.Convention;
+using DragonCon.Logical.Factories;
 using DragonCon.Modeling.Gateways;
 using DragonCon.Modeling.Models.Convention;
 using DragonCon.Modeling.Models.Wrappers;

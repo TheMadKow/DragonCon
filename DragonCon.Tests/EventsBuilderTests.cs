@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DragonCon.Logic.Requests;
+using DragonCon.Logical.Requests;
 using DragonCon.Modeling.Gateways;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Events;
@@ -34,12 +34,12 @@ namespace DragonCon.Logic.Tests
                 },
                 EventActivityId = "Activity-ID",
                 EventSystemId = "System-ID",
-                Restrictions = new EventRestriction()
-                {
-                    Age = new AgeRestriction(),
-                    MaxParticipants = 5,
-                    MinParticipants = 2
-                }, //TODO maybe restriction logic change
+                //Restrictions = new EventRestriction()
+                //{
+                //    Age = new AgeRestriction(),
+                //    MaxParticipants = 5,
+                //    MinParticipants = 2
+                //}, //TODO maybe restriction logic change
                 Tags = new List<string>()
                 {
                     "מהמם",
