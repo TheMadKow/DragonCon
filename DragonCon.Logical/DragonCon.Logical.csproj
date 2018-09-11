@@ -31,15 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.AspNetCore.Mvc.Abstractions">
-      <HintPath>C:\Users\The Mad Kow\.nuget\packages\microsoft.aspnetcore.mvc.abstractions\2.1.2\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNetCore.Mvc.Core">
-      <HintPath>C:\Users\The Mad Kow\.nuget\packages\microsoft.aspnetcore.mvc.core\2.1.2\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures">
-      <HintPath>C:\Users\The Mad Kow\.nuget\packages\microsoft.aspnetcore.mvc.viewfeatures\2.1.2\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll</HintPath>
-    </Reference>
     <Reference Include="NodaTime">
       <HintPath>C:\Users\The Mad Kow\.nuget\packages\nodatime\2.4.0\lib\net45\NodaTime.dll</HintPath>
     </Reference>
@@ -72,6 +63,11 @@
       <Project>{2151c7ac-a6b7-479b-b96a-cb13791d5779}</Project>
       <Name>DragonCon.Modeling</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc">
+      <Version>2.1.2</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
