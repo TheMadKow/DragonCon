@@ -1,33 +1,23 @@
 ## Welcome DragonCON project
 
-We are still building this page, please be patiant :)
+[DragonCon](http://dragoncon.co.il) is an Israeli convention for gaming.
+We have Roleplaying games, Live action games, board games and so much more
 
+### About the system
 
+At some point, we needed a better system to keep this convention working.
+We offer user management (as participants), tickets pairing, event registration and more.
+This code is under GPL-2.0 liecnce, so feel free to poke around while we build the code.
 
-You can use the [editor on GitHub](https://github.com/TheMadKow/DragonCon/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+### Version
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+At this point in time, we don't have anything functional. As we make progress, we will update this section.
 
-### Markdown
+### Trello Priorities
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+You can follow public [DragonCon trello board](https://trello.com/b/9Q1iSoSB/dragoncon) here.
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+### Jekyll
 ```
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
