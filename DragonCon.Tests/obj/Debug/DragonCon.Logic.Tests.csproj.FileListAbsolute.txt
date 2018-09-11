@@ -1,2 +1,0 @@
-D:\GIT\DragonCon\DragonCon\DragonCon.Tests\obj\Debug\DragonCon.Logic.Tests.csprojAssemblyReference.cache
-D:\GIT\DragonCon\DragonCon\DragonCon.Tests\obj\Debug\DragonCon.Logic.Tests.csproj.CoreCompileInputs.cache
