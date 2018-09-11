@@ -4,3 +4,13 @@
 
 /.vs/DragonCon
 /packages
+/DragonCon.App/bin
+/DragonCon.App/obj
+/DragonCon.Gateway/bin
+/DragonCon.Gateway/obj
+/DragonCon.Logical/bin
+/DragonCon.Logical/obj
+/DragonCon.Modeling/bin
+/DragonCon.Modeling/obj
+/DragonCon.Tests/bin
+/DragonCon.Tests/obj
