@@ -16,7 +16,7 @@ We also want to support staff's backstage work, with different permissions.
 <br>
 
 ## Who are we ?
-We are **Eliran Teller** (github/TheMadKow) and **Adi Unger**, working together in pair programming style.<br>
+We are [**Eliran Teller**](https://www.facebook.com/TheMadKow) and [**Adi Unger**](https://www.facebook.com/adi.unger), working together in pair programming style.<br>
 
 ## Version
 
