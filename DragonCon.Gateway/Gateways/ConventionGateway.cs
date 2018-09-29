@@ -71,21 +71,6 @@ namespace DragonCon.RavenDB.Gateways
             }
         }
 
-        private string ParseRoleFromType(TicketType type, string conId)
-        {
-            switch (type)
-            {
-                case TicketType.GameMasterTicket:
-                    return Roles.GameMasterForConvention(conId);
-                case TicketType.VolunteerTicket:
-                    return Roles.VolunteerForConvention(conId);
-
-            }
-
-            return string.Empty;
-        }
-
-
         private static void StoreConvHalls(ConventionWrapper convention, Convention convData, IDocumentSession session)
         {
             convData.HallIds = new List<string>();

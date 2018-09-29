@@ -55,5 +55,6 @@ namespace DragonCon.Modeling.Models.Tickets
 
         public List<ConventionDay> Days { get; set; }
         public bool IsUnlimited => ActivitiesAllowed == null;
+        public LimitedToRole LimitedToRoleType { get; set; }
     }
 }

@@ -61,6 +61,7 @@
     <Compile Include="Models\Payment\IPaymentInvoice.cs" />
     <Compile Include="Models\Tickets\ITicket.cs" />
     <Compile Include="Models\Common\Wrapper.cs" />
+    <Compile Include="Models\Tickets\LimitedToRole.cs" />
     <Compile Include="Models\Tracking\TicketTrackAction.cs" />
     <Compile Include="Models\Tracking\TicketsTracking.cs" />
     <Compile Include="Models\Tracking\EventTrackAction.cs" />

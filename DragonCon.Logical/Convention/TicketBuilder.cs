@@ -19,14 +19,20 @@ namespace DragonCon.Logical.Convention
             _parent = parent;
         }
 
-        public ConventionBuilder AddTicket(TicketType type, string ticketName, params LocalDate[] localDates)
+        public ConventionBuilder AddTicket(string ticketName, params LocalDate[] localDates)
         {
-            return AddTicket(type, ticketName, localDates.ToList());
+            return AddTicket(LimitedToRole.None, ticketName, localDates.ToList());
         }
 
-        public ConventionBuilder AddTicket(TicketType type, string ticketName, List<LocalDate> localDates)
+        public ConventionBuilder AddLimitedTicket(LimitedToRole role, string ticketName, params LocalDate[] localDates)
         {
-            ThrowIfTicketnameEmpty(ticketName);
+            return AddTicket(role, ticketName, localDates.ToList());
+        }
+
+
+        public ConventionBuilder AddTicket(LimitedToRole role, string ticketName, List<LocalDate> localDates)
+        {
+            ThrowIfTicketNameEmpty(ticketName);
             ThrowIfTicketExists(ticketName);
 
             foreach (var date in localDates)
@@ -35,11 +41,11 @@ namespace DragonCon.Logical.Convention
                     throw new Exception("Ticket-Day does not exists");
             }
 
-            var ticket = new TicketWrapper(type)
+            var ticket = new TicketWrapper()
             {
                 Name = ticketName,
                 Days = localDates.Select(x => _convention.Days[x]).ToList(),
-                TicketType = type
+                LimitedToRoleType = role
             };
 
             _convention.NameAndTickets.Add(ticket.Name, ticket);
@@ -60,7 +66,7 @@ namespace DragonCon.Logical.Convention
         }
 
 
-        private void ThrowIfTicketnameEmpty(string ticketName)
+        private void ThrowIfTicketNameEmpty(string ticketName)
         {
             if (string.IsNullOrEmpty(ticketName) || string.IsNullOrWhiteSpace(ticketName))
                 throw new Exception("Empty ticket name");   

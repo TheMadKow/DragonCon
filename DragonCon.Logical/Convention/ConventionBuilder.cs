@@ -68,7 +68,7 @@ namespace DragonCon.Logical.Convention
         {
             foreach (var ticket in oldCon.NameAndTickets)
             {
-                Tickets.AddTicket(ticket.Value.TicketType, ticket.Key, ticket.Value.Days.Select(x => x.Date).ToList());
+                Tickets.AddTicket(ticket.Key, ticket.Value.LimitedToRole, ticket.Value.Days.Select(x => x.Date).ToList());
                 Tickets.SetTicketPrice(ticket.Key, ticket.Value.Price);
                 Tickets.SetTransactionCode(ticket.Key, ticket.Value.TransactionCode);
 
