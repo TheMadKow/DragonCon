@@ -8,7 +8,9 @@ We have Roleplaying games, Live action games, board games and so much more
 
 At some point, we needed a better system to keep this convention working.<br>
 We want to offer user management, event registrations, ticket pairing and simpler UX both to participants and content managers.<br>
-This code is under GPL-2.0 liecnce, so feel free to poke around while we build the code.
+This code is under GPL-2.0 liecnce, so feel free to poke around while we build the code.<br>
+<br>
+We are **Eliran Teller** (@github/TheMadKow) and **Adi Unger**, working XP style.
 
 ### Version
 
