@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using DragonCon.Modeling.Gateways;
-using DragonCon.Modeling.Models.Convention;
-using DragonCon.Modeling.Models.Wrappers;
+using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.HallsTables;
+using DragonCon.Modeling.Models.Tickets;
 using NodaTime;
 
 namespace DragonCon.Logical.Convention
@@ -67,11 +68,14 @@ namespace DragonCon.Logical.Convention
         {
             foreach (var ticket in oldCon.NameAndTickets)
             {
-                Tickets.AddTicket(ticket.Key, ticket.Value.Days.Select(x => x.Date).ToList());
+                Tickets.AddTicket(ticket.Value.TicketType, ticket.Key, ticket.Value.Days.Select(x => x.Date).ToList());
                 Tickets.SetTicketPrice(ticket.Key, ticket.Value.Price);
                 Tickets.SetTransactionCode(ticket.Key, ticket.Value.TransactionCode);
-                Tickets.SetUnlimitedActivities(ticket.Key, ticket.Value.UnlimitedActivities);
-                Tickets.SetNumberOfActivities(ticket.Key, ticket.Value.ActivitiesAllowed);
+
+                if (ticket.Value.IsUnlimited)
+                    Tickets.SetUnlimitedActivities(ticket.Key);
+                else if (ticket.Value.ActivitiesAllowed != null)
+                    Tickets.SetNumberOfActivities(ticket.Key, ticket.Value.ActivitiesAllowed.Value);
             }
         }
         private void ThrowIfRequestInvalid(params Migrate[] migrations)
@@ -86,7 +90,11 @@ namespace DragonCon.Logical.Convention
             foreach (var hall in _convention.NameAndHall)
             {
                 Halls.AddHall(hall.Key, hall.Value.Description);
-                Halls.SetHallTables(hall.Key, hall.Value.Tables.ToArray());
+                var newTables = hall.Value.Tables.Select(x => new Table(hall.Key, x.Name)
+                {
+                    Notes = x.Notes
+                });
+                Halls.SetHallTables(hall.Key, newTables);
             }
         }
 

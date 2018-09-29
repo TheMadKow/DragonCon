@@ -2,7 +2,7 @@
 
 namespace DragonCon.Modeling.Models.Tickets
 {
-    public class Ticket
+    public class Ticket : ITicket
     {
         public string Id { get; set; }
         public List<string> DayIds { get; set; }
@@ -10,7 +10,7 @@ namespace DragonCon.Modeling.Models.Tickets
         public double Price { get; set; }
         public string TransactionCode { get; set; }
 
-        public int ActivitiesAllowed { get; set; }
-        public bool UnlimitedActivities { get;set; }
+        public int? ActivitiesAllowed { get; set; }
+        public string LimitedToRole { get; set; }
     }
 }

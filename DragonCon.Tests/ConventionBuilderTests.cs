@@ -2,8 +2,9 @@
 using DragonCon.Logical.Convention;
 using DragonCon.Logical.Factories;
 using DragonCon.Modeling.Gateways;
-using DragonCon.Modeling.Models.Convention;
-using DragonCon.Modeling.Models.Wrappers;
+using DragonCon.Modeling.Models.Common;
+using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.Tickets;
 using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NodaTime;
@@ -19,7 +20,7 @@ namespace DragonCon.Logic.Tests
         }
 
         [TestMethod]
-        public void TestDaysManipulations_NewConvention_Success()
+        public void ConventionBuilder_NewConventionManipulateDates_Success()
         {
             var preGen = new StrategyFactory().TimeSlots(new LocalTime(9, 0), new LocalTime(23, 0),
                 TimeSlotStrategy.Exact246Windows);
@@ -45,7 +46,7 @@ namespace DragonCon.Logic.Tests
         }
 
         [TestMethod]
-        public void TestHallsManipulations_NewConvention_Success()
+        public void ConventionBuilder_NewConventionManipulateHallsTables_Success()
         {
             var tables = HallsBuilder.RoomsFromNumericRange(1, 25);
 
@@ -62,17 +63,17 @@ namespace DragonCon.Logic.Tests
 
         [TestMethod]
 
-        public void TestTicketManipulations_NewConvention_Success()
+        public void ConventionBuilder_NewConventionManipulateTickets_Success()
         {
             var builder = new ConventionBuilder(GetGateway())
                 .NewConvention("Test Convention")
                 .Days.AddDay(new LocalDate(2018, 7, 7), new LocalTime(9, 0), new LocalTime(23, 0))
                 .Days.AddDay(new LocalDate(2018, 7, 8), new LocalTime(9, 0), new LocalTime(23, 0))
-                .Tickets.AddTicket("AllDay", new LocalDate(2018, 7, 7), new LocalDate(2018, 7, 8))
+                .Tickets.AddTicket(TicketType.RegularTicket, "AllDay", new LocalDate(2018, 7, 7), new LocalDate(2018, 7, 8))
                 .Tickets.SetTransactionCode("AllDay", "Charge-Money")
                 .Tickets.SetNumberOfActivities("AllDay", 5)
                 .Tickets.SetTicketPrice("AllDay", 70)
-                .Tickets.SetUnlimitedActivities("AllDay", false)
+                .Tickets.SetUnlimitedActivities("AllDay")
                 .Save();
 
 
@@ -88,7 +89,8 @@ namespace DragonCon.Logic.Tests
             //builder.Tickets.Remove("AllDay");
         }
 
-        public void TestConventionMigrateFromLastYear()
+        [TestMethod]
+        public void ConventionBuilder_MigrateToNewConvention_Success()
         {
             var oldCon = new ConventionWrapper();
 

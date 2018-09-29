@@ -1,6 +1,6 @@
 ﻿using System;
-using DragonCon.Modeling.Models.Convention;
-using DragonCon.Modeling.Models.Wrappers;
+using DragonCon.Modeling.Models.Common;
+using DragonCon.Modeling.Models.Conventions;
 using NodaTime;
 
 namespace DragonCon.Logical.Convention

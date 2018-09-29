@@ -2,9 +2,9 @@
 {
     public enum TicketTrackAction
     {
-        ParticipantPaid,
-        ParticipantChanged,
-        ParticipantCanceled,
+        SelfPaid,
+        SelfChanged,
+        SelfCanceled,
 
         ManagerPaid,
         ManagerChanged,

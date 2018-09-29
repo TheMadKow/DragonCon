@@ -27,17 +27,17 @@ namespace DragonCon.Logical.Requests
         public string EventSystemId { get; set; }
         public List<string> Tags { get; set; }
 
-        public ConventionEvent ToEvent()
+        public ConEvent ToEvent()
         {
-            return new ConventionEvent()
+            return new ConEvent()
             {
                 Description = this.Description,
                 Comments = this.Comments,
                 Name = this.Name,
                 ConventionDayId = this.DayId,
                 ActivityId = this.EventActivityId,
-                ManagerId = this.UserId,
-                HelpersId = this.HelperIds,
+                GameMasterId = this.UserId,
+                HelperIds = this.HelperIds,
                 SystemId = this.EventSystemId,
                 Status = EventStatus.Pending,
                 TimeSlot = this.Timeslide,

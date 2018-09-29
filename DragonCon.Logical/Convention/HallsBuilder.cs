@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DragonCon.Modeling.Models.Convention;
-using DragonCon.Modeling.Models.Wrappers;
+using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.HallsTables;
 
 namespace DragonCon.Logical.Convention
 {
@@ -23,7 +23,7 @@ namespace DragonCon.Logical.Convention
             {
                 Name = hallName,
                 Description = hallDesc,
-                Tables = new List<string>()
+                Tables = new List<Table>()
             });
             return _builder;
         }
@@ -48,10 +48,23 @@ namespace DragonCon.Logical.Convention
             return _builder;
         }
 
-        public ConventionBuilder SetHallTables(string hallName, string[] tables)
+        public ConventionBuilder SetHallTables(string hallName, string[] tableNames)
         {
             ThrowIfHallDoesntExists(hallName);
-            _convention.NameAndHall[hallName].Tables = tables.ToList();
+            var hall = _convention.NameAndHall[hallName];
+            hall.Tables = new List<Table>();
+            foreach (var table in tableNames)
+            {
+                hall.Tables.Add(new Table(hall.Id, table));
+            }
+            return _builder;
+        }
+
+        public ConventionBuilder SetHallTables(string hallName, IEnumerable<Table> tables)
+        {
+            ThrowIfHallDoesntExists(hallName);
+            var hall = _convention.NameAndHall[hallName];
+            hall.Tables = tables.ToList();
             return _builder;
         }
 

@@ -49,15 +49,14 @@
     <Compile Include="Convention\DaysBuilder.cs" />
     <Compile Include="Convention\HallsBuilder.cs" />
     <Compile Include="Convention\TicketBuilder.cs" />
+    <Compile Include="Events\EventsBuilder.cs" />
     <Compile Include="Factories\StrategyFactory.cs" />
     <Compile Include="Factories\TimeSlotOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\EventRequest.cs" />
     <Compile Include="Requests\TimeSlotRequest.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\DragonCon.Modeling\DragonCon.Modeling.csproj">
       <Project>{2151c7ac-a6b7-479b-b96a-cb13791d5779}</Project>

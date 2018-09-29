@@ -5,7 +5,7 @@ using NLog.Targets;
 using NodaTime;
 using Raven.Client.Documents;
 
-namespace DragonCon.Gateway.NLog
+namespace DragonCon.RavenDB.NLog
 {
     [Target("RavenDb")]
     public class RavenNLogTarget : TargetWithLayout 
@@ -43,7 +43,7 @@ namespace DragonCon.Gateway.NLog
                 }
             };
 
-            using (var session = Store.OpenSession(DbName))
+            using (var session = Store.OpenSession())
             {
                 session.Store(entry);
                 session.SaveChanges();

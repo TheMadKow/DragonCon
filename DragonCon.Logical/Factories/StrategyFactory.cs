@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using DragonCon.Modeling.Models.Convention;
+using DragonCon.Modeling.Models.Common;
 using NodaTime;
 
 namespace DragonCon.Logical.Factories
