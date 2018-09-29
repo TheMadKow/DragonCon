@@ -1,4 +1,4 @@
-﻿using DragonCon.Modeling.Models.Wrappers;
+﻿using DragonCon.Modeling.Models.Conventions;
 
 namespace DragonCon.Modeling.Gateways
 {

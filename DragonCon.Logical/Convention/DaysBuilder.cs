@@ -1,6 +1,6 @@
 ﻿using System;
-using DragonCon.Modeling.Models.Convention;
-using DragonCon.Modeling.Models.Wrappers;
+using DragonCon.Modeling.Models.Common;
+using DragonCon.Modeling.Models.Conventions;
 using NodaTime;
 
 namespace DragonCon.Logical.Convention
@@ -10,6 +10,16 @@ namespace DragonCon.Logical.Convention
         private readonly ConventionBuilder _builder;
         private readonly ConventionWrapper _convention;
 
+        public ConDayWrapper this[LocalDate key]
+        {
+            get
+            {
+                if (_convention.Days.ContainsKey(key))
+                    return _convention.Days[key];
+                return null;
+            }
+        }
+
         public DaysBuilder(ConventionBuilder builder, ConventionWrapper convention)
         {
             this._convention = convention;
@@ -18,7 +28,7 @@ namespace DragonCon.Logical.Convention
         
         public ConventionBuilder UpdateDay(LocalDate date, LocalTime from, LocalTime to)
         {
-            var newRequest = new ConventionDay(date, from, to);
+            var newRequest = new ConDay(date, from, to);
             ThrowsInvalidHours(newRequest);
             ThrowsIfDateNotExists(newRequest.Date);
 
@@ -40,10 +50,10 @@ namespace DragonCon.Logical.Convention
 
         public ConventionBuilder AddDay(LocalDate date, LocalTime from, LocalTime to)
         {
-            var day = new ConventionDay(date, from, to);
+            var day = new ConDay(date, from, to);
             ThrowsInvalidHours(day);
             ThrowsIfDateExists(day.Date);
-            _convention.Days.Add(day.Date, day);
+            _convention.Days.Add(day.Date, new ConDayWrapper(day));
 
             return _builder;
         }
@@ -73,7 +83,7 @@ namespace DragonCon.Logical.Convention
         }
 
 
-        private static void ThrowsInvalidHours(ConventionDay day)
+        private static void ThrowsInvalidHours(ConDay day)
         {
             if (day.StartTime >= day.EndTime)
             {

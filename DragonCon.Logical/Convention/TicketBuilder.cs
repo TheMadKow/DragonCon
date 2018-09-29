@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DragonCon.Modeling.Models.Wrappers;
+using DragonCon.Modeling.Models.Common;
+using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.Tickets;
 using NodaTime;
 
 namespace DragonCon.Logical.Convention
@@ -10,6 +12,15 @@ namespace DragonCon.Logical.Convention
     {
         private readonly ConventionBuilder _parent;
         private readonly ConventionWrapper _convention;
+        public TicketWrapper this[string key]
+        {
+            get
+            {
+                if (_convention.NameAndTickets.ContainsKey(key))
+                    return _convention.NameAndTickets[key];
+                return null;
+            }
+        }
 
         public TicketBuilder(ConventionBuilder parent, ConventionWrapper convention)
         {
@@ -19,12 +30,18 @@ namespace DragonCon.Logical.Convention
 
         public ConventionBuilder AddTicket(string ticketName, params LocalDate[] localDates)
         {
-            return AddTicket(ticketName, localDates.ToList());
+            return AddTicket(TicketLimitation.None, ticketName, localDates.ToList());
         }
 
-        public ConventionBuilder AddTicket(string ticketName, List<LocalDate> localDates)
+        public ConventionBuilder AddLimitedTicket(TicketLimitation role, string ticketName, params LocalDate[] localDates)
         {
-            ThrowIfTicketnameEmpty(ticketName);
+            return AddTicket(role, ticketName, localDates.ToList());
+        }
+
+
+        public ConventionBuilder AddTicket(TicketLimitation role, string ticketName, List<LocalDate> localDates)
+        {
+            ThrowIfTicketNameEmpty(ticketName);
             ThrowIfTicketExists(ticketName);
 
             foreach (var date in localDates)
@@ -36,12 +53,14 @@ namespace DragonCon.Logical.Convention
             var ticket = new TicketWrapper()
             {
                 Name = ticketName,
-                Days = localDates.Select(x => _convention.Days[x]).ToList()
+                Days = localDates.Select(x => _parent.Days[x]).ToList(),
+                TicketLimitation = role
             };
 
             _convention.NameAndTickets.Add(ticket.Name, ticket);
             return _parent;
         }
+
 
         private void ThrowIfTicketExists(string ticketName)
         {
@@ -56,7 +75,7 @@ namespace DragonCon.Logical.Convention
         }
 
 
-        private void ThrowIfTicketnameEmpty(string ticketName)
+        private void ThrowIfTicketNameEmpty(string ticketName)
         {
             if (string.IsNullOrEmpty(ticketName) || string.IsNullOrWhiteSpace(ticketName))
                 throw new Exception("Empty ticket name");   
@@ -74,7 +93,6 @@ namespace DragonCon.Logical.Convention
             ThrowIfTicketNotExists(ticketName);
             ThrowIfActivityInvalid(i);
             _convention.NameAndTickets[ticketName].ActivitiesAllowed = i;
-            _convention.NameAndTickets[ticketName].UnlimitedActivities = false;
             return _parent;
         }
 
@@ -98,13 +116,10 @@ namespace DragonCon.Logical.Convention
                 throw new Exception("Cannot set negative price");
         }
 
-        public ConventionBuilder SetUnlimitedActivities(string ticketName, bool state)
+        public ConventionBuilder SetUnlimitedActivities(string ticketName)
         {
             ThrowIfTicketNotExists(ticketName);
-            _convention.NameAndTickets[ticketName].UnlimitedActivities = state;
-            if (state)
-                _convention.NameAndTickets[ticketName].ActivitiesAllowed = 0;
-
+            _convention.NameAndTickets[ticketName].ActivitiesAllowed = null;
             return _parent;
         }
     }

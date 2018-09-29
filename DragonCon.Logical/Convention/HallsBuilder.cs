@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DragonCon.Modeling.Models.Convention;
-using DragonCon.Modeling.Models.Wrappers;
+using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.HallsTables;
 
 namespace DragonCon.Logical.Convention
 {
@@ -10,6 +10,16 @@ namespace DragonCon.Logical.Convention
     {
         private readonly ConventionBuilder _builder;
         private readonly ConventionWrapper _convention;
+        public HallWrapper this[string key]
+        {
+            get
+            {
+                if (_convention.NameAndHall.ContainsKey(key))
+                    return _convention.NameAndHall[key];
+                return null;
+            }
+        }
+
         public HallsBuilder(ConventionBuilder builder, ConventionWrapper convention)
         {
             _convention = convention;
@@ -19,11 +29,11 @@ namespace DragonCon.Logical.Convention
         public ConventionBuilder AddHall(string hallName, string hallDesc)
         {
             ThrowIfHallExists(hallName);
-            _convention.NameAndHall.Add(hallName, new Hall()
+            _convention.NameAndHall.Add(hallName, new HallWrapper()
             {
                 Name = hallName,
                 Description = hallDesc,
-                Tables = new List<string>()
+                Tables = new List<ITable>()
             });
             return _builder;
         }
@@ -48,10 +58,23 @@ namespace DragonCon.Logical.Convention
             return _builder;
         }
 
-        public ConventionBuilder SetHallTables(string hallName, string[] tables)
+        public ConventionBuilder SetHallTables(string hallName, string[] tableNames)
         {
             ThrowIfHallDoesntExists(hallName);
-            _convention.NameAndHall[hallName].Tables = tables.ToList();
+            var hall = _convention.NameAndHall[hallName];
+            hall.Tables = new List<ITable>();
+            foreach (var table in tableNames)
+            {
+                hall.Tables.Add(new Table(hall.Id, table));
+            }
+            return _builder;
+        }
+
+        public ConventionBuilder SetHallTables(string hallName, IEnumerable<ITable> tables)
+        {
+            ThrowIfHallDoesntExists(hallName);
+            var hall = _convention.NameAndHall[hallName];
+            hall.Tables = tables.ToList();
             return _builder;
         }
 

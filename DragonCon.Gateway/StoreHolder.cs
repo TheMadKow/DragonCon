@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Raven.Client.Documents;
 
-namespace DragonCon.Gateway
+namespace DragonCon.RavenDB
 {
     public class StoreHolder
     {
