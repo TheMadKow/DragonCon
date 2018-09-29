@@ -35,8 +35,8 @@ namespace DragonCon.Logical.Convention
             _convention = new ConventionWrapper
             {
                 Name = name,
-                Days = new Dictionary<LocalDate, ConventionDay>(),
-                NameAndHall = new Dictionary<string, Hall>(),
+                Days = new Dictionary<LocalDate, ConDay>(),
+                NameAndHall = new Dictionary<string, IHall>(),
                 NameAndTickets = new Dictionary<string, TicketWrapper>()
             };
             CreateSubBuilders();

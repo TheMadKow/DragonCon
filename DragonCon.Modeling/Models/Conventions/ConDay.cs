@@ -3,9 +3,9 @@ using NodaTime;
 
 namespace DragonCon.Modeling.Models.Conventions
 {
-    public class ConventionDay
+    public class ConDay
     {
-        public ConventionDay(LocalDate date, LocalTime start, LocalTime end)
+        public ConDay(LocalDate date, LocalTime start, LocalTime end)
         {
             Date = date;
             StartTime = start;

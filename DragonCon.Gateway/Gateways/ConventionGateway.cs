@@ -38,8 +38,8 @@ namespace DragonCon.RavenDB.Gateways
                 {
                     Name = convention.Name,
                     Id = convention.Id,
-                    Days = session.Load<ConventionDay>(convention.DayIds).Select(x => x.Value).ToDictionary(x => x.Date, x => x),
-                    NameAndHall = session.Load<Hall>(convention.HallIds).Select(x => x.Value).ToDictionary(x => x.Name, x => x),
+                    Days = session.Load<ConDay>(convention.DayIds).Select(x => x.Value).ToDictionary(x => x.Date, x => new ConDayWrapper(x)),
+                    NameAndHall = session.Load<Hall>(convention.HallIds).Select(x => x.Value).ToDictionary(x => x.Name, x => new HallWrapper(x)),
                     NameAndTickets = session.Load<Ticket>(convention.TicketIds).Select(x => x.Value).ToDictionary(x => x.Name, x => new TicketWrapper(x)),
                 };
             }
@@ -66,6 +66,7 @@ namespace DragonCon.RavenDB.Gateways
             convData.TicketIds = new List<string>();
             foreach (var ticket in convention.NameAndTickets)
             {
+                // TODO map back to model
                 session.Store(ticket.Value);
                 convData.TicketIds.Add(ticket.Value.Id);
             }

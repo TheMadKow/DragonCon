@@ -49,10 +49,14 @@
     <Compile Include="Models\Common\AgeRestrictionTemplate.cs" />
     <Compile Include="Models\Common\SizeRestriction.cs" />
     <Compile Include="Models\Common\AgeRestriction.cs" />
+    <Compile Include="Models\Conventions\ConDayWrapper.cs" />
     <Compile Include="Models\Conventions\Convention.cs" />
-    <Compile Include="Models\Conventions\ConventionDay.cs" />
+    <Compile Include="Models\Conventions\ConDay.cs" />
+    <Compile Include="Models\HallsTables\HallWrapper.cs" />
     <Compile Include="Models\HallsTables\Hall.cs" />
     <Compile Include="Models\Conventions\PhoneRecord.cs" />
+    <Compile Include="Models\HallsTables\IHall.cs" />
+    <Compile Include="Models\HallsTables\ITable.cs" />
     <Compile Include="Models\HallsTables\Table.cs" />
     <Compile Include="Models\Common\TimeSlotStrategy.cs" />
     <Compile Include="Models\Events\ConEvent.cs" />
@@ -70,12 +74,11 @@
     <Compile Include="Models\Common\EventSystem.cs" />
     <Compile Include="Models\Identities\FullParticipant.cs" />
     <Compile Include="Models\Identities\IParticipant.cs" />
-    <Compile Include="Models\Identities\LimitedParticipant.cs" />
+    <Compile Include="Models\Identities\ParticipantLimited.cs" />
     <Compile Include="Models\Identities\Participant.cs" />
     <Compile Include="Models\Payment\PaymentInvoice.cs" />
     <Compile Include="Models\Identities\Roles.cs" />
     <Compile Include="Models\Tracking\EventsTracking.cs" />
-    <Compile Include="Models\System\Menu.cs" />
     <Compile Include="Models\System\SystemConfiguration.cs" />
     <Compile Include="Models\Tickets\Ticket.cs" />
     <Compile Include="Models\Common\TimeSlot.cs" />
@@ -83,8 +86,9 @@
     <Compile Include="Models\Conventions\ConventionWrapper.cs" />
     <Compile Include="Models\Tickets\TicketWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\ErrorViewModel.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

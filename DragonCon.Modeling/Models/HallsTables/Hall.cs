@@ -2,11 +2,11 @@
 
 namespace DragonCon.Modeling.Models.HallsTables
 {
-    public class Hall
+    public class Hall : IHall
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public List<Table> Tables { get; set; }
+        public List<ITable> Tables { get; set; }
         public string Description { get; set; }
     }
 }

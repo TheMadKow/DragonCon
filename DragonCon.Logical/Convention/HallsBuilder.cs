@@ -23,7 +23,7 @@ namespace DragonCon.Logical.Convention
             {
                 Name = hallName,
                 Description = hallDesc,
-                Tables = new List<Table>()
+                Tables = new List<ITable>()
             });
             return _builder;
         }
@@ -52,7 +52,7 @@ namespace DragonCon.Logical.Convention
         {
             ThrowIfHallDoesntExists(hallName);
             var hall = _convention.NameAndHall[hallName];
-            hall.Tables = new List<Table>();
+            hall.Tables = new List<ITable>();
             foreach (var table in tableNames)
             {
                 hall.Tables.Add(new Table(hall.Id, table));
@@ -60,7 +60,7 @@ namespace DragonCon.Logical.Convention
             return _builder;
         }
 
-        public ConventionBuilder SetHallTables(string hallName, IEnumerable<Table> tables)
+        public ConventionBuilder SetHallTables(string hallName, IEnumerable<ITable> tables)
         {
             ThrowIfHallDoesntExists(hallName);
             var hall = _convention.NameAndHall[hallName];

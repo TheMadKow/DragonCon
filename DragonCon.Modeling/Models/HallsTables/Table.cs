@@ -1,6 +1,6 @@
 ﻿namespace DragonCon.Modeling.Models.HallsTables
 {
-    public class Table
+    public class Table : ITable
     {
         public Table(string hallId, string name)
         {

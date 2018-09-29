@@ -5,12 +5,10 @@ namespace DragonCon.Modeling.Models.System
     public class SystemConfiguration
     {
         public string ActiveConventionId { get; set; }
-        
+     
         public bool AllowEventsRegistration { get; set; }
-        public bool AllowEventRegistrationUpdates { get; set; }
-        public bool AllowEventRequests { get; set; }
-
-
-        public List<Menu> Menus { get; set; }
+        public bool AllowEventRegistrationChanges { get; set; }
+        public bool AllowEventSuggestions { get; set; }
+        public bool AllowPayments { get;set; }
     }
 }
