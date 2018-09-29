@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DragonCon.Modeling.Models.Tickets
 {
-    public enum LimitedToRole
+    public enum TicketLimitation
     {
         None,
         GameMaster,

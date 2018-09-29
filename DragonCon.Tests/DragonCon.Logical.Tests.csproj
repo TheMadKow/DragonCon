@@ -56,7 +56,6 @@
   <ItemGroup>
     <Compile Include="ConventionBuilderTests.cs" />
     <Compile Include="EventsBuilderTests.cs" />
-    <Compile Include="RavenTests\FakeServerLocatior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

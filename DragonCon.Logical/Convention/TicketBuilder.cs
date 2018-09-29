@@ -21,16 +21,16 @@ namespace DragonCon.Logical.Convention
 
         public ConventionBuilder AddTicket(string ticketName, params LocalDate[] localDates)
         {
-            return AddTicket(LimitedToRole.None, ticketName, localDates.ToList());
+            return AddTicket(TicketLimitation.None, ticketName, localDates.ToList());
         }
 
-        public ConventionBuilder AddLimitedTicket(LimitedToRole role, string ticketName, params LocalDate[] localDates)
+        public ConventionBuilder AddLimitedTicket(TicketLimitation role, string ticketName, params LocalDate[] localDates)
         {
             return AddTicket(role, ticketName, localDates.ToList());
         }
 
 
-        public ConventionBuilder AddTicket(LimitedToRole role, string ticketName, List<LocalDate> localDates)
+        public ConventionBuilder AddTicket(TicketLimitation role, string ticketName, List<LocalDate> localDates)
         {
             ThrowIfTicketNameEmpty(ticketName);
             ThrowIfTicketExists(ticketName);
@@ -45,7 +45,7 @@ namespace DragonCon.Logical.Convention
             {
                 Name = ticketName,
                 Days = localDates.Select(x => _convention.Days[x]).ToList(),
-                LimitedToRoleType = role
+                TicketLimitation = role
             };
 
             _convention.NameAndTickets.Add(ticket.Name, ticket);

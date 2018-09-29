@@ -47,14 +47,8 @@ namespace DragonCon.Modeling.Models.Tickets
             set => Model.ActivitiesAllowed = value;
         }
 
-        public string LimitedToRole
-        {
-            get => Model.LimitedToRole;
-            set => Model.LimitedToRole = value;
-        }
-
         public List<ConventionDay> Days { get; set; }
         public bool IsUnlimited => ActivitiesAllowed == null;
-        public LimitedToRole LimitedToRoleType { get; set; }
+        public TicketLimitation TicketLimitation { get; set; }
     }
 }
