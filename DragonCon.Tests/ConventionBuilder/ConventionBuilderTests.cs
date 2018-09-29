@@ -6,12 +6,12 @@ using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Tickets;
 using FakeItEasy;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NodaTime;
+using NUnit.Framework;
 
 namespace DragonCon.Logic.Tests.ConventionBuilder
 {
-    [TestClass]
+    [TestFixture]
     public class ConventionBuilderTests
     {
         private IConventionGateway GetGateway()
@@ -19,37 +19,54 @@ namespace DragonCon.Logic.Tests.ConventionBuilder
             return A.Fake<IConventionGateway>();
         }
 
-        [TestMethod]
+        [Test]
         public void ConventionBuilder_NewConvention_CorrectNameObject()
         {
             var builder = new Logical.Convention.ConventionBuilder(GetGateway())
                 .NewConvention("Test Convention")
                 .Save();
-            Assert.AreEqual(builder.GetConvention().Name, "Test Convention");
         }
 
-        [TestMethod]
-        public void ConventionBuilder_NewConventionManipulateDates_Success()
+        [Test]
+        public void ConventionBuilder_LoadConventionChangeName_Success()
         {
             var builder = new Logical.Convention.ConventionBuilder(GetGateway())
                 .NewConvention("Test Convention")
-                .Days.AddDay(new LocalDate(2018, 7, 7), new LocalTime(9, 0), new LocalTime(23, 0))
-                .Days.AddDay(new LocalDate(2018, 7, 8), new LocalTime(9, 0), new LocalTime(23, 0))
-                .Days.UpdateDay(new LocalDate(2018, 7, 7), new LocalTime(11, 0), new LocalTime(22, 0))
-                .Days.RemoveDay(new LocalDate(2018, 7, 8))
-                .Days.SetTimeSlotStrategy(new LocalDate(2018, 7, 7), TimeSlotStrategy.Exact246Windows)
-                .Days.SetTimeSlotStrategy(new LocalDate(2018, 7, 8), TimeSlotStrategy.Exact246Windows)
                 .Save();
 
-            var onlyDay = builder.Days[new LocalDate(2018, 7, 7)];
+            builder = new Logical.Convention.ConventionBuilder(GetGateway())
+                .LoadConvention("Test Convention")
+                .ChangeName("New Name");
 
-            Assert.AreEqual(onlyDay.Date, new LocalDate(2018, 7, 7));
-            Assert.AreEqual(onlyDay.EndTime, new LocalTime(22, 0));
-            Assert.AreEqual(onlyDay.StartTime, new LocalTime(11, 0));
-            Assert.AreEqual(onlyDay.TimeSlotStrategy, TimeSlotStrategy.Exact246Windows);
+            Assert.AreEqual(builder.ConventionName, "New Name");
         }
 
-        [TestMethod]
+
+        [Test]
+        public void ConventionBuilder_NewConventionManipulateDates_Success()
+        {
+            var builder = new Logical.Convention.ConventionBuilder(GetGateway());
+            builder.NewConvention("Test Convention")
+                .Days.AddDay(new LocalDate(2018, 7, 7), new LocalTime(9, 0), new LocalTime(23, 0))
+                .Days.AddDay(new LocalDate(2018, 7, 8), new LocalTime(9, 0), new LocalTime(23, 0));
+           
+            Assert.AreEqual(builder.Days[new LocalDate(2018, 7, 7)].EndTime, new LocalTime(23, 0));
+            Assert.AreEqual(builder.Days[new LocalDate(2018, 7, 7)].StartTime, new LocalTime(9, 0));
+
+            builder.Days.UpdateDay(new LocalDate(2018, 7, 7), new LocalTime(11, 0), new LocalTime(22, 0))
+                   .Days.RemoveDay(new LocalDate(2018, 7, 8));
+
+            Assert.AreEqual(builder.Days[new LocalDate(2018, 7, 7)].EndTime, new LocalTime(22, 0));
+            Assert.AreEqual(builder.Days[new LocalDate(2018, 7, 7)].StartTime, new LocalTime(11, 0));
+            Assert.AreEqual(builder.Days[new LocalDate(2018, 7, 8)], null);
+
+            builder.Days.SetTimeSlotStrategy(new LocalDate(2018, 7, 7), TimeSlotStrategy.Exact246Windows)
+                .Save();
+
+            Assert.AreEqual(builder.Days[new LocalDate(2018, 7, 7)].TimeSlotStrategy, TimeSlotStrategy.Exact246Windows);
+        }
+
+        [Test]
         public void ConventionBuilder_NewConventionManipulateHallsTables_Success()
         {
             var tables = HallsBuilder.RoomsFromNumericRange(1, 25);
@@ -57,24 +74,25 @@ namespace DragonCon.Logic.Tests.ConventionBuilder
             var builder = new Logical.Convention.ConventionBuilder(GetGateway())
                 .NewConvention("Test Convention")
                 .Halls.AddHall("אולם השחקנים", "ללא תיאור")
+                .Halls.AddHall("אולם ההרפתקנים", "ללא תיאור")
                 .Halls.SetDescription("אולם השחקנים", "עם תיאור")
                 .Halls.SetHallTables("אולם השחקנים", tables)
                 .Halls.RenameHall("אולם השחקנים", "אולם המשחקים")
-                .Halls.RemoveHall("אולם השחקנים")
-                .Halls.RemoveHall("אולם המשחקים")
+                .Halls.RemoveHall("אולם ההרפתקנים")
                 .Save();
 
-            var hall = builder.Halls["אולם השחקנים"];
+            var removedHall = builder.Halls["אולם ההרפתקנים"];
+            Assert.IsNull(removedHall);
 
-            Assert.AreEqual(hall.Name, "אולם השחקנים");
+            var hall = builder.Halls["אולם המשחקים"];
+            Assert.AreEqual(hall.Name, "אולם המשחקים");
             Assert.AreEqual(hall.Description, "עם תיאור");
             Assert.AreEqual(hall.Tables.Count, 25);
 
         }
 
 
-        [TestMethod]
-
+        [Test]
         public void ConventionBuilder_NewConventionManipulateTickets_Success()
         {
             var builder = new Logical.Convention.ConventionBuilder(GetGateway())
@@ -103,7 +121,7 @@ namespace DragonCon.Logic.Tests.ConventionBuilder
             //builder.Tickets.Remove("AllDay");
         }
 
-        [TestMethod]
+        [Test]
         public void ConventionBuilder_MigrateToNewConvention_Success()
         {
             var oldCon = new ConventionWrapper();

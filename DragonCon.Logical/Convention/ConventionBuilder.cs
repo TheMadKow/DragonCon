@@ -24,6 +24,7 @@ namespace DragonCon.Logical.Convention
         public DaysBuilder Days { get; private set; }
         public TicketBuilder Tickets { get; set; }
         public HallsBuilder Halls { get; set; }
+        public string ConventionName => _convention.Name;
 
         public ConventionBuilder(IConventionGateway gateway)
         {
@@ -43,8 +44,20 @@ namespace DragonCon.Logical.Convention
             return this;
         }
 
+        public ConventionBuilder ChangeName(string name)
+        {
+            ThrowIfStringIsEmpty(name);
+            _convention.Name = name;
+            return this;
+        }
 
-        public ConventionBuilder UpdateConvention(string id)
+        private void ThrowIfStringIsEmpty(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new Exception("New name cannot be empty");
+        }
+
+        public ConventionBuilder LoadConvention(string id)
         {
             _convention = _gateway.GetConventionWrapper(id);
             CreateSubBuilders();
@@ -111,6 +124,7 @@ namespace DragonCon.Logical.Convention
         {
             Days = new DaysBuilder(this, _convention);
             Tickets = new TicketBuilder(this, _convention);
+            Halls = new HallsBuilder(this, _convention);
         }
 
 
@@ -119,9 +133,5 @@ namespace DragonCon.Logical.Convention
             _gateway.StoreConvention(_convention);
             return this;
         }
-
-        public ConventionWrapper GetConvention() => _convention;
-
-
     }
 }

@@ -4,12 +4,13 @@ using DragonCon.Modeling.Gateways;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Events;
 using FakeItEasy;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NodaTime;
+using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace DragonCon.Logic.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class EventsBuilderTests
     {
         private IConventionGateway GetGateway()
@@ -17,7 +18,7 @@ namespace DragonCon.Logic.Tests
             return A.Fake<IConventionGateway>();
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddEvent_UserSuggestion_Success()
         {
             var eventRequest = new EventRequest()
