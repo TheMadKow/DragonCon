@@ -1,0 +1,4 @@
+D:\Repository\DragonCon\DragonCon\DragonCon.Specs\obj\Debug\netstandard2.0\DragonCon.Specs.csprojAssemblyReference.cache
+D:\Repository\DragonCon\DragonCon\DragonCon.Specs\obj\Debug\netstandard2.0\DragonCon.Specs.csproj.CoreCompileInputs.cache
+D:\Repository\DragonCon\DragonCon\DragonCon.Specs\obj\Debug\netstandard2.0\DragonCon.Specs.AssemblyInfoInputs.cache
+D:\Repository\DragonCon\DragonCon\DragonCon.Specs\obj\Debug\netstandard2.0\DragonCon.Specs.AssemblyInfo.cs

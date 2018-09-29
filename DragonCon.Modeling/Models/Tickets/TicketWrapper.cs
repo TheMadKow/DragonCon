@@ -47,7 +47,7 @@ namespace DragonCon.Modeling.Models.Tickets
             set => Model.ActivitiesAllowed = value;
         }
 
-        public List<ConDay> Days { get; set; }
+        public List<ConDayWrapper> Days { get; set; }
         public bool IsUnlimited => ActivitiesAllowed == null;
         public TicketLimitation TicketLimitation { get; set; }
     }

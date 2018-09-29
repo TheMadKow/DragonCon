@@ -1,2 +1,0 @@
-D:\Repository\DragonCon\DragonCon\DragonCon.Specs\obj\Debug\DragonCon.Specs.csprojAssemblyReference.cache
-D:\Repository\DragonCon\DragonCon\DragonCon.Specs\obj\Debug\DragonCon.Specs.csproj.CoreCompileInputs.cache

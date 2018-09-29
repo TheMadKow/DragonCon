@@ -10,6 +10,16 @@ namespace DragonCon.Logical.Convention
     {
         private readonly ConventionBuilder _builder;
         private readonly ConventionWrapper _convention;
+        public HallWrapper this[string key]
+        {
+            get
+            {
+                if (_convention.NameAndHall.ContainsKey(key))
+                    return _convention.NameAndHall[key];
+                return null;
+            }
+        }
+
         public HallsBuilder(ConventionBuilder builder, ConventionWrapper convention)
         {
             _convention = convention;
@@ -19,7 +29,7 @@ namespace DragonCon.Logical.Convention
         public ConventionBuilder AddHall(string hallName, string hallDesc)
         {
             ThrowIfHallExists(hallName);
-            _convention.NameAndHall.Add(hallName, new Hall()
+            _convention.NameAndHall.Add(hallName, new HallWrapper()
             {
                 Name = hallName,
                 Description = hallDesc,

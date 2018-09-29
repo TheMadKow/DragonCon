@@ -10,6 +10,16 @@ namespace DragonCon.Logical.Convention
         private readonly ConventionBuilder _builder;
         private readonly ConventionWrapper _convention;
 
+        public ConDayWrapper this[LocalDate key]
+        {
+            get
+            {
+                if (_convention.Days.ContainsKey(key))
+                    return _convention.Days[key];
+                return null;
+            }
+        }
+
         public DaysBuilder(ConventionBuilder builder, ConventionWrapper convention)
         {
             this._convention = convention;
@@ -43,7 +53,7 @@ namespace DragonCon.Logical.Convention
             var day = new ConDay(date, from, to);
             ThrowsInvalidHours(day);
             ThrowsIfDateExists(day.Date);
-            _convention.Days.Add(day.Date, day);
+            _convention.Days.Add(day.Date, new ConDayWrapper(day));
 
             return _builder;
         }

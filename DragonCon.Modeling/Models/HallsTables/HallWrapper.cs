@@ -5,7 +5,10 @@ namespace DragonCon.Modeling.Models.HallsTables
 {
     public class HallWrapper : Wrapper<Hall>
     {
-        public HallWrapper() { }
+        public HallWrapper()
+        {
+            Model = new Hall();
+        }
         public HallWrapper(Hall model) : base(model) { }
 
         public string Id { get => Model.Id; set => Model.Id = value; }

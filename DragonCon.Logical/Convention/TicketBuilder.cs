@@ -12,6 +12,15 @@ namespace DragonCon.Logical.Convention
     {
         private readonly ConventionBuilder _parent;
         private readonly ConventionWrapper _convention;
+        public TicketWrapper this[string key]
+        {
+            get
+            {
+                if (_convention.NameAndTickets.ContainsKey(key))
+                    return _convention.NameAndTickets[key];
+                return null;
+            }
+        }
 
         public TicketBuilder(ConventionBuilder parent, ConventionWrapper convention)
         {
@@ -44,7 +53,7 @@ namespace DragonCon.Logical.Convention
             var ticket = new TicketWrapper()
             {
                 Name = ticketName,
-                Days = localDates.Select(x => _convention.Days[x]).ToList(),
+                Days = localDates.Select(x => _parent.Days[x]).ToList(),
                 TicketLimitation = role
             };
 
