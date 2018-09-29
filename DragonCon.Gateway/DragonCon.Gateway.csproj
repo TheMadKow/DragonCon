@@ -31,6 +31,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Abstractions">
+      <HintPath>C:\Users\The Mad Kow\.nuget\packages\microsoft.aspnetcore.mvc.abstractions\2.1.2\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Core">
+      <HintPath>C:\Users\The Mad Kow\.nuget\packages\microsoft.aspnetcore.mvc.core\2.1.2\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures">
+      <HintPath>C:\Users\The Mad Kow\.nuget\packages\microsoft.aspnetcore.mvc.viewfeatures\2.1.2\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler.Shared">
+      <HintPath>C:\Users\The Mad Kow\.nuget\packages\miniprofiler.shared\4.0.138\lib\net461\MiniProfiler.Shared.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>C:\Users\The Mad Kow\.nuget\packages\nlog\4.5.10\lib\net45\NLog.dll</HintPath>
     </Reference>
@@ -41,6 +53,9 @@
     <Reference Include="Raven.Client, Version=4.1.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\The Mad Kow\.nuget\packages\ravendb.client\4.1.0\lib\netstandard2.0\Raven.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="RavenDB.Identity">
+      <HintPath>C:\Users\The Mad Kow\.nuget\packages\ravendb.identity\4.3.0\lib\netstandard2.0\RavenDB.Identity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,7 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\RavenController.cs" />
     <Compile Include="ConventionGateway.cs" />
+    <Compile Include="Identity\RavenSystemUser.cs" />
     <Compile Include="NLog\RavenNLogTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreHolder.cs" />
@@ -68,6 +85,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="MiniProfiler">
+      <Version>4.0.138</Version>
+    </PackageReference>
     <PackageReference Include="NLog">
       <Version>4.5.10</Version>
     </PackageReference>
@@ -77,9 +97,10 @@
     <PackageReference Include="RavenDB.Client">
       <Version>4.1.0</Version>
     </PackageReference>
+    <PackageReference Include="RavenDB.Identity">
+      <Version>4.3.0</Version>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Identity\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

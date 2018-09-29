@@ -54,6 +54,7 @@
     <Compile Include="Models\Convention\PhoneRecord.cs" />
     <Compile Include="Models\Convention\TimeSlotStrategy.cs" />
     <Compile Include="Models\Events\ConventionEvent.cs" />
+    <Compile Include="Models\Identities\ISystemUser.cs" />
     <Compile Include="Models\Tracking\TicketTrackAction.cs" />
     <Compile Include="Models\Tracking\TicketsTracking.cs" />
     <Compile Include="Models\Tracking\EventTrackAction.cs" />
