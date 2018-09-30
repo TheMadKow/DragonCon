@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using DragonCon.Logical.Convention;
-using DragonCon.Logical.Factories;
+﻿using DragonCon.Logical.Convention;
 using DragonCon.Modeling.Gateways;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
@@ -9,7 +7,7 @@ using FakeItEasy;
 using NodaTime;
 using NUnit.Framework;
 
-namespace DragonCon.Logic.Tests.ConventionBuilder
+namespace DragonCon.Logical.Tests.ConventionBuilder
 {
     [TestFixture]
     public class ConventionBuilderTests
