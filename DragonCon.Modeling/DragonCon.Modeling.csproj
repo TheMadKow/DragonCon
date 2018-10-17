@@ -8,8 +8,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <ItemGroup>
-	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="NodaTime" Version="2.4.0" />
 	</ItemGroup>

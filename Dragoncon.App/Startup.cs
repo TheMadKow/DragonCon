@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DragonCon.RavenDB;
-using DragonCon.RavenDB.Identity;
+using DragonCon.Gateway.RavenDB;
+using DragonCon.Gateway.RavenDB.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
