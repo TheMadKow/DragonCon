@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DragonCon.Logical.Gateways.Users;
+﻿using DragonCon.Logical.Gateways.Users;
 using DragonCon.Modeling.Models.Common;
-using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Raven.Client.Documents.Session;
 
-namespace DragonCon.Gateway.RavenDB.Controllers.Users
+namespace DragonCon.Logical.Controllers.Users
 {
     [Area("Users")]
     [Authorize]

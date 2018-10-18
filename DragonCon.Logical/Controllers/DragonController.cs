@@ -1,10 +1,9 @@
 ﻿using DragonCon.Logical.Gateways;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Raven.Client.Documents.Session;
 using StackExchange.Profiling;
 
-namespace DragonCon.Gateway.RavenDB.Controllers
+namespace DragonCon.Logical.Controllers
 {
     public class DragonController<T> : Controller
     where T : IGateway
