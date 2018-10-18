@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DragonCon.Modeling.Gateways;
+using DragonCon.Logical.Gateways.Management;
 
 namespace DragonCon.Logical.Events
 {
     public class EventsBuilder
     {
-        private IEventsGateway _gateway;
+        private IContentGateway _gateway;
 
-        public EventsBuilder(IEventsGateway gateway)
+        public EventsBuilder(IContentGateway gateway)
         {
             _gateway = gateway;
         }

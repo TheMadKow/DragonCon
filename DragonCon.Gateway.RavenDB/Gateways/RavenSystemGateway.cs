@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DragonCon.Modeling.Gateways;
+using DragonCon.Logical.Gateways.Management;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Tickets;
@@ -8,16 +8,16 @@ using Raven.Client.Documents.Session;
 
 namespace DragonCon.Gateway.RavenDB.Gateways
 {
-    public class ConventionGateway : IConventionGateway
+    public class RavenSystemGateway : ISystemGateway
     {
         private readonly StoreHolder _holder;
 
-        public ConventionGateway()
+        public RavenSystemGateway()
         {
 
         }
 
-        public ConventionGateway(StoreHolder holder)
+        public RavenSystemGateway(StoreHolder holder)
         {
             _holder = holder;
         }
