@@ -11,4 +11,9 @@
 	<ItemGroup>
 	  <PackageReference Include="NodaTime" Version="2.4.0" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="RavenDB.Identity">
+	    <HintPath>C:\Users\The Mad Kow\.nuget\packages\ravendb.identity\4.4.1\lib\netstandard2.0\RavenDB.Identity.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
 </Project>

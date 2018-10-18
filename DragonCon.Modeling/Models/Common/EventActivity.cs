@@ -6,6 +6,6 @@ namespace DragonCon.Modeling.Models.Common
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public List<EventSystem> EventSystems { get; set; }
+        public List<EventSystem> ActivitySystems { get; set; }
     }
 }

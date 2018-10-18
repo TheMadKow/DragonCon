@@ -2,12 +2,8 @@
 {
     public enum TicketTrackAction
     {
-        SelfPaid,
-        SelfChanged,
-        SelfCanceled,
-
-        ManagerPaid,
-        ManagerChanged,
-        ManagerCanceled
+        Paid,
+        Changed,
+        Canceled
     }
 }
