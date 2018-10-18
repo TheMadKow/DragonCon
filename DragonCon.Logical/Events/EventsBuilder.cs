@@ -11,6 +11,7 @@ namespace DragonCon.Logical.Events
     {
         private IContentGateway _gateway;
 
+
         public EventsBuilder(IContentGateway gateway)
         {
             _gateway = gateway;

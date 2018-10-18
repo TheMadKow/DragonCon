@@ -7,7 +7,7 @@ namespace DragonCon.Modeling.Models.Events
     {
         string ActivityId { get; set; }
         AgeRestriction Age { get; set; }
-        string Requests { get; set; }
+        string SpecialRequests { get; set; }
         string ConventionDayId { get; set; }
         string Description { get; set; }
         string GameMasterId { get; set; }

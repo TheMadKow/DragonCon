@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DragonCon.Logical.Gateways.Home
+namespace DragonCon.Logical.Gateways
 {
-    public interface IHomeGateway : IGateway
+    public interface IGateway
     {
     }
 }

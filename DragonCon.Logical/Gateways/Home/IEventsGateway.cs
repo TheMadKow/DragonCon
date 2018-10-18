@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DragonCon.Logical.Gateways.Home
 {
-    public interface IEventsGateway
+    public interface IEventsGateway : IGateway
     {
     }
 }

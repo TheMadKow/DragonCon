@@ -5,7 +5,7 @@ using DragonCon.Modeling.Models.Events;
 
 namespace DragonCon.Logical.Gateways.Management
 {
-    public interface IStatisticsGateway
+    public interface IStatisticsGateway : IGateway
     {
         ConEventWrapper GetEvent(string id);
         void StoreEvent(ConEventWrapper conEvent);

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DragonCon.Logical.Gateways.Users
 {
-    public interface IPurchasesGateway
+    public interface IPurchasesGateway: IGateway
     {
     }
 }

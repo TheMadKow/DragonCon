@@ -25,7 +25,7 @@ namespace DragonCon.Modeling.Models.Events
         public string TableId { get; set; }
         
         public string Description { get; set; }
-        public string Requests { get;set; }
+        public string SpecialRequests { get;set; }
 
         public List<string> Changes { get;set; }
     }

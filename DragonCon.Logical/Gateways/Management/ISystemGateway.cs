@@ -5,7 +5,7 @@ using DragonCon.Modeling.Models.Conventions;
 
 namespace DragonCon.Logical.Gateways.Management
 {
-    public interface ISystemGateway
+    public interface ISystemGateway : IGateway
     {
         ConventionWrapper GetConventionWrapper(string id);
         void StoreConvention(ConventionWrapper convention);

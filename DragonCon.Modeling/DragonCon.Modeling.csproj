@@ -12,8 +12,14 @@
 	  <PackageReference Include="NodaTime" Version="2.4.0" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures">
+	    <HintPath>C:\Users\The Mad Kow\.nuget\packages\microsoft.aspnetcore.mvc.viewfeatures\2.1.2\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll</HintPath>
+	  </Reference>
 	  <Reference Include="RavenDB.Identity">
 	    <HintPath>C:\Users\The Mad Kow\.nuget\packages\ravendb.identity\4.4.1\lib\netstandard2.0\RavenDB.Identity.dll</HintPath>
+	  </Reference>
+	  <Reference Include="System.ComponentModel.Annotations">
+	    <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\netcoreapp2.1\System.ComponentModel.Annotations.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 </Project>
