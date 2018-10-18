@@ -2,11 +2,7 @@
 {
     public enum EventTrackAction
     {
-        SelfAdded,
-        SelfRemoved,
-
-        ManagerAdded,
-        ManagerRemoved
-
+       Added,
+       Removed,
     }
 }

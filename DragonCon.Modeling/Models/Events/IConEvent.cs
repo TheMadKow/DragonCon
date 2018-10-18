@@ -7,13 +7,12 @@ namespace DragonCon.Modeling.Models.Events
     {
         string ActivityId { get; set; }
         AgeRestriction Age { get; set; }
-        string Comments { get; set; }
+        string SpecialRequests { get; set; }
         string ConventionDayId { get; set; }
         string Description { get; set; }
         string GameMasterId { get; set; }
         bool HasBeenRevised { get; set; }
-        IList<string> HelperIds { get; set; }
-        List<string> HistoryIds { get; set; }
+        List<string> HelperIds { get; set; }
         string Id { get; set; }
         string Name { get; set; }
         List<string> ParticipantIds { get; set; }
@@ -23,5 +22,6 @@ namespace DragonCon.Modeling.Models.Events
         string TableId { get; set; }
         List<string> Tags { get; set; }
         TimeSlot TimeSlot { get; set; }
+        List<string> Changes { get;set; }
     }
 }

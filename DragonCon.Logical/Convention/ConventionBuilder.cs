@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DragonCon.Modeling.Gateways;
+using DragonCon.Logical.Gateways.Management;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Tickets;
@@ -19,14 +19,14 @@ namespace DragonCon.Logical.Convention
         }
 
         private ConventionWrapper _convention = null;
-        private readonly IConventionGateway _gateway;
+        private readonly ISystemGateway _gateway;
 
         public DaysBuilder Days { get; private set; }
         public TicketBuilder Tickets { get; set; }
         public HallsBuilder Halls { get; set; }
         public string ConventionName => _convention.Name;
 
-        public ConventionBuilder(IConventionGateway gateway)
+        public ConventionBuilder(ISystemGateway gateway)
         {
             _gateway = gateway;
         }

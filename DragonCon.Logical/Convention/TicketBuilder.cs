@@ -30,7 +30,7 @@ namespace DragonCon.Logical.Convention
 
         public ConventionBuilder AddTicket(string ticketName, params LocalDate[] localDates)
         {
-            return AddTicket(TicketLimitation.None, ticketName, localDates.ToList());
+            return AddTicket(TicketLimitation.NotLimited, ticketName, localDates.ToList());
         }
 
         public ConventionBuilder AddLimitedTicket(TicketLimitation role, string ticketName, params LocalDate[] localDates)

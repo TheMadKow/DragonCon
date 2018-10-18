@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DragonCon.RavenDB;
-using DragonCon.RavenDB.Identity;
+using DragonCon.Gateway.RavenDB;
+using DragonCon.Gateway.RavenDB.Identity;
+using DragonCon.Logical.Gateways.Home;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,9 @@ namespace Dragoncon.App
                 opt.SetMinimumLevel(LogLevel.Warning);
             });
 
-            var holder = new StoreHolder("", ""); //TODO connection String
+            var holder = new StoreHolder("DragonCon", "http://127.0.0.1:8080"); //TODO connection String
+            services.AddSingleton<StoreHolder>(holder);
+            services.AddScoped<NullGateway, NullGateway>();
 
             services
                 .AddRavenDbAsyncSession(holder.Store) // Create a RavenDB IAsyncDocumentSession for each request.
@@ -53,13 +56,14 @@ namespace Dragoncon.App
             {
                 // TODO: move to config
                 opt.Cookie.Expiration = TimeSpan.FromDays(30);
-                opt.LoginPath = "Users/Login";
-                opt.LogoutPath = "Users/Logout";
-                opt.AccessDeniedPath = "Users/Denied";
+                opt.LoginPath = "/Users/Login";
+                opt.LogoutPath = "/Users/Logout";
+                opt.AccessDeniedPath = "/Users/Denied";
                 opt.SlidingExpiration = true;
             });
 
             services.AddAntiforgery();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

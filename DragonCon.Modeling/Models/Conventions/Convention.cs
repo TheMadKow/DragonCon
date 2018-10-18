@@ -12,9 +12,7 @@ namespace DragonCon.Modeling.Models.Conventions
         public List<string> EventIds { get; set; }
         public List<string> HallIds { get; set; }
 
-
         public List<PhoneRecord> PhoneBook { get;set; }
         public Dictionary<string, string> Metadata { get;set; }
-
     }
 }

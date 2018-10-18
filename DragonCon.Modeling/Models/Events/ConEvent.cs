@@ -9,23 +9,24 @@ namespace DragonCon.Modeling.Models.Events
         public string Name { get; set; }
         public string ConventionDayId { get;set; }
         public string ActivityId { get; set; }
+        public string SystemId { get;set; }
+
         public string GameMasterId { get; set; }
-        public IList<string> HelperIds { get; set; }
+        public List<string> HelperIds { get; set; }
         public List<string> ParticipantIds { get;set; }
         public bool HasBeenRevised { get; set; }
 
-        public string SystemId { get;set; }
         public EventStatus Status { get; set; }
+        public TimeSlot TimeSlot { get;set; }
         public AgeRestriction Age { get; set; }
         public SizeRestriction Size { get;set; }
 
         public List<string> Tags { get;set; }
-
-        public List<string> HistoryIds {get; set;}
         public string TableId { get; set; }
-
-        public TimeSlot TimeSlot { get;set; }
+        
         public string Description { get; set; }
-        public string Comments { get;set; }
+        public string SpecialRequests { get;set; }
+
+        public List<string> Changes { get;set; }
     }
 }
