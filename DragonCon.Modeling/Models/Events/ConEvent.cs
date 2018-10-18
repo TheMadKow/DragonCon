@@ -22,11 +22,11 @@ namespace DragonCon.Modeling.Models.Events
         public SizeRestriction Size { get;set; }
 
         public List<string> Tags { get;set; }
-        public List<string> HistoryIds {get; set;}
-
         public string TableId { get; set; }
         
         public string Description { get; set; }
         public string Requests { get;set; }
+
+        public List<string> Changes { get;set; }
     }
 }

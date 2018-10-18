@@ -13,7 +13,6 @@ namespace DragonCon.Modeling.Models.Events
         string GameMasterId { get; set; }
         bool HasBeenRevised { get; set; }
         List<string> HelperIds { get; set; }
-        List<string> HistoryIds { get; set; }
         string Id { get; set; }
         string Name { get; set; }
         List<string> ParticipantIds { get; set; }
@@ -23,5 +22,6 @@ namespace DragonCon.Modeling.Models.Events
         string TableId { get; set; }
         List<string> Tags { get; set; }
         TimeSlot TimeSlot { get; set; }
+        List<string> Changes { get;set; }
     }
 }

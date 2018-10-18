@@ -5,7 +5,11 @@ namespace DragonCon.Modeling.Models.Tracking
 {
     public class EventsTracking
     {
+        public string Id { get; set; }
+
+        public string EventId { get; set; }
         public string ConventionId { get; set; }
+
         public Instant TimeStamp { get; set; }
         
         public string ParticipantId { get;set; }
