@@ -6,6 +6,10 @@
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.4.1.tgz#6194786c1a705ab84253e06429834466670e3c3f"
 
+bootstrap-rtl-v4@4.0.0-alpha.6:
+  version "4.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/bootstrap-rtl-v4/-/bootstrap-rtl-v4-4.0.0-alpha.6.tgz#4cee4295bad5527df8fde543ce6f238c5a3788e5"
+
 bootstrap-select@1.13.3:
   version "1.13.3"
   resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.13.3.tgz#77f62b72c69339227753b3879cec036039dcb4d9"

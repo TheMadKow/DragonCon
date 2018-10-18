@@ -6,5 +6,5 @@
 /packages
 **/bin
 **/obj
-/DragonCon.App/wwwroot
-/DragonCon.App/node_modules
+**/wwwroot
+**/node_modules
