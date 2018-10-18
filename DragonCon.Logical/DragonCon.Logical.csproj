@@ -17,5 +17,8 @@
   <ItemGroup>
     <ProjectReference Include="..\DragonCon.Modeling\DragonCon.Modeling.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Gateways\" />
+  </ItemGroup>
 
 </Project>

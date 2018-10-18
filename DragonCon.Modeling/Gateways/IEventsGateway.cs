@@ -6,7 +6,7 @@ namespace DragonCon.Modeling.Gateways
     public interface IEventsGateway
     {
         ConEventWrapper GetEvent(string id);
-        void StoreEvent(ConEventWrapper id);
+        void StoreEvent(ConEventWrapper conEvent);
         List<ConEventWrapper> GetAllEvents(string conventionId);
     }
 }

@@ -81,19 +81,21 @@ namespace DragonCon.Logical.Tests.ConventionBuilder
 
             var removedHall = builder.Halls["אולם ההרפתקנים"];
             Assert.IsNull(removedHall);
+          
+            var renamedHall = builder.Halls["אולם השחקנים"];
+            Assert.IsNull(renamedHall);
 
             var hall = builder.Halls["אולם המשחקים"];
             Assert.AreEqual(hall.Name, "אולם המשחקים");
             Assert.AreEqual(hall.Description, "עם תיאור");
             Assert.AreEqual(hall.Tables.Count, 25);
-
         }
 
 
         [Test]
         public void ConventionBuilder_NewConventionManipulateTickets_Success()
         {
-            var builder = new Logical.Convention.ConventionBuilder(GetGateway())
+            var builder = new Convention.ConventionBuilder(GetGateway())
                 .NewConvention("Test Convention")
                 .Days.AddDay(new LocalDate(2018, 7, 7), new LocalTime(9, 0), new LocalTime(23, 0))
                 .Days.AddDay(new LocalDate(2018, 7, 8), new LocalTime(9, 0), new LocalTime(23, 0))
@@ -101,35 +103,35 @@ namespace DragonCon.Logical.Tests.ConventionBuilder
                 .Tickets.AddLimitedTicket(TicketLimitation.GameMaster, "GameMaster", new LocalDate(2018, 7, 7), new LocalDate(2018, 7, 8))
                 .Tickets.AddLimitedTicket(TicketLimitation.Volunteer, "Volunteer", new LocalDate(2018, 7, 7), new LocalDate(2018, 7, 8))
                 .Tickets.SetTransactionCode("AllDay", "Charge-Money")
-                .Tickets.SetNumberOfActivities("AllDay", 5)
-                .Tickets.SetTicketPrice("AllDay", 70)
+                .Tickets.SetNumberOfActivities("AllDay", 5);
+            
+            Assert.NotNull(builder.Tickets["AllDay"]);
+            Assert.NotNull(builder.Tickets["AllDay"].Days.Contains(builder.Days[new LocalDate(2018, 7, 7)]));
+            Assert.NotNull(builder.Tickets["AllDay"].Days.Contains(builder.Days[new LocalDate(2018, 7, 8)]));
+            Assert.NotNull(builder.Tickets["AllDay"].ActivitiesAllowed);
+            Assert.AreEqual(builder.Tickets["AllDay"].ActivitiesAllowed.Value, 5);
+
+            builder.Tickets.SetTicketPrice("AllDay", 70)
+                .Tickets.SetTicketPrice("GameMaster", 0)
+                .Tickets.SetTicketPrice("Volunteer", 0)
                 .Tickets.SetUnlimitedActivities("AllDay")
                 .Save();
 
+            Assert.NotNull(builder.Tickets["GameMaster"]);
+            Assert.NotNull(builder.Tickets["Volunteer"]);
 
-
-            //    builder.Tickets.SetTicketName("AllDay", "New Name")
-            //    .Tickets.SetTicketDays(new List<LocalDate>()
-            //    {
-            //        new LocalDate(2018, 7, 7),
-            //    });
-
-
-
-            //builder.Tickets.Remove("AllDay");
+            Assert.AreEqual(builder.Tickets["GameMaster"].TicketLimitation, TicketLimitation.GameMaster);
+            Assert.AreEqual(builder.Tickets["Volunteer"].TicketLimitation, TicketLimitation.Volunteer);
+            Assert.AreEqual(builder.Tickets["AllDay"].TicketLimitation, TicketLimitation.NotLimited);
+  
+            Assert.AreEqual(builder.Tickets["AllDay"].TransactionCode, "Charge-Money");
+            Assert.AreEqual(builder.Tickets["AllDay"].IsUnlimited, true);
         }
 
         [Test]
         public void ConventionBuilder_MigrateToNewConvention_Success()
         {
-            var oldCon = new ConventionWrapper();
-
-            var builder = new Logical.Convention.ConventionBuilder(GetGateway())
-                .NewFromOldConvention("My New Con", oldCon,
-                    Logical.Convention.ConventionBuilder.Migrate.Days,
-                    Logical.Convention.ConventionBuilder.Migrate.Halls,
-                    Logical.Convention.ConventionBuilder.Migrate.Tickets);
-
+            //TODO Move to Functional Tests
         }
     }
 }

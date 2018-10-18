@@ -8,8 +8,9 @@ namespace DragonCon.Modeling.Models.Tickets
 {
     public enum TicketLimitation
     {
-        None,
+        NotLimited,
         GameMaster,
+        GameHelper,
         Volunteer
     }
 }

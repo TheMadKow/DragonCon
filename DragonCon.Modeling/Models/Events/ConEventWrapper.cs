@@ -17,7 +17,7 @@ namespace DragonCon.Modeling.Models.Events
         public ConDay ConDay { get; set; }
         public EventSystem EventSystem { get; set; }
         public EventActivity EventActivity { get;set; }
-        public Participant Manager { get; set; }
+        public IParticipant Manager { get; set; }
         public IList<IParticipant> Helpers { get; set; }
         public IList<IParticipant> Participants { get; set; }
         public Hall Hall { get;set; }

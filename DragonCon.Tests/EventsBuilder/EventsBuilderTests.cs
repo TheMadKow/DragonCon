@@ -24,7 +24,7 @@ namespace DragonCon.Logical.Tests.EventsBuilder
                 UserId = "some@user.net",
                 Name = "האירוע שלי",
                 Description = "האירוע הכי מהמם בכנס",
-                Comments = "אני זקוק לשולחן",
+                Requests = "אני זקוק לשולחן",
                 DayId = "day-ID",
                 Timeslide = new TimeSlot()
                 {

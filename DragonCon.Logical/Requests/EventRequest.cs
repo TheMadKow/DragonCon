@@ -14,7 +14,7 @@ namespace DragonCon.Logical.Requests
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Comments { get; set; }
+        public string Requests { get; set; }
         public string UserId { get; set; }
         public List<string> HelperIds { get; set; }
         public TimeSlot Timeslide { get; set; }
@@ -32,7 +32,7 @@ namespace DragonCon.Logical.Requests
             return new ConEvent()
             {
                 Description = this.Description,
-                Comments = this.Comments,
+                Requests = this.Requests,
                 Name = this.Name,
                 ConventionDayId = this.DayId,
                 ActivityId = this.EventActivityId,

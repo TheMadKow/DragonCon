@@ -1,4 +1,6 @@
-﻿using DragonCon.Modeling.Models.Conventions;
+﻿using System.Collections.Generic;
+using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.Events;
 
 namespace DragonCon.Modeling.Gateways
 {
