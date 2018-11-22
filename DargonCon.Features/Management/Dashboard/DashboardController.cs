@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DragonCon.Logical.Gateways.Home;
+﻿using DragonCon.Features.Shared;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragonCon.Logical.Controllers.Management
+namespace DragonCon.Features.Management.Dashboard
 {
     [Area("Management")]
     public class DashboardController : DragonController<NullGateway>

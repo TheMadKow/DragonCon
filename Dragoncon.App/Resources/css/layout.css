@@ -70,3 +70,20 @@ body {
         text-decoration: none;
         color: #c9c9ff;
     }
+
+
+.toggle-off.btn {
+    padding-left: 12px;
+}
+
+.toggle-on.btn {
+    padding-right: 12px;
+}
+
+.checkbox label .toggle, .checkbox-inline .toggle {
+    margin-left: 0;
+}
+
+.toggle-text {
+    padding-right: 10px;
+}

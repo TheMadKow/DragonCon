@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DragonCon.Logical.Gateways.Management;
+using DragonCon.Features.Management;
 
 namespace DragonCon.Logical.Events
 {

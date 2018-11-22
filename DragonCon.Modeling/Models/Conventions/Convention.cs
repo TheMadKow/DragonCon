@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NodaTime;
 
 namespace DragonCon.Modeling.Models.Conventions
 {
@@ -14,5 +15,6 @@ namespace DragonCon.Modeling.Models.Conventions
 
         public List<PhoneRecord> PhoneBook { get;set; }
         public Dictionary<string, string> Metadata { get;set; }
+        public Instant CreationTimeStamp { get; set; }
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DragonCon.Logical.Gateways.Home;
+﻿using DragonCon.Features.Shared;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragonCon.Logical.Controllers.Home
+namespace DragonCon.Features.Home
 {
     public class HomeController : DragonController<NullGateway>
     {

@@ -15,46 +15,51 @@
     @RenderSection("Styles", required: false)
 </head>
 <body style="">
-<div class="right-to-left">
-    <ul class="right-to-left admin-navbar bg-dark">
-        <li class="admin-navbar-brand text-center">
-            <a class="admin-navbar-brand-link" href="#">דקוניקון<br />אזור הניהול</a>
-        </li>
-        <li class="list-divider"></li>
-        <li>
-            <a class="" asp-area="Management" asp-controller="Events" asp-action="Information">מידע אירועים</a>
-        </li>
-        <li>
-            <a class="" href="#">מידע משתמשים</a>
-        </li>
-        <li class="list-divider"></li>
-        <li class="">
-            <a class="" href="#">ניהול אירועים</a>
-        </li>
-        <li class="">
-            <a class="" href="#">ניהול משתמשים</a>
-        </li>
-        <li class="list-divider"></li>
-        <li class="">
-            <a class="" href="#">ניהול כנס</a>
-        </li>
-        <li class="list-divider"></li>
-    </ul>
-    <div class="container container-admin">
-        <h4 class="Title-Text">@ViewBag.Title</h4>
+    <div class="right-to-left">
+        <ul class="right-to-left admin-navbar bg-dark">
+            <li class="admin-navbar-brand text-center">
+                <a class="admin-navbar-brand-link" href="#">דקוניקון<br />אזור הניהול</a>
+            </li>
+            <li class="list-divider"></li>
+            <li>
+                <a asp-area="Management" asp-controller="Events" asp-action="Information">מידע אירועים</a>
+            </li>
+            <li>
+                <a asp-area="Management" asp-controller="Participants" asp-action="Information">מידע משתמשים</a>
+            </li>
+            <li class="list-divider"></li>
+            <li>
+                <a asp-area="Management" asp-controller="Events" asp-action="Manage">ניהול אירועים</a>
+            </li>
+            <li>
+                <a asp-area="Management" asp-controller="Participants" asp-action="Manage">ניהול משתמשים</a>
+            </li>
+            <li class="list-divider"></li>
+            <li>
+                <a asp-area="Management" asp-controller="Convention" asp-action="Manage">ניהול כנס</a>
+            </li>
+            <li class="list-divider"></li>
+        </ul>
+        <div class="container container-admin">
+            <h4 class="Title-Text">@ViewBag.Title</h4>
 
-        <div class="body-content">
-            @RenderBody()
+            <div class="body-content">
+                @RenderBody()
+            </div>
         </div>
+
     </div>
 
-</div>
-    
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/popper.js/dist/popper.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
-
+    <script>
+        $(document).ready(function () {
+            $('.bootstrap-toggle').bootstrapToggle();
+        });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

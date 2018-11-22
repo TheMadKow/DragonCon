@@ -1,6 +1,8 @@
 ﻿using System;
-using DragonCon.Logical.Gateways.Home;
+using DragonCon.Features.Management.Convention;
+using DragonCon.Features.Shared;
 using DragonCon.RavenDB;
+using DragonCon.RavenDB.Gateways.Management;
 using DragonCon.RavenDB.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Raven.Client.NodaTime;
+using Raven.Client.ServerWide;
+using Raven.Client.ServerWide.Operations;
 using Raven.Identity;
 
 namespace DragonCon.App
@@ -32,9 +37,18 @@ namespace DragonCon.App
                 opt.SetMinimumLevel(LogLevel.Warning);
             });
 
-            var holder = new StoreHolder("DragonCon", "http://127.0.0.1:8080"); //TODO connection String
+            var holder = new StoreHolder(DragonConsts.DatabaseName, "http://127.0.0.1:8080"); //TODO connection String
+            holder.Store.ConfigureForNodaTime();
+            holder.Store.Initialize();
+            if (holder.Store.Maintenance.Server.Send(new GetDatabaseRecordOperation(DragonConsts.DatabaseName)) == null)
+            {
+                var databaseRecord = new DatabaseRecord(DragonConsts.DatabaseName);
+                holder.Store.Maintenance.Server.Send(new CreateDatabaseOperation(databaseRecord));
+            };
+
             services.AddSingleton<StoreHolder>(holder);
             services.AddScoped<NullGateway, NullGateway>();
+            services.AddScoped<IConventionGateway, RavenConventionGateway>();
 
             services
                 .AddRavenDbAsyncSession(holder.Store) // Create a RavenDB IAsyncDocumentSession for each request.

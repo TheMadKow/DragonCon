@@ -1,14 +1,13 @@
-﻿using DragonCon.Logical.Gateways.Users;
+﻿using DragonCon.Features.Shared;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragonCon.Logical.Controllers.Users
+namespace DragonCon.Features.Users
 {
     [Area("Users")]
     [Authorize]
-
     public class EventsController  : DragonController<IEventsGateway>
     {
         public EventsController(IEventsGateway gateway) : 

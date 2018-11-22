@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using DragonCon.Logical.Gateways.Users;
+using DragonCon.Features.Home;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.ViewModels;

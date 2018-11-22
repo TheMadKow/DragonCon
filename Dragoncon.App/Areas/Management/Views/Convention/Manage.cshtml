@@ -1,0 +1,99 @@
+﻿@model DragonCon.Features.Management.Convention.ConventionManagementViewModel
+@{
+    ViewBag.Title = "ניהול הכנס";
+}
+
+<div class="right-to-left">
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-cons-tab" data-toggle="tab" href="#nav-cons" role="tab" aria-controls="nav-cons" aria-selected="true">כנסים</a>
+            <a class="nav-item nav-link" id="nav-settings-tab" data-toggle="tab" href="#nav-settings" role="tab" aria-controls="nav-profile" aria-selected="false">הגדרות מערכת</a>
+            <a class="nav-item nav-link" id="nav-export-tab" data-toggle="tab" href="#nav-export" role="tab" aria-controls="nav-contact" aria-selected="false">יצוא וגיבוי</a>
+            <a class="nav-item nav-link" id="nav-statistics-tab" data-toggle="tab" href="#nav-statistics" role="tab" aria-controls="nav-contact" aria-selected="false">סטטיסטקות</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-cons" role="tabpanel" aria-labelledby="nav-home-tab">
+            <table class="table table-hover table-stripped text-right">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td>מזהה</td>
+                        <td>שם</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var con in Model.Conventions)
+                {
+                    <tr>
+                        <td><a href="#"> <i class="fa fa-fw fa-star"></i></a></td>
+                        <td>@con.Id</td>
+                        <td>@con.Name</td>
+                        <td>
+                            <button class="btn btn-warning">
+                                <i class="fa fa-fw fa-pen"></i>
+                            </button>
+                            <button class="btn btn-info">
+                                <i class="fa fa-fw fa-info-circle"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade text-right" id="nav-settings" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <br />
+
+            <div>כנס פעיל:</div>
+            <div></div>
+            
+            <div class="card">
+            <div class="checkbox text-right">
+                <label class="label-control">
+                    <input asp-for="Configuration.AllowEventsSuggestions"
+                           type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"
+                           data-offstyle="danger" data-onstyle="success" data-width="50">
+                </label>
+                <span class="toggle-text">אפשר הצעת אירועים</span>
+            </div>
+
+            <div class="checkbox text-right">
+                <label class="label-control">
+                    <input asp-for="Configuration.AllowEventsRegistration"
+                           type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"
+                           data-offstyle="danger" data-onstyle="success" data-width="50">
+                </label>
+                <span class="toggle-text">אפשר רישום לאירועים</span>
+            </div>
+
+            <div class="checkbox text-right">
+                <label class="label-control">
+                    <input asp-for="Configuration.AllowEventsRegistrationChanges"
+                           type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"
+                           data-offstyle="danger" data-onstyle="success" data-width="50">
+                </label>
+                <span class="toggle-text">אפשר שינוי רישום לאירועים</span>
+            </div>
+
+                <div class="checkbox text-right">
+                    <label class="label-control">
+                        <input asp-for="Configuration.AllowPayments"
+                               type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"
+                               data-offstyle="danger" data-onstyle="success" data-width="50">
+                    </label>
+                    <span class="toggle-text">אפשר רכישת כרטיסים</span>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-export" role="tabpanel" aria-labelledby="nav-contact-tab">
+            עוד לא פעיל
+        </div>
+        <div class="tab-pane fade" id="nav-statistics" role="tabpanel" aria-labelledby="nav-contact-tab">
+            עוד לא פעיל
+        </div>
+    </div>
+</div>
+
