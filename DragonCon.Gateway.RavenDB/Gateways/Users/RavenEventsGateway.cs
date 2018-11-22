@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using DragonCon.Logical.Gateways.Users;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.ViewModels;
-using Microsoft.AspNetCore.Authentication;
-using SystemClock = NodaTime.SystemClock;
 
-namespace DragonCon.Gateway.RavenDB.Gateways.Users
+namespace DragonCon.RavenDB.Gateways.Users
 {
     public class RavenEventsGateway : RavenGateway, IEventsGateway
     {

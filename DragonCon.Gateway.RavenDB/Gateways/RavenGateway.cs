@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
+﻿using Raven.Client.Documents.Session;
 
-namespace DragonCon.Gateway.RavenDB.Gateways
+namespace DragonCon.RavenDB.Gateways
 {
     public abstract class RavenGateway
     {

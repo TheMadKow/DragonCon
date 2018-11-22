@@ -6,7 +6,7 @@ using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Tickets;
 using Raven.Client.Documents.Session;
 
-namespace DragonCon.Gateway.RavenDB.Gateways
+namespace DragonCon.RavenDB.Gateways.Management
 {
     public class RavenSystemGateway : ISystemGateway
     {

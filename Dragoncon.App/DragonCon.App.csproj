@@ -36,13 +36,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DragonCon.Gateway.RavenDB\DragonCon.Gateway.RavenDB.csproj" />
+    <ProjectReference Include="..\DragonCon.Gateway.RavenDB\DragonCon.RavenDB.csproj" />
     <ProjectReference Include="..\DragonCon.Logical\DragonCon.Logical.csproj" />
     <ProjectReference Include="..\DragonCon.Modeling\DragonCon.Modeling.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Management\Views\Convention\" />
     <Folder Include="Areas\Users\Views\Events\" />
+    <Folder Include="Resources\js\" />
+    <Folder Include="Resources\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Management\Views\Shared\_Layout.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Management\Views\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Management\Views\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DragonCon.Gateway.RavenDB;
-using DragonCon.Gateway.RavenDB.Identity;
 using DragonCon.Logical.Gateways.Home;
+using DragonCon.RavenDB;
+using DragonCon.RavenDB.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
 using Raven.Identity;
 
-namespace Dragoncon.App
+namespace DragonCon.App
 {
     public class Startup
     {
@@ -86,7 +81,7 @@ namespace Dragoncon.App
             {
                 routes.MapRoute(
                     name: "admin",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                    template: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
                 routes.MapRoute(
                     name: "default",

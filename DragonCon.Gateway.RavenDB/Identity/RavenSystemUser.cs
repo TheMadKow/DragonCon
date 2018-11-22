@@ -4,7 +4,7 @@ using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Payment;
 using Raven.Identity;
 
-namespace DragonCon.Gateway.RavenDB.Identity
+namespace DragonCon.RavenDB.Identity
 {
     public class RavenSystemUser : IdentityUser, IParticipant
     {
