@@ -1,4 +1,5 @@
-﻿@model DragonCon.Features.Management.Convention.ConventionManagementViewModel
+﻿@using System.Globalization
+@model DragonCon.Features.Management.Convention.ConventionManagementViewModel
 @{
     ViewBag.Title = "ניהול הכנס";
 }
@@ -14,12 +15,18 @@
     </nav>
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-cons" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="text-right" style="padding:15px;">
+                <a asp-area="Management" asp-controller="Convention" asp-action="CreateConvention">
+                    <i class="fa fa-fw fa-plus-square"></i> הגדרת כנס חדש
+                </a>
+            </div>
             <table class="table table-hover table-stripped text-right">
                 <thead>
                     <tr>
                         <td></td>
                         <td>מזהה</td>
                         <td>שם</td>
+                        <td>תאריכים</td>
                         <td></td>
                     </tr>
                 </thead>
@@ -27,16 +34,35 @@
                 @foreach (var con in Model.Conventions)
                 {
                     <tr>
-                        <td><a href="#"> <i class="fa fa-fw fa-star"></i></a></td>
-                        <td>@con.Id</td>
+                        <td><i class="text-muted fa fa-fw fa-star"></i></td>
+                        <td>@con.Id.Split("/")[1]</td>
                         <td>@con.Name</td>
                         <td>
-                            <button class="btn btn-warning">
-                                <i class="fa fa-fw fa-pen"></i>
-                            </button>
-                            <button class="btn btn-info">
-                                <i class="fa fa-fw fa-info-circle"></i>
-                            </button>
+                            @foreach (var day in con.Days.GroupBy(x => x.Key))
+                            {
+                                <span>@day.Key.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</span><br />
+                            }
+                        </td>
+
+                        <td>
+                                <div class="dropdown">
+                                    <button  class="btn btn-warning" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-fw fa-pen"></i> 
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-calendar"></i> עדכון תאריכים</a>
+                                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-ticket-alt"></i> עדכון כרטיסים</a>
+                                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-door-closed"></i> עדכון אולמות</a>
+                                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-cog"></i> עדכון פרטים נלווים</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-clone"></i> שכפל כנס זה</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-star"></i> קבע ככנס פעיל</a>
+                                    </div>
+                                </div>
+                                <button class="btn btn-info" title="הצגת פרטים מלאים">
+                                    <i class="fa fa-fw fa-info-circle"></i> 
+                                </button>
                         </td>
                     </tr>
                 }

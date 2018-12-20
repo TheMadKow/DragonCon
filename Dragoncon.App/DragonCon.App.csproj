@@ -44,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Controllers\" />
     <Folder Include="Areas\Users\Views\Events\" />
     <Folder Include="Resources\js\" />
     <Folder Include="Resources\images\" />

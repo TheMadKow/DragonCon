@@ -1,5 +1,5 @@
-﻿using DragonCon.Features.Management.Convention;
-using DragonCon.Logical.Convention;
+﻿using DragonCon.Logical.Convention;
+using DragonCon.Logical.Gateways;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Tickets;
@@ -12,9 +12,9 @@ namespace DragonCon.Logical.Tests.ConventionBuilder
     [TestFixture]
     public class ConventionBuilderTests
     {
-        private IConventionGateway GetGateway()
+        private IConventionBuilderGateway GetGateway()
         {
-            return A.Fake<IConventionGateway>();
+            return A.Fake<IConventionBuilderGateway>();
         }
 
         [Test]

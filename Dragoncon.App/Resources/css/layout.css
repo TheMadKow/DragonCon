@@ -1,5 +1,10 @@
 ﻿.right-to-left {
     direction: rtl;
+    text-align: right !important;
+}
+
+.dropdown-item {
+    text-align: right;
 }
 
 body {

@@ -16,7 +16,6 @@
     <PackageReference Include="NodaTime" Version="2.4.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DargonCon.Features\DragonCon.Features.csproj" />
     <ProjectReference Include="..\DragonCon.Modeling\DragonCon.Modeling.csproj" />
   </ItemGroup>
   <ItemGroup>

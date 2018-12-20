@@ -18,7 +18,7 @@
     <div class="right-to-left">
         <ul class="right-to-left admin-navbar bg-dark">
             <li class="admin-navbar-brand text-center">
-                <a class="admin-navbar-brand-link" href="#">דקוניקון<br />אזור הניהול</a>
+                <a class="admin-navbar-brand-link" href="#">דרקוניקון<br />אזור הניהול</a>
             </li>
             <li class="list-divider"></li>
             <li>
@@ -36,7 +36,7 @@
             </li>
             <li class="list-divider"></li>
             <li>
-                <a asp-area="Management" asp-controller="Convention" asp-action="Manage">ניהול כנס</a>
+                <a asp-area="Management" asp-controller="Convention" asp-action="Manage">ניהול כנסים</a>
             </li>
             <li class="list-divider"></li>
         </ul>
@@ -51,10 +51,10 @@
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-    <script src="~/lib/popper.js/dist/popper.min.js" asp-append-version="true"></script>
+    <script src="~/lib/popper.js/dist/umd/popper.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js" asp-append-version="true"></script>
-    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    @*<script src="~/js/site.min.js" asp-append-version="true"></script>*@
     <script>
         $(document).ready(function () {
             $('.bootstrap-toggle').bootstrapToggle();

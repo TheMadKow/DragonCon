@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DragonCon.Logical\DragonCon.Logical.csproj" />
     <ProjectReference Include="..\DragonCon.Modeling\DragonCon.Modeling.csproj" />
   </ItemGroup>
 

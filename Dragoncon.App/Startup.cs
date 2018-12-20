@@ -1,7 +1,10 @@
 ﻿using System;
 using DragonCon.Features.Management.Convention;
 using DragonCon.Features.Shared;
+using DragonCon.Logical.Convention;
+using DragonCon.Logical.Gateways;
 using DragonCon.RavenDB;
+using DragonCon.RavenDB.Gateways.Logic;
 using DragonCon.RavenDB.Gateways.Management;
 using DragonCon.RavenDB.Identity;
 using Microsoft.AspNetCore.Builder;
@@ -49,6 +52,8 @@ namespace DragonCon.App
             services.AddSingleton<StoreHolder>(holder);
             services.AddScoped<NullGateway, NullGateway>();
             services.AddScoped<IConventionGateway, RavenConventionGateway>();
+            services.AddScoped<IConventionBuilderGateway, RavenConventionBuilderGateway>();
+            services.AddScoped<ConventionBuilder, ConventionBuilder>();
 
             services
                 .AddRavenDbAsyncSession(holder.Store) // Create a RavenDB IAsyncDocumentSession for each request.
