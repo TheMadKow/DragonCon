@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using NodaTime;
 
 namespace DragonCon.Logical.Convention
 {
-    public class DaysBuilder
+    public class DaysBuilder 
     {
         private readonly ConventionBuilder _builder;
         private readonly ConventionWrapper _convention;
@@ -91,7 +94,7 @@ namespace DragonCon.Logical.Convention
             }
         }
 
-        private bool IsDaysExists(LocalDate day) => _convention.Days.ContainsKey(day);
-
+        public bool IsDaysExists(LocalDate day) => _convention.Days.ContainsKey(day);
+        public List<ConDayWrapper> AllDays => _convention.Days.Values.ToList();
     }
 }

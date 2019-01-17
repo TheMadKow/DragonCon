@@ -21,6 +21,9 @@ namespace DragonCon.RavenDB.Gateways.Logic
 
         public ConventionWrapper GetConventionWrapper(string id)
         {
+            if (id.StartsWith("conventions/") == false)
+                id = "conventions/" + id;
+
             using (var session = _holder.Store.OpenSession())
             {
                 Convention convention = session
@@ -46,6 +49,7 @@ namespace DragonCon.RavenDB.Gateways.Logic
             {
                 var conventionData = session.Load<Convention>(convention.Id) ?? new Convention();
 
+                StoreGeneralInformation(convention, conventionData);
                 StoreConvDays(convention, conventionData, session);
                 StoreConvHalls(convention, conventionData, session);
                 StoreConvTickets(convention, conventionData, session);
@@ -56,7 +60,13 @@ namespace DragonCon.RavenDB.Gateways.Logic
             }
         }
 
-        
+        private void StoreGeneralInformation(ConventionWrapper wrapperData, Convention conventionData)
+        {
+            conventionData.CreateTimeStamp = wrapperData.CreateTimeStamp;
+            conventionData.UpdateTimeStamp = wrapperData.UpdateTimeStamp;
+        }
+
+
         private void StoreConvTickets(ConventionWrapper convention, Convention convData, IDocumentSession session)
         {
             convData.TicketIds = new List<string>();

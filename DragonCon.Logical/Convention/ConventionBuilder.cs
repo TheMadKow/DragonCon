@@ -130,8 +130,14 @@ namespace DragonCon.Logical.Convention
 
         public ConventionBuilder Save()
         {
+            if (_convention.CreateTimeStamp == Instant.MinValue)
+                _convention.CreateTimeStamp = SystemClock.Instance.GetCurrentInstant();
+
+            _convention.UpdateTimeStamp = SystemClock.Instance.GetCurrentInstant();
+
             _gateway.StoreConvention(_convention);
             return this;
         }
+
     }
 }

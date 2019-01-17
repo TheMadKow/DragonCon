@@ -33,28 +33,97 @@ namespace DragonCon.Features.Management.Convention
         }
 
         [HttpGet]
-        public IActionResult CreateConvention()
+        public IActionResult CreateUpdateConvention(ConventionCreateUpdateViewModel viewmodel = null,
+                                                    string conId = null)
         {
-            return View(new ConventionCreateUpdateViewModel()
+            if (string.IsNullOrWhiteSpace(conId) == false)
             {
-                Days = new List<DaysViewModel>
+                var convention = Builder.LoadConvention(conId);
+                viewmodel = new ConventionCreateUpdateViewModel
                 {
-                }
-            });
+                    Id = conId,
+                    Name = convention.ConventionName,
+                    Days = convention.Days.AllDays.Select(x => new DaysViewModel(x)).ToList()
+                };
+            }
+
+            if (viewmodel?.Days == null)
+            {
+                viewmodel = new ConventionCreateUpdateViewModel
+                {
+                    Days = new List<DaysViewModel>()
+                };
+            }
+
+            return View("CreateUpdateConvention", viewmodel);
         }
 
         [HttpPost]
-        public IActionResult CreateConvention(ConventionCreateUpdateViewModel viewmodel)
+        public IActionResult CreateUpdateConventionPost(ConventionCreateUpdateViewModel viewmodel)
+        {
+            if (string.IsNullOrWhiteSpace(viewmodel.Id))
+            {
+                return CreateConvention(viewmodel);
+            }
+            else
+            {
+                return UpdateConvention(viewmodel);
+            }
+        }
+
+        private IActionResult UpdateConvention(ConventionCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
             {
-                return RedirectToAction("CreateConvention", viewmodel);
+                return CreateUpdateConvention(viewmodel);
+            }
+
+            var deletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted).ToList());
+            var nonDeletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted == false).ToList());
+            if (nonDeletedFiltered.Any() == false)
+            {
+                return CreateUpdateConvention(viewmodel);
+            }
+
+            var builder = Builder.LoadConvention(viewmodel.Id);
+            foreach (var parsedDay in nonDeletedFiltered)
+            {
+                if (builder.Days.IsDaysExists(parsedDay.Date) == false)
+                {
+                    builder.Days.AddDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
+                }
+                else
+                {
+                    builder.Days.UpdateDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
+                }
+
+                builder.Days.SetTimeSlotStrategy(parsedDay.Date, TimeSlotStrategy.Exact246Windows);
+            }
+
+            foreach (var parsedDay in deletedFiltered)
+            {
+                if (nonDeletedFiltered.Any(x => x.Date == parsedDay.Date) == false)
+                {
+                    if (builder.Days.IsDaysExists(parsedDay.Date))
+                        builder.Days.RemoveDay(parsedDay.Date);
+                }
+            }
+
+            builder.ChangeName(viewmodel.Name);
+            builder.Save();
+            return RedirectToAction("Manage");        }
+
+        private IActionResult CreateConvention(ConventionCreateUpdateViewModel viewmodel)
+        {
+            if (string.IsNullOrWhiteSpace(viewmodel.Name))
+            {
+                return CreateUpdateConvention(viewmodel);
             }
 
             var filteredList = viewmodel.Days.Where(x => x.IsDeleted == false).ToList();
             if (filteredList.Any() == false)
             {
-                return RedirectToAction("CreateConvention", viewmodel);
+                return CreateUpdateConvention(viewmodel);
             }
 
             var actualDays = ParseDays(filteredList);

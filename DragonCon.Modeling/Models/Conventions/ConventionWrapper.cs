@@ -21,6 +21,8 @@ namespace DragonCon.Modeling.Models.Conventions
         public Dictionary<LocalDate, ConDayWrapper> Days { get; set; } = new Dictionary<LocalDate, ConDayWrapper>();
         public Dictionary<string, HallWrapper> NameAndHall { get; set; } = new Dictionary<string, HallWrapper>();
         public Dictionary<string, TicketWrapper> NameAndTickets { get; set; } = new Dictionary<string, TicketWrapper>();
-
+   
+        public Instant CreateTimeStamp { get => Model.CreateTimeStamp; set => Model.CreateTimeStamp = value; }
+        public Instant UpdateTimeStamp { get => Model.UpdateTimeStamp; set => Model.UpdateTimeStamp = value; }
     }
 }
