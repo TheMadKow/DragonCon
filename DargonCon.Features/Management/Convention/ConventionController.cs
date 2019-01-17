@@ -5,6 +5,7 @@ using DragonCon.Features.Shared;
 using DragonCon.Logical.Convention;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Internal;
 using NodaTime;
@@ -27,7 +28,6 @@ namespace DragonCon.Features.Management.Convention
         [HttpGet]
         public IActionResult Manage(int page = 0, int perPage = ResultsPerPage)
         {
-            var instant = SystemClock.Instance.GetCurrentInstant().ToString();
             var conventionViewModel = Gateway.BuildConventionList(DisplayPagination.BuildForGateway(page, perPage));
             return View(conventionViewModel);
         }
@@ -81,6 +81,43 @@ namespace DragonCon.Features.Management.Convention
             }
 
             return results;
+        }
+
+        [HttpPost]
+        public Answer ToggleType(string type, bool value)
+        {
+            var config = Gateway.LoadSystemConfiguration();
+            switch (type)
+            {
+                case "events":
+                    config.AllowEventsSuggestions = value;
+                    break;
+                case "registration-add":
+                    config.AllowEventsRegistration = value;
+                    break;
+                case "registration-change":
+                    config.AllowEventsRegistrationChanges = value;
+                    break;
+                case "tickets":
+                    config.AllowPayments = value;
+                    break;
+                default:
+                    throw new Exception("Unknown config toggle");
+            }
+            Gateway.SaveSystemConfiguration(config);
+            return Answer.Success;
+        }
+
+        [HttpPost]
+        public Answer SetActive(string id)
+        {
+            var config = new SystemConfiguration
+            {
+                ActiveConventionId = id
+            };
+
+            Gateway.SaveSystemConfiguration(config);
+            return Answer.Success;
         }
     }
 }

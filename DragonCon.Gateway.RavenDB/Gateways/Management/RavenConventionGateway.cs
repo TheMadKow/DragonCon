@@ -12,16 +12,16 @@ using Raven.Client.Documents.Session;
 
 namespace DragonCon.RavenDB.Gateways.Management
 {
-    public class RavenConventionGateway : IConventionGateway
+    public class RavenConventionGateway : RavenGateway, IConventionGateway
     {
         private readonly StoreHolder _holder;
 
-        public RavenConventionGateway()
+        public RavenConventionGateway() : base()
         {
 
         }
 
-        public RavenConventionGateway(StoreHolder holder)
+        public RavenConventionGateway(StoreHolder holder) : base(holder)
         {
             _holder = holder;
         }
@@ -58,10 +58,20 @@ namespace DragonCon.RavenDB.Gateways.Management
                         session.Load<Ticket>(y.TicketIds)?.Select(x => x.Value).ToDictionary(x => x.Name, x => new TicketWrapper(x)),
                 }).ToList();
 
-                result.Configuration = session.Load<SystemConfiguration>(SystemConfiguration.Id) ?? new SystemConfiguration();
                 result.Pagination = DisplayPagination.BuildForView(stats.TotalResults, pagination.SkipCount, pagination.ResultsPerPage);
             }
+
+            result.Configuration = LoadSystemConfiguration();
             return result;
+        }
+
+        public void SaveSystemConfiguration(SystemConfiguration config)
+        {
+            using (var session = _holder.Store.OpenSession())
+            {
+                session.Store(config, SystemConfiguration.Id);
+                session.SaveChanges();
+            }
         }
 
     }

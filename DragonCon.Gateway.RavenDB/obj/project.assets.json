@@ -7826,11 +7826,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Gateway.RavenDB\\DragonCon.RavenDB.csproj",
+      "projectUniqueName": "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Gateway.RavenDB\\DragonCon.RavenDB.csproj",
       "projectName": "DragonCon.RavenDB",
-      "projectPath": "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Gateway.RavenDB\\DragonCon.RavenDB.csproj",
+      "projectPath": "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Gateway.RavenDB\\DragonCon.RavenDB.csproj",
       "packagesPath": "C:\\Users\\The Mad Kow\\.nuget\\packages\\",
-      "outputPath": "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Gateway.RavenDB\\obj\\",
+      "outputPath": "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Gateway.RavenDB\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -7852,14 +7852,14 @@
       "frameworks": {
         "netstandard2.0": {
           "projectReferences": {
-            "D:\\Repository\\DragonCon\\DragonCon\\DargonCon.Features\\DragonCon.Features.csproj": {
-              "projectPath": "D:\\Repository\\DragonCon\\DragonCon\\DargonCon.Features\\DragonCon.Features.csproj"
+            "D:\\Repos\\GitHub\\DragonCon\\DargonCon.Features\\DragonCon.Features.csproj": {
+              "projectPath": "D:\\Repos\\GitHub\\DragonCon\\DargonCon.Features\\DragonCon.Features.csproj"
             },
-            "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Logical\\DragonCon.Logical.csproj": {
-              "projectPath": "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Logical\\DragonCon.Logical.csproj"
+            "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Logical\\DragonCon.Logical.csproj": {
+              "projectPath": "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Logical\\DragonCon.Logical.csproj"
             },
-            "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Modeling\\DragonCon.Modeling.csproj": {
-              "projectPath": "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Modeling\\DragonCon.Modeling.csproj"
+            "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Modeling\\DragonCon.Modeling.csproj": {
+              "projectPath": "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Modeling\\DragonCon.Modeling.csproj"
             }
           }
         }

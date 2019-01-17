@@ -6624,11 +6624,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Specs\\DragonCon.Specs.csproj",
+      "projectUniqueName": "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Specs\\DragonCon.Specs.csproj",
       "projectName": "DragonCon.Specs",
-      "projectPath": "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Specs\\DragonCon.Specs.csproj",
+      "projectPath": "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Specs\\DragonCon.Specs.csproj",
       "packagesPath": "C:\\Users\\The Mad Kow\\.nuget\\packages\\",
-      "outputPath": "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Specs\\obj\\",
+      "outputPath": "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Specs\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -6650,11 +6650,11 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Logical\\DragonCon.Logical.csproj": {
-              "projectPath": "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Logical\\DragonCon.Logical.csproj"
+            "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Logical\\DragonCon.Logical.csproj": {
+              "projectPath": "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Logical\\DragonCon.Logical.csproj"
             },
-            "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Modeling\\DragonCon.Modeling.csproj": {
-              "projectPath": "D:\\Repository\\DragonCon\\DragonCon\\DragonCon.Modeling\\DragonCon.Modeling.csproj"
+            "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Modeling\\DragonCon.Modeling.csproj": {
+              "projectPath": "D:\\Repos\\GitHub\\DragonCon\\DragonCon.Modeling\\DragonCon.Modeling.csproj"
             }
           }
         }
@@ -6677,6 +6677,7 @@
             "version": "[15.9.0, )"
           },
           "Microsoft.NETCore.App": {
+            "suppressParent": "All",
             "target": "Package",
             "version": "[2.1.0, )",
             "autoReferenced": true
