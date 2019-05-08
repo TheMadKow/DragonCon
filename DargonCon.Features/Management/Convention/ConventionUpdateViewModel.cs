@@ -19,10 +19,12 @@ namespace DragonCon.Features.Management.Convention
     {
         public Dictionary<string, string> Metadata { get; set; }
         public List<PhoneRecord> Phonebook { get; set; }
+        public string ConventionId { get; set; }
     }
 
     public class HallsUpdateViewModel{
         public List<HallWrapper> Halls { get; set; }
+        public string ConventionId { get; set; }
     }
 
 }

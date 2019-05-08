@@ -99,44 +99,73 @@ namespace DragonCon.Features.Management.Convention
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
             {
-                return UpdateConvention(viewmodel.Id, "שם כנס ריק");
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = viewmodel.Id,
+                    errorMessage = "הוזן שם כנס ריק"
+                });
             }
 
             var deletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted).ToList());
             var nonDeletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted == false).ToList());
             if (nonDeletedFiltered.Any() == false)
             {
-                return UpdateConvention(viewmodel.Id, "אין ימים בכנס");
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = viewmodel.Id,
+                    errorMessage = "לא הוזנו ימים לכנס"
+                });
             }
-
-            var builder = Builder.LoadConvention(viewmodel.Id);
-            foreach (var parsedDay in nonDeletedFiltered)
+            if (nonDeletedFiltered.GroupBy(x => x.Date).Any(x => x.Count() > 1))
             {
-                if (builder.Days.IsDaysExists(parsedDay.Date) == false)
+                return RedirectToAction("UpdateConvention", new
                 {
-                    builder.Days.AddDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
-                }
-                else
-                {
-                    builder.Days.UpdateDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
-                }
-
-                builder.Days.SetTimeSlotStrategy(parsedDay.Date, TimeSlotStrategy.Exact246Windows);
+                    conId = viewmodel.Id,
+                    errorMessage = "הוזן אותו התאריך יותר מפעם אחת"
+                });
             }
-
-            foreach (var parsedDay in deletedFiltered)
+            try
             {
-                if (nonDeletedFiltered.Any(x => x.Date == parsedDay.Date) == false)
+                var builder = Builder.LoadConvention(viewmodel.Id);
+                foreach (var parsedDay in nonDeletedFiltered)
                 {
-                    if (builder.Days.IsDaysExists(parsedDay.Date))
-                        builder.Days.RemoveDay(parsedDay.Date);
+                    if (builder.Days.IsDaysExists(parsedDay.Date) == false)
+                    {
+                        builder.Days.AddDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
+                    }
+                    else
+                    {
+                        builder.Days.UpdateDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
+                    }
+
+                    builder.Days.SetTimeSlotStrategy(parsedDay.Date, TimeSlotStrategy.Exact246Windows);
                 }
+
+                foreach (var parsedDay in deletedFiltered)
+                {
+                    if (nonDeletedFiltered.Any(x => x.Date == parsedDay.Date) == false)
+                    {
+                        if (builder.Days.IsDaysExists(parsedDay.Date))
+                            builder.Days.RemoveDay(parsedDay.Date);
+                    }
+                }
+
+                builder.ChangeName(viewmodel.Name);
+                builder.Save();
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = viewmodel.Id,
+                    errorMessage = e.Message
+                });
             }
 
-            builder.ChangeName(viewmodel.Name);
-            builder.Save();
-
-            return UpdateConvention(viewmodel.Id);
+            return RedirectToAction("UpdateConvention", new
+            {
+                conId = viewmodel.Id,
+            });
         }
 
         [HttpPost]

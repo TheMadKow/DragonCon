@@ -1,4 +1,16 @@
-﻿function RemoveDay(selector) {
+﻿function ToggleUnlimitedTicket(selector) {
+    var number = $(selector).closest(".row").find(".update-events-number");
+    var isOn = number.prop('disabled');
+    if (isOn === true) {
+        number.prop('disabled', false);
+    } else {
+        number.prop('disabled', true);
+        number.val(null);
+    }
+
+}
+
+function RemoveDay(selector) {
     $(selector).closest(".row").find(".update-deleted").attr('value','true');
     $(selector).closest(".row").hide();
 }
@@ -19,4 +31,5 @@ function AddNewDay() {
     clone.find("a").click(function () { RemoveDay(this); });
 
     $(".last-day-row").last().after(clone);
+    setupPickers();
 }

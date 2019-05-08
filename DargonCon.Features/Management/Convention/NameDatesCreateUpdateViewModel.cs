@@ -24,10 +24,13 @@ namespace DragonCon.Features.Management.Convention
         {
             IsDeleted = false;
 
+            Id = day.Id;
             Date = day.Date.ToDateTimeUnspecified();
             From = new DateTime(1, 1, 1, day.StartTime.Hour, day.StartTime.Minute, 0);
             To = new DateTime(1, 1, 1, day.EndTime.Hour, day.EndTime.Minute, 0);
         }
+
+        public string Id { get; set; }
 
 
         public bool IsDeleted {get; set; }

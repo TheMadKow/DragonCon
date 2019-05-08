@@ -92,16 +92,20 @@ namespace DragonCon.RavenDB.Gateways.Management
 
                 result.Halls = new HallsUpdateViewModel
                 {
+                    ConventionId = convention.Id,
                     Halls = halls.Select(x => new HallWrapper(x.Value)).ToList()
                 };
 
                 result.Tickets = new TicketsUpdateViewModel()
                 {
-                    Tickets = tickets.Select(x => new TicketWrapper(x.Value)).ToList()
+                    ConventionId = convention.Id,
+                    Tickets = tickets.Select(x => new TicketViewModel(new TicketWrapper(x.Value))).ToList(),
+                    AvailableDays = result.NameDate.Days
                 };
 
                 result.Details = new DetailsUpdateViewModel
                 {
+                    ConventionId = convention.Id,
                     Metadata = convention.Metadata,
                     Phonebook = convention.PhoneBook
                 };
