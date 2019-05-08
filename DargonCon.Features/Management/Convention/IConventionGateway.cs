@@ -8,5 +8,6 @@ namespace DragonCon.Features.Management.Convention
     {
         ConventionManagementViewModel BuildConventionList(IDisplayPagination pagination);
         void SaveSystemConfiguration(SystemConfiguration config);
+        ConventionUpdateViewModel BuildConventionUpdate(string conId);
     }
 }

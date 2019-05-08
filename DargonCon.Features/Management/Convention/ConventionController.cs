@@ -33,97 +33,31 @@ namespace DragonCon.Features.Management.Convention
         }
 
         [HttpGet]
-        public IActionResult CreateUpdateConvention(ConventionCreateUpdateViewModel viewmodel = null,
-                                                    string conId = null)
+        public IActionResult CreateConvention(NameDatesCreateUpdateViewModel viewmodel = null)
         {
-            if (string.IsNullOrWhiteSpace(conId) == false)
+            if (viewmodel == null)
             {
-                var convention = Builder.LoadConvention(conId);
-                viewmodel = new ConventionCreateUpdateViewModel
+                viewmodel = new NameDatesCreateUpdateViewModel
                 {
-                    Id = conId,
-                    Name = convention.ConventionName,
-                    Days = convention.Days.AllDays.Select(x => new DaysViewModel(x)).ToList()
+                    Days = new List<DaysViewModel>(),
                 };
             }
-
-            if (viewmodel?.Days == null)
-            {
-                viewmodel = new ConventionCreateUpdateViewModel
-                {
-                    Days = new List<DaysViewModel>()
-                };
-            }
-
-            return View("CreateUpdateConvention", viewmodel);
+            return View("CreateUpdateNameDates", viewmodel);
         }
+
 
         [HttpPost]
-        public IActionResult CreateUpdateConventionPost(ConventionCreateUpdateViewModel viewmodel)
+        public IActionResult CreateConventionPost(NameDatesCreateUpdateViewModel viewmodel)
         {
-            if (string.IsNullOrWhiteSpace(viewmodel.Id))
+            if (string.IsNullOrWhiteSpace(viewmodel.Name))
             {
                 return CreateConvention(viewmodel);
-            }
-            else
-            {
-                return UpdateConvention(viewmodel);
-            }
-        }
-
-        private IActionResult UpdateConvention(ConventionCreateUpdateViewModel viewmodel)
-        {
-            if (string.IsNullOrWhiteSpace(viewmodel.Name))
-            {
-                return CreateUpdateConvention(viewmodel);
-            }
-
-            var deletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted).ToList());
-            var nonDeletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted == false).ToList());
-            if (nonDeletedFiltered.Any() == false)
-            {
-                return CreateUpdateConvention(viewmodel);
-            }
-
-            var builder = Builder.LoadConvention(viewmodel.Id);
-            foreach (var parsedDay in nonDeletedFiltered)
-            {
-                if (builder.Days.IsDaysExists(parsedDay.Date) == false)
-                {
-                    builder.Days.AddDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
-                }
-                else
-                {
-                    builder.Days.UpdateDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
-                }
-
-                builder.Days.SetTimeSlotStrategy(parsedDay.Date, TimeSlotStrategy.Exact246Windows);
-            }
-
-            foreach (var parsedDay in deletedFiltered)
-            {
-                if (nonDeletedFiltered.Any(x => x.Date == parsedDay.Date) == false)
-                {
-                    if (builder.Days.IsDaysExists(parsedDay.Date))
-                        builder.Days.RemoveDay(parsedDay.Date);
-                }
-            }
-
-            builder.ChangeName(viewmodel.Name);
-            builder.Save();
-            return RedirectToAction("Manage");        }
-
-        private IActionResult CreateConvention(ConventionCreateUpdateViewModel viewmodel)
-        {
-            if (string.IsNullOrWhiteSpace(viewmodel.Name))
-            {
-                return CreateUpdateConvention(viewmodel);
             }
 
             var filteredList = viewmodel.Days.Where(x => x.IsDeleted == false).ToList();
             if (filteredList.Any() == false)
             {
-                return CreateUpdateConvention(viewmodel);
+                return CreateConvention(viewmodel);
             }
 
             var actualDays = ParseDays(filteredList);
@@ -137,6 +71,83 @@ namespace DragonCon.Features.Management.Convention
             builder.Save();
             return RedirectToAction("Manage");
         }
+
+        
+        [HttpGet]
+        public IActionResult UpdateConvention(string conId)
+        {
+            var conUpdateViewModel = Gateway.BuildConventionUpdate(conId);
+            return View("UpdateConvention", conUpdateViewModel);
+        }
+
+
+        [HttpPost]
+        public IActionResult UpdateNameDates(NameDatesCreateUpdateViewModel viewModel)
+        {
+            return null;
+        }
+
+        [HttpPost]
+        public IActionResult UpdateTickets(NameDatesCreateUpdateViewModel viewModel)
+        {
+            return null;
+        }
+
+        [HttpPost]
+        public IActionResult UpdateHalls(NameDatesCreateUpdateViewModel viewModel)
+        {
+            return null;
+        }
+
+        [HttpPost]
+        public IActionResult UpdateDetails(NameDatesCreateUpdateViewModel viewModel)
+        {
+            return null;
+        }
+
+        //private IActionResult UpdateConvention(NameDatesCreateUpdateViewModel viewmodel)
+        //{
+        //    if (string.IsNullOrWhiteSpace(viewmodel.Name))
+        //    {
+        //        return CreateUpdateConvention(viewmodel);
+        //    }
+
+        //    var deletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted).ToList());
+        //    var nonDeletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted == false).ToList());
+        //    if (nonDeletedFiltered.Any() == false)
+        //    {
+        //        return CreateUpdateConvention(viewmodel);
+        //    }
+
+        //    var builder = Builder.LoadConvention(viewmodel.Id);
+        //    foreach (var parsedDay in nonDeletedFiltered)
+        //    {
+        //        if (builder.Days.IsDaysExists(parsedDay.Date) == false)
+        //        {
+        //            builder.Days.AddDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
+        //        }
+        //        else
+        //        {
+        //            builder.Days.UpdateDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
+        //        }
+
+        //        builder.Days.SetTimeSlotStrategy(parsedDay.Date, TimeSlotStrategy.Exact246Windows);
+        //    }
+
+        //    foreach (var parsedDay in deletedFiltered)
+        //    {
+        //        if (nonDeletedFiltered.Any(x => x.Date == parsedDay.Date) == false)
+        //        {
+        //            if (builder.Days.IsDaysExists(parsedDay.Date))
+        //                builder.Days.RemoveDay(parsedDay.Date);
+        //        }
+        //    }
+
+        //    builder.ChangeName(viewmodel.Name);
+        //    builder.Save();
+        //    return RedirectToAction("Manage");
+
+        //}
 
         private List<ConDay> ParseDays(List<DaysViewModel> days)
         {

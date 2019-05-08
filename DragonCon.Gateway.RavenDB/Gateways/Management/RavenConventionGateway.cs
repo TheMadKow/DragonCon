@@ -65,6 +65,50 @@ namespace DragonCon.RavenDB.Gateways.Management
             return result;
         }
 
+        public ConventionUpdateViewModel BuildConventionUpdate(string conId)
+        {
+            conId = $"Conventions/{conId}";
+            var result = new ConventionUpdateViewModel();
+            using (var session = _holder.Store.OpenSession())
+            {
+                var convention = session
+                    .Include<Convention>(x => x.DayIds)
+                    .Include<Convention>(x => x.HallIds)
+                    .Include<Convention>(x => x.TicketIds)
+                    .Load<Convention>(conId);
+
+                var days = session.Load<ConDay>(convention.DayIds);
+                var halls = session.Load<Hall>(convention.HallIds);
+                var tickets = session.Load<Ticket>(convention.TicketIds);
+
+                result.NameDate = new NameDatesCreateUpdateViewModel
+                {
+                    Name = convention.Name,
+                    Id = convention.Id,
+                    Days = days.Select(x => new DaysViewModel(new ConDayWrapper(x.Value))).ToList()
+                };
+
+                result.Halls = new HallsUpdateViewModel
+                {
+                    Halls = halls.Select(x => new HallWrapper(x.Value)).ToList()
+                };
+
+                result.Tickets = new TicketsUpdateViewModel()
+                {
+                    Tickets = tickets.Select(x => new TicketWrapper(x.Value)).ToList()
+                };
+
+                result.Details = new DetailsUpdateViewModel
+                {
+                    Metadata = convention.Metadata,
+                    Phonebook = convention.PhoneBook
+                };
+            }
+
+            return result;
+        }
+
+
         public void SaveSystemConfiguration(SystemConfiguration config)
         {
             using (var session = _holder.Store.OpenSession())
