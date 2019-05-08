@@ -2,6 +2,7 @@
 using System.Linq;
 using DragonCon.Features.Management.Convention;
 using DragonCon.Features.Shared;
+using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.System;
@@ -67,8 +68,9 @@ namespace DragonCon.RavenDB.Gateways.Management
 
         public ConventionUpdateViewModel BuildConventionUpdate(string conId)
         {
-            conId = $"Conventions/{conId}";
+            conId = conId.FixRavenId("Conventions");
             var result = new ConventionUpdateViewModel();
+
             using (var session = _holder.Store.OpenSession())
             {
                 var convention = session

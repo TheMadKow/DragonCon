@@ -32,16 +32,28 @@ namespace DragonCon.Features.Management.Convention
             return View(conventionViewModel);
         }
 
+        [HttpPost]
+        public IActionResult CreateUpdateNameDatePost(NameDatesCreateUpdateViewModel viewmodel)
+        {
+            if (string.IsNullOrWhiteSpace(viewmodel.Id))
+                return CreateConventionPost(viewmodel);
+            else 
+                return UpdateNameDates(viewmodel);
+        }
+
         [HttpGet]
         public IActionResult CreateConvention(NameDatesCreateUpdateViewModel viewmodel = null)
         {
             if (viewmodel == null)
             {
-                viewmodel = new NameDatesCreateUpdateViewModel
-                {
-                    Days = new List<DaysViewModel>(),
-                };
+                viewmodel = new NameDatesCreateUpdateViewModel();
             }
+
+            if (viewmodel.Days == null)
+            {
+                viewmodel.Days = new List<DaysViewModel>();
+            }
+
             return View("CreateUpdateNameDates", viewmodel);
         }
 
@@ -74,17 +86,57 @@ namespace DragonCon.Features.Management.Convention
 
         
         [HttpGet]
-        public IActionResult UpdateConvention(string conId)
+        public IActionResult UpdateConvention(string conId, string errorMessage = null)
         {
             var conUpdateViewModel = Gateway.BuildConventionUpdate(conId);
+            conUpdateViewModel.ErrorMessage = errorMessage;
             return View("UpdateConvention", conUpdateViewModel);
         }
 
 
         [HttpPost]
-        public IActionResult UpdateNameDates(NameDatesCreateUpdateViewModel viewModel)
+        public IActionResult UpdateNameDates(NameDatesCreateUpdateViewModel viewmodel)
         {
-            return null;
+            if (string.IsNullOrWhiteSpace(viewmodel.Name))
+            {
+                return UpdateConvention(viewmodel.Id, "שם כנס ריק");
+            }
+
+            var deletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted).ToList());
+            var nonDeletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted == false).ToList());
+            if (nonDeletedFiltered.Any() == false)
+            {
+                return UpdateConvention(viewmodel.Id, "אין ימים בכנס");
+            }
+
+            var builder = Builder.LoadConvention(viewmodel.Id);
+            foreach (var parsedDay in nonDeletedFiltered)
+            {
+                if (builder.Days.IsDaysExists(parsedDay.Date) == false)
+                {
+                    builder.Days.AddDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
+                }
+                else
+                {
+                    builder.Days.UpdateDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
+                }
+
+                builder.Days.SetTimeSlotStrategy(parsedDay.Date, TimeSlotStrategy.Exact246Windows);
+            }
+
+            foreach (var parsedDay in deletedFiltered)
+            {
+                if (nonDeletedFiltered.Any(x => x.Date == parsedDay.Date) == false)
+                {
+                    if (builder.Days.IsDaysExists(parsedDay.Date))
+                        builder.Days.RemoveDay(parsedDay.Date);
+                }
+            }
+
+            builder.ChangeName(viewmodel.Name);
+            builder.Save();
+
+            return UpdateConvention(viewmodel.Id);
         }
 
         [HttpPost]
@@ -105,49 +157,6 @@ namespace DragonCon.Features.Management.Convention
             return null;
         }
 
-        //private IActionResult UpdateConvention(NameDatesCreateUpdateViewModel viewmodel)
-        //{
-        //    if (string.IsNullOrWhiteSpace(viewmodel.Name))
-        //    {
-        //        return CreateUpdateConvention(viewmodel);
-        //    }
-
-        //    var deletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted).ToList());
-        //    var nonDeletedFiltered = ParseDays(viewmodel.Days.Where(x => x.IsDeleted == false).ToList());
-        //    if (nonDeletedFiltered.Any() == false)
-        //    {
-        //        return CreateUpdateConvention(viewmodel);
-        //    }
-
-        //    var builder = Builder.LoadConvention(viewmodel.Id);
-        //    foreach (var parsedDay in nonDeletedFiltered)
-        //    {
-        //        if (builder.Days.IsDaysExists(parsedDay.Date) == false)
-        //        {
-        //            builder.Days.AddDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
-        //        }
-        //        else
-        //        {
-        //            builder.Days.UpdateDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
-        //        }
-
-        //        builder.Days.SetTimeSlotStrategy(parsedDay.Date, TimeSlotStrategy.Exact246Windows);
-        //    }
-
-        //    foreach (var parsedDay in deletedFiltered)
-        //    {
-        //        if (nonDeletedFiltered.Any(x => x.Date == parsedDay.Date) == false)
-        //        {
-        //            if (builder.Days.IsDaysExists(parsedDay.Date))
-        //                builder.Days.RemoveDay(parsedDay.Date);
-        //        }
-        //    }
-
-        //    builder.ChangeName(viewmodel.Name);
-        //    builder.Save();
-        //    return RedirectToAction("Manage");
-
-        //}
 
         private List<ConDay> ParseDays(List<DaysViewModel> days)
         {
@@ -199,5 +208,6 @@ namespace DragonCon.Features.Management.Convention
             Gateway.SaveSystemConfiguration(config);
             return Answer.Success;
         }
+
     }
 }

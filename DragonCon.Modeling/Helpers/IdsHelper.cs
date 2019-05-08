@@ -18,5 +18,14 @@ namespace DragonCon.Modeling.Helpers
             }
         }
 
+        public static string FixRavenId(this string ravenIdent, string collection)
+        {
+            if (ravenIdent.ToLower().StartsWith(collection.ToLower()) == false)
+                ravenIdent = $"{collection}/{ravenIdent}";
+
+            return ravenIdent;
+
+        }
+
     }
 }

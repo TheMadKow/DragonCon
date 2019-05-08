@@ -1,48 +1,52 @@
-﻿@model DragonCon.Features.Management.Convention.NameDatesCreateUpdateViewModel
+﻿@using DragonCon.Modeling.Models.Tickets
+@using DragonCon.Modeling.Helpers
+@model DragonCon.Features.Management.Convention.TicketsUpdateViewModel
 @{
-    if (Model.Id != null)
-    {
-        ViewBag.Title = "עריכת כנס";
-    }
-    else
-    {
-        ViewBag.Title = "הוספת כנס חדש";
-    }
-
-           
-    var loadedDays = Model.Days.Where(x => x.IsDeleted == false).ToList();
-    var initialCount = Math.Max(0, loadedDays.Count - 1);
+    //var loadedTickets = Model.Tickets.Where(x => x.IsDeleted == false).ToList();
+    //var initialCount = Math.Max(0, loadedTickets.Count - 1);..
+    var initialCount = 1;
 
 }
 <form asp-area="Management" asp-controller="Convention" asp-action="CreateUpdateNameDatePost" method="post" class="right-to-left" style="padding: 10px;">
-    <input asp-for="Id" hidden />
-
+    @*<input asp-for="Id" hidden />*@
+    @* Convention Tickets *@
     <div class="form-group">
-        <label>שם הכנס</label>
-        <input asp-for="Name" class="form-control" placeholder="למשל - 'דרקוניקון 2022'">
-    </div>
-    @* Convention Days *@
-    <div class="form-group">
-        <label>ימי הכנס</label>
-        <div id="last-day-template" data-counter="@initialCount" class="row last-day-row" style="padding-bottom: 5px;" hidden>
+        <label>סוגי כרטיסים</label>
+        <div id="last-ticket-template" data-counter="@initialCount" class="row last-ticket-row" style="padding-bottom: 5px;">
             <input type="text" class="update-deleted" value="false" hidden>
+            <input type="text" class="update-id" value="" hidden>
+
             <div class="col">
-                <input type="date" class="form-control update-date" placeholder="יום כנס">
+                <input type="text" class="form-control update-name" placeholder="שם">
             </div>
             <div class="col">
-                <input type="time" class="form-control  update-from" placeholder="שעת התחלה">
+                <input type="number" class="form-control  update-from" placeholder="מחיר">
             </div>
             <div class="col">
-                <input type="time" class="form-control  update-to" placeholder="שעת סיום">
+                <input type="text" class="form-control  update-to" placeholder="קוד PayPal">
+            </div>
+            <div class="col">
+                <input type="number" class="form-control  update-to" placeholder="#פעילויות">
+            </div>
+            <div class="col">
+                <input type="number" class="form-control  update-to" placeholder="ימים">
+            </div>
+            <div class="col">
+                <select class="form-control">
+                    @foreach (var type in Enums.AsSelectListItem<TicketLimitation>())
+                    {
+                        <option value="@type.Value">@type.Text</option>
+                    }
+                </select>
             </div>
             <div class="col-1">
                 <a href="#" class="form-control">
-                    <i title="הסר יום" class="fa fa-fw fa-times"></i>
+                    <i title="הסר כרטיס" class="fa fa-fw fa-times"></i>
                 </a>
             </div>
         </div>
 
-        @if (loadedDays.Any())
+        @*@if (loadedDays.Any())
         {
             for (int i = 0; i < loadedDays.Count; i++)
             {
@@ -85,8 +89,8 @@
                     </a>
                 </div>
             </div>
-        }
-        <a href="#" onclick="AddNewDay()"><i class="fa fa-fw fa-plus"></i> הוספת יום</a>
+        }*@
+        <a href="#" onclick="AddNewDay()"><i class="fa fa-fw fa-plus"></i> הוספת כרטיס</a>
     </div>
     <br />
     <button type="submit" class="btn btn-primary">שמור שינויים</button>
