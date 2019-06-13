@@ -37,13 +37,13 @@ namespace DragonCon.RavenDB.Gateways.Logic
                     Name = convention.Name,
                     Id = convention.Id,
                     Days = session.Load<ConDay>(convention.DayIds).Select(x => x.Value).ToDictionary(x => x.Date, x => new ConDayWrapper(x)),
-                    NameAndHall = session.Load<Hall>(convention.HallIds).Select(x => x.Value).ToDictionary(x => x.Name, x => new HallWrapper(x)),
-                    NameAndTickets = session.Load<Ticket>(convention.TicketIds).Select(x => x.Value).ToDictionary(x => x.Name, x => new TicketWrapper(x)),
+                    Halls = session.Load<Hall>(convention.HallIds).Select(x => x.Value).ToList(),
+                    Tickets = session.Load<Ticket>(convention.TicketIds).Select(x => new TicketWrapper(x.Value)).ToList(),
                 };
             }
         }
 
-        public virtual void StoreConvention(ConventionWrapper convention)
+        public virtual void StoreConvention(ConventionWrapper convention, IList<string> deletedIds)
         {
             using (var session = _holder.Store.OpenSession())
             {
@@ -53,6 +53,14 @@ namespace DragonCon.RavenDB.Gateways.Logic
                 StoreConvDays(convention, conventionData, session);
                 StoreConvHalls(convention, conventionData, session);
                 StoreConvTickets(convention, conventionData, session);
+
+                foreach (var id in deletedIds)
+                {
+                    if (string.IsNullOrWhiteSpace(id))
+                    {
+                        session.Delete(id);
+                    }
+                }
 
                 conventionData.Name = convention.Name;
                 session.Store(conventionData);
@@ -70,20 +78,20 @@ namespace DragonCon.RavenDB.Gateways.Logic
         private void StoreConvTickets(ConventionWrapper convention, Convention convData, IDocumentSession session)
         {
             convData.TicketIds = new List<string>();
-            foreach (var ticket in convention.NameAndTickets)
+            foreach (var ticket in convention.Tickets)
             {
-                session.Store(ticket.Value.Model);
-                convData.TicketIds.Add(ticket.Value.Id);
+                session.Store(ticket.Model);
+                convData.TicketIds.Add(ticket.Id);
             }
         }
 
         private static void StoreConvHalls(ConventionWrapper convention, Convention convData, IDocumentSession session)
         {
             convData.HallIds = new List<string>();
-            foreach (var hall in convention.NameAndHall)
+            foreach (var hall in convention.Halls)
             {
-                session.Store(hall.Value.Model);
-                convData.HallIds.Add(hall.Value.Id);
+                session.Store(hall);
+                convData.HallIds.Add(hall.Id);
             }
         }
 

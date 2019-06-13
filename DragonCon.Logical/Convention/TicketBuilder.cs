@@ -16,10 +16,16 @@ namespace DragonCon.Logical.Convention
         {
             get
             {
-                if (_convention.NameAndTickets.ContainsKey(key))
-                    return _convention.NameAndTickets[key];
-                return null;
+                if (string.IsNullOrWhiteSpace(key))
+                    return null;
+
+                return _convention.Tickets.SingleOrDefault(x => x.Id == key);
             }
+        }
+
+        public bool IsTicketExists(string ticketId)
+        {
+            return this[ticketId] != null;
         }
 
         public TicketBuilder(ConventionBuilder parent, ConventionWrapper convention)
@@ -42,7 +48,7 @@ namespace DragonCon.Logical.Convention
         public ConventionBuilder AddTicket(TicketLimitation role, string ticketName, List<LocalDate> localDates)
         {
             ThrowIfTicketNameEmpty(ticketName);
-            ThrowIfTicketExists(ticketName);
+            ThrowIfTicketNameExists(ticketName);
 
             foreach (var date in localDates)
             {
@@ -57,20 +63,20 @@ namespace DragonCon.Logical.Convention
                 TicketLimitation = role
             };
 
-            _convention.NameAndTickets.Add(ticket.Name, ticket);
+            _convention.Tickets.Add(ticket);
             return _parent;
         }
 
 
-        private void ThrowIfTicketExists(string ticketName)
+        private void ThrowIfTicketNameExists(string ticketName)
         {
-            if (_convention.NameAndTickets.ContainsKey(ticketName))
-                throw new Exception("Ticket already exists");
+            if (_convention.Tickets.Any(x => x.Name == ticketName))
+                throw new Exception("Ticket name already exists");
         }
 
-        private void ThrowIfTicketNotExists(string ticketName)
+        private void ThrowIfTicketNotExists(string ticketId)
         {
-            if (!_convention.NameAndTickets.ContainsKey(ticketName))
+            if (IsTicketExists(ticketId) == false)
                 throw new Exception("Ticket does not exists");
         }
 
@@ -81,32 +87,22 @@ namespace DragonCon.Logical.Convention
                 throw new Exception("Empty ticket name");   
         }
 
-        public ConventionBuilder SetTransactionCode(string ticketName, string code)
+        public ConventionBuilder UpdateTicket(string ticketId,
+            string name, string code, int? numOfActivities,
+            double price, TicketLimitation limitation)
         {
-            ThrowIfTicketNotExists(ticketName);
-            _convention.NameAndTickets[ticketName].TransactionCode = code;
-            return _parent;
-        }
-
-        public ConventionBuilder SetNumberOfActivities(string ticketName, int i)
-        {
-            ThrowIfTicketNotExists(ticketName);
-            ThrowIfActivityInvalid(i);
-            _convention.NameAndTickets[ticketName].ActivitiesAllowed = i;
-            return _parent;
-        }
-
-        private void ThrowIfActivityInvalid(int i)
-        {
-            if (i < 0)
-                throw new Exception("Cannot set negative activities");
-        }
-
-        public ConventionBuilder SetTicketPrice(string ticketName, double price)
-        {
-            ThrowIfTicketNotExists(ticketName);
+            ThrowIfTicketNotExists(ticketId);
+            //TODO ThrowIfActivityInvalid(numOfActivities.Value);
             ThrowIfPriceIsNotValid(price);
-            _convention.NameAndTickets[ticketName].Price = price;
+
+            var ticket = this[ticketId];
+            ticket.Name = name;
+            ticket.TransactionCode = code;
+            //TODO days
+            ticket.Price = price;
+            ticket.ActivitiesAllowed = numOfActivities;
+            ticket.TicketLimitation = limitation;
+
             return _parent;
         }
 
@@ -114,13 +110,6 @@ namespace DragonCon.Logical.Convention
         {
             if (price < 0)
                 throw new Exception("Cannot set negative price");
-        }
-
-        public ConventionBuilder SetUnlimitedActivities(string ticketName)
-        {
-            ThrowIfTicketNotExists(ticketName);
-            _convention.NameAndTickets[ticketName].ActivitiesAllowed = null;
-            return _parent;
         }
     }
 }

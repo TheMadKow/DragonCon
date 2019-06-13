@@ -1,0 +1,68 @@
+﻿@using DragonCon.Features.Management.Events
+@using DragonCon.Modeling.Helpers
+@model DragonCon.Features.Management.Events.EventsManagementViewModel
+
+@{
+    ViewBag.Title = "ניהול אירועים";
+}
+
+<div class="right-to-left">
+    <div class="text-right" style="padding:15px;">
+        <a asp-area="Management" asp-controller="Events" asp-action="CreateEvent">
+            <i class="fa fa-fw fa-plus-square"></i> הוספת אירוע
+        </a>
+        <a asp-area="Management" asp-controller="Events" asp-action="ManageActivities">
+            <i class="fa fa-fw fa-pen"></i> סוגים ושיטות
+        </a>
+    </div>
+    
+    <div class="right-to-left well well-sm">
+        <form>
+            @* Todo Filters *@
+            <button type="submit">
+                <i class="fa fa-fw fa-pen"></i> סנן
+            </button>
+        </form>
+    </div>
+
+    <table class="table table-hover table-stripped text-right">
+        <thead>
+        <tr class="d-flex">
+            <td class="col-1"></td>
+            <td class="col-2">מזהה</td>
+            <td class="col-3">שם</td>
+            <td class="col-3">תאריכים</td>
+            <td class="col-3"></td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var con in  Model.Events.OrderByDescending(x => x.Model.Name))
+        {
+            <tr class="d-flex">
+                <td class="col-1">
+                </td>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-3">
+                </td>
+
+                <td class="col-3">
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Convention"
+                               asp-action="UpdateConvention" asp-route-conId="@con.Model.Id.GetNumberFromId()">
+                                <i class="fa fa-fw fa-edit"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" title="הצגת פרטים מלאים" class="btn btn-sm btn-info">
+                                <i class="fa fa-fw fa-info-circle"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

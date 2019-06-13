@@ -93,7 +93,12 @@ namespace DragonCon.Features.Management.Convention
             return View("UpdateConvention", conUpdateViewModel);
         }
 
-
+        [HttpGet]
+        public IActionResult ShowDetails(string id)
+        {
+            var conUpdateViewModel = Gateway.BuildConventionUpdate(id);
+            return View("ShowDetails", conUpdateViewModel);
+        }
         [HttpPost]
         public IActionResult UpdateNameDates(NameDatesCreateUpdateViewModel viewmodel)
         {
@@ -169,6 +174,72 @@ namespace DragonCon.Features.Management.Convention
         }
 
         [HttpPost]
+        public IActionResult CreateUpdateHalls(HallsUpdateViewModel viewmodel)
+        {
+            var deletedFiltered = viewmodel.Halls.Where(x => x.IsDeleted).ToList();
+            var nonDeletedFiltered = viewmodel.Halls.Where(x => x.IsDeleted == false).ToList();
+            if (nonDeletedFiltered.Any() == false)
+            {
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = viewmodel.ConventionId,
+                    errorMessage = "לא הוזנו אולמות לכנס"
+                });
+            }
+
+            if (nonDeletedFiltered.Any(x => string.IsNullOrWhiteSpace(x.Name)))
+            {
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = viewmodel.ConventionId,
+                    errorMessage = "הוזן שם אולם ריק"
+                });
+
+            }
+
+            try
+            {
+                var builder = Builder.LoadConvention(viewmodel.ConventionId);
+                foreach (var hall in deletedFiltered)
+                {
+                    if (nonDeletedFiltered.Any() == false)
+                    {
+                        if (builder.Halls.IsHallExists(hall.Id))
+                            builder.Halls.RemoveHall(hall.Id);
+                    }
+                }
+
+                foreach (var hall in nonDeletedFiltered)
+                {
+                    if (builder.Halls.IsHallExists(hall.Id) == false)
+                    {
+                        builder.Halls.AddHall(hall.Name, hall.Description, hall.FirstTable, hall.LastTable);
+                    }
+                    else
+                    {
+                        builder.Halls.UpdateHall(hall.Id,
+                            hall.Name, hall.Description, hall.FirstTable, hall.LastTable);
+                    }
+                }
+
+                builder.Save();
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = viewmodel.ConventionId,
+                    errorMessage = e.Message
+                });
+            }
+
+            return RedirectToAction("UpdateConvention", new
+            {
+                conId = viewmodel.ConventionId,
+            });
+        }
+
+        [HttpPost]
         public IActionResult UpdateTickets(NameDatesCreateUpdateViewModel viewModel)
         {
             return null;
@@ -238,5 +309,6 @@ namespace DragonCon.Features.Management.Convention
             return Answer.Success;
         }
 
+     
     }
 }

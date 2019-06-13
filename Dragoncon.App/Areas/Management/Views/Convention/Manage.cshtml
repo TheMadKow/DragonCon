@@ -58,7 +58,7 @@
                                                 <i class="fa fa-fw fa-cog"></i>
                                             </a>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                <a class="dropdown-item" asp-area="Management" asp-controller="Convention" 
+                                                <a class="dropdown-item" asp-area="Management" asp-controller="Convention"
                                                    asp-action="UpdateConvention" asp-route-conId="@con.Id.GetNumberFromId()">
                                                     <i class="fa fa-fw fa-edit"></i> עדכון כנס
                                                 </a>
@@ -71,7 +71,7 @@
 
                                     </li>
                                     <li class="list-inline-item">
-                                        <a href="#" title="הצגת פרטים מלאים" class="btn btn-sm btn-info">
+                                        <a href="#" title="הצגת פרטים מלאים" onclick="ShowDetails('@con.Id')" class="btn btn-sm btn-info">
                                             <i class="fa fa-fw fa-info-circle"></i>
                                         </a>
                                     </li>
@@ -88,9 +88,9 @@
                 var activeCon = Model.Conventions.FirstOrDefault(x => x.Id == Model.Configuration.ActiveConventionId);
             }
             <div class="alert alert-primary" role="alert">
-                <strong>כנס פעיל</strong> - @activeCon?.Name 
+                <strong>כנס פעיל</strong> - @activeCon?.Name
             </div>
-            
+
             <div class="card">
                 <div class="checkbox toggle-padding text-right">
                     <label class="label-control">
@@ -98,7 +98,7 @@
                                type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"
                                data-offstyle="danger" data-onstyle="success" data-width="50">
                     </label>
-                    <span class="toggle-text">אפשר הצעת אירועים</span>
+                    <span class="toggle-text">אפשר הגשת אירועים</span>
                 </div>
 
                 <div class="checkbox toggle-padding text-right">
@@ -116,7 +116,7 @@
                                type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"
                                data-offstyle="danger" data-onstyle="success" data-width="50">
                     </label>
-                    <span class="toggle-text">אפשר שינוי רישום לאירועים</span>
+                    <span class="toggle-text">אפשר עדכון רישום לאירועים</span>
                 </div>
 
                 <div class="checkbox toggle-padding text-right">
@@ -137,9 +137,26 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="convention-details-ajax" tabindex="-1" role="dialog">
+</div>
 
 @section scripts {
     <script>
+        function ShowDetails(conId) {
+            AjaxModal('#convention-details-ajax', `/Management/Convention/ShowDetails?id=${conId}`);
+
+            //$('#convention-details-body').load(`/Management/Convention/ShowDetails?id=${conId}`,function(result){
+            //    $('#convention-details-ajax').modal({show:true});
+            //});
+
+            //var $modal = $('#convention-details-ajax');
+            //$('body').modalmanager('loading');
+            //$modal.load(`/Management/Convention/ShowDetails?id=${conId}`,
+            //    function() {
+            //        $modal.modal({ backdrop: 'static', keyboard: false });
+            //    });
+        }
+
         function SetActiveConvention(conId) {
             $.ajax({
                 type: "POST",
@@ -155,13 +172,13 @@
             $.ajax({
                 type: "POST",
                 url: "/Management/Convention/ToggleType?type=" + type + "&value=" + val,
-                error: function() {
+                error: function () {
                     Swal({
                         type: 'error',
                         title: 'שגיאה כללית',
                         text: 'אירעה שגיאה כללית - נא רעננו את העמוד ונסו שנית'
                     });
-                } 
+                }
             });
 
         }

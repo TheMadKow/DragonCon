@@ -21,6 +21,8 @@ namespace DragonCon.Logical.Convention
         private ConventionWrapper _convention = null;
         private readonly IConventionBuilderGateway _gateway;
 
+        public List<string> DeletedEntityIds { get; set; } = new List<string>();
+
         public DaysBuilder Days { get; private set; }
         public TicketBuilder Tickets { get; set; }
         public HallsBuilder Halls { get; set; }
@@ -36,9 +38,9 @@ namespace DragonCon.Logical.Convention
             _convention = new ConventionWrapper
             {
                 Name = name,
+                Halls = new List<Hall>(),
+                Tickets = new List<TicketWrapper>(),
                 Days = new Dictionary<LocalDate, ConDayWrapper>(),
-                NameAndHall = new Dictionary<string, HallWrapper>(),
-                NameAndTickets = new Dictionary<string, TicketWrapper>()
             };
             CreateSubBuilders();
             return this;
@@ -79,16 +81,16 @@ namespace DragonCon.Logical.Convention
 
         private void MigrateTickets(ConventionWrapper oldCon)
         {
-            foreach (var ticket in oldCon.NameAndTickets)
+            foreach (var ticket in oldCon.Tickets)
             {
-                Tickets.AddLimitedTicket(ticket.Value.TicketLimitation, ticket.Key, ticket.Value.Days.Select(x => x.Date).ToArray());
-                Tickets.SetTicketPrice(ticket.Key, ticket.Value.Price);
-                Tickets.SetTransactionCode(ticket.Key, ticket.Value.TransactionCode);
+                //Tickets.AddLimitedTicket(ticket.Value.TicketLimitation, ticket.Key, ticket.Value.Days.Select(x => x.Date).ToArray());
+                //Tickets.SetTicketPrice(ticket.Key, ticket.Value.Price);
+                //Tickets.SetTransactionCode(ticket.Key, ticket.Value.TransactionCode);
 
-                if (ticket.Value.IsUnlimited)
-                    Tickets.SetUnlimitedActivities(ticket.Key);
-                else if (ticket.Value.ActivitiesAllowed != null)
-                    Tickets.SetNumberOfActivities(ticket.Key, ticket.Value.ActivitiesAllowed.Value);
+                //if (ticket.Value.IsUnlimited)
+                //    Tickets.SetUnlimitedActivities(ticket.Key);
+                //else if (ticket.Value.ActivitiesAllowed != null)
+                //    Tickets.SetNumberOfActivities(ticket.Key, ticket.Value.ActivitiesAllowed.Value);
             }
         }
         private void ThrowIfRequestInvalid(params Migrate[] migrations)
@@ -100,14 +102,13 @@ namespace DragonCon.Logical.Convention
 
         private void MigrateHalls(ConventionWrapper oldCon)
         {
-            foreach (var hall in _convention.NameAndHall)
+            foreach (var hall in _convention.Halls)
             {
-                Halls.AddHall(hall.Key, hall.Value.Description);
-                var newTables = hall.Value.Tables.Select(x => new Table(hall.Key, x.Name)
-                {
-                    Notes = x.Notes
-                });
-                Halls.SetHallTables(hall.Key, newTables);
+                var prevHall = hall;
+                Halls.AddHall(prevHall.Name,
+                    prevHall.Description,
+                    prevHall.FirstTable,
+                    prevHall.LastTable);
             }
         }
 
@@ -135,7 +136,7 @@ namespace DragonCon.Logical.Convention
 
             _convention.UpdateTimeStamp = SystemClock.Instance.GetCurrentInstant();
 
-            _gateway.StoreConvention(_convention);
+            _gateway.StoreConvention(_convention, DeletedEntityIds);
             return this;
         }
 

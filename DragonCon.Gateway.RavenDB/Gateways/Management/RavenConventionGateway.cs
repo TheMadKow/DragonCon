@@ -9,14 +9,11 @@ using DragonCon.Modeling.Models.System;
 using DragonCon.Modeling.Models.Tickets;
 using NodaTime;
 using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
 
 namespace DragonCon.RavenDB.Gateways.Management
 {
     public class RavenConventionGateway : RavenGateway, IConventionGateway
     {
-        private readonly StoreHolder _holder;
-
         public RavenConventionGateway() : base()
         {
 
@@ -24,14 +21,13 @@ namespace DragonCon.RavenDB.Gateways.Management
 
         public RavenConventionGateway(StoreHolder holder) : base(holder)
         {
-            _holder = holder;
         }
 
 
         public ConventionManagementViewModel BuildConventionList(IDisplayPagination pagination)
         {
             var result = new ConventionManagementViewModel();
-            using (var session = _holder.Store.OpenSession())
+            using (var session = OpenSession)
             {
                 var conventions = session
                     .Query<Convention>()
@@ -43,20 +39,21 @@ namespace DragonCon.RavenDB.Gateways.Management
                     .Skip(pagination.SkipCount)
                     .Take(pagination.ResultsPerPage)
                     .ToList();
-                
+
                 result.Conventions = conventions.Select(y => new ConventionWrapper(y)
                 {
                     Name = y.Name,
                     Id = y.Id,
-                    Days = y.DayIds == null ? 
-                        new Dictionary<LocalDate, ConDayWrapper>() : 
-                        session.Load<ConDay>(y.DayIds)?.Select(x => x.Value).ToDictionary(x => x.Date, x => new ConDayWrapper(x)),
-                    NameAndHall = y.HallIds == null ?
-                        new Dictionary<string, HallWrapper>() : 
-                        session.Load<Hall>(y.HallIds)?.Select(x => x.Value).ToDictionary(x => x.Name, x => new HallWrapper(x)),
-                    NameAndTickets = y.TicketIds == null ? 
-                        new Dictionary<string, TicketWrapper>() :
-                        session.Load<Ticket>(y.TicketIds)?.Select(x => x.Value).ToDictionary(x => x.Name, x => new TicketWrapper(x)),
+                    Halls = y.HallIds == null
+                        ? new List<Hall>()
+                        : session.Load<Hall>(y.HallIds)?.Select(x => x.Value).ToList(),
+                    Tickets = y.TicketIds == null
+                        ? new List<TicketWrapper>()
+                        : session.Load<Ticket>(y.TicketIds)?.Select(x => new TicketWrapper(x.Value)).ToList(),
+                    Days = y.DayIds == null
+                        ? new Dictionary<LocalDate, ConDayWrapper>()
+                        : session.Load<ConDay>(y.DayIds)?.Select(x => x.Value)
+                            .ToDictionary(x => x.Date, x => new ConDayWrapper(x)),
                 }).ToList();
 
                 result.Pagination = DisplayPagination.BuildForView(stats.TotalResults, pagination.SkipCount, pagination.ResultsPerPage);
@@ -71,7 +68,7 @@ namespace DragonCon.RavenDB.Gateways.Management
             conId = conId.FixRavenId("Conventions");
             var result = new ConventionUpdateViewModel();
 
-            using (var session = _holder.Store.OpenSession())
+            using (var session = OpenSession)
             {
                 var convention = session
                     .Include<Convention>(x => x.DayIds)
@@ -93,7 +90,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 result.Halls = new HallsUpdateViewModel
                 {
                     ConventionId = convention.Id,
-                    Halls = halls.Select(x => new HallWrapper(x.Value)).ToList()
+                    Halls = halls.Select(x => new HallsUpdateViewModel.HallUpdateViewModel(x.Value)).ToList()
                 };
 
                 result.Tickets = new TicketsUpdateViewModel()
@@ -117,7 +114,7 @@ namespace DragonCon.RavenDB.Gateways.Management
 
         public void SaveSystemConfiguration(SystemConfiguration config)
         {
-            using (var session = _holder.Store.OpenSession())
+            using (var session = OpenSession)
             {
                 session.Store(config, SystemConfiguration.Id);
                 session.SaveChanges();

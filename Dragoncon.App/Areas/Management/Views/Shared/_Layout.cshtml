@@ -46,6 +46,12 @@
         </ul>
         <div class="container container-admin">
             <h4 class="Title-Text">@ViewBag.Title</h4>
+            
+            <div class="modal-placeholder" id="modal-placeholder" style="display: none;">
+                <div class="modal-placeholder-content text-center">
+                    <i class="fa fa-fw fa-spin fa-spinner"></i> אנא המתן...
+                </div>
+            </div>
 
             <div class="body-content">
                 @RenderBody()
@@ -63,7 +69,6 @@
     <script src="~/lib/pickadate/lib/picker.date.js" asp-append-version="true"></script>
     <script src="~/lib/pickadate/lib/picker.time.js" asp-append-version="true"></script>
     <script src="~/lib/chosen-js/chosen.jquery.min.js" asp-append-version="true"></script>
-
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script>
         $(document).ready(function () {
@@ -91,7 +96,8 @@
                 disable_search: true,
                 inherit_select_classes: true,
                 rtl: true,
-                width: "100%"});
+                width: "100%"
+            });
         }
     </script>
     @RenderSection("Scripts", required: false)

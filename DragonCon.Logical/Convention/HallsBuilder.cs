@@ -10,14 +10,21 @@ namespace DragonCon.Logical.Convention
     {
         private readonly ConventionBuilder _builder;
         private readonly ConventionWrapper _convention;
-        public HallWrapper this[string key]
+
+        public Hall this[string key]
         {
             get
             {
-                if (_convention.NameAndHall.ContainsKey(key))
-                    return _convention.NameAndHall[key];
-                return null;
+                if (string.IsNullOrWhiteSpace(key))
+                    return null;
+
+                return _convention.Halls.SingleOrDefault(x => x.Id == key);
             }
+        }
+
+        public bool IsHallExists(string hallId)
+        {
+            return this[hallId] != null;
         }
 
         public HallsBuilder(ConventionBuilder builder, ConventionWrapper convention)
@@ -26,90 +33,89 @@ namespace DragonCon.Logical.Convention
             _builder = builder;
         }
 
-        public ConventionBuilder AddHall(string hallName, string hallDesc)
+        public ConventionBuilder AddHall(string hallName, string hallDesc, 
+            int firstTable, int lastTable)
         {
-            ThrowIfHallExists(hallName);
-            _convention.NameAndHall.Add(hallName, new HallWrapper()
+            ThrowIfHallNameExists(hallName, string.Empty);
+            ThrowIfTablesInvalid(firstTable, lastTable);
+            var testHall = new Hall
             {
-                Name = hallName,
                 Description = hallDesc,
-                Tables = new List<ITable>()
-            });
+                Name = hallName,
+                FirstTable = firstTable,
+                LastTable = lastTable
+                
+            };
+            ThrowIfTablesExists(testHall, string.Empty);
+            _convention.Halls.Add(testHall);
             return _builder;
         }
 
-        private void ThrowIfHallExists(string hallName)
+        private void ThrowIfTablesExists(Hall testHall, string hallId)
         {
-            if (_convention.NameAndHall.ContainsKey(hallName))
-                throw new Exception("Hall Already Exists");
+            foreach (var hall in _convention.Halls)
+            {
+                if (hall.Id == hallId)
+                    continue;
+                
+                foreach (var table in testHall.Tables)
+                {
+                    if (hall.Tables.Contains(table))
+                        throw new Exception("Invalid Table Range.");
+                }
+            }
         }
 
-        private void ThrowIfHallDoesntExists(string hallName)
+        private void ThrowIfTablesInvalid(int firstTable, int lastTable)
         {
-            if (!_convention.NameAndHall.ContainsKey(hallName))
+            if (firstTable <= 0 || lastTable <= 0) 
+                throw new Exception("Hall Numbers Must Be Positive");
+            if (lastTable < firstTable)
+                throw new Exception("Last Table must be greater than First Table");
+        }
+
+        private void ThrowIfHallNameExists(string hallName, string hallId)
+        {
+            if (_convention.Halls.Any(x => x.Name == hallName && x.Id != hallId))
+                throw new Exception("Hall Name Already Exists");
+        }
+
+        private void ThrowIfHallDoesntExists(string hallKey)
+        {
+            if (IsHallExists(hallKey) == false)
                 throw new Exception("Hall doesn't Exists");
 
         }
 
-        public ConventionBuilder SetDescription(string hallName, string hallDesc)
+        public ConventionBuilder RemoveHall(string hallId)
         {
-            ThrowIfHallDoesntExists(hallName);
-            _convention.NameAndHall[hallName].Description = hallDesc;
+            ThrowIfHallDoesntExists(hallId);
+            var removedHall = this[hallId];
+            _convention.Halls.Remove(removedHall);
+            _builder.DeletedEntityIds.Add(hallId);
             return _builder;
         }
 
-        public ConventionBuilder SetHallTables(string hallName, string[] tableNames)
+        public ConventionBuilder UpdateHall(string hallId, 
+            string name, string desc, int firstTable, int lastTable)
         {
-            ThrowIfHallDoesntExists(hallName);
-            var hall = _convention.NameAndHall[hallName];
-            hall.Tables = new List<ITable>();
-            foreach (var table in tableNames)
+            ThrowIfHallNameExists(name, hallId);
+            ThrowIfTablesInvalid(firstTable, lastTable);
+            var testHall = new Hall
             {
-                hall.Tables.Add(new Table(hall.Id, table));
-            }
+                FirstTable = firstTable,
+                LastTable = lastTable
+            };
+            ThrowIfTablesExists(testHall, hallId);
+            var updated = this[hallId];
+            updated.Name = name;
+            updated.Description = desc;
+            updated.FirstTable = firstTable;
+            updated.LastTable = lastTable;
             return _builder;
+
+
         }
 
-        public ConventionBuilder SetHallTables(string hallName, IEnumerable<ITable> tables)
-        {
-            ThrowIfHallDoesntExists(hallName);
-            var hall = _convention.NameAndHall[hallName];
-            hall.Tables = tables.ToList();
-            return _builder;
-        }
-
-        public ConventionBuilder RenameHall(string hallNameOld, string hallNameNew)
-        {
-            ThrowIfHallDoesntExists(hallNameOld);
-            ThrowIfHallExists(hallNameNew);
-
-            var oldHall = _convention.NameAndHall[hallNameOld];
-            oldHall.Name = hallNameNew;
-            _convention.NameAndHall.Remove(hallNameOld);
-            _convention.NameAndHall.Add(hallNameNew, oldHall);
-            return _builder;
-        }
-
-        public ConventionBuilder RemoveHall(string hallName)
-        {
-            ThrowIfHallDoesntExists(hallName);
-            _convention.NameAndHall.Remove(hallName);
-            return _builder;
-        }
-
-        public static string[] RoomsFromNumericRange(int from, int to)
-        {
-            if (to < from)
-                return new string[0];
-
-            var size = to - from + 1;
-            var results = new List<string>(size);
-            for (int i = from; i <= to; i++)
-            {
-                results.Add(i.ToString());
-            }
-
-            return results.ToArray();
-        }
     }
 }

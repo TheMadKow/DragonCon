@@ -7,7 +7,6 @@ namespace DragonCon.Modeling.Models.Conventions
     public class Convention
     {
         public string Id { get; set; }
-
         public string Name { get; set; }
         
         public List<string> DayIds { get; set; }

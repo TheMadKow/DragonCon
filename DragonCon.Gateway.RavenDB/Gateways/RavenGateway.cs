@@ -6,7 +6,7 @@ namespace DragonCon.RavenDB.Gateways
     public abstract class RavenGateway
     {
         private readonly StoreHolder _holder;
-        protected IDocumentSession Session => _holder.Store.OpenSession();
+        protected IDocumentSession OpenSession => _holder.Store.OpenSession();
         protected IAsyncDocumentSession AsyncSession => _holder.Store.OpenAsyncSession();
 
         public SystemConfiguration LoadSystemConfiguration()

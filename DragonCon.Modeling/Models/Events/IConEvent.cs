@@ -11,7 +11,6 @@ namespace DragonCon.Modeling.Models.Events
         string ConventionDayId { get; set; }
         string Description { get; set; }
         string GameMasterId { get; set; }
-        bool HasBeenRevised { get; set; }
         List<string> HelperIds { get; set; }
         string Id { get; set; }
         string Name { get; set; }
@@ -19,7 +18,8 @@ namespace DragonCon.Modeling.Models.Events
         SizeRestriction Size { get; set; }
         EventStatus Status { get; set; }
         string SystemId { get; set; }
-        string TableId { get; set; }
+        string HallId { get; set; }
+        int? Table { get; set; }
         List<string> Tags { get; set; }
         TimeSlot TimeSlot { get; set; }
         List<string> Changes { get;set; }

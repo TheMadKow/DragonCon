@@ -12,8 +12,8 @@
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-days-tab" data-toggle="tab" href="#nav-days" role="tab" aria-controls="nav-days" aria-selected="true">שם ותאריכים</a>
-            <a class="nav-item nav-link" id="nav-tickets-tab" data-toggle="tab" href="#nav-tickets" role="tab" aria-controls="nav-tickets" aria-selected="false">כרטיסים</a>
             <a class="nav-item nav-link" id="nav-halls-tab" data-toggle="tab" href="#nav-halls" role="tab" aria-controls="nav-halls" aria-selected="false">אולמות</a>
+            <a class="nav-item nav-link" id="nav-tickets-tab" data-toggle="tab" href="#nav-tickets" role="tab" aria-controls="nav-tickets" aria-selected="false">כרטיסים</a>
             <a class="nav-item nav-link" id="nav-details-tab" data-toggle="tab" href="#nav-details" role="tab" aria-controls="nav-details" aria-selected="false">פרטים נוספים</a>
         </div>
     </nav>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="tab-pane fade" id="nav-halls" role="tabpanel" aria-labelledby="nav-halls-tab">
-            עוד לא פעיל
+            @await Html.PartialAsync("CreateUpdateHalls", Model.Halls)
         </div>
 
         <div class="tab-pane fade" id="nav-details" role="tabpanel" aria-labelledby="nav-details-tab">

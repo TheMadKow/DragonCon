@@ -23,8 +23,28 @@ namespace DragonCon.Features.Management.Convention
     }
 
     public class HallsUpdateViewModel{
-        public List<HallWrapper> Halls { get; set; }
+        public List<HallUpdateViewModel> Halls { get; set; }
         public string ConventionId { get; set; }
+
+        public class HallUpdateViewModel : Hall
+        {
+            public HallUpdateViewModel()
+            {
+
+            }
+
+            public HallUpdateViewModel(Hall value)
+            {
+                IsDeleted = false;
+                FirstTable = value.FirstTable;
+                LastTable = value.LastTable;
+                Name = value.Name;
+                Description = value.Description;
+                Id = value.Id;
+            }
+
+            public bool IsDeleted { get; set; }
+        }
     }
 
 }

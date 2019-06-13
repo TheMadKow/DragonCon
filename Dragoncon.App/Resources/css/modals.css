@@ -1,0 +1,43 @@
+﻿.modal-dialog {
+    max-width: 100%;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.modal-header .close {
+    margin: -1rem auto -1rem -1rem;
+    float: left;
+}
+
+.modal-header .right-to-left {
+    width: 100%;
+}
+.modal-placeholder {
+    position: FIXED;
+    background: #9c9c9c45;
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    z-index: 6;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.modal-placeholder-content {
+    float: left;
+    right: auto;
+    background: #ffffff;
+    border: #cacaca 1px solid;
+    padding: 25px;
+    padding-right: 50px;
+    padding-left: 50px;
+    font-size: 1.3em;
+    top: 37.5%;
+    width: 50%;
+    position: fixed;
+    left: 50%;
+    margin-left: -33.5%;
+
+}

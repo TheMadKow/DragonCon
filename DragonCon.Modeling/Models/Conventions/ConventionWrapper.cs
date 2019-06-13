@@ -18,9 +18,10 @@ namespace DragonCon.Modeling.Models.Conventions
         public string Id { get => Model.Id; set => Model.Id = value; }
         public string Name { get => Model.Name; set => Model.Name = value; }
 
+        public List<Hall> Halls { get; set; } = new List<Hall>();
+        public List<TicketWrapper> Tickets { get; set; } = new List<TicketWrapper>();
+
         public Dictionary<LocalDate, ConDayWrapper> Days { get; set; } = new Dictionary<LocalDate, ConDayWrapper>();
-        public Dictionary<string, HallWrapper> NameAndHall { get; set; } = new Dictionary<string, HallWrapper>();
-        public Dictionary<string, TicketWrapper> NameAndTickets { get; set; } = new Dictionary<string, TicketWrapper>();
    
         public Instant CreateTimeStamp { get => Model.CreateTimeStamp; set => Model.CreateTimeStamp = value; }
         public Instant UpdateTimeStamp { get => Model.UpdateTimeStamp; set => Model.UpdateTimeStamp = value; }

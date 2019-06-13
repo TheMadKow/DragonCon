@@ -48,6 +48,7 @@ namespace DragonCon.Logical.Convention
             ThrowsIfDateNotExists(localDate);
             var existingDay = _convention.Days[localDate];
             _convention.Days.Remove(existingDay.Date);
+            _builder.DeletedEntityIds.Add(existingDay.Id);
             return _builder;
         }
 

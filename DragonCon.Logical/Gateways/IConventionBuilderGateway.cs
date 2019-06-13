@@ -8,6 +8,6 @@ namespace DragonCon.Logical.Gateways
     public interface IConventionBuilderGateway
     {
         ConventionWrapper GetConventionWrapper(string id);
-        void StoreConvention(ConventionWrapper convention);
+        void StoreConvention(ConventionWrapper convention, IList<string> deleted);
     }
 }

@@ -7,12 +7,14 @@ using DragonCon.RavenDB;
 using DragonCon.RavenDB.Gateways.Logic;
 using DragonCon.RavenDB.Gateways.Management;
 using DragonCon.RavenDB.Identity;
+using DragonCon.RavenDB.Index;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents.Indexes;
 using Raven.Client.NodaTime;
 using Raven.Client.ServerWide;
 using Raven.Client.ServerWide.Operations;
@@ -48,6 +50,8 @@ namespace DragonCon.App
                 var databaseRecord = new DatabaseRecord(DragonConsts.DatabaseName);
                 holder.Store.Maintenance.Server.Send(new CreateDatabaseOperation(databaseRecord));
             };
+
+            IndexCreation.CreateIndexes(typeof(MastersByConventionIndex).Assembly, holder.Store);
 
             services.AddSingleton<StoreHolder>(holder);
             services.AddScoped<NullGateway, NullGateway>();

@@ -19,7 +19,7 @@ namespace DragonCon.RavenDB.Gateways.Users
             try
             {
 
-            using (var session = Session)
+            using (var session = OpenSession)
             {
                 var lazyAge = session.Advanced.Lazily.Load<AgeRestrictionTemplate>(viewmodel.AgeRestrictionId);
                 var conEvent = new ConEvent()
@@ -39,10 +39,10 @@ namespace DragonCon.RavenDB.Gateways.Users
                     GameMasterId = viewmodel.CreatorId,
                     HelperIds = viewmodel.HelperIds,
                     ParticipantIds = new List<string>(),
-                    HasBeenRevised = false,
                     Status = EventStatus.Pending,
                     Tags = viewmodel.Tags,
-                    TableId = string.Empty,
+                    HallId = string.Empty,
+                    Table = null,
                     Changes = new List<string>()
                 };
 

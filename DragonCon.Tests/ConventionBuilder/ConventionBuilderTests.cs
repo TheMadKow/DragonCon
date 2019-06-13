@@ -1,4 +1,5 @@
-﻿using DragonCon.Logical.Convention;
+﻿using System;
+using DragonCon.Logical.Convention;
 using DragonCon.Logical.Gateways;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
@@ -67,17 +68,14 @@ namespace DragonCon.Logical.Tests.ConventionBuilder
         [Test]
         public void ConventionBuilder_NewConventionManipulateHallsTables_Success()
         {
-            var tables = HallsBuilder.RoomsFromNumericRange(1, 25);
-
             var builder = new Logical.Convention.ConventionBuilder(GetGateway())
                 .NewConvention("Test Convention")
-                .Halls.AddHall("אולם השחקנים", "ללא תיאור")
-                .Halls.AddHall("אולם ההרפתקנים", "ללא תיאור")
-                .Halls.SetDescription("אולם השחקנים", "עם תיאור")
-                .Halls.SetHallTables("אולם השחקנים", tables)
-                .Halls.RenameHall("אולם השחקנים", "אולם המשחקים")
-                .Halls.RemoveHall("אולם ההרפתקנים")
+                .Halls.AddHall("אולם השחקנים", "ללא תיאור",1, 10)
+                .Halls.AddHall("אולם ההרפתקנים", "ללא תיאור", 11, 20)
                 .Save();
+
+
+            throw new Exception();
 
             var removedHall = builder.Halls["אולם ההרפתקנים"];
             Assert.IsNull(removedHall);
@@ -88,7 +86,7 @@ namespace DragonCon.Logical.Tests.ConventionBuilder
             var hall = builder.Halls["אולם המשחקים"];
             Assert.AreEqual(hall.Name, "אולם המשחקים");
             Assert.AreEqual(hall.Description, "עם תיאור");
-            Assert.AreEqual(hall.Tables.Count, 25);
+            Assert.AreEqual(hall.Tables.Count, 10);
         }
 
 
@@ -96,7 +94,7 @@ namespace DragonCon.Logical.Tests.ConventionBuilder
         public void ConventionBuilder_NewConventionManipulateTickets_Success()
         {
             var builder = new Convention.ConventionBuilder(GetGateway())
-                .NewConvention("Test Convention")
+                .NewConvention("Test Con")
                 .Days.AddDay(new LocalDate(2018, 7, 7), new LocalTime(9, 0), new LocalTime(23, 0))
                 .Days.AddDay(new LocalDate(2018, 7, 8), new LocalTime(9, 0), new LocalTime(23, 0))
                 .Tickets.AddTicket("AllDay", new LocalDate(2018, 7, 7), new LocalDate(2018, 7, 8))

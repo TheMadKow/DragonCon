@@ -33,3 +33,28 @@ function AddNewDay() {
     $(".last-day-row").last().after(clone);
     setupPickers();
 }
+
+
+function RemoveHall(selector) {
+    $(selector).closest(".row").find(".update-deleted").attr('value','true');
+    $(selector).closest(".row").hide();
+}
+
+function AddNewHall() {
+    var lastHallTemplate = $("#last-hall-template");
+    var $lastHallCounter = parseInt(lastHallTemplate.data("counter")) +1;
+    lastHallTemplate.data("counter", $lastHallCounter.toString());
+
+    var clone = lastHallTemplate.clone();
+    clone.attr("id", "");
+    clone.prop("hidden", "");
+
+    clone.find(".update-name").attr("name", `Halls[${$lastHallCounter}].Name`);
+    clone.find(".update-desc").attr("name", `Halls[${$lastHallCounter}].Description`);
+    clone.find(".update-first").attr("name", `Halls[${$lastHallCounter}].FirstTable`);
+    clone.find(".update-last").attr("name", `Halls[${$lastHallCounter}].LastTable`);
+    clone.find(".update-deleted").attr("name", `Halls[${$lastHallCounter}].IsDeleted`);
+    clone.find("a").click(function () { RemoveDay(this); });
+
+    $(".last-hall-row").last().after(clone);
+}

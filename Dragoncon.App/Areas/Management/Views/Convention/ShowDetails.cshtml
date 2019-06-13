@@ -1,0 +1,53 @@
+﻿@model DragonCon.Features.Management.Convention.ConventionUpdateViewModel
+@{
+    Layout = "";
+}
+
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+
+    <div class="modal-header">
+        <div class="right-to-left">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="סגור חלון">
+                <span aria-hidden="true" class="text-danger"><i class="fa fa-fw fa-window-close"></i></span>
+            </button>
+            <h4>@Model.NameDate.Name</h4>
+        </div>
+    </div>
+
+    <div class="modal-body right-to-left">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">ימי הכנס</h5>
+                <table class="table">
+                    @foreach (var day in Model.NameDate.Days)
+                    {
+                        <tr class="d-flex">
+                            <td class="col-3"> @day.Date.ToShortDateString()</td>
+                            <td class="col-2">@day.From.ToShortTimeString()</td>
+                            <td class="col-2">@day.To.ToShortTimeString()</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <br/>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">אולמות</h5>
+
+                <table class="table">
+                    @foreach (var hall in Model.Halls.Halls)
+                    {
+                        <tr class="d-flex">
+                            <td class="col-4"> @hall.Name</td>
+                            <td class="col-5">@hall.Description</td>
+                            <td class="col-3">@hall.Tables.Count שולחנות: @hall.FirstTable <i>עד</i> @hall.LastTable</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
