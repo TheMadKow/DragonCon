@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DragonCon.Logical.Gateways;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
@@ -36,7 +34,7 @@ namespace DragonCon.RavenDB.Gateways.Logic
                 {
                     Name = convention.Name,
                     Id = convention.Id,
-                    Days = session.Load<ConDay>(convention.DayIds).Select(x => x.Value).ToDictionary(x => x.Date, x => new ConDayWrapper(x)),
+                    Days = session.Load<ConDay>(convention.DayIds).Select(x => x.Value).Select(x => new ConDayWrapper(x)).ToList(),
                     Halls = session.Load<Hall>(convention.HallIds).Select(x => x.Value).ToList(),
                     Tickets = session.Load<Ticket>(convention.TicketIds).Select(x => new TicketWrapper(x.Value)).ToList(),
                 };
@@ -100,8 +98,8 @@ namespace DragonCon.RavenDB.Gateways.Logic
             convData.DayIds = new List<string>();
             foreach (var day in convention.Days)
             {
-                session.Store(day.Value.Model);
-                convData.DayIds.Add(day.Value.Id);
+                session.Store(day.Model);
+                convData.DayIds.Add(day.Id);
             }
         }
 

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Tickets;
-using NodaTime;
 
 namespace DragonCon.Logical.Convention
 {
-    public class TicketBuilder
+    public class TicketsBuilder
     {
         private readonly ConventionBuilder _parent;
         private readonly ConventionWrapper _convention;
@@ -28,39 +26,56 @@ namespace DragonCon.Logical.Convention
             return this[ticketId] != null;
         }
 
-        public TicketBuilder(ConventionBuilder parent, ConventionWrapper convention)
+        public TicketsBuilder(ConventionBuilder parent, ConventionWrapper convention)
         {
             _convention = convention;
             _parent = parent;
         }
 
-        public ConventionBuilder AddTicket(string ticketName, params LocalDate[] localDates)
+        //public ConventionBuilder AddTicket(string ticketName, params LocalDate[] localDates)
+        //{
+        //    return AddTicket(TicketType.NotLimited, ticketName, localDates.ToList());
+        //}
+
+        //public ConventionBuilder AddLimitedTicket(TicketType role, string ticketName, params LocalDate[] localDates)
+        //{
+        //    return AddTicket(role, ticketName, localDates.ToList());
+        //}
+
+        
+        public ConventionBuilder RemoveTicket(string ticketId)
         {
-            return AddTicket(TicketLimitation.NotLimited, ticketName, localDates.ToList());
+            ThrowIfTicketNotExists(ticketId);
+            var removedTicket = this[ticketId];
+            _convention.Tickets.Remove(removedTicket);
+            _parent.DeletedEntityIds.Add(ticketId);
+            return _parent;
         }
 
-        public ConventionBuilder AddLimitedTicket(TicketLimitation role, string ticketName, params LocalDate[] localDates)
+        public ConventionBuilder AddTicket(
+            string name, 
+            List<string> dayIds,
+            string code, int? numOfActivities,
+            double price,
+            TicketType type)
         {
-            return AddTicket(role, ticketName, localDates.ToList());
-        }
+            ThrowIfTicketNameEmpty(name);
+            ThrowIfTicketNameExists(name);
 
-
-        public ConventionBuilder AddTicket(TicketLimitation role, string ticketName, List<LocalDate> localDates)
-        {
-            ThrowIfTicketNameEmpty(ticketName);
-            ThrowIfTicketNameExists(ticketName);
-
-            foreach (var date in localDates)
+            foreach (var date in dayIds)
             {
-                if (!_convention.Days.ContainsKey(date))
-                    throw new Exception("Ticket-Day does not exists");
+                if (_parent.Days[date] == null)
+                    throw new Exception("Convention Day does not exist");
             }
 
-            var ticket = new TicketWrapper()
+            var ticket = new TicketWrapper
             {
-                Name = ticketName,
-                Days = localDates.Select(x => _parent.Days[x]).ToList(),
-                TicketLimitation = role
+                Name = name,
+                Days =  dayIds, 
+                TicketType = type,
+                TransactionCode = code,
+                Price = price,
+                ActivitiesAllowed = numOfActivities
             };
 
             _convention.Tickets.Add(ticket);
@@ -88,20 +103,21 @@ namespace DragonCon.Logical.Convention
         }
 
         public ConventionBuilder UpdateTicket(string ticketId,
-            string name, string code, int? numOfActivities,
-            double price, TicketLimitation limitation)
+            string name, 
+            List<string> dayIds,
+            string code, int? numOfActivities,
+            double price, TicketType type)
         {
             ThrowIfTicketNotExists(ticketId);
-            //TODO ThrowIfActivityInvalid(numOfActivities.Value);
             ThrowIfPriceIsNotValid(price);
 
             var ticket = this[ticketId];
             ticket.Name = name;
             ticket.TransactionCode = code;
-            //TODO days
             ticket.Price = price;
             ticket.ActivitiesAllowed = numOfActivities;
-            ticket.TicketLimitation = limitation;
+            ticket.TicketType = type;
+            ticket.Days = dayIds;
 
             return _parent;
         }

@@ -24,7 +24,7 @@ namespace DragonCon.Logical.Convention
         public List<string> DeletedEntityIds { get; set; } = new List<string>();
 
         public DaysBuilder Days { get; private set; }
-        public TicketBuilder Tickets { get; set; }
+        public TicketsBuilder Tickets { get; set; }
         public HallsBuilder Halls { get; set; }
         public string ConventionName => _convention.Name;
 
@@ -40,7 +40,7 @@ namespace DragonCon.Logical.Convention
                 Name = name,
                 Halls = new List<Hall>(),
                 Tickets = new List<TicketWrapper>(),
-                Days = new Dictionary<LocalDate, ConDayWrapper>(),
+                Days = new List<ConDayWrapper>()
             };
             CreateSubBuilders();
             return this;
@@ -83,7 +83,7 @@ namespace DragonCon.Logical.Convention
         {
             foreach (var ticket in oldCon.Tickets)
             {
-                //Tickets.AddLimitedTicket(ticket.Value.TicketLimitation, ticket.Key, ticket.Value.Days.Select(x => x.Date).ToArray());
+                //Tickets.AddLimitedTicket(ticket.Value.TicketType, ticket.Key, ticket.Value.Days.Select(x => x.Date).ToArray());
                 //Tickets.SetTicketPrice(ticket.Key, ticket.Value.Price);
                 //Tickets.SetTransactionCode(ticket.Key, ticket.Value.TransactionCode);
 
@@ -116,15 +116,15 @@ namespace DragonCon.Logical.Convention
         {
             foreach (var day in oldCon.Days)
             {
-                Days.AddDay(day.Key, day.Value.StartTime, day.Value.EndTime);
-                Days.SetTimeSlotStrategy(day.Key, day.Value.TimeSlotStrategy);
+                //Days.AddDay(day.Key, day.Value.StartTime, day.Value.EndTime);
+                //Days.SetTimeSlotStrategy(day.Key, day.Value.TimeSlotStrategy);
             }
         }
 
         private void CreateSubBuilders()
         {
             Days = new DaysBuilder(this, _convention);
-            Tickets = new TicketBuilder(this, _convention);
+            Tickets = new TicketsBuilder(this, _convention);
             Halls = new HallsBuilder(this, _convention);
         }
 

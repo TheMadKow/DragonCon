@@ -26,10 +26,17 @@
             </li>
             <li class="list-divider"></li>
             <li>
+                <a asp-area="Management" asp-controller="Events" asp-action="Information">לוח בקרה</a>
+            </li>
+            <li class="list-divider"></li>
+            <li>
                 <a asp-area="Management" asp-controller="Events" asp-action="Information">מידע אירועים</a>
             </li>
             <li>
                 <a asp-area="Management" asp-controller="Participants" asp-action="Information">מידע משתמשים</a>
+            </li>
+            <li>
+                <a asp-area="Management" asp-controller="Participants" asp-action="Information">הפקת כרטיסים</a>
             </li>
             <li class="list-divider"></li>
             <li>
@@ -70,36 +77,45 @@
     <script src="~/lib/pickadate/lib/picker.time.js" asp-append-version="true"></script>
     <script src="~/lib/chosen-js/chosen.jquery.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
-    <script>
-        $(document).ready(function () {
-            $('.bootstrap-toggle').bootstrapToggle();
-            setupPickers();
+<script>
+    $(document).ready(function () {
+        setupToggles();
+        setupPickers();
+        setupChosen();
+    });
+
+    function setupToggles() {
+        $('.bootstrap-toggle').bootstrapToggle();
+    }
+
+    function setupChosen() {
+        $('.chosen-select').chosen({
+            disable_search_threshold: 10,
+            inherit_select_classes: true,
+            rtl: true,
+            width: "100%"
         });
+        $('.chosen-select').removeClass('chosen-select');
+    }
 
-        function setupPickers() {
-            $('.datepicker').pickadate({
+    function setupPickers() {
+        $('.datepicker').pickadate({
+            clear: '',
+            today: '',
+            monthsFull: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
+            weekdaysShort: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
+            format: 'dd/mm/yyyy'
+
+        });
+        $('.timepicker').pickatime(
+            {
+                min: [7, 00],
+                max: [23, 00],
                 clear: '',
-                today: '',
-                monthsFull: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
-                weekdaysShort: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
-                format: 'dd/mm/yyyy'
-
+                format: 'HH:i'
             });
-            $('.timepicker').pickatime(
-                {
-                    min: [7, 00],
-                    max: [23, 00],
-                    clear: '',
-                    format: 'HH:i',
-                });
-            $('.chosen').chosen({
-                disable_search: true,
-                inherit_select_classes: true,
-                rtl: true,
-                width: "100%"
-            });
-        }
-    </script>
+    }
+</script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

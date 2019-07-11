@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.Tickets;
 using NodaTime;
 
 namespace DragonCon.Logical.Convention
@@ -17,11 +18,22 @@ namespace DragonCon.Logical.Convention
         {
             get
             {
-                if (_convention.Days.ContainsKey(key))
-                    return _convention.Days[key];
-                return null;
+                return _convention.Days.SingleOrDefault(x => x.Date == key);
             }
         }
+
+        public ConDayWrapper this[string key]
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(key))
+                    return null;
+
+                return _convention.Days.SingleOrDefault(x => x.Id == key);
+            }
+        }
+
+
 
         public DaysBuilder(ConventionBuilder builder, ConventionWrapper convention)
         {
@@ -35,7 +47,7 @@ namespace DragonCon.Logical.Convention
             ThrowsInvalidHours(newRequest);
             ThrowsIfDateNotExists(newRequest.Date);
 
-            var existingDay = _convention.Days[date];
+            var existingDay = this[date];
 
             existingDay.StartTime = newRequest.StartTime;
             existingDay.EndTime = newRequest.EndTime;
@@ -46,8 +58,8 @@ namespace DragonCon.Logical.Convention
         public ConventionBuilder RemoveDay(LocalDate localDate)
         {
             ThrowsIfDateNotExists(localDate);
-            var existingDay = _convention.Days[localDate];
-            _convention.Days.Remove(existingDay.Date);
+            var existingDay = this[localDate];
+            _convention.Days.Remove(existingDay);
             _builder.DeletedEntityIds.Add(existingDay.Id);
             return _builder;
         }
@@ -57,7 +69,7 @@ namespace DragonCon.Logical.Convention
             var day = new ConDay(date, from, to);
             ThrowsInvalidHours(day);
             ThrowsIfDateExists(day.Date);
-            _convention.Days.Add(day.Date, new ConDayWrapper(day));
+            _convention.Days.Add(new ConDayWrapper(day));
 
             return _builder;
         }
@@ -65,7 +77,7 @@ namespace DragonCon.Logical.Convention
         public ConventionBuilder SetTimeSlotStrategy(LocalDate localDate, TimeSlotStrategy strategy)
         {
             ThrowsIfDateNotExists(localDate);
-            var existingDay = _convention.Days[localDate];
+            var existingDay = this[localDate];
             existingDay.TimeSlotStrategy = strategy;
             return _builder;
         }
@@ -95,7 +107,7 @@ namespace DragonCon.Logical.Convention
             }
         }
 
-        public bool IsDaysExists(LocalDate day) => _convention.Days.ContainsKey(day);
-        public List<ConDayWrapper> AllDays => _convention.Days.Values.ToList();
+        public bool IsDaysExists(LocalDate day) => _builder.Days[day] != null;
+        public List<ConDayWrapper> AllDays => _convention.Days.ToList();
     }
 }

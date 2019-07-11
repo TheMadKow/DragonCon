@@ -44,7 +44,7 @@
                             <td class="col-2">@con.Id.GetNumberFromId()</td>
                             <td class="col-3">@con.Name</td>
                             <td class="col-3">
-                                @foreach (var day in con.Days.GroupBy(x => x.Key))
+                                @foreach (var day in con.Days.GroupBy(x => x.Date))
                                 {
                                     <span>@day.Key.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</span><br />
                                 }
@@ -92,7 +92,7 @@
             </div>
 
             <div class="card">
-                <div class="checkbox toggle-padding text-right">
+                <div class="checkbox toggle-padding-list text-right">
                     <label class="label-control">
                         <input asp-for="Configuration.AllowEventsSuggestions" onchange="ToggleCheckbox(this, 'events')"
                                type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"
@@ -101,7 +101,7 @@
                     <span class="toggle-text">אפשר הגשת אירועים</span>
                 </div>
 
-                <div class="checkbox toggle-padding text-right">
+                <div class="checkbox toggle-padding-list text-right">
                     <label class="label-control">
                         <input asp-for="Configuration.AllowEventsRegistration" onchange="ToggleCheckbox(this, 'registration-add')"
                                type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"
@@ -110,7 +110,7 @@
                     <span class="toggle-text">אפשר רישום לאירועים</span>
                 </div>
 
-                <div class="checkbox toggle-padding text-right">
+                <div class="checkbox toggle-padding-list text-right">
                     <label class="label-control">
                         <input asp-for="Configuration.AllowEventsRegistrationChanges" onchange="ToggleCheckbox(this, 'registration-change')"
                                type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"
@@ -119,7 +119,7 @@
                     <span class="toggle-text">אפשר עדכון רישום לאירועים</span>
                 </div>
 
-                <div class="checkbox toggle-padding text-right">
+                <div class="checkbox toggle-padding-list text-right">
                     <label class="label-control">
                         <input asp-for="Configuration.AllowPayments" onchange="ToggleCheckbox(this, 'tickets')"
                                type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"

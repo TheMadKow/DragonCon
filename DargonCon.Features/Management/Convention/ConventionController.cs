@@ -32,6 +32,52 @@ namespace DragonCon.Features.Management.Convention
             return View(conventionViewModel);
         }
 
+        [HttpGet]
+        public IActionResult ShowDetails(string id)
+        {
+            var conUpdateViewModel = Gateway.BuildConventionUpdate(id);
+            return View("ShowDetails", conUpdateViewModel);
+        }
+
+        [HttpPost]
+        public Answer ToggleType(string type, bool value)
+        {
+            var config = Gateway.LoadSystemConfiguration();
+            switch (type)
+            {
+                case "events":
+                    config.AllowEventsSuggestions = value;
+                    break;
+                case "registration-add":
+                    config.AllowEventsRegistration = value;
+                    break;
+                case "registration-change":
+                    config.AllowEventsRegistrationChanges = value;
+                    break;
+                case "tickets":
+                    config.AllowPayments = value;
+                    break;
+                default:
+                    throw new Exception("Unknown config toggle");
+            }
+            Gateway.SaveSystemConfiguration(config);
+            return Answer.Success;
+        }
+
+        [HttpPost]
+        public Answer SetActive(string id)
+        {
+            var config = new SystemConfiguration
+            {
+                ActiveConventionId = id
+            };
+
+            Gateway.SaveSystemConfiguration(config);
+            return Answer.Success;
+        }
+
+
+        #region Name & Days
         [HttpPost]
         public IActionResult CreateUpdateNameDatePost(NameDatesCreateUpdateViewModel viewmodel)
         {
@@ -83,7 +129,20 @@ namespace DragonCon.Features.Management.Convention
             builder.Save();
             return RedirectToAction("Manage");
         }
+        
+        private List<ConDay> ParseDays(List<DaysViewModel> days)
+        {
+            var results = new List<ConDay>();
+            foreach (var day in days)
+            {
+                results.Add(new ConDay(
+                    LocalDate.FromDateTime(day.Date), 
+                    LocalTime.FromHourMinuteSecondTick(day.From.Hour, day.From.Minute, 0, 0),
+                    LocalTime.FromHourMinuteSecondTick(day.To.Hour, day.To.Minute, 0, 0)));
+            }
 
+            return results;
+        }
         
         [HttpGet]
         public IActionResult UpdateConvention(string conId, string errorMessage = null)
@@ -93,12 +152,7 @@ namespace DragonCon.Features.Management.Convention
             return View("UpdateConvention", conUpdateViewModel);
         }
 
-        [HttpGet]
-        public IActionResult ShowDetails(string id)
-        {
-            var conUpdateViewModel = Gateway.BuildConventionUpdate(id);
-            return View("ShowDetails", conUpdateViewModel);
-        }
+        
         [HttpPost]
         public IActionResult UpdateNameDates(NameDatesCreateUpdateViewModel viewmodel)
         {
@@ -173,6 +227,10 @@ namespace DragonCon.Features.Management.Convention
             });
         }
 
+        #endregion
+        
+        #region Halls
+
         [HttpPost]
         public IActionResult CreateUpdateHalls(HallsUpdateViewModel viewmodel)
         {
@@ -238,77 +296,104 @@ namespace DragonCon.Features.Management.Convention
                 conId = viewmodel.ConventionId,
             });
         }
+        #endregion
+
+        #region Tickets
 
         [HttpPost]
-        public IActionResult UpdateTickets(NameDatesCreateUpdateViewModel viewModel)
+        public IActionResult CreateUpdateTickets(TicketsUpdateViewModel viewmodel)
         {
-            return null;
-        }
-
-        [HttpPost]
-        public IActionResult UpdateHalls(NameDatesCreateUpdateViewModel viewModel)
-        {
-            return null;
-        }
-
-        [HttpPost]
-        public IActionResult UpdateDetails(NameDatesCreateUpdateViewModel viewModel)
-        {
-            return null;
-        }
-
-
-        private List<ConDay> ParseDays(List<DaysViewModel> days)
-        {
-            var results = new List<ConDay>();
-            foreach (var day in days)
+            var deletedFiltered = viewmodel.Tickets.Where(x => x.IsDeleted).ToList();
+            var nonDeletedFiltered = viewmodel.Tickets.Where(x => x.IsDeleted == false).ToList();
+            if (nonDeletedFiltered.Any() == false)
             {
-                results.Add(new ConDay(
-                    LocalDate.FromDateTime(day.Date), 
-                    LocalTime.FromHourMinuteSecondTick(day.From.Hour, day.From.Minute, 0, 0),
-                    LocalTime.FromHourMinuteSecondTick(day.To.Hour, day.To.Minute, 0, 0)));
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = viewmodel.ConventionId,
+                    errorMessage = "לא הוזנו כרטיסים לכנס"
+                });
             }
 
-            return results;
-        }
-
-        [HttpPost]
-        public Answer ToggleType(string type, bool value)
-        {
-            var config = Gateway.LoadSystemConfiguration();
-            switch (type)
+            if (nonDeletedFiltered.Any(x => string.IsNullOrWhiteSpace(x.Name)))
             {
-                case "events":
-                    config.AllowEventsSuggestions = value;
-                    break;
-                case "registration-add":
-                    config.AllowEventsRegistration = value;
-                    break;
-                case "registration-change":
-                    config.AllowEventsRegistrationChanges = value;
-                    break;
-                case "tickets":
-                    config.AllowPayments = value;
-                    break;
-                default:
-                    throw new Exception("Unknown config toggle");
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = viewmodel.ConventionId,
+                    errorMessage = "הוזן שם כרטיס ריק"
+                });
             }
-            Gateway.SaveSystemConfiguration(config);
-            return Answer.Success;
-        }
 
-        [HttpPost]
-        public Answer SetActive(string id)
-        {
-            var config = new SystemConfiguration
+            if (nonDeletedFiltered.Any(x => x.Days.Any() == false))
             {
-                ActiveConventionId = id
-            };
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = viewmodel.ConventionId,
+                    errorMessage = "הוזן כרטיס ללא שיוך לימי כנס"
+                });
+            }
 
-            Gateway.SaveSystemConfiguration(config);
-            return Answer.Success;
+            if (nonDeletedFiltered.Any(x => x.Price < 0))
+            {
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = viewmodel.ConventionId,
+                    errorMessage = "הוזן כרטיס עם מחיר שלילי"
+                });
+            }
+
+            try
+            {
+                var builder = Builder.LoadConvention(viewmodel.ConventionId);
+                foreach (var ticket in deletedFiltered)
+                {
+                    if (nonDeletedFiltered.Any() == false)
+                    {
+                        if (builder.Tickets.IsTicketExists(ticket.Id))
+                            builder.Tickets.RemoveTicket(ticket.Id);
+                    }
+                }
+
+                foreach (var ticket in nonDeletedFiltered)
+                {
+                    if (builder.Tickets.IsTicketExists(ticket.Id) == false)
+                    {
+                        builder.Tickets.AddTicket(
+                            ticket.Name,
+                            ticket.Days,
+                            ticket.TransactionCode,
+                            ticket.IsLimited ? ticket.NumOfActivities : null,
+                            ticket.Price,
+                            ticket.TicketType);
+                    }
+                    else
+                    {
+                        builder.Tickets.UpdateTicket(ticket.Id,
+                            ticket.Name,
+                            ticket.Days,
+                            ticket.TransactionCode,
+                            ticket.IsLimited ? ticket.NumOfActivities : null,
+                            ticket.Price,
+                            ticket.TicketType);
+                    }
+                }
+
+                builder.Save();
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = viewmodel.ConventionId,
+                    errorMessage = e.Message
+                });
+            }
+
+            return RedirectToAction("UpdateConvention", new
+            {
+                conId = viewmodel.ConventionId,
+            });
         }
 
-     
+        #endregion
     }
 }

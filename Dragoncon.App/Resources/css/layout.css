@@ -93,3 +93,7 @@ body {
     padding-right: 10px;
 }
 
+.card.card-grayed {
+    background: #f7f7f7;
+}
+

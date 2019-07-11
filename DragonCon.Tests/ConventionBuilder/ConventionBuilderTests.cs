@@ -98,8 +98,8 @@ namespace DragonCon.Logical.Tests.ConventionBuilder
                 .Days.AddDay(new LocalDate(2018, 7, 7), new LocalTime(9, 0), new LocalTime(23, 0))
                 .Days.AddDay(new LocalDate(2018, 7, 8), new LocalTime(9, 0), new LocalTime(23, 0))
                 .Tickets.AddTicket("AllDay", new LocalDate(2018, 7, 7), new LocalDate(2018, 7, 8))
-                .Tickets.AddLimitedTicket(TicketLimitation.GameMaster, "GameMaster", new LocalDate(2018, 7, 7), new LocalDate(2018, 7, 8))
-                .Tickets.AddLimitedTicket(TicketLimitation.Volunteer, "Volunteer", new LocalDate(2018, 7, 7), new LocalDate(2018, 7, 8))
+                .Tickets.AddLimitedTicket(TicketType.GameMaster, "GameMaster", new LocalDate(2018, 7, 7), new LocalDate(2018, 7, 8))
+                .Tickets.AddLimitedTicket(TicketType.Volunteer, "Volunteer", new LocalDate(2018, 7, 7), new LocalDate(2018, 7, 8))
                 .Tickets.SetTransactionCode("AllDay", "Charge-Money")
                 .Tickets.SetNumberOfActivities("AllDay", 5);
             
@@ -118,9 +118,9 @@ namespace DragonCon.Logical.Tests.ConventionBuilder
             Assert.NotNull(builder.Tickets["GameMaster"]);
             Assert.NotNull(builder.Tickets["Volunteer"]);
 
-            Assert.AreEqual(builder.Tickets["GameMaster"].TicketLimitation, TicketLimitation.GameMaster);
-            Assert.AreEqual(builder.Tickets["Volunteer"].TicketLimitation, TicketLimitation.Volunteer);
-            Assert.AreEqual(builder.Tickets["AllDay"].TicketLimitation, TicketLimitation.NotLimited);
+            Assert.AreEqual(builder.Tickets["GameMaster"].TicketLimitation, TicketType.GameMaster);
+            Assert.AreEqual(builder.Tickets["Volunteer"].TicketLimitation, TicketType.Volunteer);
+            Assert.AreEqual(builder.Tickets["AllDay"].TicketLimitation, TicketType.NotLimited);
   
             Assert.AreEqual(builder.Tickets["AllDay"].TransactionCode, "Charge-Money");
             Assert.AreEqual(builder.Tickets["AllDay"].IsUnlimited, true);

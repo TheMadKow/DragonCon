@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Tickets;
-using NodaTime;
 
 namespace DragonCon.Features.Management.Convention
 {
@@ -14,16 +12,20 @@ namespace DragonCon.Features.Management.Convention
 
     public class TicketViewModel
     {
+        public TicketViewModel(){}
+
         public TicketViewModel(TicketWrapper ticket)
         {
             Id = ticket.Id;
             Name = ticket.Name;
             Price = ticket.Price;
             TransactionCode = ticket.TransactionCode;
-            NumOfActivities = ticket.ActivitiesAllowed;
-            TicketLimitation = ticket.TicketLimitation;
+            TicketType = ticket.TicketType;
             Days = ticket.Days;
             IsDeleted = false;
+
+            NumOfActivities = ticket.ActivitiesAllowed;
+            IsLimited = ticket.ActivitiesAllowed.HasValue;
         }
 
         public string Id { get; set; }
@@ -31,10 +33,10 @@ namespace DragonCon.Features.Management.Convention
         public double Price { get; set; }
         public string TransactionCode { get; set; }
         public int? NumOfActivities { get; set; }
-        public List<ConDayWrapper> Days { get; set; }
-        public bool IsUnlimited => NumOfActivities == null;
+        public List<string> Days { get; set; }
+        public bool IsLimited { get; set; }
         public bool IsDeleted { get; set; }
-        public TicketLimitation TicketLimitation { get; set; }
+        public TicketType TicketType { get; set; }
 
     }
 }

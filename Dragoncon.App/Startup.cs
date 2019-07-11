@@ -18,6 +18,7 @@ using Raven.Client.Documents.Indexes;
 using Raven.Client.NodaTime;
 using Raven.Client.ServerWide;
 using Raven.Client.ServerWide.Operations;
+using Raven.DependencyInjection;
 using Raven.Identity;
 
 namespace DragonCon.App

@@ -50,10 +50,9 @@ namespace DragonCon.RavenDB.Gateways.Management
                     Tickets = y.TicketIds == null
                         ? new List<TicketWrapper>()
                         : session.Load<Ticket>(y.TicketIds)?.Select(x => new TicketWrapper(x.Value)).ToList(),
-                    Days = y.DayIds == null
-                        ? new Dictionary<LocalDate, ConDayWrapper>()
-                        : session.Load<ConDay>(y.DayIds)?.Select(x => x.Value)
-                            .ToDictionary(x => x.Date, x => new ConDayWrapper(x)),
+                    Days = y.DayIds == null 
+                        ? new List<ConDayWrapper>() 
+                        : session.Load<ConDay>(y.DayIds)?.Select(x => new ConDayWrapper(x.Value)).ToList()
                 }).ToList();
 
                 result.Pagination = DisplayPagination.BuildForView(stats.TotalResults, pagination.SkipCount, pagination.ResultsPerPage);
@@ -99,6 +98,10 @@ namespace DragonCon.RavenDB.Gateways.Management
                     Tickets = tickets.Select(x => new TicketViewModel(new TicketWrapper(x.Value))).ToList(),
                     AvailableDays = result.NameDate.Days
                 };
+                if (result.Tickets.Tickets.Any() == false)
+                {
+                    result.Tickets.Tickets.Add(new TicketViewModel());
+                }
 
                 result.Details = new DetailsUpdateViewModel
                 {

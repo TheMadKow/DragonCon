@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DragonCon.Modeling.Models.Tickets
 {
-    public enum TicketLimitation
+    public enum TicketType
     {
         [Description("רגיל")]
         NotLimited,

@@ -47,8 +47,19 @@ namespace DragonCon.Modeling.Models.Tickets
             set => Model.ActivitiesAllowed = value;
         }
 
-        public List<ConDayWrapper> Days { get; set; }
+
+        public List<string> Days
+        {
+            get => Model.DayIds;
+            set => Model.DayIds = value;
+        }
+
+        public TicketType TicketType
+        {
+            get => Model.TicketType;
+            set => Model.TicketType = value;
+        }
+
         public bool IsUnlimited => ActivitiesAllowed == null;
-        public TicketLimitation TicketLimitation { get; set; }
     }
 }

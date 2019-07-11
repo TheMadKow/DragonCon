@@ -1,0 +1,184 @@
+﻿@using DragonCon.Modeling.Models.Tickets
+@using DragonCon.Modeling.Helpers
+@model DragonCon.Features.Management.Convention.TicketsUpdateViewModel
+@{
+    var loadedTickets = Model.Tickets.Where(x => x.IsDeleted == false).ToList();
+    var initialCount = Math.Max(0, loadedTickets.Count - 1);
+}
+
+<form asp-area="Management" asp-controller="Convention" asp-action="CreateUpdateTickets" method="post" class="right-to-left" style="padding: 10px;">
+    <input asp-for="ConventionId" hidden />
+    @* Convention Tickets *@
+<div class="form-group">
+    <label>סוגי כרטיסים</label>
+
+    <div id="last-ticket-template" data-counter="@initialCount"
+         class="last-ticket-row ticket-container" hidden>
+        <div class="row" style="padding-bottom: 7px;">
+            <input type="text" class="update-deleted" value="false" hidden>
+            <input type="text" class="update-id" value="" hidden>
+            <div class="col">
+                <input type="text" class="form-control update-name" placeholder="שם כרטיס">
+            </div>
+            <div class="col-1">
+                <a href="#" onclick="RemoveTicket(this)" class="form-control ticket-removal">
+                    <i title="הסר כרטיס" class="fa fa-fw fa-times"></i>
+                </a>
+            </div>
+        </div>
+        <div class="row" style="padding-bottom: 7px;">
+            <div class="col input-group">
+                <input type="number" class="form-control update-price" placeholder="מחיר">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="">&#8362;</span>
+                </div>
+            </div>
+            <div class="col input-group">
+                <input type="text" class="form-control  update-transaction" placeholder="קוד PayPal">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="">@@PayPal</span>
+                </div>
+            </div>
+            <div class="col">
+                <select class="form-control update-ticket-type" data-placeholder="בחר סוג">
+                    @foreach (var type in Enums.AsSelectListItem<TicketType>())
+                    {
+                        <option value="@type.Value">@type.Text</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="row" style="padding-bottom: 5px;">
+            <div class="col">
+                <div class="checkbox toggle-padding text-right">
+                    <label class="label-control">
+                        <input onchange="ToggleUnlimitedTicket(0)"
+                               class="update-unlimited"
+                               type="checkbox"
+                               data-on="<i class='fa fa-fw fa-greater-than-equal'></i>"
+                               data-off="<i class='fa fa-fw fa-infinity'></i>"
+                               data-offstyle="success"
+                               data-onstyle="primary"
+                               data-width="50">
+                    </label>
+                    &nbsp;&nbsp;מספר אירועים מוגבל
+
+                </div>
+            </div>
+            <div class="col">
+                <select class="form-control  update-num-of-activities" disabled>
+                    <option value="">בחר הגבלת אירועים</option>
+                    @for (int i = 0; i < 8; i++)
+                    {
+                        <option value="@i">@i אירועים</option>
+                    }
+                </select>
+            </div>
+            <div class="col">
+                <select class="form-control  update-days" data-placeholder="בחר ימים" multiple>
+                    @foreach (var day in Model.AvailableDays)
+                    {
+                        <option value="@day.Id">@day.Date.ToShortDateString()</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    @for (int j = 0; j < loadedTickets.Count; j++)
+    {
+        <div data-counter="@initialCount" class="ticket-container">
+            <div class="row" style="padding-bottom: 7px;">
+                <input asp-for="@Model.Tickets[j].Id" hidden />
+                <input type="text" class="update-deleted" asp-for="@Model.Tickets[@j].IsDeleted" value="false" hidden>
+                <input type="text" class="update-id" value="" hidden>
+                <div class="col">
+                    <input type="text" class="form-control" asp-for="@Model.Tickets[@j].Name" placeholder="שם כרטיס">
+                </div>
+                <div class="col-1">
+                    <a href="#" onclick="RemoveTicket(this)" class="form-control ticket-removal">
+                        <i title="הסר כרטיס" class="fa fa-fw fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="row" style="padding-bottom: 7px;">
+                <div class="col input-group">
+                    <input type="number" class="form-control" asp-for="@Model.Tickets[@j].Price" placeholder="מחיר">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" style="">&#8362;</span>
+                    </div>
+                </div>
+                <div class="col input-group">
+                    <input type="text" class="form-control" asp-for="@Model.Tickets[@j].TransactionCode" placeholder="קוד PayPal">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" style="">@@PayPal</span>
+                    </div>
+                </div>
+                <div class="col">
+                    <select class="form-control chosen-select" asp-for="@Model.Tickets[@j].TicketType" data-placeholder="בחר סוג">
+                        @foreach (var type in Enums.AsSelectListItem<TicketType>())
+                        {
+                            <option value="@type.Value">@type.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="padding-bottom: 5px;">
+                <div class="col">
+                    <div class="checkbox toggle-padding text-right">
+                        <label class="label-control">
+                            <input onchange="ToggleLimitedTicket(@j)"
+                                   asp-for="@Model.Tickets[@j].IsLimited"
+                                   class="bootstrap-toggle"
+                                   data-toggle="toggle"
+                                   type="checkbox"
+                                   data-on="<i class='fa fa-fw fa-greater-than-equal'></i>"
+                                   data-off="<i class='fa fa-fw fa-infinity'></i>"
+                                   data-offstyle="success"
+                                   data-onstyle="primary"
+                                   data-width="50">
+                        </label>
+                        &nbsp;&nbsp;מספר אירועים מוגבל
+                    </div>
+                </div>
+                <div class="col">
+                    @{
+                        var isLimited = Model.Tickets[j].IsLimited;
+                        if (isLimited)
+                        {
+                            <select class="form-control update-events-number-@j chosen-select" asp-for="@Model.Tickets[@j].NumOfActivities">
+                                <option value="">בחר הגבלת אירועים</option>
+                                @for (int i = 0; i < 8; i++)
+                                {
+                                    <option value="@i">@i אירועים</option>
+                                }
+                            </select>
+                        } else
+                        {
+                            <select class="form-control update-events-number-@j chosen-select" asp-for="@Model.Tickets[@j].NumOfActivities" disabled>
+                                <option value="">בחר הגבלת אירועים</option>
+                                @for (int i = 0; i < 8; i++)
+                                {
+                                    <option value="@i">@i אירועים</option>
+                                }
+                            </select>
+                        }
+                    }
+         
+                </div>
+                <div class="col">
+                    <select class="form-control chosen-select" asp-for="@Model.Tickets[@j].Days" data-placeholder="בחר ימים" multiple>
+                        @foreach (var day in Model.AvailableDays)
+                        {
+                            <option value="@day.Id">@day.Date.ToShortDateString()</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    }
+    <a href="#" onclick="AddNewTicket()"><i class="fa fa-fw fa-plus"></i> הוספת כרטיס</a>
+</div>
+    <br />
+    <button type="submit" class="btn btn-primary">שמור כרטיסים</button>
+</form>

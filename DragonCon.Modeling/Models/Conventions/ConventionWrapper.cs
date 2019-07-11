@@ -20,8 +20,7 @@ namespace DragonCon.Modeling.Models.Conventions
 
         public List<Hall> Halls { get; set; } = new List<Hall>();
         public List<TicketWrapper> Tickets { get; set; } = new List<TicketWrapper>();
-
-        public Dictionary<LocalDate, ConDayWrapper> Days { get; set; } = new Dictionary<LocalDate, ConDayWrapper>();
+        public List<ConDayWrapper> Days { get; set; } = new List<ConDayWrapper>();
    
         public Instant CreateTimeStamp { get => Model.CreateTimeStamp; set => Model.CreateTimeStamp = value; }
         public Instant UpdateTimeStamp { get => Model.UpdateTimeStamp; set => Model.UpdateTimeStamp = value; }
