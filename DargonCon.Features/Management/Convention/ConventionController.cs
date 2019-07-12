@@ -143,8 +143,9 @@ namespace DragonCon.Features.Management.Convention
         }
         
         [HttpGet]
-        public IActionResult UpdateConvention(string conId, string errorMessage = null)
+        public IActionResult UpdateConvention(string conId, string activeTab = null, string errorMessage = null)
         {
+            ViewBag.HelperTab = activeTab;
             var conUpdateViewModel = Gateway.BuildConventionUpdate(conId);
             conUpdateViewModel.ErrorMessage = errorMessage;
             return View("UpdateConvention", conUpdateViewModel);
@@ -159,6 +160,7 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.Id,
+                    activeTab = "days",
                     errorMessage = "הוזן שם כנס ריק"
                 });
             }
@@ -170,6 +172,7 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.Id,
+                    activeTab = "days",
                     errorMessage = "לא הוזנו ימים לכנס"
                 });
             }
@@ -178,6 +181,7 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.Id,
+                    activeTab = "days",
                     errorMessage = "הוזן אותו התאריך יותר מפעם אחת"
                 });
             }
@@ -215,6 +219,7 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.Id,
+                    activeTab = "days",
                     errorMessage = e.Message
                 });
             }
@@ -222,6 +227,7 @@ namespace DragonCon.Features.Management.Convention
             return RedirectToAction("UpdateConvention", new
             {
                 conId = viewmodel.Id,
+                activeTab = "days",
             });
         }
 
@@ -239,6 +245,7 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.ConventionId,
+                    activeTab = "halls",
                     errorMessage = "לא הוזנו אולמות לכנס"
                 });
             }
@@ -248,6 +255,7 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.ConventionId,
+                    activeTab = "halls",
                     errorMessage = "הוזן שם אולם ריק"
                 });
 
@@ -285,12 +293,14 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.ConventionId,
+                    activeTab = "halls",
                     errorMessage = e.Message
                 });
             }
 
             return RedirectToAction("UpdateConvention", new
             {
+                activeTab = "halls",
                 conId = viewmodel.ConventionId,
             });
         }
@@ -308,6 +318,7 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.ConventionId,
+                    activeTab = "tickets",
                     errorMessage = "לא הוזנו כרטיסים לכנס"
                 });
             }
@@ -317,6 +328,7 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.ConventionId,
+                    activeTab = "tickets",
                     errorMessage = "הוזן שם כרטיס ריק"
                 });
             }
@@ -326,6 +338,7 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.ConventionId,
+                    activeTab = "tickets",
                     errorMessage = "הוזן כרטיס ללא שיוך לימי כנס"
                 });
             }
@@ -335,6 +348,7 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.ConventionId,
+                    activeTab = "tickets",
                     errorMessage = "הוזן כרטיס עם מחיר שלילי"
                 });
             }
@@ -382,12 +396,14 @@ namespace DragonCon.Features.Management.Convention
                 return RedirectToAction("UpdateConvention", new
                 {
                     conId = viewmodel.ConventionId,
+                    activeTab = "tickets",
                     errorMessage = e.Message
                 });
             }
 
             return RedirectToAction("UpdateConvention", new
             {
+                activeTab = "tickets",
                 conId = viewmodel.ConventionId,
             });
         }
