@@ -21,94 +21,122 @@
             <div class="card card-grayed">
                 <div class="card-body">
                     <h5 class="card-title">ימי הכנס</h5>
-                    <table class="table">
-                        @foreach (var day in Model.NameDate.Days.OrderBy(x => x.Date))
-                        {
-                            <tr class="d-flex">
-                                <td class="col-3"> @day.Date.ToShortDateString()</td>
-                                <td class="col-2">@day.From.ToShortTimeString()</td>
-                                <td class="col-2">@day.To.ToShortTimeString()</td>
-                            </tr>
-                        }
-                    </table>
+                    @if (Model.NameDate.Days != null && Model.NameDate.Days.Any(x => x.Id.IsNotEmptyString()))
+                    {
+                        <table class="table">
+                            @foreach (var day in Model.NameDate.Days
+                                .Where(x => x.Id.IsNotEmptyString())
+                                .OrderBy(x => x.Date))
+                            {
+                                <tr class="d-flex">
+                                    <td class="col-3"> @day.Date.ToShortDateString()</td>
+                                    <td class="col-2">@day.From.ToShortTimeString()</td>
+                                    <td class="col-2">@day.To.ToShortTimeString()</td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                    else
+                    {
+                        <span>אין ימים מוגדרים</span>
+                    }
                 </div>
             </div>
-
             <br />
 
             <div class="card card-grayed">
                 <div class="card-body">
                     <h5 class="card-title">אולמות</h5>
+                    @if (Model.Halls.Halls != null && Model.Halls.Halls.Any(x => x.Id.IsNotEmptyString()))
+                    {
+                        <table class="table">
+                            @foreach (var hall in Model.Halls.Halls
+                                .Where(x => x.Id.IsNotEmptyString())
+                                .OrderBy(x => x.FirstTable))
+                            {
+                                <tr class="d-flex">
+                                    <td class="col-4"> @hall.Name</td>
+                                    <td class="col-4">@hall.Description</td>
+                                    <td class="col-3">
+                                        @hall.Tables.Count שולחנות
+                                        <br />מספרים @hall.FirstTable <i>עד</i> @hall.LastTable
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                    else
+                    {
+                        <span class="text-danger">אין אולמות מוגדרים</span>
+                    }
 
-                    <table class="table">
-                        @foreach (var hall in Model.Halls.Halls.OrderBy(x => x.FirstTable))
-                        {
-                            <tr class="d-flex">
-                                <td class="col-4"> @hall.Name</td>
-                                <td class="col-4">@hall.Description</td>
-                                <td class="col-3">@hall.Tables.Count שולחנות
-                                    <br/>מספרים @hall.FirstTable <i>עד</i> @hall.LastTable</td>
-                            </tr>
-                        }
-                    </table>
                 </div>
             </div>
-
-
             <br />
 
             <div class="card card-grayed">
                 <div class="card-body">
                     <h5 class="card-title">כרטיסים</h5>
 
-                    <table class="table">
-                        @foreach (var ticket in Model.Tickets.Tickets.OrderBy(x => x.Name))
-                        {
-                        <tr class="d-flex">
-                            <td class="col-3"> @ticket.Name</td>
-                            <td class="col-2"> @ticket.TicketType.ToTextual()</td>
-                            <td class="col-2">
-                                @if (ticket.IsLimited)
-                                {
-                                    <span>מוגבל ל-@ticket.NumOfActivities פעילויות</span>
-                                }
-                                else
-                                {
-                                    <strong class="text-success">ללא הגבלה</strong>
-                                }
-                            </td>
-                            <td class="col-2"> מוגבל ל-@ticket.Days.Count ימים:
-                                <br/>
-                                @foreach (var day in ticket.Days)
-                                {
-                                    <span>@Model.NameDate.Days.FirstOrDefault(x => x.Id == day)?.Date.ToShortDateString()<br/></span>
-                                }
-                            <td class="col-2">
-                                @if (ticket.Price > 0)
-                                {
-                                    <span>
-                                        @ticket.Price ₪
-                                        <br/>
-                                        @if (string.IsNullOrEmpty(ticket.TransactionCode))
+                    @if (Model.Tickets.Tickets != null && Model.Tickets.Tickets
+                        .Any(x => x.Id.IsNotEmptyString()))
+                    {
+                        <table class="table">
+                            @foreach (var ticket in Model.Tickets.Tickets
+                                .Where(x => x.Id.IsNotEmptyString())
+                                .OrderBy(x => x.Name))
+                            {
+                                <tr class="d-flex">
+                                    <td class="col-3"> @ticket.Name</td>
+                                    <td class="col-2"> @ticket.TicketType.ToTextual()</td>
+                                    <td class="col-2">
+                                        @if (ticket.IsLimited)
                                         {
-                                            <strong class="text-danger">לא קיים קוד סליקה</strong>
+                                            <span>מוגבל ל-@ticket.NumOfActivities פעילויות</span>
                                         }
                                         else
                                         {
-                                            <span>סליקה: @ticket.TransactionCode</span>
+                                            <strong class="text-success">ללא הגבלה</strong>
                                         }
-                                    </span>
-                                }
-                                else
-                                {
-                                    <strong class="text-danger">חינם</strong>
-                                }
+                                    </td>
+                                    <td class="col-2">
+                                        מוגבל ל-@ticket.Days.Count ימים:
+                                        <br />
+                                        @foreach (var day in ticket.Days)
+                                        {
+                                            <span>@Model.NameDate.Days.FirstOrDefault(x => x.Id == day)?.Date.ToShortDateString()<br /></span>
+                                        }
+                                    <td class="col-2">
+                                        @if (ticket.Price > 0)
+                                        {
+                                            <span>
+                                                @ticket.Price ₪
+                                                <br />
+                                                @if (string.IsNullOrEmpty(ticket.TransactionCode))
+                                                {
+                                                    <strong class="text-danger">לא קיים קוד סליקה</strong>
+                                                }
+                                                else
+                                                {
+                                                    <span>סליקה: @ticket.TransactionCode</span>
+                                                }
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <strong class="text-danger">חינם</strong>
+                                        }
 
-                            </td>
+                                    </td>
 
-                        </tr>
-                        }
-                    </table>
+                                </tr>
+                            }
+                        </table>
+                    }
+                    else
+                    {
+                        <span class="text-danger">אין כרטיסים מוגדרים</span>
+                    }
                 </div>
             </div>
         </div>

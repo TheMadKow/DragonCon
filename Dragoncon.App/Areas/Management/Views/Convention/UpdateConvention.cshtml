@@ -1,7 +1,9 @@
 ﻿@using DragonCon.Modeling.Helpers
 @model DragonCon.Features.Management.Convention.ConventionUpdateViewModel
 
-<a asp-area="Management" asp-controller="Convention" asp-action="Manage"><i class="fa fa-fw fa-arrow-right"></i> חזרה</a>
+@section Subheader {
+    <a class="text-info" asp-area="Management" asp-controller="Convention" asp-action="Manage"><i class="fa fa-fw fa-chevron-circle-right"></i> חזרה לניהול כנסים</a>
+}
 
 @{
     ViewBag.Title = $"עדכון כנס {Model.NameDate.Name} ({Model.NameDate.Id.GetNumberFromId()})";

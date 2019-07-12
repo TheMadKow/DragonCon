@@ -74,7 +74,6 @@ namespace DragonCon.Features.Management.Convention
             return Answer.Success;
         }
 
-
         #region Name & Days
         [HttpPost]
         public IActionResult CreateUpdateNameDatePost(NameDatesCreateUpdateViewModel viewmodel)
@@ -98,6 +97,12 @@ namespace DragonCon.Features.Management.Convention
                 viewmodel.Days = new List<DaysViewModel>();
             }
 
+            viewmodel.Days.Add(new DaysViewModel()
+            {
+                Date = DateTime.Today,
+                From = new DateTime(1,1,1, 9, 0, 0, DateTimeKind.Unspecified),
+                To = new DateTime(1, 1, 1, 21, 0, 0, DateTimeKind.Unspecified)
+            });
             return View("CreateUpdateNameDates", viewmodel);
         }
 

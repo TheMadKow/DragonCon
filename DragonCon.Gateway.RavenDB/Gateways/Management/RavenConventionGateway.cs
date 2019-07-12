@@ -84,12 +84,20 @@ namespace DragonCon.RavenDB.Gateways.Management
                     Id = convention.Id,
                     Days = days.Select(x => new DaysViewModel(x.Value)).ToList()
                 };
+                if (result.NameDate.Days.Any() == false)
+                {
+                    result.NameDate.Days.Add(new DaysViewModel());
+                }
 
                 result.Halls = new HallsUpdateViewModel
                 {
                     ConventionId = convention.Id,
-                    Halls = halls.Select(x => new HallsUpdateViewModel.HallUpdateViewModel(x.Value)).ToList()
+                    Halls = halls.Select(x => new HallViewModel(x.Value)).ToList()
                 };
+                if (result.Halls.Halls.Any() == false)
+                {
+                    result.Halls.Halls.Add(new HallViewModel());
+                }
 
                 result.Tickets = new TicketsUpdateViewModel()
                 {

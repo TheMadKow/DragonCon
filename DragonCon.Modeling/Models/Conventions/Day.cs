@@ -5,6 +5,7 @@ namespace DragonCon.Modeling.Models.Conventions
 {
     public class Day
     {
+        public Day() { }
         public Day(LocalDate date, LocalTime start, LocalTime end)
         {
             Date = date;

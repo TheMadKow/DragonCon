@@ -71,26 +71,6 @@
                 </div>
             }
         }
-        else
-        {
-            <div class="row last-day-row" style="padding-bottom: 5px;">
-                <input class="update-deleted" name="Days[0].IsDeleted" value="false" hidden>
-                <div class="col">
-                    <input name="Days[0].Date" type="date" class="datepicker form-control" placeholder="יום כנס">
-                </div>
-                <div class="col">
-                    <input name="Days[0].From" type="time" class="timepicker form-control" placeholder="שעת התחלה">
-                </div>
-                <div class="col">
-                    <input name="Days[0].To" type="time" class="timepicker form-control" placeholder="שעת סיום">
-                </div>
-                <div class="col-1">
-                    <a href="#" onclick="RemoveRow(this)" class="form-control">
-                        <i title="הסר יום" class="fa fa-fw fa-times"></i>
-                    </a>
-                </div>
-            </div>
-        }
         <a href="#" onclick="AddNewDay()"><i class="fa fa-fw fa-plus"></i> הוספת יום</a>
     </div>
     <br />

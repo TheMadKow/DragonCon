@@ -53,13 +53,14 @@
     </ul>
     <div class="container container-admin">
         <h4 class="Title-Text">@ViewBag.Title</h4>
-            
+        @RenderSection("Subheader", required: false)
+
         <div class="modal-placeholder" id="modal-placeholder" style="display: none;">
             <div class="modal-placeholder-content text-center">
                 <i class="fa fa-fw fa-spin fa-spinner"></i> אנא המתן...
             </div>
         </div>
-
+        
         <div class="body-content">
             @RenderBody()
         </div>
