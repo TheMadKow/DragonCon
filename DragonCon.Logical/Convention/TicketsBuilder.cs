@@ -6,50 +6,22 @@ using DragonCon.Modeling.Models.Tickets;
 
 namespace DragonCon.Logical.Convention
 {
-    public class TicketsBuilder
+    public class TicketsBuilder : BuilderBase<Ticket>
     {
-        private readonly ConventionBuilder _parent;
-        private readonly ConventionWrapper _convention;
-        public TicketWrapper this[string key]
+        public TicketsBuilder(ConventionBuilder parent, ConventionWrapper convention) :
+            base(parent, convention)
         {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(key))
-                    return null;
 
-                return _convention.Tickets.SingleOrDefault(x => x.Id == key);
-            }
         }
 
-        public bool IsTicketExists(string ticketId)
-        {
-            return this[ticketId] != null;
-        }
 
-        public TicketsBuilder(ConventionBuilder parent, ConventionWrapper convention)
-        {
-            _convention = convention;
-            _parent = parent;
-        }
-
-        //public ConventionBuilder AddTicket(string ticketName, params LocalDate[] localDates)
-        //{
-        //    return AddTicket(TicketType.NotLimited, ticketName, localDates.ToList());
-        //}
-
-        //public ConventionBuilder AddLimitedTicket(TicketType role, string ticketName, params LocalDate[] localDates)
-        //{
-        //    return AddTicket(role, ticketName, localDates.ToList());
-        //}
-
-        
         public ConventionBuilder RemoveTicket(string ticketId)
         {
             ThrowIfTicketNotExists(ticketId);
             var removedTicket = this[ticketId];
-            _convention.Tickets.Remove(removedTicket);
-            _parent.DeletedEntityIds.Add(ticketId);
-            return _parent;
+            Convention.Tickets.Remove(removedTicket);
+            Parent.DeletedEntityIds.Add(ticketId);
+            return Parent;
         }
 
         public ConventionBuilder AddTicket(
@@ -64,34 +36,34 @@ namespace DragonCon.Logical.Convention
 
             foreach (var date in dayIds)
             {
-                if (_parent.Days[date] == null)
+                if (Parent.Days[date] == null)
                     throw new Exception("Convention Day does not exist");
             }
 
-            var ticket = new TicketWrapper
+            var ticket = new Ticket
             {
                 Name = name,
-                Days =  dayIds, 
+                DayIds =  dayIds, 
                 TicketType = type,
                 TransactionCode = code,
                 Price = price,
                 ActivitiesAllowed = numOfActivities
             };
 
-            _convention.Tickets.Add(ticket);
-            return _parent;
+            Convention.Tickets.Add(ticket);
+            return Parent;
         }
 
 
         private void ThrowIfTicketNameExists(string ticketName)
         {
-            if (_convention.Tickets.Any(x => x.Name == ticketName))
+            if (Convention.Tickets.Any(x => x.Name == ticketName))
                 throw new Exception("Ticket name already exists");
         }
 
         private void ThrowIfTicketNotExists(string ticketId)
         {
-            if (IsTicketExists(ticketId) == false)
+            if (KeyExists(ticketId) == false)
                 throw new Exception("Ticket does not exists");
         }
 
@@ -117,9 +89,9 @@ namespace DragonCon.Logical.Convention
             ticket.Price = price;
             ticket.ActivitiesAllowed = numOfActivities;
             ticket.TicketType = type;
-            ticket.Days = dayIds;
+            ticket.DayIds = dayIds;
 
-            return _parent;
+            return Parent;
         }
 
         private void ThrowIfPriceIsNotValid(double price)

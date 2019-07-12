@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using DragonCon.Modeling.Models.Conventions;
 
 namespace DragonCon.Features.Management.Convention
@@ -20,7 +19,7 @@ namespace DragonCon.Features.Management.Convention
     {
         public DaysViewModel(){}
         
-        public DaysViewModel(ConDayWrapper day)
+        public DaysViewModel(Day day)
         {
             IsDeleted = false;
 

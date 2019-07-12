@@ -34,9 +34,9 @@ namespace DragonCon.RavenDB.Gateways.Logic
                 {
                     Name = convention.Name,
                     Id = convention.Id,
-                    Days = session.Load<ConDay>(convention.DayIds).Select(x => x.Value).Select(x => new ConDayWrapper(x)).ToList(),
+                    Days = session.Load<Day>(convention.DayIds).Select(x => x.Value).ToList(),
                     Halls = session.Load<Hall>(convention.HallIds).Select(x => x.Value).ToList(),
-                    Tickets = session.Load<Ticket>(convention.TicketIds).Select(x => new TicketWrapper(x.Value)).ToList(),
+                    Tickets = session.Load<Ticket>(convention.TicketIds).Select(x => x.Value).ToList(),
                 };
             }
         }
@@ -78,7 +78,7 @@ namespace DragonCon.RavenDB.Gateways.Logic
             convData.TicketIds = new List<string>();
             foreach (var ticket in convention.Tickets)
             {
-                session.Store(ticket.Model);
+                session.Store(ticket);
                 convData.TicketIds.Add(ticket.Id);
             }
         }
@@ -98,7 +98,7 @@ namespace DragonCon.RavenDB.Gateways.Logic
             convData.DayIds = new List<string>();
             foreach (var day in convention.Days)
             {
-                session.Store(day.Model);
+                session.Store(day);
                 convData.DayIds.Add(day.Id);
             }
         }

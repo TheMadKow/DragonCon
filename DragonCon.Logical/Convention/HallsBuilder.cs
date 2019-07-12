@@ -1,37 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 
 namespace DragonCon.Logical.Convention
 {
-    public class HallsBuilder
+    public class HallsBuilder : BuilderBase<Hall>
     {
-        private readonly ConventionBuilder _builder;
-        private readonly ConventionWrapper _convention;
-
-        public Hall this[string key]
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(key))
-                    return null;
-
-                return _convention.Halls.SingleOrDefault(x => x.Id == key);
-            }
-        }
-
-        public bool IsHallExists(string hallId)
-        {
-            return this[hallId] != null;
-        }
-
-        public HallsBuilder(ConventionBuilder builder, ConventionWrapper convention)
-        {
-            _convention = convention;
-            _builder = builder;
-        }
+        public HallsBuilder(ConventionBuilder builder, ConventionWrapper convention) : 
+            base(builder, convention) { }
 
         public ConventionBuilder AddHall(string hallName, string hallDesc, 
             int firstTable, int lastTable)
@@ -47,13 +24,13 @@ namespace DragonCon.Logical.Convention
                 
             };
             ThrowIfTablesExists(testHall, string.Empty);
-            _convention.Halls.Add(testHall);
-            return _builder;
+            Convention.Halls.Add(testHall);
+            return Parent;
         }
 
         private void ThrowIfTablesExists(Hall testHall, string hallId)
         {
-            foreach (var hall in _convention.Halls)
+            foreach (var hall in Convention.Halls)
             {
                 if (hall.Id == hallId)
                     continue;
@@ -76,13 +53,13 @@ namespace DragonCon.Logical.Convention
 
         private void ThrowIfHallNameExists(string hallName, string hallId)
         {
-            if (_convention.Halls.Any(x => x.Name == hallName && x.Id != hallId))
+            if (Convention.Halls.Any(x => x.Name == hallName && x.Id != hallId))
                 throw new Exception("Hall Name Already Exists");
         }
 
         private void ThrowIfHallDoesntExists(string hallKey)
         {
-            if (IsHallExists(hallKey) == false)
+            if (KeyExists(hallKey) == false)
                 throw new Exception("Hall doesn't Exists");
 
         }
@@ -91,9 +68,9 @@ namespace DragonCon.Logical.Convention
         {
             ThrowIfHallDoesntExists(hallId);
             var removedHall = this[hallId];
-            _convention.Halls.Remove(removedHall);
-            _builder.DeletedEntityIds.Add(hallId);
-            return _builder;
+            Convention.Halls.Remove(removedHall);
+            Parent.DeletedEntityIds.Add(hallId);
+            return Parent;
         }
 
         public ConventionBuilder UpdateHall(string hallId, 
@@ -112,7 +89,7 @@ namespace DragonCon.Logical.Convention
             updated.Description = desc;
             updated.FirstTable = firstTable;
             updated.LastTable = lastTable;
-            return _builder;
+            return Parent;
 
 
         }

@@ -39,8 +39,8 @@ namespace DragonCon.Logical.Convention
             {
                 Name = name,
                 Halls = new List<Hall>(),
-                Tickets = new List<TicketWrapper>(),
-                Days = new List<ConDayWrapper>()
+                Tickets = new List<Ticket>(),
+                Days = new List<Day>()
             };
             CreateSubBuilders();
             return this;

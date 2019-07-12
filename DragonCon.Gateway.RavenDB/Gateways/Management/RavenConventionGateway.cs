@@ -7,7 +7,6 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.System;
 using DragonCon.Modeling.Models.Tickets;
-using NodaTime;
 using Raven.Client.Documents;
 
 namespace DragonCon.RavenDB.Gateways.Management
@@ -48,11 +47,11 @@ namespace DragonCon.RavenDB.Gateways.Management
                         ? new List<Hall>()
                         : session.Load<Hall>(y.HallIds)?.Select(x => x.Value).ToList(),
                     Tickets = y.TicketIds == null
-                        ? new List<TicketWrapper>()
-                        : session.Load<Ticket>(y.TicketIds)?.Select(x => new TicketWrapper(x.Value)).ToList(),
+                        ? new List<Ticket>()
+                        : session.Load<Ticket>(y.TicketIds)?.Select(x => x.Value).ToList(),
                     Days = y.DayIds == null 
-                        ? new List<ConDayWrapper>() 
-                        : session.Load<ConDay>(y.DayIds)?.Select(x => new ConDayWrapper(x.Value)).ToList()
+                        ? new List<Day>() 
+                        : session.Load<Day>(y.DayIds)?.Select(x => x.Value).ToList()
                 }).ToList();
 
                 result.Pagination = DisplayPagination.BuildForView(stats.TotalResults, pagination.SkipCount, pagination.ResultsPerPage);
@@ -75,7 +74,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                     .Include<Convention>(x => x.TicketIds)
                     .Load<Convention>(conId);
 
-                var days = session.Load<ConDay>(convention.DayIds);
+                var days = session.Load<Day>(convention.DayIds);
                 var halls = session.Load<Hall>(convention.HallIds);
                 var tickets = session.Load<Ticket>(convention.TicketIds);
 
@@ -83,7 +82,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 {
                     Name = convention.Name,
                     Id = convention.Id,
-                    Days = days.Select(x => new DaysViewModel(new ConDayWrapper(x.Value))).ToList()
+                    Days = days.Select(x => new DaysViewModel(x.Value)).ToList()
                 };
 
                 result.Halls = new HallsUpdateViewModel
@@ -95,7 +94,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 result.Tickets = new TicketsUpdateViewModel()
                 {
                     ConventionId = convention.Id,
-                    Tickets = tickets.Select(x => new TicketViewModel(new TicketWrapper(x.Value))).ToList(),
+                    Tickets = tickets.Select(x => new TicketViewModel(x.Value)).ToList(),
                     AvailableDays = result.NameDate.Days
                 };
                 if (result.Tickets.Tickets.Any() == false)

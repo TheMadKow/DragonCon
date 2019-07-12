@@ -14,14 +14,14 @@ namespace DragonCon.Features.Management.Convention
     {
         public TicketViewModel(){}
 
-        public TicketViewModel(TicketWrapper ticket)
+        public TicketViewModel(Ticket ticket)
         {
             Id = ticket.Id;
             Name = ticket.Name;
             Price = ticket.Price;
             TransactionCode = ticket.TransactionCode;
             TicketType = ticket.TicketType;
-            Days = ticket.Days;
+            Days = ticket.DayIds;
             IsDeleted = false;
 
             NumOfActivities = ticket.ActivitiesAllowed;

@@ -50,7 +50,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                     .ToList();
                 result.Events = tempEvents.Select(x => new ConEventWrapper(x)
                 {
-                    ConDay = session.Load<ConDay>(x.ConventionDayId),
+                    Day = session.Load<Day>(x.ConventionDayId),
                     EventActivity = session.Load<EventActivity>(x.ActivityId),
                     EventSystem = session.Load<EventSystem>(x.SystemId),
                     GameMaster = session.Load<RavenSystemUser>(x.GameMasterId),

@@ -7,9 +7,7 @@ using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.System;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Internal;
 using NodaTime;
-using SystemClock = NodaTime.SystemClock;
 
 namespace DragonCon.Features.Management.Convention
 {
@@ -130,12 +128,12 @@ namespace DragonCon.Features.Management.Convention
             return RedirectToAction("Manage");
         }
         
-        private List<ConDay> ParseDays(List<DaysViewModel> days)
+        private List<Day> ParseDays(List<DaysViewModel> days)
         {
-            var results = new List<ConDay>();
+            var results = new List<Day>();
             foreach (var day in days)
             {
-                results.Add(new ConDay(
+                results.Add(new Day(
                     LocalDate.FromDateTime(day.Date), 
                     LocalTime.FromHourMinuteSecondTick(day.From.Hour, day.From.Minute, 0, 0),
                     LocalTime.FromHourMinuteSecondTick(day.To.Hour, day.To.Minute, 0, 0)));
@@ -262,14 +260,14 @@ namespace DragonCon.Features.Management.Convention
                 {
                     if (nonDeletedFiltered.Any() == false)
                     {
-                        if (builder.Halls.IsHallExists(hall.Id))
+                        if (builder.Halls.KeyExists(hall.Id))
                             builder.Halls.RemoveHall(hall.Id);
                     }
                 }
 
                 foreach (var hall in nonDeletedFiltered)
                 {
-                    if (builder.Halls.IsHallExists(hall.Id) == false)
+                    if (builder.Halls.KeyExists(hall.Id) == false)
                     {
                         builder.Halls.AddHall(hall.Name, hall.Description, hall.FirstTable, hall.LastTable);
                     }
@@ -348,14 +346,14 @@ namespace DragonCon.Features.Management.Convention
                 {
                     if (nonDeletedFiltered.Any() == false)
                     {
-                        if (builder.Tickets.IsTicketExists(ticket.Id))
+                        if (builder.Tickets.KeyExists(ticket.Id))
                             builder.Tickets.RemoveTicket(ticket.Id);
                     }
                 }
 
                 foreach (var ticket in nonDeletedFiltered)
                 {
-                    if (builder.Tickets.IsTicketExists(ticket.Id) == false)
+                    if (builder.Tickets.KeyExists(ticket.Id) == false)
                     {
                         builder.Tickets.AddTicket(
                             ticket.Name,

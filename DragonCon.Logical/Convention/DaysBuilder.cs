@@ -1,49 +1,29 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
-using DragonCon.Modeling.Models.Tickets;
 using NodaTime;
 
 namespace DragonCon.Logical.Convention
 {
-    public class DaysBuilder 
+    public class DaysBuilder  : BuilderBase<Day>
     {
-        private readonly ConventionBuilder _builder;
-        private readonly ConventionWrapper _convention;
-
-        public ConDayWrapper this[LocalDate key]
+        public Day this[LocalDate key]
         {
             get
             {
-                return _convention.Days.SingleOrDefault(x => x.Date == key);
+                return Convention.Days.SingleOrDefault(x => x.Date == key);
             }
         }
 
-        public ConDayWrapper this[string key]
+        public DaysBuilder(ConventionBuilder builder, ConventionWrapper convention) : base(builder, convention)
         {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(key))
-                    return null;
-
-                return _convention.Days.SingleOrDefault(x => x.Id == key);
-            }
-        }
-
-
-
-        public DaysBuilder(ConventionBuilder builder, ConventionWrapper convention)
-        {
-            this._convention = convention;
-            this._builder = builder;
         }
         
         public ConventionBuilder UpdateDay(LocalDate date, LocalTime from, LocalTime to)
         {
-            var newRequest = new ConDay(date, from, to);
+            var newRequest = new Day(date, from, to);
             ThrowsInvalidHours(newRequest);
             ThrowsIfDateNotExists(newRequest.Date);
 
@@ -52,26 +32,26 @@ namespace DragonCon.Logical.Convention
             existingDay.StartTime = newRequest.StartTime;
             existingDay.EndTime = newRequest.EndTime;
 
-            return _builder;
+            return Parent;
         }
 
         public ConventionBuilder RemoveDay(LocalDate localDate)
         {
             ThrowsIfDateNotExists(localDate);
             var existingDay = this[localDate];
-            _convention.Days.Remove(existingDay);
-            _builder.DeletedEntityIds.Add(existingDay.Id);
-            return _builder;
+            Convention.Days.Remove(existingDay);
+            Parent.DeletedEntityIds.Add(existingDay.Id);
+            return Parent;
         }
 
         public ConventionBuilder AddDay(LocalDate date, LocalTime from, LocalTime to)
         {
-            var day = new ConDay(date, from, to);
+            var day = new Day(date, from, to);
             ThrowsInvalidHours(day);
             ThrowsIfDateExists(day.Date);
-            _convention.Days.Add(new ConDayWrapper(day));
+            Convention.Days.Add(day);
 
-            return _builder;
+            return Parent;
         }
 
         public ConventionBuilder SetTimeSlotStrategy(LocalDate localDate, TimeSlotStrategy strategy)
@@ -79,7 +59,7 @@ namespace DragonCon.Logical.Convention
             ThrowsIfDateNotExists(localDate);
             var existingDay = this[localDate];
             existingDay.TimeSlotStrategy = strategy;
-            return _builder;
+            return Parent;
         }
 
         private void ThrowsIfDateExists(LocalDate day)
@@ -99,7 +79,7 @@ namespace DragonCon.Logical.Convention
         }
 
 
-        private static void ThrowsInvalidHours(ConDay day)
+        private static void ThrowsInvalidHours(Day day)
         {
             if (day.StartTime >= day.EndTime)
             {
@@ -107,7 +87,7 @@ namespace DragonCon.Logical.Convention
             }
         }
 
-        public bool IsDaysExists(LocalDate day) => _builder.Days[day] != null;
-        public List<ConDayWrapper> AllDays => _convention.Days.ToList();
+        public bool IsDaysExists(LocalDate day) => Parent.Days[day] != null;
+        public List<Day> AllDays => Convention.Days.ToList();
     }
 }

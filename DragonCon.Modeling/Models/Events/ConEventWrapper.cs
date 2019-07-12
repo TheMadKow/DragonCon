@@ -14,7 +14,7 @@ namespace DragonCon.Modeling.Models.Events
 
         public ConEventWrapper(ConEvent model) : base(model){}
 
-        public ConDay ConDay { get; set; }
+        public Day Day { get; set; }
         public EventSystem EventSystem { get; set; }
         public EventActivity EventActivity { get;set; }
         public IParticipant GameMaster { get; set; }
