@@ -1,0 +1,61 @@
+﻿@model DragonCon.Features.Management.Events.ActivitySystemCreateUpdateViewModel
+@{
+    if (Model.Id != null)
+    {
+        ViewBag.Title = "עריכת פעילות";
+    }
+    else
+    {
+        ViewBag.Title = "הוספת פעילות חדשה";
+    }
+
+           
+    var loadedSystems = Model.Systems.Where(x => x.IsDeleted == false).ToList();
+    var initialCount = Math.Max(0, loadedSystems.Count - 1);
+
+}
+<form asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventActivityPost" method="post" class="right-to-left" style="padding: 10px;">
+    <input asp-for="Id" hidden />
+
+    <div class="form-group">
+        <label>שם הפעילות</label>
+        <input asp-for="Name" class="form-control" placeholder="למשל - 'משחקי תפקידים'">
+    </div>
+    @* Systems *@
+    <div class="form-group">
+        <label>שיטות</label>
+        <div id="last-system-template" data-counter="@initialCount" class="row last-system-row" style="padding-bottom: 5px;" hidden>
+            <input type="text" class="update-deleted" value="false" hidden>
+            <div class="col">
+                <input class="form-control update-system" placeholder="שם השיטה">
+            </div>
+            <div class="col-1">
+                <a href="#" class="form-control">
+                    <i title="הסר שיטה" class="fa fa-fw fa-times"></i>
+                </a>
+            </div>
+        </div>
+
+        @if (loadedSystems.Any())
+        {
+            for (int i = 0; i < loadedSystems.Count; i++)
+            {
+                <div class="row last-system-row" style="padding-bottom: 5px;">
+                    <input class="update-deleted" name="Systems[@i].IsDeleted" value="false" hidden>
+                    <div class="col">
+                        <input asp-for="@Model.Systems[i].Id" hidden/>
+                        <input asp-for="@Model.Systems[i].Name" class="form-control" placeholder="שם השיטה">
+                    </div>
+                    <div class="col-1">
+                        <a href="#" onclick="RemoveRow(this)" class="form-control">
+                            <i title="הסר שיטה" class="fa fa-fw fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+        <a href="#" onclick="AddNewSystem()"><i class="fa fa-fw fa-plus"></i> הוספת שיטה</a>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">שמור </button>
+</form>

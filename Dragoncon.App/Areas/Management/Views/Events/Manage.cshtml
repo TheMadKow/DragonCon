@@ -1,5 +1,6 @@
 ﻿@using DragonCon.Features.Management.Events
 @using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Common
 @using DragonCon.Modeling.Models.Events
 @using DragonCon.Modeling.Models.Tickets
 @model DragonCon.Features.Management.Events.EventsManagementViewModel
@@ -13,115 +14,140 @@
     
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link active" id="nav-events-tab" data-toggle="tab" href="#nav-events" role="tab" aria-controls="nav-cons" aria-selected="true">רשימת אירועים</a>
-            <a class="nav-item nav-link" id="nav-activities-tab" data-toggle="tab" href="#nav-activities" role="tab" aria-controls="nav-profile" aria-selected="false">פעילויות ושיטות</a>
-            <a class="nav-item nav-link" id="nav-statistics-tab" data-toggle="tab" href="#nav-statistics" role="tab" aria-controls="nav-contact" aria-selected="false">סטטיסטקות</a>
+            <a class="nav-item nav-link active" id="nav-item-events" data-toggle="tab" href="#tab-pan-events" role="tab" aria-controls="nav-cons" aria-selected="true">רשימת אירועים</a>
+            <a class="nav-item nav-link" id="nav-item-settings" data-toggle="tab" href="#tab-pan-settings" role="tab" aria-controls="nav-profile" aria-selected="false">הגדרות</a>
+            <a class="nav-item nav-link" id="nav-item-statistics" data-toggle="tab" href="#tab-pan-statistics" role="tab" aria-controls="nav-contact" aria-selected="false">סטטיסטקות</a>
         </div>
     </nav>
 
     
-    <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-events" role="tabpanel" aria-labelledby="nav-contact-tab">
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="tab-pan-events" role="tabpanel" aria-labelledby="nav-contact-tab">
 
-            <div class="text-right" style="padding: 15px;">
-                <a asp-area="Management" asp-controller="Events" asp-action="CreateEvent">
-                    <i class="fa fa-fw fa-plus-square"></i> הוספת אירוע
-                </a>
-            </div>
-
-            <div class="filter-container">
-                <input class="form-control" placeholder="חיפוש לפי שם אירוע או שם מנחה"/>
-            </div>
-            <div class="filter-container">
-                סינונים<br/>
-                <label>לפי סטטוס</label>
-                <select class="form-control chosen-select" data-placeholder="סטטוס אירוע">
-                    <option value="" selected>הכל</option>
-                    @foreach (var type in Enums.AsSelectListItem<EventStatus>())
-                    {
-                        <option value="@type.Value">@type.Text</option>
-                    }
-                </select>
-                <select class="form-control chosen-select" asp-for="ActiveFilters.ActivitySystem" asp-items="Model.GetActivitiesDropDown" data-placeholder="פעילות ושיטות">
-                    <option value="" selected>הכל</option>
-                </select>
-                <button class="btn btn-info"><i class="fa fa-fw fa-filter"></i> סינון</button>
-            </div>
-            <table class="table table-hover table-stripped text-right">
-                <thead>
-                    <tr class="d-flex">
-                        <td class="col-1"></td>
-                        <td class="col-2">מזהה</td>
-                        <td class="col-3">שם</td>
-                        <td class="col-3">תאריכים</td>
-                        <td class="col-3"></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var con in Model.Events.OrderByDescending(x => x.Model.Name))
-                    {
-                        <tr class="d-flex">
-                            <td class="col-2"></td>
-                            <td class="col-3"></td>
-                            <td class="col-3">
-                            </td>
-
-                            <td class="col-3">
-                                <ul class="list-inline">
-                                    <li class="list-inline-item">
-                                        <a class="dropdown-item" asp-area="Management" asp-controller="Convention"
-                                           asp-action="UpdateConvention" asp-route-conId="@con.Model.Id.GetNumberFromId()">
-                                            <i class="fa fa-fw fa-edit"></i>
-                                        </a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="#" title="הצגת פרטים מלאים" class="btn btn-sm btn-info">
-                                            <i class="fa fa-fw fa-info-circle"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div class="text-right" style="padding: 15px;">
+            <a asp-area="Management" asp-controller="Events" asp-action="CreateEvent">
+                <i class="fa fa-fw fa-plus-square"></i> הוספת אירוע
+            </a>
         </div>
-        <div class="tab-pane fade" id="nav-activities" role="tabpanel" aria-labelledby="nav-contact-tab">
-            <div class="text-right" style="padding: 15px;">
-                <a asp-area="Management" asp-controller="Events" asp-action="CreateEventActivity">
-                    <i class="fa fa-fw fa-plus-square"></i> הוספת סוג פעילות
-                </a>
-            </div>
-            @foreach (var activity in Model.Activities.OrderByDescending(x => x.Name))
+
+        <div class="filter-container">
+            <input class="form-control" placeholder="חיפוש לפי שם אירוע או שם מנחה" />
+        </div>
+        <div class="filter-container">
+            סינונים<br />
+            <label>לפי סטטוס</label>
+            <select class="form-control chosen-select" data-placeholder="סטטוס אירוע">
+                <option value="" selected>הכל</option>
+                @foreach (var type in Enums.AsSelectListItem<EventStatus>())
+                {
+                    <option value="@type.Value">@type.Text</option>
+                }
+            </select>
+            <select class="form-control chosen-select" asp-for="ActiveFilters.ActivitySystem" asp-items="Model.GetActivitiesDropDown" data-placeholder="פעילות ושיטות">
+                <option value="" selected>הכל</option>
+            </select>
+            <button class="btn btn-info"><i class="fa fa-fw fa-filter"></i> סינון</button>
+        </div>
+        <table class="table table-hover table-stripped text-right">
+            <thead>
+            <tr class="d-flex">
+                <td class="col-1"></td>
+                <td class="col-2">מזהה</td>
+                <td class="col-3">שם</td>
+                <td class="col-3">תאריכים</td>
+                <td class="col-3"></td>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var con in Model.Events.OrderByDescending(x => x.Model.Name))
             {
-                <div class="card">
-                <h5>@activity.Id.GetNumberFromId() @activity.Name</h5>
-                    <table class="table table-hover table-stripped text-right">
-                        <thead>
-                        <tr class="d-flex">
-                            <td class="col-2">מזהה</td>
-                            <td class="col-3">שיטה</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach (var system in activity.ActivitySystems.OrderByDescending(x => x.Name))
-                        {
-                            <tr class="d-flex">
-                                <td>@system.Id.GetNumberFromId()</td>
-                                <td>@system.Name</td>
+                <tr class="d-flex">
+                    <td class="col-2"></td>
+                    <td class="col-3"></td>
+                    <td class="col-3">
+                    </td>
 
-                            </tr>
-                        }
-                        </tbody>
-                    </table>
-                </div>
+                    <td class="col-3">
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a class="dropdown-item" asp-area="Management" asp-controller="Convention"
+                                   asp-action="UpdateConvention" asp-route-conId="@con.Model.Id.GetNumberFromId()">
+                                    <i class="fa fa-fw fa-edit"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" title="הצגת פרטים מלאים" class="btn btn-sm btn-info">
+                                    <i class="fa fa-fw fa-info-circle"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
             }
-
-        </div>
-        <div class="tab-pane fade" id="nav-statistics" role="tabpanel" aria-labelledby="nav-contact-tab">
-            עוד לא פעיל
-        </div>
+            </tbody>
+        </table>
     </div>
-    
+    <div class="tab-pane fade" id="tab-pan-settings" role="tabpanel" aria-labelledby="tab-pane-settings">
+        <h3>גילאים</h3>
+        <a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventAgeRestriction">
+            <i class="fa fa-fw fa-plus-square"></i> הוספת הגבלת גיל
+        </a>
 
+        <div class="card card-body">
+            <div class="card card-body">
+                <table class="table table-hover table-stripped text-right">
+                    <tbody>
+                    @foreach (AgeRestriction ageRestriction in Model.AgeRestrictions.OrderByDescending(x => x.Name))
+                    {
+                        <tr class="d-flex">
+                            <td class="col-2">@ageRestriction.Name</td>
+                            <td class="col">
+                                @if (ageRestriction.MinAge.HasValue)
+                                {
+                                    <span>מגיל- @ageRestriction.MinAge</span>
+                                }
+                                @if (ageRestriction.MaxAge.HasValue)
+                                {
+                                    <span>עד גיל- @ageRestriction.MinAge</span>
+                                }
+                                @if (ageRestriction.MaxAge.HasValue == false &&
+                                     ageRestriction.MinAge.HasValue == false)
+                                {
+                                    <span class="text-info">ללא הגבלת גיל</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br />
+        <h3>פעילויות</h3>
+        <a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventActivity">
+            <i class="fa fa-fw fa-plus-square"></i> הוספת פעילות ושיטות
+        </a>
+        @foreach (var activity in Model.Activities.OrderByDescending(x => x.Name))
+        {
+            <div class="card card-body">
+                <h5>@activity.Id.GetNumberFromId() @activity.Name</h5>
+                <table class="table table-hover table-stripped text-right">
+                    <tbody>
+                    @foreach (var system in activity.ActivitySystems.OrderByDescending(x => x.Name))
+                    {
+                        <tr class="d-flex">
+                            <td class="col-2">@system.Id.GetNumberFromId()</td>
+                            <td class="col">@system.Name</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+    <div class="tab-pane fade" id="tab-pan-statistics" role="tabpanel" aria-labelledby="tab-pane-statistics">
+
+    </div>
+</div>
 </div>

@@ -33,8 +33,17 @@ namespace DragonCon.Features.Management.Events
         public Filters ActiveFilters { get; set; }
         public string ActiveConvention { get;set; } 
         public List<ConEventWrapper> Events { get; set; } = new List<ConEventWrapper>();
-        public List<EventActivity> Activities { get; set; }
+        public List<AgeRestriction> AgeRestrictions { get; set; }
 
+        public List<SelectListItem> GetAgeRestrictionDropDown
+        {
+            get
+            {
+                return AgeRestrictions.Select(x => new SelectListItem(x.Name, x.Id)).ToList();
+            }
+        }
+
+        public List<EventActivity> Activities { get; set; }
         public List<SelectListItem> GetActivitiesDropDown
         {
             get

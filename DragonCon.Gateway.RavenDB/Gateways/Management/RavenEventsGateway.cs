@@ -29,6 +29,35 @@ namespace DragonCon.RavenDB.Gateways.Management
         {
         }
 
+        public Answer AddNewActivity(string name, List<string> systems)
+        {
+            using (var session = OpenSession)
+            {
+                var existing = session.Query<EventActivity>().Where(x => x.Name == name).ToList();
+                if (existing.Any())
+                {
+                    return Answer.Error("קיימת פעילות בשם שהוזן");
+                }
+
+                var activity = new EventActivity();
+                activity.Name = name;
+                activity.ActivitySystems = new List<EventSystem>();
+                foreach (var system in systems)
+                {
+                    var eventSystem = new EventSystem
+                    {
+                        Name = system
+                    };
+                    session.Store(eventSystem);
+                    activity.ActivitySystems.Add(eventSystem);
+                }
+
+                session.Store(activity);
+                session.SaveChanges();
+                return Answer.Success;
+            }
+        }
+
         public EventsManagementViewModel BuildIndex(IDisplayPagination pagination,
             EventsManagementViewModel.Filters filters = null)
         {
@@ -37,7 +66,9 @@ namespace DragonCon.RavenDB.Gateways.Management
             using (var session = OpenSession)
             {
                 result.ActiveConvention = session.Load<Convention>(config.ActiveConventionId).Name;
-                result.Activities = session.Query<EventActivity>().ToList();
+                result.Activities = session.Query<EventActivity>().Include(x => x.ActivitySystems).ToList();
+                result.AgeRestrictions = session.Query<AgeRestriction>().ToList();
+                
                 var tempEvents = session.Query<ConEvent>()
                     .Statistics(out var stats)
                     .Include(x => x.ConventionDayId)

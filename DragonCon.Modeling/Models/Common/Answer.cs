@@ -19,7 +19,7 @@ namespace DragonCon.Modeling.Models.Common
         }
 
         public static Answer Success => new Answer(AnswerType.Success);
-        public static Answer Error => new Answer(AnswerType.Error);
+        public static Answer Error(string message = null) => new Answer(AnswerType.Error){Message = message};
 
 
         public AnswerType AnswerType {get; set;}
