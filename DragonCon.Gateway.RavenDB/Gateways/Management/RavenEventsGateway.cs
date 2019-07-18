@@ -14,17 +14,18 @@ using DragonCon.Modeling.Models.Identities;
 using DragonCon.RavenDB.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
+using Raven.Client.Documents.Session;
 
 namespace DragonCon.RavenDB.Gateways.Management
 {
-    public class RavenEventsGateway : RavenGateway, IEventsGateway
+    public class RavenManagementEventsGateway : RavenGateway, IManagementEventsGateway
     {
-        public RavenEventsGateway() : base()
+        public RavenManagementEventsGateway() : base()
         {
 
         }
 
-        public RavenEventsGateway(StoreHolder holder) : base(holder)
+        public RavenManagementEventsGateway(StoreHolder holder) : base(holder)
         {
         }
 
@@ -36,12 +37,12 @@ namespace DragonCon.RavenDB.Gateways.Management
             using (var session = OpenSession)
             {
                 result.ActiveConvention = session.Load<Convention>(config.ActiveConventionId).Name;
+                result.Activities = session.Query<EventActivity>().ToList();
                 var tempEvents = session.Query<ConEvent>()
+                    .Statistics(out var stats)
                     .Include(x => x.ConventionDayId)
                     .Include(x => x.GameMasterId)
                     .Include(x => x.HelperIds)
-                    .Include(x => x.ActivityId)
-                    .Include(x => x.SystemId)
                     .Include(x => x.HallId)
                     .Where(x => x.ConventionId == config.ActiveConventionId)
                     .OrderBy(x => x.Name)
@@ -57,8 +58,11 @@ namespace DragonCon.RavenDB.Gateways.Management
                     Helpers = session.Load<RavenSystemUser>(x.HelperIds).Select(y => y.Value).ToList<IParticipant>(),
                     Hall = session.Load<Hall>(x.HallId),
                 }).ToList();
+                result.Pagination = DisplayPagination.BuildForView(
+                    stats.TotalResults, 
+                    pagination.SkipCount,
+                    pagination.ResultsPerPage);
             }
-
             return result;
         }
     }

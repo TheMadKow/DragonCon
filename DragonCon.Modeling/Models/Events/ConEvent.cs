@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DragonCon.Modeling.Models.Common;
+using NodaTime;
 
 namespace DragonCon.Modeling.Models.Events
 {
@@ -28,6 +29,13 @@ namespace DragonCon.Modeling.Models.Events
         public string Description { get; set; }
         public string SpecialRequests { get;set; }
 
-        public List<string> Changes { get;set; }
+        public List<EventHistory> StatusHistory { get;set; }
+    }
+
+    public class EventHistory
+    {
+        public string UserId { get; set; }
+        public Instant Timestamp { get; set; }
+        public EventStatus Status { get; set; }
     }
 }

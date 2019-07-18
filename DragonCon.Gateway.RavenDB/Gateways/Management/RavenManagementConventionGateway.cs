@@ -11,14 +11,14 @@ using Raven.Client.Documents;
 
 namespace DragonCon.RavenDB.Gateways.Management
 {
-    public class RavenConventionGateway : RavenGateway, IConventionGateway
+    public class RavenManagementConventionGateway : RavenGateway, IManagementConventionGateway
     {
-        public RavenConventionGateway() : base()
+        public RavenManagementConventionGateway() : base()
         {
 
         }
 
-        public RavenConventionGateway(StoreHolder holder) : base(holder)
+        public RavenManagementConventionGateway(StoreHolder holder) : base(holder)
         {
         }
 

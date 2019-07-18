@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Management.Dashboard
 {
     [Area("Management")]
-    public class EventsController : DragonController<IEventsGateway>
+    public class EventsController : DragonController<IManagementEventsGateway>
     {
-        public EventsController(IEventsGateway gateway) : base(gateway)
+        public EventsController(IManagementEventsGateway gateway) : base(gateway)
         {
         }
 
@@ -29,7 +29,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
     }
 
-    public interface IEventsGateway : IGateway
+    public interface IManagementEventsGateway : IGateway
     {
         EventsManagementViewModel BuildIndex(IDisplayPagination pagination, 
                                              EventsManagementViewModel.Filters filters = null);

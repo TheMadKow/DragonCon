@@ -12,12 +12,12 @@ using NodaTime;
 namespace DragonCon.Features.Management.Convention
 {
     [Area("Management")]
-    public class ConventionController : DragonController<IConventionGateway>
+    public class ConventionController : DragonController<IManagementConventionGateway>
     {
         private ConventionBuilder Builder;
         public ConventionController(
             ConventionBuilder builder,
-            IConventionGateway gateway) : 
+            IManagementConventionGateway gateway) : 
             base(gateway)
         {
             Builder = builder;

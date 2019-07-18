@@ -1,5 +1,6 @@
 ﻿using System;
 using DragonCon.Features.Management.Convention;
+using DragonCon.Features.Management.Dashboard;
 using DragonCon.Features.Shared;
 using DragonCon.Logical.Convention;
 using DragonCon.Logical.Gateways;
@@ -56,7 +57,8 @@ namespace DragonCon.App
 
             services.AddSingleton<StoreHolder>(holder);
             services.AddScoped<NullGateway, NullGateway>();
-            services.AddScoped<IConventionGateway, RavenConventionGateway>();
+            services.AddScoped<IManagementConventionGateway, RavenManagementConventionGateway>();
+            services.AddScoped<IManagementEventsGateway, RavenManagementEventsGateway>();
             services.AddScoped<IConventionBuilderGateway, RavenConventionBuilderGateway>();
             services.AddScoped<ConventionBuilder, ConventionBuilder>();
 

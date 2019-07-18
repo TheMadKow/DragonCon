@@ -4,7 +4,7 @@ using DragonCon.Modeling.Models.System;
 
 namespace DragonCon.Features.Management.Convention
 {
-    public interface IConventionGateway : IGateway
+    public interface IManagementConventionGateway : IGateway
     {
         ConventionManagementViewModel BuildConventionList(IDisplayPagination pagination);
         void SaveSystemConfiguration(SystemConfiguration config);

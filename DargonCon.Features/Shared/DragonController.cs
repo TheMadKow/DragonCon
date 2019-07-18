@@ -7,7 +7,7 @@ namespace DragonCon.Features.Shared
     public class DragonController<T> : Controller
     where T : IGateway
     {
-        protected const int ResultsPerPage = 30;
+        protected const int ResultsPerPage = 45;
 
         protected T Gateway { get; set; }
         public MiniProfiler Profiler { get; set; }
