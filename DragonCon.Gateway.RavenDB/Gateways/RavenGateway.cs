@@ -9,12 +9,17 @@ namespace DragonCon.RavenDB.Gateways
         protected IDocumentSession OpenSession => _holder.Store.OpenSession();
         protected IAsyncDocumentSession AsyncSession => _holder.Store.OpenAsyncSession();
 
-        public SystemConfiguration LoadSystemConfiguration()
+        public SystemConfiguration LoadSystemConfiguration(IDocumentSession session = null)
         {
-            using (var session = _holder.Store.OpenSession())
+            if (session == null)
             {
-                return session.Load<SystemConfiguration>(SystemConfiguration.Id) ?? new SystemConfiguration();
+                using (session = _holder.Store.OpenSession())
+                {
+                    return session.Load<SystemConfiguration>(SystemConfiguration.Id) ?? new SystemConfiguration();
+                }
             }
+
+            return session.Load<SystemConfiguration>(SystemConfiguration.Id) ?? new SystemConfiguration();
         }
 
         protected RavenGateway()

@@ -1,0 +1,187 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Events
+@using StackExchange.Profiling.Internal
+@model DragonCon.Features.Management.Events.EventCreateUpdateViewModel
+@{
+    if (Model.Id != null)
+    {
+        ViewBag.Title = "עריכת אירוע";
+    }
+    else
+    {
+        ViewBag.Title = "הוספת אירוע";
+    }
+}
+<form asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventPost" method="post" class="right-to-left" style="padding: 10px;">
+    <input asp-for="Id" hidden />
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>שם האירוע</label>
+                <input asp-for="Name" class="form-control" placeholder="שם האירוע ">
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label>סטטוס</label>
+                <select class="form-control chosen-select" asp-for="Status" data-placeholder="סטטוס אירוע">
+                    @foreach (var type in Enums.AsSelectListItem<EventStatus>())
+                    {
+                        <option value="@type.Value">@type.Text</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>תיאור האירוע</label>
+                <textarea class="form-control" asp-for="Description" placeholder="תיאור האירוע"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>תגיות</label>
+                <input asp-for="Name" class="form-control" placeholder="תגיות אירוע">
+            </div>
+        </div>
+    </div>
+
+
+    <br />
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>פעילות</label>
+                <select class="form-control chosen-select" asp-for="SystemId"
+                        asp-items="Model.GetActivitiesDropDown">
+                    <option value="" disabled selected>בחירת אפשרות</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>קבוצת גיל</label>
+                <select class="form-control chosen-select" asp-for="AgeRestrictionId"
+                        asp-items="Model.GetAgeRestrictionDropDown">
+                    <option value="" disabled selected>בחירת אפשרות</option>
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>מספר שחקנים מינימלי</label>
+                <input type="number" min="1" max="99" asp-for="Size.Min" placeholder="ריק - ללא הגבלה" class="form-control">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>מספר שחקנים מקסימלי</label>
+                <input type="number" min="1" max="99" asp-for="Size.Max" placeholder="ריק - ללא הגבלה" class="form-control">
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>יום</label>
+                <select class="form-control chosen-select" asp-for="ConventionDayId"
+                        asp-items="Model.GetDaysDropDown" onchange="ChangedEventDay(this)">
+                    <option value="" disabled selected>בחירת יום</option>
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>שעת התחלה</label>
+                <div id="event-start-time">
+                    <select class="form-control chosen-select">
+                        <option value="" disabled selected>יש לבחור יום</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>משך</label>
+                <div id="event-duration">
+                    <select class="form-control chosen-select">
+                        <option value="" disabled selected>יש לבחור שעת התחלה</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>מנחה</label>
+                <input asp-for="Name" class="form-control" placeholder="שם אירוע תמציתי בעברית">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>אולם ושולחן</label>
+                <select class="form-control chosen-select" asp-for="Table"
+                        asp-items="Model.GetHallsDropdown">
+                    <option value="" disabled selected>בחירת אולם שולחן</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>בקשות מיוחדות</label>
+                <textarea class="form-control" asp-for="Description" placeholder="בקשות מיוחד מהכנס - ציוד, מיקום וכיוצא בזאת"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">שמור </button>
+</form>
+
+
+<div hidden>
+    @foreach (var day in Model.GetDayOptions())
+    {
+        <select id="template-starttime-@day.Key.Id" class="form-control" asp-for="TimeSlot.From" onchange="ChangedEventStartTime('@day.Key.Id', this)">
+            <option value="" disabled selected>בחירת שעת התחלה</option>
+            @foreach (var startTime in day.Value.StartTimeAndDurations.Keys)
+            {
+                <option value="@startTime">@startTime.ToString("HH:mm", CultureInfo.DefaultThreadCurrentCulture)</option>
+            }
+        </select>
+    }
+
+
+    @foreach (var day in Model.GetDayOptions())
+    {
+        @foreach (var startTime in day.Value.StartTimeAndDurations)
+        {
+            <select id="template-duration-@day.Key.Id-@startTime.Key" class="form-control" asp-for="TimeSlot.From">
+                <option value="" disabled selected>בחירת משך אירוע</option>
+                @foreach (var duration in startTime.Value)
+                {
+                    <option value="@duration">@duration שעות</option>
+                }
+            </select>
+        }
+    }
+</div>

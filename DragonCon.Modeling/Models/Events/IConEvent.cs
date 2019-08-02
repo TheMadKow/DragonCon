@@ -6,7 +6,7 @@ namespace DragonCon.Modeling.Models.Events
     public interface IConEvent
     {
         string ActivityId { get; set; }
-        AgeRestriction Age { get; set; }
+        string AgeId { get; set; }
         string SpecialRequests { get; set; }
         string ConventionDayId { get; set; }
         string Description { get; set; }

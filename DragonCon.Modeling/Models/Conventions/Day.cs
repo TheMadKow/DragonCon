@@ -1,4 +1,7 @@
-﻿using DragonCon.Modeling.Models.Common;
+﻿using System.Globalization;
+using System.Text;
+using DragonCon.Modeling.Helpers;
+using DragonCon.Modeling.Models.Common;
 using NodaTime;
 
 namespace DragonCon.Modeling.Models.Conventions
@@ -18,5 +21,13 @@ namespace DragonCon.Modeling.Models.Conventions
         public LocalTime StartTime { get; set; }
         public LocalTime EndTime { get; set; }
         public TimeSlotStrategy TimeSlotStrategy { get; set; }
+
+        public string GetDescription()
+        {
+            var sb = new StringBuilder();
+            sb.Append(Date.DayOfWeek.InHebrew());
+            sb.Append(Date.ToString(" ה-dd/MM", CultureInfo.DefaultThreadCurrentCulture));
+            return sb.ToString();
+        }
     }
 }

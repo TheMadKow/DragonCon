@@ -16,10 +16,9 @@ namespace DragonCon.Modeling.Models.Events
         public string GameMasterId { get; set; }
         public List<string> HelperIds { get; set; }
         public List<string> ParticipantIds { get;set; }
-
+        public string AgeId { get; set; }
         public EventStatus Status { get; set; }
         public TimeSlot TimeSlot { get;set; }
-        public AgeRestriction Age { get; set; }
         public SizeRestriction Size { get;set; }
 
         public List<string> Tags { get;set; }

@@ -4,6 +4,7 @@ using DragonCon.Features.Management.Events;
 using DragonCon.Features.Shared;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
+using DragonCon.Modeling.Models.Events;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragonCon.Features.Management.Dashboard
@@ -15,6 +16,7 @@ namespace DragonCon.Features.Management.Dashboard
         {
         }
 
+        #region Display
         [HttpGet]
         public IActionResult Manage(int page = 0, int perPage = ResultsPerPage, string tab = null)
         {
@@ -32,7 +34,9 @@ namespace DragonCon.Features.Management.Dashboard
             return View(viewModel);
 
         }
+        #endregion
 
+        #region Activity
         [HttpPost]
         public Answer DeleteEventActivity(string activityId)
         {
@@ -119,7 +123,9 @@ namespace DragonCon.Features.Management.Dashboard
                 tab = "settings"
             });
         }
+        #endregion
 
+        #region Age Restriction
         [HttpGet]
         public IActionResult UpdateEventAgeRestriction(string restrictionId)
         {
@@ -165,6 +171,14 @@ namespace DragonCon.Features.Management.Dashboard
         {
             return Gateway.DeleteAgeRestriction(restrictionId);
         }
+        #endregion
+
+        [HttpGet]
+        public IActionResult CreateUpdateEvent(string eventId = null)
+        {
+            var viewModel = Gateway.GetEventViewModel(eventId);
+            return View("CreateUpdateEvent", viewModel);
+        }
 
 
     }
@@ -184,5 +198,6 @@ namespace DragonCon.Features.Management.Dashboard
         AgeSystemCreateUpdateViewModel GetAgeRestrictionViewModel(string restrictionId);
         Answer DeleteAgeRestriction(string restrictionId);
 
+        EventCreateUpdateViewModel GetEventViewModel(string eventId);
     }
 }

@@ -28,7 +28,7 @@ namespace DragonCon.Features.Management.Events
         }
 
         public string Id { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = "חובה להזין שם לשיטה")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "חובה להזין שם לסוג הפעילות")]
         public string Name { get; set; }
         public bool IsDeleted {get; set; }
     }

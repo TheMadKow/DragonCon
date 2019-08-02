@@ -10,7 +10,7 @@
     }
 
            
-    var loadedSystems = Model.Systems.Where(x => x.IsDeleted == false).ToList();
+    var loadedSystems = Model.Systems.Where(x => x.IsDeleted == false).OrderBy(x => x.Name).ToList();
     var initialCount = Math.Max(0, loadedSystems.Count - 1);
 
 }
@@ -27,11 +27,11 @@
         <div id="last-system-template" data-counter="@initialCount" class="row last-system-row" style="padding-bottom: 5px;" hidden>
             <input type="text" class="update-deleted" value="false" hidden>
             <div class="col">
-                <input class="form-control update-system" placeholder="שם השיטה">
+                <input class="form-control update-system" placeholder="סוג הפעילות">
             </div>
             <div class="col-1">
                 <a href="#" class="form-control">
-                    <i title="הסר שיטה" class="fa fa-fw fa-times"></i>
+                    <i title="הסר סוג פעילות" class="fa fa-fw fa-times"></i>
                 </a>
             </div>
         </div>
@@ -44,18 +44,18 @@
                     <input class="update-deleted" name="Systems[@i].IsDeleted" value="false" hidden>
                     <div class="col">
                         <input asp-for="@Model.Systems[i].Id" hidden/>
-                        <input asp-for="@Model.Systems[i].Name" class="form-control" placeholder="שם השיטה">
+                        <input asp-for="@Model.Systems[i].Name" class="form-control" placeholder="סוג הפעילות">
                     </div>
                     <div class="col-1">
                         <a href="#" onclick="RemoveRow(this)" class="form-control">
-                            <i title="הסר שיטה" class="fa fa-fw fa-times"></i>
+                            <i title="הסר סוג פעילות" class="fa fa-fw fa-times"></i>
                         </a>
                     </div>
                 </div>
             }
         }
-        <a href="#" onclick="AddNewSystem()"><i class="fa fa-fw fa-plus"></i> הוספת שיטה</a>
+        <a href="#" onclick="AddNewSystem()"><i class="fa fa-fw fa-plus"></i> הוספת סוג פעילות</a>
     </div>
     <br />
-    <button type="submit" class="btn btn-primary">שמור </button>
+    <button type="submit" class="btn btn-primary">שמור </button>5
 </form>

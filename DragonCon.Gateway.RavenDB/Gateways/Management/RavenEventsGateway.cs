@@ -102,6 +102,8 @@ namespace DragonCon.RavenDB.Gateways.Management
                     activity.ActivitySystems.Add(eventSystem);
                 }
 
+                activity.Name = activityName;
+
                 session.SaveChanges();
                 return Answer.Success;
             }
@@ -201,13 +203,53 @@ namespace DragonCon.RavenDB.Gateways.Management
             }
         }
 
+        public EventCreateUpdateViewModel GetEventViewModel(string eventId)
+        {
+            using (var session = OpenSession)
+            {
+                var config = LoadSystemConfiguration(session);
+                var currentConvention = session
+                    .Include<Convention>(x => x.DayIds)
+                    .Include<Convention>(x => x.HallIds)
+                    .Load<Convention>(config.ActiveConventionId);
+
+                var viewModel = new EventCreateUpdateViewModel
+                {
+                    Activities = session.Query<EventActivity>().Include(x => x.ActivitySystems).ToList(),
+                    Days = session.Load<Day>(currentConvention.DayIds).Select(x => x.Value),
+                    Halls = session.Load<Hall>(currentConvention.HallIds).Select(x => x.Value),
+                    AgeRestrictions = session.Query<AgeRestriction>().ToList()
+                };
+
+                if (eventId.IsNotEmptyString())
+                {
+                    // TODO
+                }
+                else
+                {
+                    if (viewModel.HelperIds == null)
+                        viewModel.HelperIds = new List<string>();
+                    if (viewModel.Size == null)
+                        viewModel.Size = new SizeRestriction();
+                    if (viewModel.Tags == null)
+                        viewModel.Tags = new List<string>();
+                    if (viewModel.TimeSlot == null)
+                        viewModel.TimeSlot = new TimeSlot();
+                    viewModel.Status = EventStatus.Pending;
+                }
+
+                return viewModel;
+            }
+
+        }
+
         public EventsManagementViewModel BuildIndex(IDisplayPagination pagination,
             EventsManagementViewModel.Filters filters = null)
         {
             var result = new EventsManagementViewModel();
-            var config = LoadSystemConfiguration();
             using (var session = OpenSession)
             {
+                var config = LoadSystemConfiguration(session);
                 result.ActiveConvention = session.Load<Convention>(config.ActiveConventionId).Name;
                 result.Activities = session.Query<EventActivity>().Include(x => x.ActivitySystems).ToList();
                 result.AgeRestrictions = session.Query<AgeRestriction>().ToList();

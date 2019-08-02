@@ -55,7 +55,7 @@ namespace DragonCon.RavenDB.Gateways.Users
                     });
 
                     session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
-                    conEvent.Age = lazyAge.Value;
+                    conEvent.AgeId = lazyAge.Value.Id;
 
                     session.Store(conEvent);
                     session.SaveChanges();

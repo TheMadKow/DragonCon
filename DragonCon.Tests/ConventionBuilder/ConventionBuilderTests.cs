@@ -59,10 +59,10 @@ namespace DragonCon.Logical.Tests.ConventionBuilder
             Assert.AreEqual(builder.Days[new LocalDate(2018, 7, 7)].StartTime, new LocalTime(11, 0));
             Assert.AreEqual(builder.Days[new LocalDate(2018, 7, 8)], null);
 
-            builder.Days.SetTimeSlotStrategy(new LocalDate(2018, 7, 7), TimeSlotStrategy.Exact246Windows)
+            builder.Days.SetTimeSlotStrategy(new LocalDate(2018, 7, 7), TimeSlotStrategy.StartEvery2Hours_Duration246Windows)
                 .Save();
 
-            Assert.AreEqual(builder.Days[new LocalDate(2018, 7, 7)].TimeSlotStrategy, TimeSlotStrategy.Exact246Windows);
+            Assert.AreEqual(builder.Days[new LocalDate(2018, 7, 7)].TimeSlotStrategy, TimeSlotStrategy.StartEvery2Hours_Duration246Windows);
         }
 
         [Test]

@@ -55,9 +55,9 @@ namespace DragonCon.RavenDB.Gateways.Management
                 }).ToList();
 
                 result.Pagination = DisplayPagination.BuildForView(stats.TotalResults, pagination.SkipCount, pagination.ResultsPerPage);
+                result.Configuration = LoadSystemConfiguration(session);
             }
 
-            result.Configuration = LoadSystemConfiguration();
             return result;
         }
 
@@ -119,6 +119,11 @@ namespace DragonCon.RavenDB.Gateways.Management
             }
 
             return result;
+        }
+
+        public SystemConfiguration LoadSystemConfiguration()
+        {
+            return LoadSystemConfiguration(null);
         }
 
 

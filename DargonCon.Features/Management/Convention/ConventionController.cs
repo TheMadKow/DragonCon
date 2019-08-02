@@ -126,7 +126,7 @@ namespace DragonCon.Features.Management.Convention
             foreach (var actualDay in actualDays)
             {
                 builder.Days.AddDay(actualDay.Date, actualDay.StartTime, actualDay.EndTime);
-                builder.Days.SetTimeSlotStrategy(actualDay.Date, TimeSlotStrategy.Exact246Windows);
+                builder.Days.SetTimeSlotStrategy(actualDay.Date, TimeSlotStrategy.StartEvery2Hours_Duration246Windows);
             }
 
             builder.Save();
@@ -204,7 +204,7 @@ namespace DragonCon.Features.Management.Convention
                         builder.Days.UpdateDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
                     }
 
-                    builder.Days.SetTimeSlotStrategy(parsedDay.Date, TimeSlotStrategy.Exact246Windows);
+                    builder.Days.SetTimeSlotStrategy(parsedDay.Date, TimeSlotStrategy.StartEvery2Hours_Duration246Windows);
                 }
 
                 foreach (var parsedDay in deletedFiltered)
