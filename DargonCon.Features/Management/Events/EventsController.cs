@@ -119,6 +119,54 @@ namespace DragonCon.Features.Management.Dashboard
                 tab = "settings"
             });
         }
+
+        [HttpGet]
+        public IActionResult UpdateEventAgeRestriction(string restrictionId)
+        {
+            var viewModel = Gateway.GetAgeRestrictionViewModel(restrictionId);
+            return CreateUpdateEventAgeRestriction(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult CreateUpdateEventAgeRestriction(AgeSystemCreateUpdateViewModel viewModel = null)
+        {
+            if (viewModel == null)
+            {
+                viewModel = new AgeSystemCreateUpdateViewModel();
+            }
+
+            return View("CreateUpdateEventAgeRestriction", viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult CreateUpdateEventAgeRestrictionPost(AgeSystemCreateUpdateViewModel viewmodel)
+        {
+            if (string.IsNullOrWhiteSpace(viewmodel.Name))
+            {
+                viewmodel.ErrorMessage = "שם קבוצת גיל ריק";
+                return CreateUpdateEventAgeRestriction(viewmodel);
+            }
+
+            var answer = Gateway.AddOrUpdateAgeRestriction(viewmodel);
+            if (answer.AnswerType != AnswerType.Success)
+            {
+                viewmodel.ErrorMessage = answer.Message;
+                return CreateUpdateEventAgeRestriction(viewmodel);
+            }
+
+            return RedirectToAction("Manage", new
+            {
+                tab = "settings"
+            });
+        }
+
+        [HttpPost]
+        public Answer DeleteAgeRestriction(string restrictionId)
+        {
+            return Gateway.DeleteAgeRestriction(restrictionId);
+        }
+
+
     }
 
     public interface IManagementEventsGateway : IGateway
@@ -130,5 +178,11 @@ namespace DragonCon.Features.Management.Dashboard
         Answer UpdateExistingActivity(string viewmodelId, string viewmodelName, List<SystemViewModel> filteredList);
         Answer DeleteActivity(string activityId);
         ActivitySystemCreateUpdateViewModel GetActivityViewModel(string activityId);
+        
+
+        Answer AddOrUpdateAgeRestriction(AgeSystemCreateUpdateViewModel viewmodel);
+        AgeSystemCreateUpdateViewModel GetAgeRestrictionViewModel(string restrictionId);
+        Answer DeleteAgeRestriction(string restrictionId);
+
     }
 }

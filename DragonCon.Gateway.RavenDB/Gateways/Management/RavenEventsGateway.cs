@@ -145,6 +145,62 @@ namespace DragonCon.RavenDB.Gateways.Management
             }
         }
 
+        public Answer AddOrUpdateAgeRestriction(AgeSystemCreateUpdateViewModel viewmodel)
+        {
+            using (var session = OpenSession)
+            {
+                var ageRestriction = new AgeRestriction();
+                if (viewmodel.Id.IsNotEmptyString())
+                {
+                    ageRestriction = session.Load<AgeRestriction>(viewmodel.Id);
+                    if (ageRestriction == null)
+                        throw new Exception("Unknown Age Restriction");
+                }
+
+                ageRestriction.Name = viewmodel.Name;
+                ageRestriction.MaxAge = viewmodel.MaxAge;
+                ageRestriction.MinAge = viewmodel.MinAge;
+
+                session.Store(ageRestriction);
+                session.SaveChanges();
+
+                return Answer.Success;
+            }
+        }
+
+        public AgeSystemCreateUpdateViewModel GetAgeRestrictionViewModel(string restrictionId)
+        {
+            using (var session = OpenSession)
+            {
+                restrictionId = restrictionId.FixRavenId("AgeRestrictions");
+                var ageRestriction = session.Load<AgeRestriction>(restrictionId);
+                if (ageRestriction == null)
+                    throw new Exception("Unknown Age Restriction");
+
+                return new AgeSystemCreateUpdateViewModel()
+                {
+                    Id = ageRestriction.Id,
+                    Name = ageRestriction.Name,
+                    MaxAge = ageRestriction.MaxAge,
+                    MinAge = ageRestriction.MinAge
+                };
+            }
+        }
+
+        public Answer DeleteAgeRestriction(string restrictionId)
+        {
+            using (var session = OpenSession)
+            {
+                var ageRestriction = session.Load<AgeRestriction>(restrictionId);
+                if (ageRestriction == null)
+                    return Answer.Error("Unknown Age Restriction");
+
+                session.Delete(ageRestriction);
+                session.SaveChanges();
+                return Answer.Success;
+            }
+        }
+
         public EventsManagementViewModel BuildIndex(IDisplayPagination pagination,
             EventsManagementViewModel.Filters filters = null)
         {
