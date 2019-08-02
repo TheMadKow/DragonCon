@@ -33,6 +33,21 @@ namespace DragonCon.Features.Management.Dashboard
 
         }
 
+        [HttpPost]
+        public Answer DeleteEventActivity(string activityId)
+        {
+            var answer = Gateway.DeleteActivity(activityId);
+            return answer;
+        }
+
+        [HttpGet]
+        public IActionResult UpdateEventActivity(string activityId)
+        {
+            var viewModel = Gateway.GetActivityViewModel(activityId);
+            return CreateUpdateEventActivity(viewModel);
+        }
+
+
         [HttpGet]
         public IActionResult CreateUpdateEventActivity(ActivitySystemCreateUpdateViewModel viewModel = null)
         {
@@ -49,7 +64,7 @@ namespace DragonCon.Features.Management.Dashboard
                 };
             }
 
-            return View(viewModel);
+            return View("CreateUpdateEventActivity", viewModel);
         }
 
         [HttpPost]
@@ -63,7 +78,24 @@ namespace DragonCon.Features.Management.Dashboard
 
         private IActionResult UpdateEventActivity(ActivitySystemCreateUpdateViewModel viewmodel)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrWhiteSpace(viewmodel.Name))
+            {
+                viewmodel.ErrorMessage = "שם פעילות ריק";
+                return CreateUpdateEventActivity(viewmodel);
+            }
+
+            var filteredList = viewmodel.Systems.Where(x => x.IsDeleted == false && x.Name.IsNotEmptyString()).ToList();
+            var answer = Gateway.UpdateExistingActivity(viewmodel.Id, viewmodel.Name, filteredList);
+            if (answer.AnswerType != AnswerType.Success)
+            {
+                viewmodel.ErrorMessage = answer.Message;
+                return CreateUpdateEventActivity(viewmodel);
+            }
+
+            return RedirectToAction("Manage", new
+            {
+                tab = "settings"
+            });
         }
 
         private IActionResult CreateEventActivity(ActivitySystemCreateUpdateViewModel viewmodel)
@@ -84,15 +116,19 @@ namespace DragonCon.Features.Management.Dashboard
 
             return RedirectToAction("Manage", new
             {
-                tab = "activities"
+                tab = "settings"
             });
         }
     }
 
     public interface IManagementEventsGateway : IGateway
     {
+        EventsManagementViewModel BuildIndex(IDisplayPagination pagination, EventsManagementViewModel.Filters filters = null);
+
+
         Answer AddNewActivity(string name, List<string> systems);
-        EventsManagementViewModel BuildIndex(IDisplayPagination pagination, 
-                                             EventsManagementViewModel.Filters filters = null);
+        Answer UpdateExistingActivity(string viewmodelId, string viewmodelName, List<SystemViewModel> filteredList);
+        Answer DeleteActivity(string activityId);
+        ActivitySystemCreateUpdateViewModel GetActivityViewModel(string activityId);
     }
 }

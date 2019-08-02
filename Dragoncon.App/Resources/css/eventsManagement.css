@@ -6,3 +6,7 @@
     background: #f7f7f773;
     border: 1px solid #adadad;
 }
+
+.card-margined {
+    margin: 20px;
+}

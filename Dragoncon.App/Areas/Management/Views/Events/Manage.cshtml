@@ -87,14 +87,15 @@
             </tbody>
         </table>
     </div>
+
     <div class="tab-pane fade" id="tab-pan-settings" role="tabpanel" aria-labelledby="tab-pane-settings">
+        <br/>
         <h3>גילאים</h3>
         <a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventAgeRestriction">
             <i class="fa fa-fw fa-plus-square"></i> הוספת הגבלת גיל
         </a>
 
-        <div class="card card-body">
-            <div class="card card-body">
+        <div class="card card-body card-margined">
                 <table class="table table-hover table-stripped text-right">
                     <tbody>
                     @foreach (AgeRestriction ageRestriction in Model.AgeRestrictions.OrderByDescending(x => x.Name))
@@ -120,7 +121,6 @@
                     }
                     </tbody>
                 </table>
-            </div>
         </div>
         <br />
         <h3>פעילויות</h3>
@@ -129,8 +129,25 @@
         </a>
         @foreach (var activity in Model.Activities.OrderByDescending(x => x.Name))
         {
-            <div class="card card-body">
-                <h5>@activity.Id.GetNumberFromId() @activity.Name</h5>
+            <div class="card card-body card-margined">
+                <h5>@activity.Id.GetNumberFromId() @activity.Name
+                
+                    <div class="dropdown pull-left">
+                        <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm btn-warning">
+                            <i class="fa fa-fw fa-cog"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                               asp-action="UpdateEventActivity" asp-route-activityId="@activity.Id.GetNumberFromId()">
+                                <i class="fa fa-fw fa-edit"></i> עדכון פעילות 
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" onclick="DeleteActivity('@activity.Id')" href="#"><i class="fa fa-fw fa-trash"></i> מחיקת פעילות </a>
+                        </div>
+                    </div>
+
+                    </h5>
+
                 <table class="table table-hover table-stripped text-right">
                     <tbody>
                     @foreach (var system in activity.ActivitySystems.OrderByDescending(x => x.Name))
@@ -151,3 +168,34 @@
     </div>
 </div>
 </div>
+
+
+@section Scripts
+{
+    <script>
+        
+        function DeleteActivity(actId) {
+            Swal.fire({
+                title: 'האם למחוק פעילות?',
+                text: "מחיקת הפעילות תגרום למחיקת כל השיטות הקשורות!",
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#3085d6',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'אישור מחיקה',
+                cancelButtonText: 'ביטול מחיקה'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Management/Events/DeleteEventActivity?activityId=" + actId,
+                        data: actId,
+                        success: function() {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

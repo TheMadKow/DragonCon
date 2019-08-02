@@ -38,7 +38,7 @@
                             <td class="col-1">
                                 @if (Model.Configuration.ActiveConventionId == con.Id)
                                 {
-                                    <i title="כנס פעיל" class="fa fa-fw fa-star" style="color: #2484ff"></i>
+                                    <i title="כנס פעיל" class="fa fa-fw fa-globe-europe" style="color: #2484ff"></i>
                                 }
                             </td>
                             <td class="col-2">@con.Id.GetNumberFromId()</td>
@@ -65,7 +65,7 @@
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" href="#"><i class="fa fa-fw fa-clone"></i> שכפל כנס זה</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#" onclick="SetActiveConvention('@con.Id')"><i class="fa fa-fw fa-star"></i> קבע ככנס פעיל</a>
+                                                <a class="dropdown-item" href="#" onclick="SetActiveConvention('@con.Id')"><i class="fa fa-fw fa-globe-europe"></i> קבע ככנס פעיל</a>
                                             </div>
                                         </div>
 
@@ -164,7 +164,9 @@
                 type: "POST",
                 url: "/Management/Convention/SetActive?id=" + conId,
                 data: conId,
-                success: location.reload()
+                success: function() {
+                    location.reload();
+                }
             });
         }
 
@@ -175,7 +177,7 @@
                 type: "POST",
                 url: "/Management/Convention/ToggleType?type=" + type + "&value=" + val,
                 error: function () {
-                    Swal({
+                    Swal.fire({
                         type: 'error',
                         title: 'שגיאה כללית',
                         text: 'אירעה שגיאה כללית - נא רעננו את העמוד ונסו שנית'

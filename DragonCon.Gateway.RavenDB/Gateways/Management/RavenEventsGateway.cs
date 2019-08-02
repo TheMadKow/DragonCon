@@ -6,6 +6,7 @@ using System.Text;
 using DragonCon.Features.Management.Dashboard;
 using DragonCon.Features.Management.Events;
 using DragonCon.Features.Shared;
+using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
@@ -55,6 +56,92 @@ namespace DragonCon.RavenDB.Gateways.Management
                 session.Store(activity);
                 session.SaveChanges();
                 return Answer.Success;
+            }
+        }
+
+        public Answer UpdateExistingActivity(string activityId, string activityName, List<SystemViewModel> filteredList)
+        {
+            using (var session = OpenSession)
+            {
+                var activity = session.Load<EventActivity>(activityId);
+                if (activity == null)
+                    throw new Exception("Unknown activity ID");
+
+                var existingSystems = filteredList
+                    .Where(x => x.Id.IsNotEmptyString())
+                    .ToDictionary(x => x.Id, x => x.Name);
+                var newSystems = filteredList.Where(x => x.Id.IsEmptyString());
+                var removedSystems = new List<EventSystem>();
+
+                foreach (var activitySystem in activity.ActivitySystems)
+                {
+                    if (existingSystems.MissingKey(activitySystem.Id))
+                    {
+                        removedSystems.Add(activitySystem);;
+                        session.Delete(activitySystem.Id);
+                    }
+                    else
+                    {
+                        activitySystem.Name = existingSystems[activitySystem.Id];
+                        session.Store(activitySystem);
+                    }
+                }
+
+                foreach (var removedSystem in removedSystems)
+                {
+                    activity.ActivitySystems.Remove(removedSystem);
+                }
+
+                foreach (var newSystem in newSystems)
+                {
+                    var eventSystem = new EventSystem
+                    {
+                        Name = newSystem.Name
+                    };
+                    session.Store(eventSystem);
+                    activity.ActivitySystems.Add(eventSystem);
+                }
+
+                session.SaveChanges();
+                return Answer.Success;
+            }
+        }
+
+        public Answer DeleteActivity(string activityId)
+        {
+            using (var session = OpenSession)
+            {
+                var activity = session.Load<EventActivity>(activityId);
+                if (activity == null)
+                    throw new Exception("Unknown activity ID");
+
+                foreach (var system in activity.ActivitySystems)
+                {
+                    session.Delete(system.Id);
+                }
+
+                session.Delete(activity.Id);
+                session.SaveChanges();
+            }
+
+            return Answer.Success;
+        }
+
+        public ActivitySystemCreateUpdateViewModel GetActivityViewModel(string activityId)
+        {
+            using (var session = OpenSession)
+            {
+                activityId = activityId.FixRavenId("EventActivities");
+                var activity = session.Load<EventActivity>(activityId);
+                if (activity == null)
+                    throw new Exception("Unknown activity ID");
+
+                return new ActivitySystemCreateUpdateViewModel()
+                {
+                    Name = activity.Name,
+                    Id = activity.Id,
+                    Systems = activity.ActivitySystems.Select(x => new SystemViewModel(x)).ToList()
+                };
             }
         }
 

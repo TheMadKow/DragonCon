@@ -25,6 +25,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.76" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.4" />
     <PackageReference Include="NodaTime" Version="2.4.6" />
     <PackageReference Include="RavenDB.Client" Version="4.2.1" />
@@ -46,7 +47,6 @@
   <ItemGroup>
     <Folder Include="Areas\Controllers\" />
     <Folder Include="Areas\Users\Views\Events\" />
-    <Folder Include="Resources\images\" />
   </ItemGroup>
 
   <ItemGroup>

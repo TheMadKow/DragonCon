@@ -21,12 +21,15 @@
 <body style="">
 <div class="right-to-left">
     <ul class="right-to-left admin-navbar bg-dark">
+        <li>
+            <img src="images/DragonCon-Invert.png" style="width: 135px;"/>
+        </li>
         <li class="admin-navbar-brand text-center">
-            <a class="admin-navbar-brand-link" href="#">דרקוניקון<br />אזור הניהול</a>
+            <a class="admin-navbar-brand-link" href="#">דרקוניקון<br/>אזור הניהול</a>
         </li>
         <li class="list-divider"></li>
         <li>
-            <a asp-area="Management" asp-controller="Events" asp-action="Information">לוח בקרה</a>
+            <a asp-area="Management" asp-controller="Dashboard" asp-action="Index">לוח הבקרה</a>
         </li>
         <li class="list-divider"></li>
         <li>
@@ -36,7 +39,7 @@
             <a asp-area="Management" asp-controller="Participants" asp-action="Information">מידע משתמשים</a>
         </li>
         <li>
-            <a asp-area="Management" asp-controller="Participants" asp-action="Information">הפקת כרטיסים</a>
+            <a asp-area="Management" asp-controller="Participants" asp-action="Tickets">הפקת כרטיסים</a>
         </li>
         <li class="list-divider"></li>
         <li>

@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "defaultProvider": "filesystem",
+  "libraries": [
+    {
+      "provider": "filesystem",
+      "library": "Resources/Images/",
+      "destination": "wwwroot/images/"
+    }
+  ]
+}
