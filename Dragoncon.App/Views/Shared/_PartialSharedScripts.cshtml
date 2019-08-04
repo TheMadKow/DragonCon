@@ -1,0 +1,67 @@
+﻿<script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+<script src="~/lib/popper.js/dist/umd/popper.min.js" asp-append-version="true"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+<script src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js" asp-append-version="true"></script>
+<script src="~/lib/sweetalert2/dist/sweetalert2.min.js" asp-append-version="true"></script>
+<script src="~/lib/pickadate/lib/picker.js" asp-append-version="true"></script>
+<script src="~/lib/pickadate/lib/picker.date.js" asp-append-version="true"></script>
+<script src="~/lib/pickadate/lib/picker.time.js" asp-append-version="true"></script>
+<script src="~/lib/chosen-js/chosen.jquery.min.js" asp-append-version="true"></script>
+<script src="~/js/site.min.js" asp-append-version="true"></script>
+<script>
+    $(document).ready(function () {
+        setupToggles();
+        setupPickers();
+        setupChosen();
+        setupOpenTab();
+    });
+
+    function setupOpenTab() {
+        var $tab = $("#helper-tab").val();
+        if ($tab != null && $tab !== "") {
+            $(".nav-item").removeClass("active");
+            $("#nav-item-" + $tab).addClass("active");
+
+            $(".tab-pane").removeClass("active");
+            $(".tab-pane").removeClass("show");
+
+            $("#tab-pan-" + $tab).addClass("active");
+            $("#tab-pan-" + $tab).addClass("show");
+
+            $("#nav-item-" + $tab).tab("show");
+        }
+    }
+
+    function setupToggles() {
+        $('.bootstrap-toggle').bootstrapToggle();
+    }
+
+    function setupChosen() {
+        $('.chosen-select').chosen({
+            disable_search_threshold: 10,
+            inherit_select_classes: true,
+            include_group_label_in_selected: true,
+            rtl: true,
+            width: "100%"
+        });
+        $('.chosen-select').removeClass('chosen-select');
+    }
+
+    function setupPickers() {
+        $('.datepicker').pickadate({
+            clear: '',
+            today: '',
+            monthsFull: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
+            weekdaysShort: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
+            format: 'dd/mm/yyyy'
+
+        });
+        $('.timepicker').pickatime(
+            {
+                min: [7, 00],
+                max: [23, 00],
+                clear: '',
+                format: 'HH:i'
+            });
+    }
+</script>

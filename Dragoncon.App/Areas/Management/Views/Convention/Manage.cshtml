@@ -2,7 +2,7 @@
 @using DragonCon.Modeling.Helpers
 @model DragonCon.Features.Management.Convention.ConventionManagementViewModel
 @{
-    ViewBag.Title = "ניהול הכנס";
+    ViewBag.Title = "ניהול - כנסים";
 }
 
 <div class="right-to-left">
@@ -21,36 +21,34 @@
                     <i class="fa fa-fw fa-plus-square"></i> הוספת כנס חדש
                 </a>
             </div>
-            <table class="table table-hover table-stripped text-right">
+            <table class="table table-sm table-hover table-stripped text-right">
                 <thead>
-                    <tr class="d-flex">
-                        <td class="col-1"></td>
-                        <td class="col-2">מזהה</td>
-                        <td class="col-3">שם</td>
-                        <td class="col-3">תאריכים</td>
-                        <td class="col-3"></td>
+                    <tr>
+                        <td class="tw-1"></td>
+                        <td class="tw-5">שם</td>
+                        <td class="tw-3">תאריכים</td>
+                        <td class="tw-3"></td>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var con in Model.Conventions.OrderByDescending(x => x.UpdateTimeStamp))
                     {
-                        <tr class="d-flex">
-                            <td class="col-1">
+                        <tr>
+                            <td>
                                 @if (Model.Configuration.ActiveConventionId == con.Id)
                                 {
                                     <i title="כנס פעיל" class="fa fa-fw fa-globe-europe" style="color: #2484ff"></i>
                                 }
                             </td>
-                            <td class="col-2">@con.Id.GetNumberFromId()</td>
-                            <td class="col-3">@con.Name</td>
-                            <td class="col-3">
+                            <td>@con.Name</td>
+                            <td>
                                 @foreach (var day in con.Days.GroupBy(x => x.Date))
                                 {
                                     <span>@day.Key.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</span><br />
                                 }
                             </td>
 
-                            <td class="col-3">
+                            <td class="text-left">
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <div class="dropdown">
@@ -94,7 +92,7 @@
                 }
                 else
                 {
-                    <strong>כנס פעיל: @activeCon.Name (קוד: @activeCon.Id.GetNumberFromId())</strong>
+                    <strong>כנס פעיל: @activeCon.Name</strong>
                     <Br />
                     <a href="#" onclick="ShowDetails('@activeCon.Id')"><i class="fa fa-fw fa-info-circle"></i> צפיה בפרטי הכנס  </a>
                 }

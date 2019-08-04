@@ -17,13 +17,6 @@ body {
     padding-top: 15px;
 }
 
-.container-admin {
-    width: 100%;
-    margin-left: 20px;
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: 200px;
-}
 
 .body-content {
     margin-top: 20px;
@@ -37,45 +30,6 @@ body {
     width: 80%;
     margin-right: 19px;
 }
-
-.admin-navbar {
-    padding-right: 0;
-    width: 200px;
-    text-align: right;
-    position: fixed;
-    right: 0;
-    height: 100%;
-    padding-top: 10px;
-    top: 0;
-    box-shadow: -1px 0px 7px #b1b1b1;
-}
-
-.admin-navbar-brand {
-    font-weight: bold;
-    padding-right: 0 !important;
-}
-.admin-navbar-brand-link {
-    font-size: 1.4rem !important;
-    padding-right: 0 !important;
-}
-
-.admin-navbar > li {
-    list-style: none;
-    padding: 5px;
-    padding-right: 30px;
-    padding-top: 15px;
-}
-
-.admin-navbar > li > a {
-    color: white;
-    font-size: 1.2rem;
-}
-
-    .admin-navbar > li > a:hover {
-        text-decoration: none;
-        color: #c9c9ff;
-    }
-
 
 .toggle-off.btn {
     padding-left: 12px;
@@ -96,4 +50,3 @@ body {
 .card.card-grayed {
     background: #f7f7f7;
 }
-

@@ -44,15 +44,7 @@ namespace DragonCon.RavenDB.Gateways.Users
                         Tags = viewmodel.Tags,
                         HallId = string.Empty,
                         Table = null,
-                        StatusHistory = new List<EventHistory>()
                     };
-
-                    conEvent.StatusHistory.Add(new EventHistory()
-                    {
-                        Timestamp = SystemClock.Instance.GetCurrentInstant(),
-                        UserId = viewmodel.CreatorId,
-                        Status = EventStatus.Pending
-                    });
 
                     session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
                     conEvent.AgeId = lazyAge.Value.Id;

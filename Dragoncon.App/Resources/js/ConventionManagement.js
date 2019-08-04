@@ -1,4 +1,18 @@
-﻿/* General */
+﻿function ToggleSideMenu() {
+    var $navbar = $(".admin-navbar");   
+    var $sidebarToggle = $("#sidebar-toggle");
+    var $container = $(".container-admin");
+
+    if ($navbar.hasClass("d-none")) {
+        $navbar.removeClass("d-none");
+        $navbar.removeClass("d-md-block");
+    } else {
+        $navbar.addClass("d-none");
+        $navbar.addClass("d-md-block");
+    }
+}
+
+/* General */
 function RemoveRow(selector) {
     $(selector).closest(".row").find(".update-deleted").attr('value','true');
     $(selector).closest(".row").hide();

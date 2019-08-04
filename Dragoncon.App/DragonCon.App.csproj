@@ -53,7 +53,7 @@
     <Content Update="Areas\Management\Views\Convention\Manage.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Areas\Management\Views\Shared\_Layout.cshtml">
+    <Content Update="Areas\Management\Views\Shared\_ManagementLayout.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\Management\Views\_ViewImports.cshtml">
