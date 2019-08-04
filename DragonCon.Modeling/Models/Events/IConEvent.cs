@@ -22,6 +22,7 @@ namespace DragonCon.Modeling.Models.Events
         int? Table { get; set; }
         List<string> Tags { get; set; }
         TimeSlot TimeSlot { get; set; }
-        List<EventHistory> StatusHistory { get;set; }
+        
+        string UserActionsId { get;set; }
     }
 }

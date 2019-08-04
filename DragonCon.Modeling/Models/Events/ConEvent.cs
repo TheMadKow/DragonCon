@@ -28,13 +28,6 @@ namespace DragonCon.Modeling.Models.Events
         public string Description { get; set; }
         public string SpecialRequests { get;set; }
 
-        public List<EventHistory> StatusHistory { get;set; }
-    }
-
-    public class EventHistory
-    {
-        public string UserId { get; set; }
-        public Instant Timestamp { get; set; }
-        public EventStatus Status { get; set; }
+        public string UserActionsId { get;set; }
     }
 }
