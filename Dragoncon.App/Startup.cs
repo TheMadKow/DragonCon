@@ -53,7 +53,7 @@ namespace DragonCon.App
                 holder.Store.Maintenance.Server.Send(new CreateDatabaseOperation(databaseRecord));
             };
 
-            IndexCreation.CreateIndexes(typeof(MastersByConventionIndex).Assembly, holder.Store);
+            //IndexCreation.CreateIndexes(typeof(MastersByConventionIndex).Assembly, holder.Store);
 
             services.AddSingleton<StoreHolder>(holder);
             services.AddScoped<NullGateway, NullGateway>();

@@ -30,7 +30,7 @@
             <div class="col input-group">
                 <input type="number" class="form-control update-price" placeholder="מחיר">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" style="">&#8362;</span>
+                    <span class="input-group-text" style="">@Html.Raw(@DragonConstants.NIS_SYMBOL)</span>
                 </div>
             </div>
             <div class="col input-group">
@@ -105,7 +105,7 @@
                 <div class="col input-group">
                     <input type="number" class="form-control" asp-for="@Model.Tickets[@j].Price" placeholder="מחיר">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" style="">&#8362;</span>
+                        <span class="input-group-text" style="">@Html.Raw(@DragonConstants.NIS_SYMBOL)</span>
                     </div>
                 </div>
                 <div class="col input-group">
@@ -180,5 +180,7 @@
     <a href="#" onclick="AddNewTicket()"><i class="fa fa-fw fa-plus"></i> הוספת כרטיס</a>
 </div>
     <br />
-    <button type="submit" class="btn btn-primary">שמור כרטיסים</button>
+    <div class="btn-save-container">
+        <button type="submit" class="btn btn-primary btn-save">שמירת כרטיסים </button>
+    </div>
 </form>

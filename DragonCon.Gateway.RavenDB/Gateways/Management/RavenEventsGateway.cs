@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using DragonCon.Features.Management.Dashboard;
 using DragonCon.Features.Management.Events;
@@ -13,9 +14,13 @@ using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.RavenDB.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
+using NodaTime;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
+using SystemClock = Microsoft.Extensions.Internal.SystemClock;
 
 namespace DragonCon.RavenDB.Gateways.Management
 {
@@ -223,24 +228,216 @@ namespace DragonCon.RavenDB.Gateways.Management
 
                 if (eventId.IsNotEmptyString())
                 {
-                    // TODO
+                    eventId = eventId.FixRavenId("ConEvents");
+                    var existing = session.Load<ConEvent>(eventId);
+                    viewModel.Duration = (int) existing.TimeSlot.Span.Hours;
+                    viewModel.StartTime = new DateTime(1, 1,1, existing.TimeSlot.From.Hour, existing.TimeSlot.From.Minute, existing.TimeSlot.From.Second);
+                    viewModel.Name = existing.Name;
+                    viewModel.GameMasterIds = existing.GameMasterIds;
+                    viewModel.SpecialRequests = existing.SpecialRequests;
+                    viewModel.Status = existing.Status;
+                    viewModel.Tags = existing.Tags;
+                    viewModel.AgeRestrictionId = existing.AgeId;
+                    viewModel.Size = existing.Size;
+                    viewModel.ConventionDayId = existing.ConventionDayId;
+                    viewModel.Description = existing.Description;
+                    viewModel.Id = existing.Id;
+                    viewModel.IsSpecialPrice = existing.IsSpecialPrice;
+                    viewModel.SpecialPrice = existing.SpecialPrice;
+                    viewModel.Table = $"{existing.HallId},{existing.Table}";
+                    viewModel.SystemId = $"{existing.ActivityId},{existing.SystemId}";
                 }
                 else
                 {
-                    if (viewModel.HelperIds == null)
-                        viewModel.HelperIds = new List<string>();
+                    if (viewModel.GameMasterIds == null)
+                        viewModel.GameMasterIds = new List<string>();
                     if (viewModel.Size == null)
                         viewModel.Size = new SizeRestriction();
                     if (viewModel.Tags == null)
                         viewModel.Tags = new List<string>();
-                    if (viewModel.TimeSlot == null)
-                        viewModel.TimeSlot = new TimeSlot();
                     viewModel.Status = EventStatus.Pending;
                 }
 
                 return viewModel;
             }
 
+        }
+
+        public Answer UpdateEvent(EventCreateUpdateViewModel viewmodel)
+        {
+            var answer = ValidateEventFields(viewmodel);
+            if (answer.AnswerType != AnswerType.Success)
+                return answer;
+
+            using (var session = OpenSession)
+            {
+                var model = session
+                    .Include<ConEvent>(x => x.UserActionsId)
+                    .Load<ConEvent>(viewmodel.Id);
+
+                if (model == null)
+                    return Answer.Error("תקלה בטעינת האירוע");
+
+                var userActionList = session.Load<UserActionList>(model.UserActionsId);
+                var changes = GetUserActions(model, viewmodel);
+                userActionList.Actions.AddRange(changes);
+
+                model.IsSpecialPrice = viewmodel.IsSpecialPrice;
+                model.SpecialPrice = viewmodel.SpecialPrice;
+                model.Name = viewmodel.Name;
+                model.Description = viewmodel.Description;
+                model.ConventionDayId = viewmodel.ConventionDayId;
+                model.Status = viewmodel.Status;
+                model.GameMasterIds = viewmodel.GameMasterIds;
+                model.Size = viewmodel.Size;
+                model.AgeId = viewmodel.AgeRestrictionId;
+                model.Tags = viewmodel.Tags;
+                model.SpecialRequests = viewmodel.SpecialRequests;
+                
+                var activity = viewmodel.SystemId.Split(new[] {','}, StringSplitOptions.None);
+                model.ActivityId = activity[0];
+                model.SystemId = activity[1];
+                
+                var hall = viewmodel.Table.Split(new[] {','}, StringSplitOptions.None);
+                model.HallId = hall[0];
+                model.Table = int.Parse(hall[1]);
+
+                var startTime = new LocalTime(viewmodel.StartTime.Value.Hour,
+                    viewmodel.StartTime.Value.Minute,
+                    viewmodel.StartTime.Value.Second);
+                var endTime = startTime.PlusHours(viewmodel.Duration.Value);
+                model.TimeSlot = new TimeSlot
+                {
+                    From = startTime,
+                    To = endTime
+                };
+
+                session.SaveChanges();
+            }
+            return Answer.Success;
+        }
+
+        private List<UserAction> GetUserActions(ConEvent model, EventCreateUpdateViewModel viewmodel)
+        {
+            var result = new List<UserAction>();
+            foreach (PropertyInfo property in model.GetType().GetProperties())
+            {
+                var value1 = property.GetValue(model, null);
+                var compareProperty = viewmodel.GetType().GetProperty(property.Name);
+                if (compareProperty != null)
+                {
+                    var value2 = compareProperty.GetValue(viewmodel, null);
+                    if (!value1.Equals(value2))
+                    {
+                        result.Add(new UserAction()
+                        {
+                            UserId = "",
+                            Field = property.Name,
+                            OldValue = value1.ToString(),
+                            NewValue = value2.ToString(),
+                            TimeStamp = NodaTime.SystemClock.Instance.GetCurrentInstant()
+                        });
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
+        public Answer CreateEvent(EventCreateUpdateViewModel viewmodel)
+        {
+            var answer = ValidateEventFields(viewmodel);
+            if (answer.AnswerType != AnswerType.Success)
+                return answer;
+
+            using (var session = OpenSession)
+            {
+                var model = new ConEvent();
+                var userActionList = new UserActionList()
+                {
+                    Actions = new List<UserAction>()
+                    {
+                        new UserAction()
+                        {
+                            Field = "Event Creation",
+                            TimeStamp = NodaTime.SystemClock.Instance.GetCurrentInstant(),
+                            UserId = ""
+                        }
+                    }
+                };
+
+                session.Store(userActionList);
+                model.ConventionId = LoadSystemConfiguration(session).ActiveConventionId;
+                model.UserActionsId = userActionList.Id;
+                model.IsSpecialPrice = viewmodel.IsSpecialPrice;
+                model.SpecialPrice = viewmodel.SpecialPrice;
+                model.Name = viewmodel.Name;
+                model.Description = viewmodel.Description;
+                model.ConventionDayId = viewmodel.ConventionDayId;
+                model.Status = viewmodel.Status;
+                model.GameMasterIds = viewmodel.GameMasterIds;
+                model.Size = viewmodel.Size;
+                model.AgeId = viewmodel.AgeRestrictionId;
+                model.Tags = viewmodel.Tags;
+                model.SpecialRequests = viewmodel.SpecialRequests;
+
+                if (viewmodel.SystemId.IsNotEmptyString())
+                {
+                    var activity = viewmodel.SystemId.Split(new[] {','}, StringSplitOptions.None);
+                    model.ActivityId = activity[0];
+                    model.SystemId = activity[1];
+                }
+
+                if (viewmodel.Table.IsNotEmptyString())
+                {
+                    var hall = viewmodel.Table.Split(new[] {','}, StringSplitOptions.None);
+                    model.HallId = hall[0];
+                    model.Table = int.Parse(hall[1]);
+                }
+
+                if (viewmodel.StartTime.HasValue && viewmodel.Duration.HasValue)
+                {
+
+                    var startTime = new LocalTime(viewmodel.StartTime.Value.Hour,
+                        viewmodel.StartTime.Value.Minute,
+                        viewmodel.StartTime.Value.Second);
+                    var endTime = startTime.PlusHours(viewmodel.Duration.Value);
+                    model.TimeSlot = new TimeSlot
+                    {
+                        From = startTime,
+                        To = endTime
+                    };
+                }
+
+                session.Store(model);
+                session.SaveChanges();
+            }
+            return Answer.Success;
+        }
+
+        
+        private static Answer ValidateEventFields(EventCreateUpdateViewModel viewmodel)
+        {
+            if (viewmodel.IsSpecialPrice && viewmodel.SpecialPrice == null)
+                return Answer.Error("אי אפשר הגדיר מחיר מיוחד ריק");
+            if (viewmodel.Name.IsEmptyString())
+                return Answer.Error("אי אפשר להגדיר אירוע ללא שם");
+            if (viewmodel.Status == EventStatus.Approved)
+            {
+                if (viewmodel.SystemId.IsEmptyString())
+                    return Answer.Error("אי אפשר לאשר אירוע ללא סוג פעילות");
+                if (viewmodel.AgeRestrictionId.IsEmptyString())
+                    return Answer.Error("אי אפשר לאשר אירוע ללא קבוצת גיל");
+                if (viewmodel.ConventionDayId.IsEmptyString())
+                    return Answer.Error("אי אפשר לאשר אירוע ללא יום");
+                if (viewmodel.StartTime.HasValue == false || viewmodel.Duration.HasValue == false || viewmodel.Duration <= 0)
+                    return Answer.Error("אי אפשר לאשר אירוע ללא מסגרת זמן");
+                if (viewmodel.GameMasterIds.Any() == false)
+                    return Answer.Error("אי אפשר לאשר אירוע ללא הנחיה");
+            }
+
+            return Answer.Success;
         }
 
         public EventsManagementViewModel BuildIndex(IDisplayPagination pagination,
@@ -257,9 +454,9 @@ namespace DragonCon.RavenDB.Gateways.Management
                 var tempEvents = session.Query<ConEvent>()
                     .Statistics(out var stats)
                     .Include(x => x.ConventionDayId)
-                    .Include(x => x.GameMasterId)
-                    .Include(x => x.HelperIds)
+                    .Include(x => x.GameMasterIds)
                     .Include(x => x.HallId)
+                    .Include(x => x.AgeId)
                     .Where(x => x.ConventionId == config.ActiveConventionId)
                     .OrderBy(x => x.Name)
                     .Skip(pagination.SkipCount)
@@ -270,9 +467,9 @@ namespace DragonCon.RavenDB.Gateways.Management
                     Day = session.Load<Day>(x.ConventionDayId),
                     EventActivity = session.Load<EventActivity>(x.ActivityId),
                     EventSystem = session.Load<EventSystem>(x.SystemId),
-                    GameMaster = session.Load<RavenSystemUser>(x.GameMasterId),
-                    Helpers = session.Load<RavenSystemUser>(x.HelperIds).Select(y => y.Value).ToList<IParticipant>(),
+                    GameMasters = session.Load<RavenSystemUser>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
                     Hall = session.Load<Hall>(x.HallId),
+                    AgeRestriction = session.Load<AgeRestriction>(x.AgeId)
                 }).ToList();
                 result.Pagination = DisplayPagination.BuildForView(
                     stats.TotalResults, 

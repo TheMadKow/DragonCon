@@ -12,3 +12,15 @@
 
     $(".last-system-row").last().after(clone);
 }
+
+
+function ToggleEventSpecialPrice() {
+    var toggle = $("#is-special-price");
+    var isOn = toggle.prop('disabled');
+    if (isOn === true) {
+        toggle.prop('disabled', false);
+    } else {
+        toggle.prop('disabled', true);
+        toggle.val(null);
+    }
+}

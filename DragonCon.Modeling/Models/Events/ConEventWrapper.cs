@@ -17,9 +17,9 @@ namespace DragonCon.Modeling.Models.Events
         public Day Day { get; set; }
         public EventSystem EventSystem { get; set; }
         public EventActivity EventActivity { get;set; }
-        public IParticipant GameMaster { get; set; }
-        public IList<IParticipant> Helpers { get; set; }
+        public IList<IParticipant> GameMasters { get; set; }
         public IList<IParticipant> Participants { get; set; }
+        public AgeRestriction AgeRestriction { get; set; }
         public Hall Hall { get;set; }
     }
 }

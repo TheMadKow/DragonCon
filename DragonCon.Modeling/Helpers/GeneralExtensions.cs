@@ -7,6 +7,7 @@ namespace DragonCon.Modeling.Helpers
 {
     public static class GeneralExtensions
     {
+
         public static string InHebrew(this IsoDayOfWeek dow)
         {
             switch (dow)

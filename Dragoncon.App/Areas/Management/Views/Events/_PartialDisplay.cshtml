@@ -8,57 +8,236 @@
     </a>
 </div>
 
-<div class="filter-container">eve
-    <input class="form-control" placeholder="חיפוש לפי שם אירוע או שם מנחה" />
-</div>
 <div class="filter-container">
-    סינונים<br />
-    <label>לפי סטטוס</label>
-    <select class="form-control chosen-select" data-placeholder="סטטוס אירוע">
-        <option value="" selected>הכל</option>
-        @foreach (var type in Enums.AsSelectListItem<EventStatus>())
-        {
-            <option value="@type.Value">@type.Text</option>
-        }
-    </select>
-    <select class="form-control chosen-select" asp-for="ActiveFilters.ActivitySystem" asp-items="Model.GetActivitiesDropDown" data-placeholder="פעילות ושיטות">
-        <option value="" selected>הכל</option>
-    </select>
-    <button class="btn btn-info"><i class="fa fa-fw fa-filter"></i> סינון</button>
-</div>
-<table class="table table-hover table-stripped text-right">
-    <thead>
-        <tr class="d-flex">
-            <td class="col-1"></td>
-            <td class="col-2">מזהה</td>
-            <td class="col-3">שם</td>
-            <td class="col-3">תאריכים</td>
-            <td class="col-3"></td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var con in Model.Events.OrderByDescending(x => x.Model.Name))
-        {
-            <tr class="d-flex">
-                <td class="col-2"></td>
-                <td class="col-3"></td>
-                <td class="col-3">
-                </td>
+    <strong>חיפוש חופשי</strong>
+    <div class="row">
+        <div class="col-10">
+            <input class="form-control" placeholder="חיפוש לפי שם אירוע או שם מנחה"/>
+        </div>
+        <div class="col-2">
+            <button class="btn btn-filter btn-info"><i class="fa fa-fw fa-search"></i> חיפוש</button>
+        </div>
+    </div>
+    <br/>
+    <strong>סינון לפי</strong>
+    <br/>
+    
+    <div class="row">
+        <div class="col-1">
+            <label>סטטוס</label>
+        </div>
+        <div class="col-4">
+            <select class="form-control chosen-select"
+                    asp-for="ActiveFilters.Status"
+                    data-placeholder="סטטוס אירוע">
+                <option value="" selected>הכל</option>
+                @foreach (var type in Enums.AsSelectListItem<EventStatus>())
+                {
+                    <option value="@type.Value">@type.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-1">
+            <label class="label-control">פעילות</label>
 
-                <td class="col-3">
+        </div>
+        <div class="col-4">
+            <select class="form-control chosen-select" 
+                    asp-for="ActiveFilters.Activity"
+                    asp-items="Model.GetActivitiesDropDown" data-placeholder="פעילות ושיטות">
+                <option value="" selected>הכל</option>
+            </select>
+        </div>
+        <div class="col-2">
+            <button class="btn btn-filter btn-info" type="submit"><i class="fa fa-fw fa-filter"></i> סינון </button>
+        </div>
+    </div>
+</div>
+<table id="accordion" class="table table-couple-striped text-right">
+    <tbody>
+        @foreach (var evnt in Model.Events.OrderByDescending(x => x.Model.Name))
+        {
+            var statusColor = "";
+            switch (evnt.Model.Status)
+            {
+                case EventStatus.Approved:
+                    statusColor = "text-success";
+                    break;
+                case EventStatus.Pending:
+                    statusColor = "text-info";
+                    break;
+                case EventStatus.Canceled:
+                case EventStatus.Declined:
+                    statusColor = "text-danger";
+                    break;
+            }
+
+
+            <tr>
+                <td>
+                    <strong>@evnt.Model.Name</strong> <br />
+                    @evnt.EventActivity?.Name @evnt.EventSystem?.Name
+
+                    @if (evnt.EventActivity == null)
+                    {
+                        <span class="text-danger">חסר סוג פעילות</span>
+                    }
+                    <br />
+                    @if (evnt.GameMasters.Any())
+                    {
+                        @foreach (var master in evnt.GameMasters)
+                        {
+                            @if (master == null)
+                            {
+                                <strong class="text-danger">משתמש לא קיים,</strong>
+
+                            }
+                            else
+                            {
+                                <strong class="text-secondary">@master?.FirstName @master?.LastName,</strong>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-danger">חסרה הנחיה</span>
+                    }
+                </td>
+                <td>
+                    <strong>@evnt.Day?.GetDescription()</strong>
+                    @if (evnt.EventActivity == null)
+                    {
+                        <strong class="text-danger">חסר תאריך</strong>
+                    }
+                    <br />
+
+                    @if (evnt.Model.TimeSlot == null)
+                    {
+                        <span class="text-danger">חסרים שעת התחלה ומשך</span>
+                    }
+                    else
+                    {
+                        <span>@evnt.Model.TimeSlot?.GetDescription()</span>
+                    }
+
+                </td>
+                <td>
+                    <strong>@evnt.Hall?.Name</strong>
+                    @if (evnt.Hall == null)
+                    {
+                        <strong class="text-danger">חסר מיקום</strong>
+                    }
+                    else
+                    {
+                        <span>
+                            <br/>
+                            שולחן @evnt.Model?.Table<br/>
+                        </span>
+                    }
+                </td>
+                <td>
+                    <strong class="@statusColor">@evnt.Model.Status.ToTextual()</strong>
+                </td>
+                <td>
                     <ul class="list-inline">
                         <li class="list-inline-item">
-                            <a class="dropdown-item" asp-area="Management" asp-controller="Convention"
-                               asp-action="UpdateConvention" asp-route-conId="@con.Model.Id.GetNumberFromId()">
+                            <a class="btn text-primary" data-toggle="collapse" href="#extra-data-@evnt.Model.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
+                                <i class="fa fa-fw fa-arrow-alt-circle-down"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a title="עריכת אירוע" class="btn text-primary" asp-area="Management" asp-controller="Events"
+                               asp-action="CreateUpdateEvent" asp-route-eventId="@evnt.Model.Id.GetNumberFromId()">
                                 <i class="fa fa-fw fa-edit"></i>
                             </a>
                         </li>
-                        <li class="list-inline-item">
-                            <a href="#" title="הצגת פרטים מלאים" class="btn btn-sm btn-info">
-                                <i class="fa fa-fw fa-info-circle"></i>
-                            </a>
-                        </li>
                     </ul>
+                </td>
+            </tr>
+            <tr id="extra-data-@evnt.Model.Id.GetNumberFromId()" 
+                class="collapse" data-parent="#accordion">
+                <td colspan="100%">
+                    <table class="table table-no-border table-no-background">
+                        <tr>
+                            <td class="tw-2">
+                                <strong>תיאור </strong>
+                            </td>
+                            <td class="tw-10">
+                                @if (evnt.Model.Description.IsEmptyString())
+                                {
+                                    <span class="text-danger">חסר תיאור</span>
+                                }
+                                else
+                                {
+                                    @evnt.Model.Description
+                                }
+                            </td>
+                        </tr>
+                        @if (evnt.Model.SpecialRequests.IsNotEmptyString())
+                        {
+                            <tr>
+                                <td>
+                                    <strong>בקשות מיוחדות </strong>
+                                </td>
+                                <td>
+                                    @evnt.Model.SpecialRequests
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>קבוצת גיל</strong>
+                                </td>
+                                <td>
+                                    @if (evnt.AgeRestriction == null)
+                                    {
+                                        <span class="text-danger">חסרה קבוצת גיל</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@evnt.AgeRestriction.GetDescription()</span>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>מספר משתתפים</strong>
+                                </td>
+                                <td>
+                                    <span>מ-</span>
+                                    @if (evnt.Model.Size.Min == null || evnt.Model.Size.Min == 0)
+                                    {
+                                        <span class="text-info">ללא הגבלה</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@evnt.Model.Size.Min</span>
+                                    }
+
+                                    <span>עד-</span>
+                                    @if (evnt.Model.Size.Max == null || evnt.Model.Size.Max == 0)
+                                    {
+                                        <span class="text-info">ללא הגבלה</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@evnt.Model.Size.Max</span>
+                                    }
+                                </td>
+                            </tr>
+                            @if (evnt.Model.IsSpecialPrice)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>מחיר מיוחד</strong>
+                                    </td>
+                                    <td>
+                                        <span>@evnt.Model.SpecialPrice @Html.Raw(@DragonConstants.NIS_SYMBOL)</span>
+                                    </td>
+                                </tr>
+                            }
+                            
+                        }
+                    </table>
                 </td>
             </tr>
         }

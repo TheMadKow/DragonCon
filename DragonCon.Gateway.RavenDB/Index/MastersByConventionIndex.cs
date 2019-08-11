@@ -22,23 +22,23 @@ namespace DragonCon.RavenDB.Index
 
         public MastersByConventionIndex()
         {
-            Map = events => from anEvent in events
-                let user = LoadDocument<RavenSystemUser>(anEvent.GameMasterId)
-                select new
-                {
-                    GameMasterName = $"{user.FirstName} {user.LastName}",
-                    GameMasterId = anEvent.GameMasterId,
-                    ConventionId = anEvent.ConventionId
-                };
+            //Map = events => from anEvent in events
+            //    let users = LoadDocument<RavenSystemUser>(anEvent.GameMasterId)
+            //    select new
+            //    {
+            //        GameMasterName = $"{user.FirstName} {user.LastName}",
+            //        GameMasterId = anEvent.GameMasterId,
+            //        ConventionId = anEvent.ConventionId
+            //    };
             
-            Reduce = results => from result in results
-                group result by new {result.ConventionId, result.GameMasterId} into groupedMasters
-                select new
-                {
-                    GameMasterName = groupedMasters.First().GameMasterName,
-                    GameMasterId = groupedMasters.First().GameMasterId,
-                    ConventionId = groupedMasters.First().ConventionId
-                };
+            //Reduce = results => from result in results
+            //    group result by new {result.ConventionId, result.GameMasterId} into groupedMasters
+            //    select new
+            //    {
+            //        GameMasterName = groupedMasters.First().GameMasterName,
+            //        GameMasterId = groupedMasters.First().GameMasterId,
+            //        ConventionId = groupedMasters.First().ConventionId
+            //    };
 
         }
     }

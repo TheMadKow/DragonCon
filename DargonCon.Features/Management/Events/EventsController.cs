@@ -180,7 +180,22 @@ namespace DragonCon.Features.Management.Dashboard
             return View("CreateUpdateEvent", viewModel);
         }
 
+        [HttpPost]
+        public IActionResult CreateUpdateEvent(EventCreateUpdateViewModel viewmodel)
+        {
+            var answer = Answer.Error();
+            if (viewmodel.Id.IsNotEmptyString())
+                answer = Gateway.UpdateEvent(viewmodel);
+            else
+                answer = Gateway.CreateEvent(viewmodel);
 
+            if (answer.AnswerType == AnswerType.Success)
+                return RedirectToAction("Manage");
+            else
+            {
+                return View("CreateUpdateEvent", viewmodel);
+            }
+        }
     }
 
     public interface IManagementEventsGateway : IGateway
@@ -199,5 +214,7 @@ namespace DragonCon.Features.Management.Dashboard
         Answer DeleteAgeRestriction(string restrictionId);
 
         EventCreateUpdateViewModel GetEventViewModel(string eventId);
+        Answer UpdateEvent(EventCreateUpdateViewModel viewmodel);
+        Answer CreateEvent(EventCreateUpdateViewModel viewmodel);
     }
 }

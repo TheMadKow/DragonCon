@@ -8,6 +8,7 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.HallsTables;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NodaTime;
 
 namespace DragonCon.Features.Management.Events
 {
@@ -18,19 +19,23 @@ namespace DragonCon.Features.Management.Events
         public string ConventionDayId { get;set; }
         public string SystemId { get;set; }
 
-        public string GameMasterId { get; set; }
-        public List<string> HelperIds { get; set; }
+        public List<string> GameMasterIds { get; set; }
 
         public EventStatus Status { get; set; }
-        public TimeSlot TimeSlot { get;set; }
         public SizeRestriction Size { get;set; }
         public string AgeRestrictionId { get; set; }
-        
+
+        public DateTime? StartTime { get; set; }
+        public int? Duration { get; set; }
+
         public List<string> Tags { get;set; }
-        public int? Table { get; set; }
+        public string Table { get; set; }
         
         public string Description { get; set; }
         public string SpecialRequests { get;set; }
+
+        public bool IsSpecialPrice { get; set; }
+        public double? SpecialPrice { get; set; }
 
 
         #region Selectors
@@ -53,6 +58,9 @@ namespace DragonCon.Features.Management.Events
         {
             get
             {
+                if (AgeRestrictions == null)
+                    return new List<SelectListItem>();
+
                 var items = new List<SelectListItem>();
                 foreach (var age in AgeRestrictions.OrderBy(x => x.Name))
                 {
@@ -73,13 +81,16 @@ namespace DragonCon.Features.Management.Events
         {
             get
             {
+                if (Activities == null)
+                    return new List<SelectListItem>();
+
                 var items = new List<SelectListItem>();
                 foreach (var eventActivity in Activities.OrderBy(x => x.Name))
                 {
                     var group = new SelectListGroup {Name = eventActivity.Name};
                     items.Add(new SelectListItem
                     {
-                        Value = eventActivity.Id,
+                        Value = $"{eventActivity.Id},",
                         Text = "כללי",
                         Group = group
                     });
@@ -88,7 +99,7 @@ namespace DragonCon.Features.Management.Events
                     {
                         var item = new SelectListItem
                         {
-                            Value = system.Id,
+                            Value = $"{eventActivity.Id},{system.Id}",
                             Text = system.Name,
                             Group = group
                         };
@@ -104,6 +115,9 @@ namespace DragonCon.Features.Management.Events
         {
             get
             {
+                if (Days == null)
+                    return new List<SelectListItem>();
+
                 var items = new List<SelectListItem>();
                 foreach (var day in Days.OrderBy(x => x.Date))
                 {
@@ -124,6 +138,9 @@ namespace DragonCon.Features.Management.Events
         {
             get
             {
+                if (Halls == null)
+                    return new List<SelectListItem>();
+
                 var items = new List<SelectListItem>();
                 foreach (var halls in Halls.OrderBy(x => x.FirstTable))
                 {
@@ -132,7 +149,7 @@ namespace DragonCon.Features.Management.Events
                     {
                         var item = new SelectListItem
                         {
-                            Value = table.ToString(),
+                            Value = $"{halls.Id},{table}",
                             Text = $"שולחן {table}",
                             Group = group
                         };

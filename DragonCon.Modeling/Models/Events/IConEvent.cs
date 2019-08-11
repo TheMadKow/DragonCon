@@ -10,8 +10,7 @@ namespace DragonCon.Modeling.Models.Events
         string SpecialRequests { get; set; }
         string ConventionDayId { get; set; }
         string Description { get; set; }
-        string GameMasterId { get; set; }
-        List<string> HelperIds { get; set; }
+        List<string> GameMasterIds { get; set; }
         string Id { get; set; }
         string Name { get; set; }
         List<string> ParticipantIds { get; set; }
@@ -22,7 +21,11 @@ namespace DragonCon.Modeling.Models.Events
         int? Table { get; set; }
         List<string> Tags { get; set; }
         TimeSlot TimeSlot { get; set; }
-        
+
+        bool IsSpecialPrice { get; set; }
+        double? SpecialPrice { get; set; }
+
         string UserActionsId { get;set; }
+
     }
 }

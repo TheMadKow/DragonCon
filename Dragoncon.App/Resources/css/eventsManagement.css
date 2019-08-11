@@ -1,10 +1,10 @@
 ﻿.filter-container {
     margin-top: 5px;
-    margin-bottom: 5px;
-    padding: 5px;
-    border-radius: 2px;
+    margin-bottom: 15px;
+    padding: 10px;
     background: #f7f7f773;
     border: 1px solid #adadad;
+    border-radius: 5px;
 }
 
 .card-margined {

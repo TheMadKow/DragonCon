@@ -37,8 +37,7 @@ namespace DragonCon.RavenDB.Gateways.Users
                             To = viewmodel.StartTime.Plus(viewmodel.Period)
                         },
                         Size = viewmodel.SizeRestrictions,
-                        GameMasterId = viewmodel.CreatorId,
-                        HelperIds = viewmodel.HelperIds,
+                        GameMasterIds = new List<string> {viewmodel.CreatorId},
                         ParticipantIds = new List<string>(),
                         Status = EventStatus.Pending,
                         Tags = viewmodel.Tags,
