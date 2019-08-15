@@ -12,10 +12,21 @@ namespace DragonCon.Features.Shared
         protected T Gateway { get; set; }
         public MiniProfiler Profiler { get; set; }
 
-        public DragonController(T gateway)
+        public DragonController(T gateway, IActor actor)
         {
             Gateway = gateway;
             Profiler = MiniProfiler.Current;
+            // TODO Populate Actor
+
+            if (actor == null)
+            {
+                BuildActor(actor);
+            }
+        }
+
+        private void BuildActor(IActor actor)
+        {
+
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

@@ -2,15 +2,15 @@
 # yarn lockfile v1
 
 
-"@fortawesome/fontawesome-free@5.6.1":
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.6.1.tgz#eb096a49446d649bdc8c90f04400306eff7c33c2"
-  integrity sha512-0afQfB+HBeJHlXPzcF2Jjh78SbwPSkDjba/O7pZFzAW3WGKNzd4s4AqrZo7oIlMWGnfoyDo8+QeosK0+DTDrTg==
+"@fortawesome/fontawesome-free@^5.6.1":
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.10.1.tgz#dec28ee02c3fc51da46d53ce4da9d5787312fbd7"
+  integrity sha512-PYncBhgN1l02mwHmczukexmu4yRTjRDAAdcK62jdWSAW8epcnZ9K2win/7rMrffiv/c7XLVDA8vD+yi6WyvbGQ==
 
-bootstrap-select@1.13.3:
-  version "1.13.3"
-  resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.13.3.tgz#77f62b72c69339227753b3879cec036039dcb4d9"
-  integrity sha512-XzMwLFqRJQb142zR3ev57bZl66/h/RRguMODVfH0w2YTcJrqU+VCO6CserMxsVF4JE6hX9O99MQGZxgWZiitfg==
+bootstrap-select@1.13.10:
+  version "1.13.10"
+  resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.13.10.tgz#b0cf57f8d448bc0488faba04ecaa2f4c5216e144"
+  integrity sha512-mwfyd+VWHY8wDN4je4Y8PPEaOAzDPUz95z5F5zxzlIqebqxtbrujclFWLrhkVOyETpsgZCL1rsfyEnHpAugtGg==
 
 bootstrap-toggle@2.2.2:
   version "2.2.2"
@@ -45,7 +45,12 @@ jquery-validation-unobtrusive@3.2.11:
     jquery ">=1.8"
     jquery-validation ">=1.16"
 
-jquery-validation@1.19.0, jquery-validation@>=1.16:
+jquery-validation@1.19.1:
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/jquery-validation/-/jquery-validation-1.19.1.tgz#a85043467dc2b70d9fff05778646d150e747742f"
+  integrity sha512-QNnrZBqSltWUEJx+shOY5WtfrIb0gWmDjFfQP8rZKqMMSfpRSwEkSqhfHPvDfkObD8Hnv5KHSYI8yg73sVFdqA==
+
+jquery-validation@>=1.16:
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/jquery-validation/-/jquery-validation-1.19.0.tgz#0fedf0c0483a030c4fff072398898ac18cfd6e40"
   integrity sha512-i1ygcs9K9eI0jqQ8fiOZdT0Ofw941YII1zyPQDUkBS8t2G8SoSWz8UUEVT6gV1KvsaBbovtL8YxjLALACR0syQ==
@@ -75,17 +80,17 @@ magicsuggest@2.1.4:
     bootstrap "~3"
     jquery ">= 1.8.3"
 
-pickadate@3.6.3:
-  version "3.6.3"
-  resolved "https://registry.yarnpkg.com/pickadate/-/pickadate-3.6.3.tgz#da2c958848e68f61a117b0151fa0dbfaf3982fd1"
-  integrity sha512-UbYH4HptW6Mv4SHr/RaQLaHaawFU1HZD3jtS+uted+0bdUGzV5qUakUAZi+r5NTbnplJBqpOEg2MBg9IKcWPuQ==
+pickadate@3.6.4:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/pickadate/-/pickadate-3.6.4.tgz#3ec4df80643166888d4c8656bffefe7bd53cdbae"
+  integrity sha512-2QN4aAXJJu1BN6L6ZzFd/rOWu9fzAPwNE9PpNX19YccuOu0c+0rMzO3sl72mNrfTmzR2jcLtvLUtw3PoWvhBrQ==
   dependencies:
     jquery ">=1.7"
 
-popper.js@1.14.7:
-  version "1.14.7"
-  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.14.7.tgz#e31ec06cfac6a97a53280c3e55e4e0c860e7738e"
-  integrity sha512-4q1hNvoUre/8srWsH7hnoSJ5xVmIL4qgz+s4qf2TnJIMyZFUFMGH+9vE7mXynAlHSZ/NdTmmow86muD0myUkVQ==
+popper.js@1.15.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.15.0.tgz#5560b99bbad7647e9faa475c6b8056621f5a4ff2"
+  integrity sha512-w010cY1oCUmI+9KwwlWki+r5jxKfTFDVoadl7MSrIujHU5MJ5OR6HTDj6Xo8aoR/QsA56x8jKjA59qGH4ELtrA==
 
 pretty-json-string@1.0.3:
   version "1.0.3"

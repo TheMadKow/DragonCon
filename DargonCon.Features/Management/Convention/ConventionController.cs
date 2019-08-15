@@ -5,13 +5,16 @@ using DragonCon.Features.Shared;
 using DragonCon.Logical.Convention;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.Identities.Policy;
 using DragonCon.Modeling.Models.System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 
 namespace DragonCon.Features.Management.Convention
 {
     [Area("Management")]
+    [Authorize(policy: Policies.Types.AtLeastConventionManager)]
     public class ConventionController : DragonController<IManagementConventionGateway>
     {
         private ConventionBuilder Builder;

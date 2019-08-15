@@ -35,34 +35,56 @@
         <li>
             <a asp-area="Management" asp-controller="Participants" asp-action="Information">מידע - משתמשים</a>
         </li>
-        <li class="list-divider"></li>
-        <li>
-            <a asp-area="Management" asp-controller="Events" asp-action="Manage">ניהול - אירועים</a>
-        </li>
-        <li>
-            <a asp-area="Management" asp-controller="Participants" asp-action="Manage">ניהול - משתמשים</a>
-        </li>
-        <li class="list-divider"></li>
-        <li>
-            <a asp-area="Management" asp-controller="Convention" asp-action="Manage">ניהול - כנסים</a>
-        </li>
+        @if (Actor.HasSystemRole(SystemRoles.ContentManager) || 
+             Actor.HasSystemRole(SystemRoles.UsersManager) || 
+             Actor.HasSystemRole(SystemRoles.ConventionManager))
+        {
+            <li class="list-divider"></li>
+            @if (Actor.HasSystemRole(SystemRoles.ContentManager) ||
+                 Actor.HasSystemRole(SystemRoles.ConventionManager))
+            {
+                <li>
+                    <a asp-area="Management" asp-controller="Events" asp-action="Manage">ניהול - אירועים</a>
+                </li>
+            }
+
+            @if (Actor.HasSystemRole(SystemRoles.UsersManager) ||
+                 Actor.HasSystemRole(SystemRoles.ConventionManager))
+            {
+                <li>
+                    <a asp-area="Management" asp-controller="Participants" asp-action="Manage">ניהול - משתמשים</a>
+                </li>
+            }
+
+        }
+
+        @if (Actor.HasSystemRole(SystemRoles.ConventionManager))
+        {
+            <li class="list-divider"></li>
+            <li>
+                <a asp-area="Management" asp-controller="Convention" asp-action="Manage">ניהול - כנסים</a>
+            </li>
+        }
+
         <li class="list-divider"></li>
         <li>
             <a asp-area="" asp-controller="Home" asp-action="Index"><i class="fa fa-fw fa-angle-right"></i>חזרה</a>
         </li>
     </ul>
-    <div class="container container-admin">
-        <h4 class="Title-Text">@ViewBag.Title</h4>
-        @RenderSection("Subheader", required: false)
+    <div class="container">
+        <div class="container-admin">
+            <h4 class="Title-Text">@ViewBag.Title</h4>
+            @RenderSection("Subheader", required: false)
 
-        <div class="modal-placeholder" id="modal-placeholder" style="display: none;">
-            <div class="modal-placeholder-content text-center">
-                <i class="fa fa-fw fa-spin fa-spinner"></i> אנא המתן...
+            <div class="modal-placeholder" id="modal-placeholder" style="display: none;">
+                <div class="modal-placeholder-content text-center">
+                    <i class="fa fa-fw fa-spin fa-spinner"></i> אנא המתן...
+                </div>
             </div>
-        </div>
 
-        <div class="body-content">
-            @RenderBody()
+            <div class="body-content">
+                @RenderBody()
+            </div>
         </div>
     </div>
 </div>

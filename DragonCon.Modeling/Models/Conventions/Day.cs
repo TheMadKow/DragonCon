@@ -26,7 +26,7 @@ namespace DragonCon.Modeling.Models.Conventions
         {
             var sb = new StringBuilder();
             sb.Append(Date.DayOfWeek.InHebrew());
-            sb.Append(Date.ToString(" ה-dd/MM", CultureInfo.DefaultThreadCurrentCulture));
+            sb.Append(Date.ToString($" ה-{DragonConstants.DEFAULT_DATE}", CultureInfo.DefaultThreadCurrentCulture));
             return sb.ToString();
         }
     }

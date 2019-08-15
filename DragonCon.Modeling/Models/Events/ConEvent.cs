@@ -30,6 +30,9 @@ namespace DragonCon.Modeling.Models.Events
         public string Description { get; set; }
         public string SpecialRequests { get;set; }
 
+        public Instant CreatedOn { get;set; }
+        public Instant UpdatedOn { get;set; }
+
         public string UserActionsId { get;set; }
     }
 }

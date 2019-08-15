@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Users
 {
     [Area("Users")]
-    [Authorize]
     public class EventsController  : DragonController<IEventsGateway>
     {
         public EventsController(IEventsGateway gateway) : 

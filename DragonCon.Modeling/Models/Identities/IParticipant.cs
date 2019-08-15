@@ -1,13 +1,14 @@
 ﻿using System;
+using NodaTime;
 
 namespace DragonCon.Modeling.Models.Identities
 {
     public interface IParticipant
     {
-        DateTimeOffset DayOfBirth { get; set; }
+        LocalDate DayOfBirth { get; set; }
         string Email { get; set; }
-        string FirstName { get; set; }
-        string LastName { get; set; }
+        string FirstName { get; }
+        string FullName { get; set; }
         string PhoneNumber { get; set; }
     }
 }

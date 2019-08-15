@@ -5,7 +5,6 @@ using System.Text;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.System;
-using DragonCon.RavenDB.Identity;
 using Raven.Client.Documents.Indexes;
 
 namespace DragonCon.RavenDB.Index

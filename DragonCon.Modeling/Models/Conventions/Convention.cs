@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using DragonCon.Modeling.Models.Identities;
 using NodaTime;
 
 namespace DragonCon.Modeling.Models.Conventions
@@ -14,9 +15,15 @@ namespace DragonCon.Modeling.Models.Conventions
         public List<string> HallIds { get; set; }
         public List<string> EventIds { get; set; }
 
+        public Dictionary<string, List<ConventionRoles>> UserConventionRoles { get; set; }
+
+
+        
         public List<PhoneRecord> PhoneBook { get;set; }
         public Dictionary<string, string> Metadata { get;set; }
+
         
+
         public Instant CreateTimeStamp { get; set; }
         public Instant UpdateTimeStamp { get; set; }
     }

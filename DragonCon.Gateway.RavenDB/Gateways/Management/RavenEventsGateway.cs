@@ -13,9 +13,6 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Identities;
-using DragonCon.RavenDB.Identity;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
@@ -282,6 +279,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 var changes = GetUserActions(model, viewmodel);
                 userActionList.Actions.AddRange(changes);
 
+                model.UpdatedOn = NodaTime.SystemClock.Instance.GetCurrentInstant();
                 model.IsSpecialPrice = viewmodel.IsSpecialPrice;
                 model.SpecialPrice = viewmodel.SpecialPrice;
                 model.Name = viewmodel.Name;
@@ -368,6 +366,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 };
 
                 session.Store(userActionList);
+                model.CreatedOn = NodaTime.SystemClock.Instance.GetCurrentInstant();
                 model.ConventionId = LoadSystemConfiguration(session).ActiveConventionId;
                 model.UserActionsId = userActionList.Id;
                 model.IsSpecialPrice = viewmodel.IsSpecialPrice;
@@ -467,7 +466,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                     Day = session.Load<Day>(x.ConventionDayId),
                     EventActivity = session.Load<EventActivity>(x.ActivityId),
                     EventSystem = session.Load<EventSystem>(x.SystemId),
-                    GameMasters = session.Load<RavenSystemUser>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
+                    GameMasters = session.Load<FullParticipant>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
                     Hall = session.Load<Hall>(x.HallId),
                     AgeRestriction = session.Load<AgeRestriction>(x.AgeId)
                 }).ToList();

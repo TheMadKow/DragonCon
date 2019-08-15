@@ -9,6 +9,5 @@ namespace DragonCon.Features.Management
         ConEventWrapper GetEvent(string id);
         void StoreEvent(ConEventWrapper conEvent);
         List<ConEventWrapper> GetAllEvents(string conventionId);
-
     }
 }

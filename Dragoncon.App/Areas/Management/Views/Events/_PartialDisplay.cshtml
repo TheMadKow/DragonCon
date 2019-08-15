@@ -1,5 +1,7 @@
-﻿@using DragonCon.Modeling.Helpers
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
 @using DragonCon.Modeling.Models.Events
+@using NodaTime
 @model DragonCon.Features.Management.Events.EventsManagementViewModel
 
 <div class="text-right" style="padding: 15px;">
@@ -75,14 +77,17 @@
 
             <tr>
                 <td>
-                    <strong>@evnt.Model.Name</strong> <br />
+                    <a class="text-primary" data-toggle="collapse" href="#extra-data-@evnt.Model.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
+                        <strong>@evnt.Model.Name</strong>
+                    </a>
+                    <br/>
                     @evnt.EventActivity?.Name @evnt.EventSystem?.Name
 
                     @if (evnt.EventActivity == null)
                     {
                         <span class="text-danger">חסר סוג פעילות</span>
                     }
-                    <br />
+                    <br/>
                     @if (evnt.GameMasters.Any())
                     {
                         @foreach (var master in evnt.GameMasters)
@@ -94,7 +99,7 @@
                             }
                             else
                             {
-                                <strong class="text-secondary">@master?.FirstName @master?.LastName,</strong>
+                                <strong class="text-secondary">@master?.FullName</strong>
                             }
                         }
                     }
@@ -103,7 +108,7 @@
                         <span class="text-danger">חסרה הנחיה</span>
                     }
                 </td>
-                <td>
+                <td class="tw-3">
                     <strong>@evnt.Day?.GetDescription()</strong>
                     @if (evnt.EventActivity == null)
                     {
@@ -121,7 +126,7 @@
                     }
 
                 </td>
-                <td>
+                <td class="tw-2">
                     <strong>@evnt.Hall?.Name</strong>
                     @if (evnt.Hall == null)
                     {
@@ -139,10 +144,55 @@
                     <strong class="@statusColor">@evnt.Model.Status.ToTextual()</strong>
                 </td>
                 <td>
-                    <ul class="list-inline">
+                    <div class="dropdown pull-left">
+                        <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm">
+                            <i class="fa fa-fw fa-ellipsis-h"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                               asp-action="UpdateEventAgeRestriction">
+                                <i class="fa fa-fw fa-pencil-alt"></i> שינוי מהיר
+                            </a>
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                               asp-action="UpdateEventAgeRestriction">
+                                <i class="fa fa-fw fa-edit"></i> עדכון מלא
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                               asp-action="UpdateEventAgeRestriction">
+                                <i class="fa fa-fw fa-clone"></i> שכפול אירוע
+                            </a>
+                            @if (evnt.GameMasters.Any(x => x != null))
+                            {
+                                <div class="dropdown-divider"></div>
+                                 <div class="text-center">
+                                    <a>עריכת מנחים</a>
+                                </div>
+                            }
+                            @foreach(var gm in evnt.GameMasters)
+                            {
+                                if (gm == null)
+                                {
+                                    continue;
+                                }
+
+                                <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                   asp-action="UpdateEventAgeRestriction">
+                                    <i class="fa fa-fw fa-user-edit"></i> @gm?.FirstName
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+                  
+
+                    @*<ul class="list-inline">
                         <li class="list-inline-item">
-                            <a class="btn text-primary" data-toggle="collapse" href="#extra-data-@evnt.Model.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
-                                <i class="fa fa-fw fa-arrow-alt-circle-down"></i>
+                        </li>
+                        <li>
+                            <a title="עריכה מהירה" class="btn text-primary" asp-area="Management" asp-controller="Events"
+                               asp-action="CreateUpdateEvent" asp-route-eventId="@evnt.Model.Id.GetNumberFromId()">
+                                <i class="fa fa-fw fa-pencil-alt"></i>
                             </a>
                         </li>
                         <li class="list-inline-item">
@@ -151,7 +201,7 @@
                                 <i class="fa fa-fw fa-edit"></i>
                             </a>
                         </li>
-                    </ul>
+                    </ul>*@
                 </td>
             </tr>
             <tr id="extra-data-@evnt.Model.Id.GetNumberFromId()" 
@@ -183,59 +233,77 @@
                                     @evnt.Model.SpecialRequests
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <strong>קבוצת גיל</strong>
-                                </td>
-                                <td>
-                                    @if (evnt.AgeRestriction == null)
-                                    {
-                                        <span class="text-danger">חסרה קבוצת גיל</span>
-                                    }
-                                    else
-                                    {
-                                        <span>@evnt.AgeRestriction.GetDescription()</span>
-                                    }
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>מספר משתתפים</strong>
-                                </td>
-                                <td>
-                                    <span>מ-</span>
-                                    @if (evnt.Model.Size.Min == null || evnt.Model.Size.Min == 0)
-                                    {
-                                        <span class="text-info">ללא הגבלה</span>
-                                    }
-                                    else
-                                    {
-                                        <span>@evnt.Model.Size.Min</span>
-                                    }
+                        }
+                        <tr>
+                            <td>
+                                <strong>קבוצת גיל</strong>
+                            </td>
+                            <td>
+                                @if (evnt.AgeRestriction == null)
+                                {
+                                    <span class="text-danger">חסרה קבוצת גיל</span>
+                                }
+                                else
+                                {
+                                    <span>@evnt.AgeRestriction.GetDescription()</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>מספר משתתפים</strong>
+                            </td>
+                            <td>
+                                <span>מ-</span>
+                                @if (evnt.Model.Size.Min == null || evnt.Model.Size.Min == 0)
+                                {
+                                    <span class="text-info">ללא הגבלה</span>
+                                }
+                                else
+                                {
+                                    <span>@evnt.Model.Size.Min</span>
+                                }
 
-                                    <span>עד-</span>
-                                    @if (evnt.Model.Size.Max == null || evnt.Model.Size.Max == 0)
-                                    {
-                                        <span class="text-info">ללא הגבלה</span>
-                                    }
-                                    else
-                                    {
-                                        <span>@evnt.Model.Size.Max</span>
-                                    }
+                                <span>עד-</span>
+                                @if (evnt.Model.Size.Max == null || evnt.Model.Size.Max == 0)
+                                {
+                                    <span class="text-info">ללא הגבלה</span>
+                                }
+                                else
+                                {
+                                    <span>@evnt.Model.Size.Max</span>
+                                }
+                            </td>
+                        </tr>
+                        @if (evnt.Model.IsSpecialPrice)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>מחיר מיוחד</strong>
+                                </td>
+                                <td>
+                                    <span>@evnt.Model.SpecialPrice @Html.Raw(DragonConstants.NIS_SYMBOL)</span>
                                 </td>
                             </tr>
-                            @if (evnt.Model.IsSpecialPrice)
-                            {
-                                <tr>
-                                    <td>
-                                        <strong>מחיר מיוחד</strong>
-                                    </td>
-                                    <td>
-                                        <span>@evnt.Model.SpecialPrice @Html.Raw(@DragonConstants.NIS_SYMBOL)</span>
-                                    </td>
-                                </tr>
-                            }
-                            
+                        }
+                        <tr>
+                            <td>
+                                <strong>נוצר בתאריך</strong>
+                            </td>
+                            <td>
+                                <span>@evnt.Model.CreatedOn.ToString(DragonConstants.DEFAULT_DATE, CultureInfo.CurrentCulture)</span>
+                            </td>
+                        </tr>
+                        @if (evnt.Model.UpdatedOn != new Instant())
+                        {
+                            <tr>
+                                <td>
+                                    <strong>עודכן לאחרונה</strong>
+                                </td>
+                                <td>
+                                    <span>@evnt.Model.UpdatedOn.ToString(DragonConstants.DEFAULT_DATE, CultureInfo.CurrentCulture)</span>
+                                </td>
+                            </tr>
                         }
                     </table>
                 </td>
