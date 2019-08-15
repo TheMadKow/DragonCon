@@ -1,4 +1,6 @@
-﻿using DragonCon.Features.Shared;
+﻿using System;
+using DragonCon.Features.Shared;
+using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Identities.Policy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +11,7 @@ namespace DragonCon.Features.Management.Dashboard
     [Authorize(policy: Policies.Types.AtLeastManagementViewer)]
     public class DashboardController : DragonController<NullGateway>
     {
-        public DashboardController(NullGateway gateway) : base(gateway)
+        public DashboardController(IServiceProvider service) : base(service)
         {
         }
 

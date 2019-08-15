@@ -1,5 +1,7 @@
-﻿using DragonCon.Features.Shared;
+﻿using System;
+using DragonCon.Features.Shared;
 using DragonCon.Modeling.Models.Common;
+using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,8 +11,7 @@ namespace DragonCon.Features.Users
     [Area("Users")]
     public class EventsController  : DragonController<IEventsGateway>
     {
-        public EventsController(IEventsGateway gateway) : 
-            base(gateway)  { }
+        public EventsController(IServiceProvider service) : base(service) {}
 
         [HttpGet]
         public IActionResult Index()

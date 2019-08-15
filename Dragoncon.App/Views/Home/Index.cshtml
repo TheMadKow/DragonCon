@@ -1,7 +1,23 @@
-﻿@{
+﻿@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Identities
+@{
     ViewData["Title"] = "Home Page";
+    var actor = Actor;
 }
 
 <h3>
     <a asp-area="Management" asp-controller="Dashboard" asp-action="Index">Go Go Power Rangers!</a>
+    
+    
+    <span>
+        <br />
+        Hello @Actor.Participant.FullName <br/>
+        Roles :
+        @foreach (var role in Actor.Participant.RoleList)
+        {
+            <span>@role.ToTextual()</span>
+            <br />
+        }
+        @Actor.Convention.Name
+    </span>
 </h3>

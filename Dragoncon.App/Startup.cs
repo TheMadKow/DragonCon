@@ -163,6 +163,7 @@ namespace DragonCon.App
             });
             app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseActorInitialization();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

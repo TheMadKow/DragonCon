@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.Identities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Profiling;
 
 namespace DragonCon.Features.Shared
@@ -10,29 +14,24 @@ namespace DragonCon.Features.Shared
         protected const int ResultsPerPage = 45;
 
         protected T Gateway { get; set; }
+        protected IActor Actor { get; set; }
+        protected IServiceProvider Service {get;set;}
         public MiniProfiler Profiler { get; set; }
 
-        public DragonController(T gateway, IActor actor)
+
+        public DragonController(IServiceProvider service)
         {
-            Gateway = gateway;
+            Gateway = service.GetRequiredService<T>();
             Profiler = MiniProfiler.Current;
-            // TODO Populate Actor
-
-            if (actor == null)
-            {
-                BuildActor(actor);
-            }
+            Service = service;
         }
 
-        private void BuildActor(IActor actor)
-        {
-
-        }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             using (Profiler.Step("On Action Executing"))
             {
+                Actor = Service.GetRequiredService<IActor>();
                 base.OnActionExecuting(context);
             }
         }

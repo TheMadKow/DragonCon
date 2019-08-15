@@ -5,6 +5,7 @@ using DragonCon.Features.Shared;
 using DragonCon.Logical.Convention;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Identities.Policy;
 using DragonCon.Modeling.Models.System;
 using Microsoft.AspNetCore.Authorization;
@@ -18,10 +19,7 @@ namespace DragonCon.Features.Management.Convention
     public class ConventionController : DragonController<IManagementConventionGateway>
     {
         private ConventionBuilder Builder;
-        public ConventionController(
-            ConventionBuilder builder,
-            IManagementConventionGateway gateway) : 
-            base(gateway)
+        public ConventionController(ConventionBuilder builder, IServiceProvider service) : base(service)
         {
             Builder = builder;
         }

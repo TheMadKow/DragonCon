@@ -8,17 +8,24 @@ namespace DragonCon.Modeling.Models.Identities.Policy
 {
     public class RolesRequirementHandler : AuthorizationHandler<RolesRequirement>
     {
+        public RolesRequirementHandler(IActor actor)
+        {
+            Actor = actor;
+        }
+
+        public IActor Actor { get; }
+
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, RolesRequirement requirement)
         {
 
-            if (context.User == null)
+            if (Actor == null)
             {
                 context.Fail();
             }
 
             foreach (var allowedRole in requirement.AllowedRoles)
             {
-                if (context.User.IsInRole(allowedRole.ToString()))
+                if (Actor.HasSystemRole(allowedRole))
                 {
                     context.Succeed(requirement);
                     return Task.CompletedTask;
