@@ -11,5 +11,6 @@ namespace DragonCon.Modeling.Models.System
         public bool AllowEventsRegistrationChanges { get; set; } = false;
         public bool AllowEventsSuggestions { get; set; } = false;
         public bool AllowPayments { get; set; } = false;
+        public bool AllowPaymentChanges { get; set; } = false;
     }
 }

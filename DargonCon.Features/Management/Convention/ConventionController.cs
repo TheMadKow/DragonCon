@@ -53,7 +53,10 @@ namespace DragonCon.Features.Management.Convention
                 case "registration-change":
                     config.AllowEventsRegistrationChanges = value;
                     break;
-                case "tickets":
+                case "payment":
+                    config.AllowPayments = value;
+                    break;
+                case "payment-change":
                     config.AllowPayments = value;
                     break;
                 default:

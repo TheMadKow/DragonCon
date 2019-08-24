@@ -9,6 +9,9 @@
     @RenderSection("Styles", required: false)
 </head>
 <body style="">
+<div id="anti-forgery">
+    @Html.AntiForgeryToken();
+</div>
 <div class="right-to-left">
     <div class="text-right d-xs-block d-sm-block d-md-none">
         <button id="sidebar-toggle" class="btn toggle-button" onclick="ToggleSideMenu()">
@@ -19,10 +22,10 @@
 
     <ul class="right-to-left admin-navbar bg-dark d-none d-md-block">
         <li class="d-none d-md-block">
-            <img src="/images/DragonCon-Invert.png" style="width: 135px;" />
+            <img src="/images/DragonCon-Invert.png" style="width: 135px;"/>
         </li>
         <li class="admin-navbar-brand text-center">
-            <span class="admin-navbar-brand-link" style="color: white;">דרקוניקון<br />אזור הניהול</span>
+            <span class="admin-navbar-brand-link" style="color: white;">דרקוניקון<br/>אזור הניהול</span>
         </li>
         <li class="list-divider"></li>
         <li>
@@ -35,8 +38,8 @@
         <li>
             <a asp-area="Management" asp-controller="Participants" asp-action="Information">מידע - משתמשים</a>
         </li>
-        @if (Actor.HasSystemRole(SystemRoles.ContentManager) || 
-             Actor.HasSystemRole(SystemRoles.UsersManager) || 
+        @if (Actor.HasSystemRole(SystemRoles.ContentManager) ||
+             Actor.HasSystemRole(SystemRoles.UsersManager) ||
              Actor.HasSystemRole(SystemRoles.ConventionManager))
         {
             <li class="list-divider"></li>
@@ -90,10 +93,10 @@
 </div>
 
 
-    <div id="helpers" hidden>
-        <input id="helper-tab" value="@ViewBag.HelperTab"/>
-    </div>
-    @await Html.PartialAsync("_PartialSharedScripts")
-    @RenderSection("Scripts", required: false)
+<div id="helpers" hidden>
+    <input id="helper-tab" value="@ViewBag.HelperTab"/>
+</div>
+@await Html.PartialAsync("_PartialSharedScripts")
+@RenderSection("Scripts", required: false)
 </body>
 </html>

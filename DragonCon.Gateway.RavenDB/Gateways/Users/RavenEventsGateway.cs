@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DragonCon.Features.Home;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Events;
+using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.ViewModels;
 using SystemClock = NodaTime.SystemClock;
 
@@ -10,8 +11,7 @@ namespace DragonCon.RavenDB.Gateways.Users
 {
     public class RavenEventsGateway : RavenGateway, IEventsGateway
     {
-        public RavenEventsGateway(StoreHolder holder) :
-            base(holder)
+        public RavenEventsGateway(StoreHolder holder, IActor actor) : base(holder, actor)
         {
         }
 
@@ -19,18 +19,15 @@ namespace DragonCon.RavenDB.Gateways.Users
         {
             try
             {
-
-                using (var session = OpenSession)
-                {
-                    var lazyAge = session.Advanced.Lazily.Load<AgeRestrictionTemplate>(viewmodel.AgeRestrictionId);
-                    var conEvent = new ConEvent()
+                    var lazyAge = Session.Advanced.Lazily.Load<AgeGroup>(viewmodel.AgeRestrictionId);
+                    var conEvent = new Event()
                     {
                         Name = viewmodel.Name,
                         ConventionDayId = viewmodel.DayId,
                         Description = viewmodel.Description,
                         SpecialRequests = viewmodel.Requests,
                         ActivityId = viewmodel.ActivityId,
-                        SystemId = viewmodel.SystemId,
+                        SubActivityId = viewmodel.SystemId,
                         TimeSlot = new TimeSlot
                         {
                             From = viewmodel.StartTime,
@@ -42,17 +39,17 @@ namespace DragonCon.RavenDB.Gateways.Users
                         Status = EventStatus.Pending,
                         Tags = viewmodel.Tags,
                         HallId = string.Empty,
-                        Table = null,
+                        HallTable = null,
                     };
 
-                    session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
+                    Session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
                     conEvent.AgeId = lazyAge.Value.Id;
 
-                    session.Store(conEvent);
-                    session.SaveChanges();
+                    Session.Store(conEvent);
+                    Session.SaveChanges();
 
                     return new Answer(AnswerType.Success);
-                }
+                
             }
             catch (Exception e)
             {

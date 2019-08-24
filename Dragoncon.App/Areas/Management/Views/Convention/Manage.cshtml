@@ -131,12 +131,22 @@
 
                     <div class="checkbox toggle-padding-list text-right">
                         <label class="label-control">
-                            <input asp-for="Configuration.AllowPayments" onchange="ToggleCheckbox(this, 'tickets')"
+                            <input asp-for="Configuration.AllowPayments" onchange="ToggleCheckbox(this, 'payment')"
                                    type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"
                                    data-offstyle="danger" data-onstyle="success" data-width="50">
                         </label>
                         <span class="toggle-text">אפשר רכישת כרטיסים</span>
                     </div>
+                    
+                    <div class="checkbox toggle-padding-list text-right">
+                        <label class="label-control">
+                            <input asp-for="Configuration.AllowPaymentChanges" onchange="ToggleCheckbox(this, 'payment-change')"
+                                   type="checkbox" class="bootstrap-toggle" data-toggle="toggle" data-on="<i class='fa fa-fw fa-check'></i>" data-off="<i class='fa fa-fw fa-times'></i>"
+                                   data-offstyle="danger" data-onstyle="success" data-width="50">
+                        </label>
+                        <span class="toggle-text">אפשר עדכון כרטיסים</span>
+                    </div>
+
                 </div>
             }
         </div>
@@ -155,12 +165,24 @@
         }
 
         function SetActiveConvention(conId) {
-            $.ajax({
-                type: "POST",
-                url: "/Management/Convention/SetActive?id=" + conId,
-                data: conId,
-                success: function() {
-                    location.reload();
+            Swal.fire({
+                title: '?האם לקבוע ככנס פעיל',
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#3085d6',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'אישור',
+                cancelButtonText: 'ביטול'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Management/Convention/SetActive?id=" + conId,
+                        data: CreateDefaultPostData(),
+                        success: function() {
+                            location.reload();
+                        }
+                    });
                 }
             });
         }
@@ -170,7 +192,9 @@
             console.log(val);
             $.ajax({
                 type: "POST",
+                data: CreateDefaultPostData(),
                 url: "/Management/Convention/ToggleType?type=" + type + "&value=" + val,
+
                 error: function () {
                     Swal.fire({
                         type: 'error',

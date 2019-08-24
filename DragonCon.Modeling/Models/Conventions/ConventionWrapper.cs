@@ -29,7 +29,6 @@ namespace DragonCon.Modeling.Models.Conventions
         public Instant UpdateTimeStamp { get => Model.UpdateTimeStamp; set => Model.UpdateTimeStamp = value; }
 
 
-
         public T GetById<T>(string key)
         where T : class
         {

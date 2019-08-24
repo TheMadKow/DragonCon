@@ -9,7 +9,7 @@ using Raven.Client.Documents.Indexes;
 
 namespace DragonCon.RavenDB.Index
 {
-    public class MastersByConventionIndex : AbstractIndexCreationTask<ConEvent, MastersByConventionIndex.Result>
+    public class MastersByConventionIndex : AbstractIndexCreationTask<Event, MastersByConventionIndex.Result>
     {
         public class Result
         {

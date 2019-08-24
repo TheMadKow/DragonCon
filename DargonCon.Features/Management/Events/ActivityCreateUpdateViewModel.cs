@@ -1,30 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using DragonCon.Modeling.Models.Common;
 
 namespace DragonCon.Features.Management.Events
 {
-    public class ActivitySystemCreateUpdateViewModel
+    public class ActivityCreateUpdateViewModel
     {
         public string Id { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "חובה להזין שם לפעילות")]
         public string Name { get; set; }
-        public List<SystemViewModel> Systems {get; set; }
+        public List<SubActivityViewModel> SubActivities {get; set; }
         public string ErrorMessage { get; set; }
     }
 
-    public class SystemViewModel
+    public class SubActivityViewModel
     {
-        public SystemViewModel(){}
+        public SubActivityViewModel(){}
         
-        public SystemViewModel(EventSystem system)
+        public SubActivityViewModel(Activity subActivity)
         {
             IsDeleted = false;
 
-            Id = system.Id;
-            Name = system.Name;
+            Id = subActivity.Id;
+            Name = subActivity.Name;
         }
 
         public string Id { get; set; }

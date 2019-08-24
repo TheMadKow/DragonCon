@@ -6,8 +6,8 @@ namespace DragonCon.Features.Management
 {
     public interface IStatisticsGateway : IGateway
     {
-        ConEventWrapper GetEvent(string id);
-        void StoreEvent(ConEventWrapper conEvent);
-        List<ConEventWrapper> GetAllEvents(string conventionId);
+        EventWrapper GetEvent(string id);
+        void StoreEvent(EventWrapper @event);
+        List<EventWrapper> GetAllEvents(string conventionId);
     }
 }

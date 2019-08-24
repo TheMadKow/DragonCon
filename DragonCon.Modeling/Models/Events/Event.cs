@@ -4,14 +4,15 @@ using NodaTime;
 
 namespace DragonCon.Modeling.Models.Events
 {
-    public class ConEvent : IConEvent
+    public class Event : IEvent
     {
         public string Id { get; set; }
         public string Name { get; set; }
         public string ConventionId { get; set; }
         public string ConventionDayId { get;set; }
+
         public string ActivityId { get; set; }
-        public string SystemId { get;set; }
+        public string SubActivityId { get;set; }
 
         public List<string> GameMasterIds { get; set; }
         public List<string> ParticipantIds { get;set; }
@@ -25,14 +26,12 @@ namespace DragonCon.Modeling.Models.Events
 
         public List<string> Tags { get;set; }
         public string HallId { get; set; }
-        public int? Table { get; set; }
+        public int? HallTable { get; set; }
         
         public string Description { get; set; }
         public string SpecialRequests { get;set; }
 
         public Instant CreatedOn { get;set; }
         public Instant UpdatedOn { get;set; }
-
-        public string UserActionsId { get;set; }
     }
 }

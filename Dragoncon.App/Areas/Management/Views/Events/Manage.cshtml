@@ -52,7 +52,7 @@
                     $.ajax({
                         type: "POST",
                         url: "/Management/Events/DeleteEventActivity?activityId=" + actId,
-                        data: actId,
+                        data: CreateDefaultPostData(),
                         success: function() {
                             location.reload();
                         }
@@ -75,7 +75,7 @@
                     $.ajax({
                         type: "POST",
                         url: "/Management/Events/DeleteAgeRestriction?restrictionId=" + ageId,
-                        data: ageId,
+                        data: CreateDefaultPostData(),
                         success: function() {
                             location.reload();
                         }

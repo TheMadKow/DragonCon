@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using DragonCon.App.Helpers;
 using DragonCon.Features.Management.Convention;
 using DragonCon.Features.Management.Dashboard;
@@ -32,8 +33,11 @@ namespace DragonCon.App
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostingEnvironment _environment;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
+            _environment = environment;
             Configuration = configuration;
         }
 
@@ -81,12 +85,23 @@ namespace DragonCon.App
                 opt.SetMinimumLevel(LogLevel.Warning);
             });
 
-            var holder = new StoreHolder(DragonConsts.DatabaseName, "http://127.0.0.1:8080"); //TODO connection String
+            var database = "";
+            if (_environment.IsDevelopment())
+                database = StoreConsts.DatabaseName_Developement;
+            if (_environment.IsStaging())
+                database = StoreConsts.DatabaseName_Staging;
+            if (_environment.IsProduction())
+                database = StoreConsts.DatabaseName_Production;
+
+
+            var certificatePath = Path.Combine(_environment.ContentRootPath, StoreConsts.CertificatePath);
+            var holder = new StoreHolder(database, certificatePath, StoreConsts.ConnectionString); 
+            
             holder.Store.ConfigureForNodaTime();
             holder.Store.Initialize();
-            if (holder.Store.Maintenance.Server.Send(new GetDatabaseRecordOperation(DragonConsts.DatabaseName)) == null)
+            if (holder.Store.Maintenance.Server.Send(new GetDatabaseRecordOperation(database)) == null)
             {
-                var databaseRecord = new DatabaseRecord(DragonConsts.DatabaseName);
+                var databaseRecord = new DatabaseRecord(database);
                 holder.Store.Maintenance.Server.Send(new CreateDatabaseOperation(databaseRecord));
             };
 

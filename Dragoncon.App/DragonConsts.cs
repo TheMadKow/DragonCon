@@ -7,6 +7,5 @@ namespace DragonCon.App
 {
     public static class DragonConsts
     {
-        public const string DatabaseName = "DragonCon";
     }
 }

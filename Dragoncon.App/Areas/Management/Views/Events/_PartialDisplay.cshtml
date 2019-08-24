@@ -77,16 +77,28 @@
 
             <tr>
                 <td>
-                    <a class="text-primary" data-toggle="collapse" href="#extra-data-@evnt.Model.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
-                        <strong>@evnt.Model.Name</strong>
+                    <a class="text-black" data-toggle="collapse" href="#extra-data-@evnt.Model.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
+                        <strong>@evnt.Model.Name</strong><i class="fa fa-fw fa-caret-down"></i>
                     </a>
                     <br/>
-                    @evnt.EventActivity?.Name @evnt.EventSystem?.Name
+                     
 
-                    @if (evnt.EventActivity == null)
+                    @if (evnt.Activity == null)
                     {
                         <span class="text-danger">חסר סוג פעילות</span>
                     }
+                    else
+                    {
+                        <span class="text-primary text-light-bold">@evnt.Activity?.Name</span>
+                    }
+
+                    @if (evnt.SubActivity != null)
+                    {
+                        <span class="text-light-bold"> - @evnt.SubActivity?.Name</span>
+                    }
+
+                    
+
                     <br/>
                     @if (evnt.GameMasters.Any())
                     {
@@ -110,7 +122,7 @@
                 </td>
                 <td class="tw-3">
                     <strong>@evnt.Day?.GetDescription()</strong>
-                    @if (evnt.EventActivity == null)
+                    @if (evnt.Activity == null)
                     {
                         <strong class="text-danger">חסר תאריך</strong>
                     }
@@ -136,7 +148,7 @@
                     {
                         <span>
                             <br/>
-                            שולחן @evnt.Model?.Table<br/>
+                            שולחן @evnt.Model?.HallTable<br/>
                         </span>
                     }
                 </td>
@@ -239,13 +251,13 @@
                                 <strong>קבוצת גיל</strong>
                             </td>
                             <td>
-                                @if (evnt.AgeRestriction == null)
+                                @if (evnt.AgeGroup == null)
                                 {
                                     <span class="text-danger">חסרה קבוצת גיל</span>
                                 }
                                 else
                                 {
-                                    <span>@evnt.AgeRestriction.GetDescription()</span>
+                                    <span>@evnt.AgeGroup.GetDescription()</span>
                                 }
                             </td>
                         </tr>

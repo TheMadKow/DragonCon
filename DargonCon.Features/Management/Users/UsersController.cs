@@ -72,9 +72,9 @@ namespace DragonCon.Features.Management.Dashboard
 
 
         Answer AddNewActivity(string name, List<string> systems);
-        Answer UpdateExistingActivity(string viewmodelId, string viewmodelName, List<SystemViewModel> filteredList);
+        Answer UpdateExistingActivity(string viewmodelId, string viewmodelName, List<SubActivityViewModel> filteredList);
         Answer DeleteActivity(string activityId);
-        ActivitySystemCreateUpdateViewModel GetActivityViewModel(string activityId);
+        ActivityCreateUpdateViewModel GetActivityViewModel(string activityId);
         
 
         Answer AddOrUpdateAgeRestriction(AgeSystemCreateUpdateViewModel viewmodel);

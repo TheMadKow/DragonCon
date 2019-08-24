@@ -6,20 +6,20 @@ using DragonCon.Modeling.Models.Identities;
 
 namespace DragonCon.Modeling.Models.Events
 {
-    public class ConEventWrapper : Wrapper<ConEvent>
+    public class EventWrapper : Wrapper<Event>
     {
-        public ConEventWrapper() : base()
+        public EventWrapper() : base()
         {
         }
 
-        public ConEventWrapper(ConEvent model) : base(model){}
+        public EventWrapper(Event model) : base(model){}
 
         public Day Day { get; set; }
-        public EventSystem EventSystem { get; set; }
-        public EventActivity EventActivity { get;set; }
+        public Activity Activity { get;set; }
+        public Activity SubActivity { get; set; }
         public IList<IParticipant> GameMasters { get; set; }
         public IList<IParticipant> Participants { get; set; }
-        public AgeRestriction AgeRestriction { get; set; }
+        public AgeGroup AgeGroup { get; set; }
         public Hall Hall { get;set; }
     }
 }

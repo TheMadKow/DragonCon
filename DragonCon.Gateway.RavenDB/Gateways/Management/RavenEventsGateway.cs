@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using DragonCon.Features.Management.Dashboard;
 using DragonCon.Features.Management.Events;
 using DragonCon.Features.Shared;
@@ -16,247 +15,225 @@ using DragonCon.Modeling.Models.Identities;
 using NodaTime;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Session;
-using SystemClock = Microsoft.Extensions.Internal.SystemClock;
+using Activity = DragonCon.Modeling.Models.Common.Activity;
 
 namespace DragonCon.RavenDB.Gateways.Management
 {
     public class RavenManagementEventsGateway : RavenGateway, IManagementEventsGateway
     {
-        public RavenManagementEventsGateway() : base()
-        {
-
-        }
-
-        public RavenManagementEventsGateway(StoreHolder holder) : base(holder)
+        public RavenManagementEventsGateway(StoreHolder holder, IActor actor) :
+            base(holder, actor)
         {
         }
 
-        public Answer AddNewActivity(string name, List<string> systems)
+        public Answer AddNewActivity(string name, List<string> subActivities)
         {
-            using (var session = OpenSession)
+            var existing = Session.Query<Activity>().Where(x => x.Name == name && x.IsSubActivity == false).ToList();
+            if (existing.Any())
             {
-                var existing = session.Query<EventActivity>().Where(x => x.Name == name).ToList();
-                if (existing.Any())
-                {
-                    return Answer.Error("קיימת פעילות בשם שהוזן");
-                }
-
-                var activity = new EventActivity();
-                activity.Name = name;
-                activity.ActivitySystems = new List<EventSystem>();
-                foreach (var system in systems)
-                {
-                    var eventSystem = new EventSystem
-                    {
-                        Name = system
-                    };
-                    session.Store(eventSystem);
-                    activity.ActivitySystems.Add(eventSystem);
-                }
-
-                session.Store(activity);
-                session.SaveChanges();
-                return Answer.Success;
+                return Answer.Error("קיימת פעילות בשם שהוזן");
             }
+
+            var activity = new Activity();
+            activity.Name = name;
+            activity.SubActivities = new List<Activity>();
+            foreach (var subActivity in subActivities)
+            {
+                var eventActivity = new Activity
+                {
+                    Name = subActivity,
+                    IsSubActivity = true
+                };
+                Session.Store(eventActivity);
+                activity.SubActivities.Add(eventActivity);
+            }
+
+            Session.Store(activity);
+            Session.SaveChanges();
+            return Answer.Success;
         }
 
-        public Answer UpdateExistingActivity(string activityId, string activityName, List<SystemViewModel> filteredList)
+        public Answer UpdateExistingActivity(string activityId, string activityName,
+            List<SubActivityViewModel> filteredList)
         {
-            using (var session = OpenSession)
+            var activity = Session.Load<Activity>(activityId);
+            if (activity == null)
+                throw new Exception("Unknown activity ID");
+
+            var existing = Session.Query<Activity>()
+                .Where(x => x.Name == activityName && x.IsSubActivity == false && x.IsSubActivity == false).ToList();
+            if (existing.Any())
             {
-                var activity = session.Load<EventActivity>(activityId);
-                if (activity == null)
-                    throw new Exception("Unknown activity ID");
-
-                var existingSystems = filteredList
-                    .Where(x => x.Id.IsNotEmptyString())
-                    .ToDictionary(x => x.Id, x => x.Name);
-                var newSystems = filteredList.Where(x => x.Id.IsEmptyString());
-                var removedSystems = new List<EventSystem>();
-
-                foreach (var activitySystem in activity.ActivitySystems)
-                {
-                    if (existingSystems.MissingKey(activitySystem.Id))
-                    {
-                        removedSystems.Add(activitySystem);;
-                        session.Delete(activitySystem.Id);
-                    }
-                    else
-                    {
-                        activitySystem.Name = existingSystems[activitySystem.Id];
-                        session.Store(activitySystem);
-                    }
-                }
-
-                foreach (var removedSystem in removedSystems)
-                {
-                    activity.ActivitySystems.Remove(removedSystem);
-                }
-
-                foreach (var newSystem in newSystems)
-                {
-                    var eventSystem = new EventSystem
-                    {
-                        Name = newSystem.Name
-                    };
-                    session.Store(eventSystem);
-                    activity.ActivitySystems.Add(eventSystem);
-                }
-
-                activity.Name = activityName;
-
-                session.SaveChanges();
-                return Answer.Success;
+                return Answer.Error("קיימת פעילות בשם שהוזן");
             }
+
+            var exisitingSubActivities = filteredList
+                .Where(x => x.Id.IsNotEmptyString())
+                .ToDictionary(x => x.Id, x => x.Name);
+            var newSubActivities = filteredList.Where(x => x.Id.IsEmptyString());
+            var removedSubActivities = new List<Activity>();
+
+            foreach (var subActivity in activity.SubActivities)
+            {
+                if (exisitingSubActivities.MissingKey(subActivity.Id))
+                {
+                    removedSubActivities.Add(subActivity);
+                    ;
+                    Session.Delete(subActivity.Id);
+                }
+                else
+                {
+                    subActivity.Name = exisitingSubActivities[subActivity.Id];
+                    Session.Store(subActivity);
+                }
+            }
+
+            foreach (var removedSystem in removedSubActivities)
+            {
+                activity.SubActivities.Remove(removedSystem);
+            }
+
+            foreach (var newSubActivity in newSubActivities)
+            {
+                var subActivity = new Activity
+                {
+                    Name = newSubActivity.Name,
+                    IsSubActivity = true
+                };
+                Session.Store(subActivity);
+                activity.SubActivities.Add(subActivity);
+            }
+
+            activity.Name = activityName;
+
+            Session.SaveChanges();
+            return Answer.Success;
         }
 
         public Answer DeleteActivity(string activityId)
         {
-            using (var session = OpenSession)
+            var activity = Session.Load<Activity>(activityId);
+            if (activity == null)
+                throw new Exception("Unknown activity ID");
+
+            foreach (var system in activity.SubActivities)
             {
-                var activity = session.Load<EventActivity>(activityId);
-                if (activity == null)
-                    throw new Exception("Unknown activity ID");
-
-                foreach (var system in activity.ActivitySystems)
-                {
-                    session.Delete(system.Id);
-                }
-
-                session.Delete(activity.Id);
-                session.SaveChanges();
+                Session.Delete(system.Id);
             }
+
+            Session.Delete(activity.Id);
+            Session.SaveChanges();
 
             return Answer.Success;
         }
 
-        public ActivitySystemCreateUpdateViewModel GetActivityViewModel(string activityId)
+        public ActivityCreateUpdateViewModel GetActivityViewModel(string activityId)
         {
-            using (var session = OpenSession)
-            {
-                activityId = activityId.FixRavenId("EventActivities");
-                var activity = session.Load<EventActivity>(activityId);
-                if (activity == null)
-                    throw new Exception("Unknown activity ID");
+            activityId = activityId.FixRavenId("Activities");
+            var activity = Session.Load<Activity>(activityId);
+            if (activity == null)
+                throw new Exception("Unknown activity ID");
 
-                return new ActivitySystemCreateUpdateViewModel()
-                {
-                    Name = activity.Name,
-                    Id = activity.Id,
-                    Systems = activity.ActivitySystems.Select(x => new SystemViewModel(x)).ToList()
-                };
-            }
+            return new ActivityCreateUpdateViewModel()
+            {
+                Name = activity.Name,
+                Id = activity.Id,
+                SubActivities = activity.SubActivities.Select(x => new SubActivityViewModel(x)).ToList()
+            };
         }
 
         public Answer AddOrUpdateAgeRestriction(AgeSystemCreateUpdateViewModel viewmodel)
         {
-            using (var session = OpenSession)
+            var ageRestriction = new AgeGroup();
+            if (viewmodel.Id.IsNotEmptyString())
             {
-                var ageRestriction = new AgeRestriction();
-                if (viewmodel.Id.IsNotEmptyString())
-                {
-                    ageRestriction = session.Load<AgeRestriction>(viewmodel.Id);
-                    if (ageRestriction == null)
-                        throw new Exception("Unknown Age Restriction");
-                }
-
-                ageRestriction.Name = viewmodel.Name;
-                ageRestriction.MaxAge = viewmodel.MaxAge;
-                ageRestriction.MinAge = viewmodel.MinAge;
-
-                session.Store(ageRestriction);
-                session.SaveChanges();
-
-                return Answer.Success;
+                ageRestriction = Session.Load<AgeGroup>(viewmodel.Id);
+                if (ageRestriction == null)
+                    throw new Exception("Unknown Age Restriction");
             }
+
+            ageRestriction.Name = viewmodel.Name;
+            ageRestriction.MaxAge = viewmodel.MaxAge;
+            ageRestriction.MinAge = viewmodel.MinAge;
+
+            Session.Store(ageRestriction);
+            Session.SaveChanges();
+
+            return Answer.Success;
+
         }
 
         public AgeSystemCreateUpdateViewModel GetAgeRestrictionViewModel(string restrictionId)
         {
-            using (var session = OpenSession)
-            {
-                restrictionId = restrictionId.FixRavenId("AgeRestrictions");
-                var ageRestriction = session.Load<AgeRestriction>(restrictionId);
-                if (ageRestriction == null)
-                    throw new Exception("Unknown Age Restriction");
+            restrictionId = restrictionId.FixRavenId("AgeGroups");
+            var ageRestriction = Session.Load<AgeGroup>(restrictionId);
+            if (ageRestriction == null)
+                throw new Exception("Unknown Age Restriction");
 
-                return new AgeSystemCreateUpdateViewModel()
-                {
-                    Id = ageRestriction.Id,
-                    Name = ageRestriction.Name,
-                    MaxAge = ageRestriction.MaxAge,
-                    MinAge = ageRestriction.MinAge
-                };
-            }
+            return new AgeSystemCreateUpdateViewModel()
+            {
+                Id = ageRestriction.Id,
+                Name = ageRestriction.Name,
+                MaxAge = ageRestriction.MaxAge,
+                MinAge = ageRestriction.MinAge
+            };
         }
 
         public Answer DeleteAgeRestriction(string restrictionId)
         {
-            using (var session = OpenSession)
-            {
-                var ageRestriction = session.Load<AgeRestriction>(restrictionId);
-                if (ageRestriction == null)
-                    return Answer.Error("Unknown Age Restriction");
+            var ageRestriction = Session.Load<AgeGroup>(restrictionId);
+            if (ageRestriction == null)
+                return Answer.Error("Unknown Age Restriction");
 
-                session.Delete(ageRestriction);
-                session.SaveChanges();
-                return Answer.Success;
-            }
+            Session.Delete(ageRestriction);
+            Session.SaveChanges();
+            return Answer.Success;
         }
 
         public EventCreateUpdateViewModel GetEventViewModel(string eventId)
         {
-            using (var session = OpenSession)
+            var viewModel = new EventCreateUpdateViewModel
             {
-                var config = LoadSystemConfiguration(session);
-                var currentConvention = session
-                    .Include<Convention>(x => x.DayIds)
-                    .Include<Convention>(x => x.HallIds)
-                    .Load<Convention>(config.ActiveConventionId);
+                Activities = SystemState.Activities,
+                Days = SystemState.ActiveConvention.Days,
+                Halls = SystemState.ActiveConvention.Halls,
+                AgeGroups = SystemState.AgeGroups
+            };
 
-                var viewModel = new EventCreateUpdateViewModel
-                {
-                    Activities = session.Query<EventActivity>().Include(x => x.ActivitySystems).ToList(),
-                    Days = session.Load<Day>(currentConvention.DayIds).Select(x => x.Value),
-                    Halls = session.Load<Hall>(currentConvention.HallIds).Select(x => x.Value),
-                    AgeRestrictions = session.Query<AgeRestriction>().ToList()
-                };
-
-                if (eventId.IsNotEmptyString())
-                {
-                    eventId = eventId.FixRavenId("ConEvents");
-                    var existing = session.Load<ConEvent>(eventId);
-                    viewModel.Duration = (int) existing.TimeSlot.Span.Hours;
-                    viewModel.StartTime = new DateTime(1, 1,1, existing.TimeSlot.From.Hour, existing.TimeSlot.From.Minute, existing.TimeSlot.From.Second);
-                    viewModel.Name = existing.Name;
-                    viewModel.GameMasterIds = existing.GameMasterIds;
-                    viewModel.SpecialRequests = existing.SpecialRequests;
-                    viewModel.Status = existing.Status;
-                    viewModel.Tags = existing.Tags;
-                    viewModel.AgeRestrictionId = existing.AgeId;
-                    viewModel.Size = existing.Size;
-                    viewModel.ConventionDayId = existing.ConventionDayId;
-                    viewModel.Description = existing.Description;
-                    viewModel.Id = existing.Id;
-                    viewModel.IsSpecialPrice = existing.IsSpecialPrice;
-                    viewModel.SpecialPrice = existing.SpecialPrice;
-                    viewModel.Table = $"{existing.HallId},{existing.Table}";
-                    viewModel.SystemId = $"{existing.ActivityId},{existing.SystemId}";
-                }
-                else
-                {
-                    if (viewModel.GameMasterIds == null)
-                        viewModel.GameMasterIds = new List<string>();
-                    if (viewModel.Size == null)
-                        viewModel.Size = new SizeRestriction();
-                    if (viewModel.Tags == null)
-                        viewModel.Tags = new List<string>();
-                    viewModel.Status = EventStatus.Pending;
-                }
-
-                return viewModel;
+            if (eventId.IsNotEmptyString())
+            {
+                eventId = eventId.FixRavenId("Events");
+                var existing = Session.Load<Event>(eventId);
+                viewModel.Duration = (int) existing.TimeSlot.Span.Hours;
+                viewModel.StartTime = new DateTime(1, 1, 1, existing.TimeSlot.From.Hour, existing.TimeSlot.From.Minute,
+                    existing.TimeSlot.From.Second);
+                viewModel.Name = existing.Name;
+                viewModel.GameMasterIds = existing.GameMasterIds;
+                viewModel.SpecialRequests = existing.SpecialRequests;
+                viewModel.Status = existing.Status;
+                viewModel.Tags = existing.Tags;
+                viewModel.AgeRestrictionId = existing.AgeId;
+                viewModel.Size = existing.Size;
+                viewModel.ConventionDayId = existing.ConventionDayId;
+                viewModel.Description = existing.Description;
+                viewModel.Id = existing.Id;
+                viewModel.IsSpecialPrice = existing.IsSpecialPrice;
+                viewModel.SpecialPrice = existing.SpecialPrice;
+                viewModel.Table = $"{existing.HallId},{existing.HallTable}";
+                viewModel.SystemId = $"{existing.ActivityId},{existing.SubActivityId}";
             }
+            else
+            {
+                if (viewModel.GameMasterIds == null)
+                    viewModel.GameMasterIds = new List<string>();
+                if (viewModel.Size == null)
+                    viewModel.Size = new SizeRestriction();
+                if (viewModel.Tags == null)
+                    viewModel.Tags = new List<string>();
+                viewModel.Status = EventStatus.Pending;
+            }
+
+            return viewModel;
 
         }
 
@@ -266,56 +243,53 @@ namespace DragonCon.RavenDB.Gateways.Management
             if (answer.AnswerType != AnswerType.Success)
                 return answer;
 
-            using (var session = OpenSession)
+            var model = Session.Load<Event>(viewmodel.Id);
+
+            if (model == null)
+                return Answer.Error("תקלה בטעינת האירוע");
+
+            var userActions = GetUserActions(model, viewmodel);
+            foreach (var userAction in userActions)
             {
-                var model = session
-                    .Include<ConEvent>(x => x.UserActionsId)
-                    .Load<ConEvent>(viewmodel.Id);
-
-                if (model == null)
-                    return Answer.Error("תקלה בטעינת האירוע");
-
-                var userActionList = session.Load<UserActionList>(model.UserActionsId);
-                var changes = GetUserActions(model, viewmodel);
-                userActionList.Actions.AddRange(changes);
-
-                model.UpdatedOn = NodaTime.SystemClock.Instance.GetCurrentInstant();
-                model.IsSpecialPrice = viewmodel.IsSpecialPrice;
-                model.SpecialPrice = viewmodel.SpecialPrice;
-                model.Name = viewmodel.Name;
-                model.Description = viewmodel.Description;
-                model.ConventionDayId = viewmodel.ConventionDayId;
-                model.Status = viewmodel.Status;
-                model.GameMasterIds = viewmodel.GameMasterIds;
-                model.Size = viewmodel.Size;
-                model.AgeId = viewmodel.AgeRestrictionId;
-                model.Tags = viewmodel.Tags;
-                model.SpecialRequests = viewmodel.SpecialRequests;
-                
-                var activity = viewmodel.SystemId.Split(new[] {','}, StringSplitOptions.None);
-                model.ActivityId = activity[0];
-                model.SystemId = activity[1];
-                
-                var hall = viewmodel.Table.Split(new[] {','}, StringSplitOptions.None);
-                model.HallId = hall[0];
-                model.Table = int.Parse(hall[1]);
-
-                var startTime = new LocalTime(viewmodel.StartTime.Value.Hour,
-                    viewmodel.StartTime.Value.Minute,
-                    viewmodel.StartTime.Value.Second);
-                var endTime = startTime.PlusHours(viewmodel.Duration.Value);
-                model.TimeSlot = new TimeSlot
-                {
-                    From = startTime,
-                    To = endTime
-                };
-
-                session.SaveChanges();
+                Session.Store(userAction);
             }
+
+            model.UpdatedOn = NodaTime.SystemClock.Instance.GetCurrentInstant();
+            model.IsSpecialPrice = viewmodel.IsSpecialPrice;
+            model.SpecialPrice = viewmodel.SpecialPrice;
+            model.Name = viewmodel.Name;
+            model.Description = viewmodel.Description;
+            model.ConventionDayId = viewmodel.ConventionDayId;
+            model.Status = viewmodel.Status;
+            model.GameMasterIds = viewmodel.GameMasterIds;
+            model.Size = viewmodel.Size;
+            model.AgeId = viewmodel.AgeRestrictionId;
+            model.Tags = viewmodel.Tags;
+            model.SpecialRequests = viewmodel.SpecialRequests;
+
+            var activity = viewmodel.SystemId.Split(new[] {','}, StringSplitOptions.None);
+            model.ActivityId = activity[0];
+            model.SubActivityId = activity[1];
+
+            var hall = viewmodel.Table.Split(new[] {','}, StringSplitOptions.None);
+            model.HallId = hall[0];
+            model.HallTable = int.Parse(hall[1]);
+
+            var startTime = new LocalTime(viewmodel.StartTime.Value.Hour,
+                viewmodel.StartTime.Value.Minute,
+                viewmodel.StartTime.Value.Second);
+            var endTime = startTime.PlusHours(viewmodel.Duration.Value);
+            model.TimeSlot = new TimeSlot
+            {
+                From = startTime,
+                To = endTime
+            };
+
+            Session.SaveChanges();
             return Answer.Success;
         }
 
-        private List<UserAction> GetUserActions(ConEvent model, EventCreateUpdateViewModel viewmodel)
+        private List<UserAction> GetUserActions(Event model, EventCreateUpdateViewModel viewmodel)
         {
             var result = new List<UserAction>();
             foreach (PropertyInfo property in model.GetType().GetProperties())
@@ -329,6 +303,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                     {
                         result.Add(new UserAction()
                         {
+
                             UserId = "",
                             Field = property.Name,
                             OldValue = value1.ToString(),
@@ -349,73 +324,68 @@ namespace DragonCon.RavenDB.Gateways.Management
             if (answer.AnswerType != AnswerType.Success)
                 return answer;
 
-            using (var session = OpenSession)
+            var model = new Event
             {
-                var model = new ConEvent();
-                var userActionList = new UserActionList()
-                {
-                    Actions = new List<UserAction>()
-                    {
-                        new UserAction()
-                        {
-                            Field = "Event Creation",
-                            TimeStamp = NodaTime.SystemClock.Instance.GetCurrentInstant(),
-                            UserId = ""
-                        }
-                    }
-                };
+                CreatedOn = SystemClock.Instance.GetCurrentInstant(),
+                ConventionId = SystemState.ActiveConvention.Id,
+                IsSpecialPrice = viewmodel.IsSpecialPrice,
+                SpecialPrice = viewmodel.SpecialPrice,
+                Name = viewmodel.Name,
+                Description = viewmodel.Description,
+                ConventionDayId = viewmodel.ConventionDayId,
+                Status = viewmodel.Status,
+                GameMasterIds = viewmodel.GameMasterIds,
+                Size = viewmodel.Size,
+                AgeId = viewmodel.AgeRestrictionId,
+                Tags = viewmodel.Tags,
+                SpecialRequests = viewmodel.SpecialRequests
+            };
 
-                session.Store(userActionList);
-                model.CreatedOn = NodaTime.SystemClock.Instance.GetCurrentInstant();
-                model.ConventionId = LoadSystemConfiguration(session).ActiveConventionId;
-                model.UserActionsId = userActionList.Id;
-                model.IsSpecialPrice = viewmodel.IsSpecialPrice;
-                model.SpecialPrice = viewmodel.SpecialPrice;
-                model.Name = viewmodel.Name;
-                model.Description = viewmodel.Description;
-                model.ConventionDayId = viewmodel.ConventionDayId;
-                model.Status = viewmodel.Status;
-                model.GameMasterIds = viewmodel.GameMasterIds;
-                model.Size = viewmodel.Size;
-                model.AgeId = viewmodel.AgeRestrictionId;
-                model.Tags = viewmodel.Tags;
-                model.SpecialRequests = viewmodel.SpecialRequests;
-
-                if (viewmodel.SystemId.IsNotEmptyString())
-                {
-                    var activity = viewmodel.SystemId.Split(new[] {','}, StringSplitOptions.None);
-                    model.ActivityId = activity[0];
-                    model.SystemId = activity[1];
-                }
-
-                if (viewmodel.Table.IsNotEmptyString())
-                {
-                    var hall = viewmodel.Table.Split(new[] {','}, StringSplitOptions.None);
-                    model.HallId = hall[0];
-                    model.Table = int.Parse(hall[1]);
-                }
-
-                if (viewmodel.StartTime.HasValue && viewmodel.Duration.HasValue)
-                {
-
-                    var startTime = new LocalTime(viewmodel.StartTime.Value.Hour,
-                        viewmodel.StartTime.Value.Minute,
-                        viewmodel.StartTime.Value.Second);
-                    var endTime = startTime.PlusHours(viewmodel.Duration.Value);
-                    model.TimeSlot = new TimeSlot
-                    {
-                        From = startTime,
-                        To = endTime
-                    };
-                }
-
-                session.Store(model);
-                session.SaveChanges();
+            if (viewmodel.SystemId.IsNotEmptyString())
+            {
+                var activity = viewmodel.SystemId.Split(new[] {','}, StringSplitOptions.None);
+                model.ActivityId = activity[0];
+                model.SubActivityId = activity[1];
             }
+
+            if (viewmodel.Table.IsNotEmptyString())
+            {
+                var hall = viewmodel.Table.Split(new[] {','}, StringSplitOptions.None);
+                model.HallId = hall[0];
+                model.HallTable = int.Parse(hall[1]);
+            }
+
+            if (viewmodel.StartTime.HasValue && viewmodel.Duration.HasValue)
+            {
+
+                var startTime = new LocalTime(viewmodel.StartTime.Value.Hour,
+                    viewmodel.StartTime.Value.Minute,
+                    viewmodel.StartTime.Value.Second);
+                var endTime = startTime.PlusHours(viewmodel.Duration.Value);
+                model.TimeSlot = new TimeSlot
+                {
+                    From = startTime,
+                    To = endTime
+                };
+            }
+
+            Session.Store(model);
+            var userAction = new UserAction
+            {
+                UserId = Actor.Participant.Id,
+                DocumentId = model.Id,
+
+                Field = "Event Creation",
+                TimeStamp = SystemClock.Instance.GetCurrentInstant(),
+            };
+
+            Session.Store(userAction);
+            Session.SaveChanges();
+
             return Answer.Success;
         }
 
-        
+
         private static Answer ValidateEventFields(EventCreateUpdateViewModel viewmodel)
         {
             if (viewmodel.IsSpecialPrice && viewmodel.SpecialPrice == null)
@@ -430,7 +400,8 @@ namespace DragonCon.RavenDB.Gateways.Management
                     return Answer.Error("אי אפשר לאשר אירוע ללא קבוצת גיל");
                 if (viewmodel.ConventionDayId.IsEmptyString())
                     return Answer.Error("אי אפשר לאשר אירוע ללא יום");
-                if (viewmodel.StartTime.HasValue == false || viewmodel.Duration.HasValue == false || viewmodel.Duration <= 0)
+                if (viewmodel.StartTime.HasValue == false || viewmodel.Duration.HasValue == false ||
+                    viewmodel.Duration <= 0)
                     return Answer.Error("אי אפשר לאשר אירוע ללא מסגרת זמן");
                 if (viewmodel.GameMasterIds.Any() == false)
                     return Answer.Error("אי אפשר לאשר אירוע ללא הנחיה");
@@ -443,38 +414,37 @@ namespace DragonCon.RavenDB.Gateways.Management
             EventsManagementViewModel.Filters filters = null)
         {
             var result = new EventsManagementViewModel();
-            using (var session = OpenSession)
+            result.ActiveConvention = SystemState.ActiveConvention.Id;
+            result.Activities = SystemState.Activities;
+            result.AgeGroups = SystemState.AgeGroups;
+
+            var tempEvents = Session.Query<Event>()
+                .Statistics(out var stats)
+                .Include(x => x.ConventionDayId)
+                .Include(x => x.GameMasterIds)
+                .Include(x => x.HallId)
+                .Include(x => x.AgeId)
+                .Where(x => x.ConventionId == SystemState.ActiveConvention.Id)
+                .OrderBy(x => x.Name)
+                .Skip(pagination.SkipCount)
+                .Take(pagination.ResultsPerPage)
+                .ToList();
+            result.Events = tempEvents.Select(x => new EventWrapper(x)
             {
-                var config = LoadSystemConfiguration(session);
-                result.ActiveConvention = session.Load<Convention>(config.ActiveConventionId).Name;
-                result.Activities = session.Query<EventActivity>().Include(x => x.ActivitySystems).ToList();
-                result.AgeRestrictions = session.Query<AgeRestriction>().ToList();
-                
-                var tempEvents = session.Query<ConEvent>()
-                    .Statistics(out var stats)
-                    .Include(x => x.ConventionDayId)
-                    .Include(x => x.GameMasterIds)
-                    .Include(x => x.HallId)
-                    .Include(x => x.AgeId)
-                    .Where(x => x.ConventionId == config.ActiveConventionId)
-                    .OrderBy(x => x.Name)
-                    .Skip(pagination.SkipCount)
-                    .Take(pagination.ResultsPerPage)
-                    .ToList();
-                result.Events = tempEvents.Select(x => new ConEventWrapper(x)
-                {
-                    Day = session.Load<Day>(x.ConventionDayId),
-                    EventActivity = session.Load<EventActivity>(x.ActivityId),
-                    EventSystem = session.Load<EventSystem>(x.SystemId),
-                    GameMasters = session.Load<FullParticipant>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
-                    Hall = session.Load<Hall>(x.HallId),
-                    AgeRestriction = session.Load<AgeRestriction>(x.AgeId)
-                }).ToList();
-                result.Pagination = DisplayPagination.BuildForView(
-                    stats.TotalResults, 
-                    pagination.SkipCount,
-                    pagination.ResultsPerPage);
-            }
+                Day = Session.Load<Day>(x.ConventionDayId),
+                Activity = Session.Load<Activity>(x.ActivityId),
+                SubActivity = Session.Load<Activity>(x.SubActivityId),
+                GameMasters =
+                    Session.Load<FullParticipant>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
+                Hall = Session.Load<Hall>(x.HallId),
+                AgeGroup = Session.Load<AgeGroup>(x.AgeId)
+            }).ToList();
+
+            result.Pagination = DisplayPagination.BuildForView(
+                stats.TotalResults,
+                pagination.SkipCount,
+                pagination.ResultsPerPage);
+
             return result;
         }
     }

@@ -69,3 +69,19 @@
 .chosen-container-multi .chosen-drop {
      margin-top: -21px;
  }
+
+.chosen-container .chosen-single .group-name, .chosen-container .search-choice .group-name {
+    font-weight: 500;
+    color: #1400b7;
+}
+
+.group-result {
+    color: #1400b7;
+    font-weight: 500 !important;
+}
+
+.chosen-container-single .chosen-single {
+    color: #000000 !important;
+}
+
+.chosen-container .chosen-single .group-name:after, .chosen-container .search-choice .group-name:after { content: " - "; }

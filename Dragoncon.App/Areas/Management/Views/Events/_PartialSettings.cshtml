@@ -8,7 +8,7 @@
     <i class="fa fa-fw fa-plus-square"></i> הוספת קבוצת גיל
 </a>
 
-            @foreach (AgeRestriction ageRestriction in Model.AgeRestrictions.OrderBy(x => x.Name))
+            @foreach (AgeGroup ageRestriction in Model.AgeGroups.OrderBy(x => x.Name))
             {
                 <div class="card card-body card-margined">
                     <div class="row">
@@ -75,11 +75,11 @@
 
         </h5>
         
-        @if (activity.ActivitySystems.Any())
+        @if (activity.SubActivities.Any())
         {
             <table class="table table-hover table-stripped text-right">
                 <tbody>
-                @foreach (var system in activity.ActivitySystems.OrderBy(x => x.Name))
+                @foreach (var system in activity.SubActivities.OrderBy(x => x.Name))
                 {
                     <tr class="d-flex">
                         <td class="col">@system.Name</td>

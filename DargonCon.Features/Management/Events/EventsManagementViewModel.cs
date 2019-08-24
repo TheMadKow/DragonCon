@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DragonCon.Features.Shared;
 using DragonCon.Modeling.Models.Common;
-using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
-using DragonCon.Modeling.Models.System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DragonCon.Features.Management.Events
@@ -21,18 +17,18 @@ namespace DragonCon.Features.Management.Events
         public IDisplayPagination Pagination { get; set; }
         public Filters ActiveFilters { get; set; }
         public string ActiveConvention { get;set; } 
-        public List<ConEventWrapper> Events { get; set; } = new List<ConEventWrapper>();
-        public List<AgeRestriction> AgeRestrictions { get; set; }
+        public List<EventWrapper> Events { get; set; } = new List<EventWrapper>();
+        public List<AgeGroup> AgeGroups { get; set; }
 
         public List<SelectListItem> GetAgeRestrictionDropDown
         {
             get
             {
-                return AgeRestrictions.Select(x => new SelectListItem(x.Name, x.Id)).ToList();
+                return AgeGroups.Select(x => new SelectListItem(x.Name, x.Id)).ToList();
             }
         }
 
-        public List<EventActivity> Activities { get; set; }
+        public List<Activity> Activities { get; set; }
         public List<SelectListItem> GetActivitiesDropDown
         {
             get
@@ -48,7 +44,7 @@ namespace DragonCon.Features.Management.Events
                         Group = group
                     });
 
-                    foreach (var system in eventActivity.ActivitySystems.OrderBy(x => x.Name))
+                    foreach (var system in eventActivity.SubActivities.OrderBy(x => x.Name))
                     {
                         var item = new SelectListItem
                         {

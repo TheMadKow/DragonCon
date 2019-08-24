@@ -63,18 +63,18 @@ namespace DragonCon.Features.Management.Dashboard
 
         [HttpGet]
         [Authorize(policy: Policies.Types.AtLeastEventsManager)]
-        public IActionResult CreateUpdateEventActivity(ActivitySystemCreateUpdateViewModel viewModel = null)
+        public IActionResult CreateUpdateEventActivity(ActivityCreateUpdateViewModel viewModel = null)
         {
             if (viewModel == null)
             {
-                viewModel = new ActivitySystemCreateUpdateViewModel();
+                viewModel = new ActivityCreateUpdateViewModel();
             }
 
-            if (viewModel.Systems == null)
+            if (viewModel.SubActivities == null)
             {
-                viewModel.Systems = new List<SystemViewModel>()
+                viewModel.SubActivities = new List<SubActivityViewModel>()
                 {
-                    new SystemViewModel {Name = string.Empty}
+                    new SubActivityViewModel {Name = string.Empty}
                 };
             }
 
@@ -83,7 +83,7 @@ namespace DragonCon.Features.Management.Dashboard
 
         [HttpPost]
         [Authorize(policy: Policies.Types.AtLeastEventsManager)]
-        public IActionResult CreateUpdateEventActivityPost(ActivitySystemCreateUpdateViewModel viewmodel)
+        public IActionResult CreateUpdateEventActivityPost(ActivityCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Id))
                 return CreateEventActivity(viewmodel);
@@ -92,7 +92,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
 
         [Authorize(policy: Policies.Types.AtLeastEventsManager)]
-        private IActionResult UpdateEventActivity(ActivitySystemCreateUpdateViewModel viewmodel)
+        private IActionResult UpdateEventActivity(ActivityCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
             {
@@ -100,7 +100,7 @@ namespace DragonCon.Features.Management.Dashboard
                 return CreateUpdateEventActivity(viewmodel);
             }
 
-            var filteredList = viewmodel.Systems.Where(x => x.IsDeleted == false && x.Name.IsNotEmptyString()).ToList();
+            var filteredList = viewmodel.SubActivities.Where(x => x.IsDeleted == false && x.Name.IsNotEmptyString()).ToList();
             var answer = Gateway.UpdateExistingActivity(viewmodel.Id, viewmodel.Name, filteredList);
             if (answer.AnswerType != AnswerType.Success)
             {
@@ -115,7 +115,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
 
         [Authorize(policy: Policies.Types.AtLeastEventsManager)]
-        private IActionResult CreateEventActivity(ActivitySystemCreateUpdateViewModel viewmodel)
+        private IActionResult CreateEventActivity(ActivityCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
             {
@@ -123,7 +123,7 @@ namespace DragonCon.Features.Management.Dashboard
                 return CreateUpdateEventActivity(viewmodel);
             }
 
-            var filteredList = viewmodel.Systems.Where(x => x.IsDeleted == false && x.Name.IsNotEmptyString()).Select(x => x.Name).ToList();
+            var filteredList = viewmodel.SubActivities.Where(x => x.IsDeleted == false && x.Name.IsNotEmptyString()).Select(x => x.Name).ToList();
             var answer = Gateway.AddNewActivity(viewmodel.Name, filteredList);
             if (answer.AnswerType != AnswerType.Success)
             {
@@ -222,10 +222,10 @@ namespace DragonCon.Features.Management.Dashboard
         EventsManagementViewModel BuildIndex(IDisplayPagination pagination, EventsManagementViewModel.Filters filters = null);
 
 
-        Answer AddNewActivity(string name, List<string> systems);
-        Answer UpdateExistingActivity(string viewmodelId, string viewmodelName, List<SystemViewModel> filteredList);
+        Answer AddNewActivity(string name, List<string> subActivities);
+        Answer UpdateExistingActivity(string viewmodelId, string viewmodelName, List<SubActivityViewModel> filteredList);
         Answer DeleteActivity(string activityId);
-        ActivitySystemCreateUpdateViewModel GetActivityViewModel(string activityId);
+        ActivityCreateUpdateViewModel GetActivityViewModel(string activityId);
         
 
         Answer AddOrUpdateAgeRestriction(AgeSystemCreateUpdateViewModel viewmodel);

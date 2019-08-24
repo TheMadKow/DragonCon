@@ -3,7 +3,7 @@ using DragonCon.Modeling.Models.Common;
 
 namespace DragonCon.Modeling.Models.Events
 {
-    public interface IConEvent
+    public interface IEvent
     {
         string ActivityId { get; set; }
         string AgeId { get; set; }
@@ -16,16 +16,13 @@ namespace DragonCon.Modeling.Models.Events
         List<string> ParticipantIds { get; set; }
         SizeRestriction Size { get; set; }
         EventStatus Status { get; set; }
-        string SystemId { get; set; }
+        string SubActivityId { get; set; }
         string HallId { get; set; }
-        int? Table { get; set; }
+        int? HallTable { get; set; }
         List<string> Tags { get; set; }
         TimeSlot TimeSlot { get; set; }
 
         bool IsSpecialPrice { get; set; }
         double? SpecialPrice { get; set; }
-
-        string UserActionsId { get;set; }
-
     }
 }

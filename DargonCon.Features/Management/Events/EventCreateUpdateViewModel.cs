@@ -53,16 +53,16 @@ namespace DragonCon.Features.Management.Events
         }
 
 
-        public List<AgeRestriction> AgeRestrictions { get; set; }
+        public List<AgeGroup> AgeGroups { get; set; }
         public List<SelectListItem> GetAgeRestrictionDropDown
         {
             get
             {
-                if (AgeRestrictions == null)
+                if (AgeGroups == null)
                     return new List<SelectListItem>();
 
                 var items = new List<SelectListItem>();
-                foreach (var age in AgeRestrictions.OrderBy(x => x.Name))
+                foreach (var age in AgeGroups.OrderBy(x => x.Name))
                 {
                     var item = new SelectListItem
                     {
@@ -76,7 +76,7 @@ namespace DragonCon.Features.Management.Events
             }
         }
 
-        public List<EventActivity> Activities { get; set; }
+        public List<Activity> Activities { get; set; }
         public List<SelectListItem> GetActivitiesDropDown
         {
             get
@@ -95,7 +95,7 @@ namespace DragonCon.Features.Management.Events
                         Group = group
                     });
 
-                    foreach (var system in eventActivity.ActivitySystems.OrderBy(x => x.Name))
+                    foreach (var system in eventActivity.SubActivities.OrderBy(x => x.Name))
                     {
                         var item = new SelectListItem
                         {
