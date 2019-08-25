@@ -10,16 +10,12 @@
 }
 
 <div class="right-to-left">
-    
-    
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-item-events" data-toggle="tab" href="#tab-pan-events" role="tab" aria-controls="nav-cons" aria-selected="true">רשימת אירועים</a>
             <a class="nav-item nav-link" id="nav-item-settings" data-toggle="tab" href="#tab-pan-settings" role="tab" aria-controls="nav-profile" aria-selected="false">הגדרות</a>
         </div>
     </nav>
-
-    
 <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="tab-pan-events" role="tabpanel" aria-labelledby="nav-contact-tab">
         @await Html.PartialAsync("_PartialDisplay")

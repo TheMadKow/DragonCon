@@ -42,11 +42,6 @@ namespace DragonCon.Features.Shared
             {
                 base.OnActionExecuted(context);
 
-                if (Gateway.SystemState != null)
-                {
-                    Response.Headers.Add("X-DragonCon-System-Sate-Time", Gateway.SystemState.BuildMilliseconds.ToString());
-                }
-
                 if (context.Result is ViewResult result)
                 {
                     if (result.Model is IDisplayPaginationViewModel vmPage)

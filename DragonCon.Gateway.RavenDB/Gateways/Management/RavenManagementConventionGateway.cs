@@ -49,7 +49,7 @@ namespace DragonCon.RavenDB.Gateways.Management
             }).ToList();
 
             result.Pagination = DisplayPagination.BuildForView(stats.TotalResults, pagination.SkipCount, pagination.ResultsPerPage);
-            result.Configuration = SystemState.Configurations;
+            result.Configuration = Actor.State.Configurations;
 
             return result;
         }
@@ -113,7 +113,7 @@ namespace DragonCon.RavenDB.Gateways.Management
 
         public SystemConfiguration LoadSystemConfiguration()
         {
-            return SystemState.Configurations;
+            return Actor.State.Configurations;
         }
 
 

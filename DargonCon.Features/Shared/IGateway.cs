@@ -4,6 +4,5 @@ namespace DragonCon.Features.Shared
 {
     public interface IGateway
     {
-        SystemState SystemState { get; }
     }
 }

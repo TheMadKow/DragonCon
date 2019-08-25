@@ -194,10 +194,10 @@ namespace DragonCon.RavenDB.Gateways.Management
         {
             var viewModel = new EventCreateUpdateViewModel
             {
-                Activities = SystemState.Activities,
-                Days = SystemState.ActiveConvention.Days,
-                Halls = SystemState.ActiveConvention.Halls,
-                AgeGroups = SystemState.AgeGroups
+                Activities = Actor.State.Activities,
+                Days = Actor.State.ActiveConvention.Days,
+                Halls = Actor.State.ActiveConvention.Halls,
+                AgeGroups = Actor.State.AgeGroups
             };
 
             if (eventId.IsNotEmptyString())
@@ -327,7 +327,7 @@ namespace DragonCon.RavenDB.Gateways.Management
             var model = new Event
             {
                 CreatedOn = SystemClock.Instance.GetCurrentInstant(),
-                ConventionId = SystemState.ActiveConvention.Id,
+                ConventionId = Actor.State.ActiveConvention.Id,
                 IsSpecialPrice = viewmodel.IsSpecialPrice,
                 SpecialPrice = viewmodel.SpecialPrice,
                 Name = viewmodel.Name,
@@ -414,9 +414,9 @@ namespace DragonCon.RavenDB.Gateways.Management
             EventsManagementViewModel.Filters filters = null)
         {
             var result = new EventsManagementViewModel();
-            result.ActiveConvention = SystemState.ActiveConvention.Id;
-            result.Activities = SystemState.Activities;
-            result.AgeGroups = SystemState.AgeGroups;
+            result.ActiveConvention = Actor.State.ActiveConvention.Id;
+            result.Activities = Actor.State.Activities;
+            result.AgeGroups = Actor.State.AgeGroups;
 
             var tempEvents = Session.Query<Event>()
                 .Statistics(out var stats)
@@ -424,7 +424,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .Include(x => x.GameMasterIds)
                 .Include(x => x.HallId)
                 .Include(x => x.AgeId)
-                .Where(x => x.ConventionId == SystemState.ActiveConvention.Id)
+                .Where(x => x.ConventionId == Actor.State.ActiveConvention.Id)
                 .OrderBy(x => x.Name)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)

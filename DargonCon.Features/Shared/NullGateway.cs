@@ -8,7 +8,5 @@ namespace DragonCon.Features.Shared
         {
             return new SystemConfiguration();
         }
-
-        public SystemState SystemState { get; } = null;
     }
 }
