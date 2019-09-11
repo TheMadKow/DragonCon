@@ -22,6 +22,5 @@ We are [**Eliran Teller**](https://www.facebook.com/TheMadKow) and [**Adi Unger*
 
 At this point in time, we don't have anything functional. As we make progress, we will update this section.
 
-## Trello Priorities
-
-You can follow public [DragonCon Trello](https://trello.com/b/9Q1iSoSB/dragoncon) here.
+## GitKarken Glo
+You can follow public [DragonCon Glo Board](https://app.gitkraken.com/glo/board/XXZE9QtDJAAPHO8t) here.
