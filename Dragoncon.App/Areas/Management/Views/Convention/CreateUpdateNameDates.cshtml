@@ -1,4 +1,7 @@
-﻿@model DragonCon.Features.Management.Convention.NameDatesCreateUpdateViewModel
+﻿@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Common
+@using DragonCon.Modeling.Models.Events
+@model DragonCon.Features.Management.Convention.NameDatesCreateUpdateViewModel
 @{
     if (Model.Id != null)
     {
@@ -63,13 +66,24 @@
                                 var from = Model.Days[i].From;
                                 var to = Model.Days[i].To;
                             }
-                            <input data-value="@date.ToString("dd/MM/yyyy")" asp-for="@Model.Days[i].Date" type="date" class="datepicker form-control" placeholder="יום כנס">
+                            <input data-value="@date.ToString("dd/MM/yyyy")" asp-for="@Model.Days[i].Date" type="date" class="datepicker nice-pickers form-control" placeholder="יום כנס">
                         </div>
                         <div class="col">
-                            <input data-value="@from.ToString("HH:mm")" asp-for="@Model.Days[i].From" type="time" class="timepicker form-control" placeholder="שעת התחלה">
+                            <input 
+                                data-value="@from.ToString("HH:mm")" asp-for="@Model.Days[i].From" type="time" class="timepicker nice-pickers form-control" placeholder="שעת התחלה">
                         </div>
                         <div class="col">
-                            <input data-value="@to.ToString("HH:mm")" asp-for="@Model.Days[i].To" type="time" class="timepicker form-control" placeholder="שעת סיום">
+                            <input data-value="@to.ToString("HH:mm")" asp-for="@Model.Days[i].To" type="time" class="timepicker nice-pickers form-control" placeholder="שעת סיום">
+                        </div>
+                        <div class="col">
+                            <select class="form-control chosen-select"
+                                    data-placeholder="אסטרטגיה">
+                                @foreach (var type in Enums.AsSelectListItem<TimeSlotStrategy>())
+                                {
+                                    <option value="@type.Value">@type.Text</option>
+                                }
+                            </select>
+
                         </div>
                         <div class="col-1">
                             <a href="#" onclick="RemoveRow(this)" class="form-control">

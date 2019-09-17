@@ -1,5 +1,6 @@
 ﻿@using System.Globalization
 @using DragonCon.Modeling.Helpers
+@using Microsoft.AspNetCore.CookiePolicy
 @model DragonCon.Features.Management.Convention.ConventionManagementViewModel
 @{
     ViewBag.Title = "ניהול - כנסים";
@@ -34,17 +35,25 @@
                     @foreach (var con in Model.Conventions.OrderByDescending(x => x.UpdateTimeStamp))
                     {
                         <tr>
-                            <td>
+                            <td class="text-center">
                                 @if (Model.Configuration.ActiveConventionId == con.Id)
                                 {
-                                    <i title="כנס פעיל" style="font-size: 1.35em; padding-top: 5px; color: #ff24a7;" class="fa fa-fw fa-ankh"></i>
+                                    <i title="כנס פעיל" style="font-size: 1.35em; padding-top: 10px; color: #ff24a7;" class="fa fa-fw fa-ankh"></i>
                                 }
                             </td>
-                            <td>@con.Name</td>
                             <td>
-                                @foreach (var day in con.Days.GroupBy(x => x.Date))
+                                @con.Name
+                                <br/>
+                                <i>@con.TagLine</i>
+                            </td>
+                            <td>
+                                @foreach (var day in con.Days)
                                 {
-                                    <span>@day.Key.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</span> <br />
+                                <span>
+                                    <strong>@day.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</strong>
+                                    &nbsp;&nbsp; @day.StartTime.ToString("HH:mm", CultureInfo.CurrentCulture) - @day.EndTime.ToString("HH:mm", CultureInfo.CurrentCulture)
+                                </span>
+                                    <br/>
                                 }
                             </td>
 

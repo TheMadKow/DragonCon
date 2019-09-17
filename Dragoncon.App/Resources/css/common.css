@@ -1,4 +1,11 @@
-﻿.pull-left {
+﻿.nice-pickers {
+    color: #060064;
+    background: #f7fffe;
+    background-color: #f7fffe !important;
+    text-align: center;
+}
+
+.pull-left {
     float: left !important;
 }
 
