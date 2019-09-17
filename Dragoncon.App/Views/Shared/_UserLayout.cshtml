@@ -8,9 +8,9 @@
     @await Html.PartialAsync("_PartialSharedStyles")
     @RenderSection("Styles", required: false)
 </head>
-<body style="">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">DragonCon</a>
+<body class="right-to-left" style="text-align: right;">
+    <nav class="navbar navbar-dark navbar-expand-md bg-primary">
+        <a class="navbar-brand" href="/"><img src="/images/DragonCon.png" style="height: 75px;" /></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -21,25 +21,38 @@
                     <a class="nav-link" href="#">דף הבית</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">משחקים</a>
+                    <a class="nav-link" href="#">אירועים</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">מידע למבקר</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">איזור אישי</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-area="Management" asp-controller="Dashboard" asp-action="Index" class="nav-link" #">אזור ניהול</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
         </div>
     </nav>
 
-
-
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - Dragoncon.App</p>
-        </footer>
+<div class="container">
+    <h4 class="Title-Text">@ViewBag.Title </h4>
+    
+    <div class="modal-placeholder" id="modal-placeholder" style="display: none;">
+        <div class="modal-placeholder-content text-center">
+            <i class="fa fa-fw fa-spin fa-spinner"></i> אנא המתן...
+        </div>
     </div>
+    
+    <div class="body-content">
+        @RenderBody()
+    </div>
+
+    @await Html.PartialAsync("_PartialFooter")
+
+</div>
+
 
     @await Html.PartialAsync("_PartialSharedScripts")
     @RenderSection("Scripts", required: false)

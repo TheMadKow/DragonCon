@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Controllers\**" />
     <Compile Remove="wwwroot\lib\**" />
+    <Content Remove="Areas\Controllers\**" />
     <Content Remove="wwwroot\lib\**" />
+    <EmbeddedResource Remove="Areas\Controllers\**" />
     <EmbeddedResource Remove="wwwroot\lib\**" />
+    <None Remove="Areas\Controllers\**" />
     <None Remove="wwwroot\lib\**" />
   </ItemGroup>
 
@@ -49,7 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Controllers\" />
     <Folder Include="Areas\Users\Views\Events\" />
   </ItemGroup>
 

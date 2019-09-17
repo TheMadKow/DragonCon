@@ -162,7 +162,7 @@ namespace DragonCon.App
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Convention/Error");
             }
 
             //app.UseHsts();
@@ -187,7 +187,7 @@ namespace DragonCon.App
 
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{area=Home}/{controller=Convention}/{action=Index}/{id?}");
             });
 
             // TODO verify database

@@ -1,0 +1,15 @@
+﻿@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Identities
+@{
+    ViewData["Title"] = "דף הבית";
+    var actor = Actor;
+}
+
+<h3>
+    <span>
+        @Actor.State.ActiveConvention.Name
+    </span>
+</h3>
+
+
+

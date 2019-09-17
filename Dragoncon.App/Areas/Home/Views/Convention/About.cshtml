@@ -1,0 +1,123 @@
+﻿@using System.Globalization
+@{
+    ViewData["Title"] = "על הכנס והאתר";
+}
+
+<br />
+
+<div class="card card-margined right-to-left">
+    <div class="card-body">
+        <h5 class="card-title">אודות דרקוניקון</h5>
+        <p>
+            דרקוניקון הוא כנס משחקי שולחן המתקיים כל שנה במהלך אוגוסט בתל-אביב, מ-2007 ועד היום. בכנס תמצאו את כל סוגי המשחקים: משחקי לוח, משחקי תפקידים, מבוכים ודרקונים, לארפים, משחקי קלפים ועוד.
+        </p>
+    </div>
+</div>
+
+@{
+    var con = Actor.State.ActiveConvention;
+}
+
+<div class="card card-margined right-to-left">
+    <div class="card-body">
+        <h5 class="card-title">הכנס הנוכחי - @con.Name</h5>
+        מיקום: @con.Location <br />
+        ימים:
+        <p>
+            <ul>
+                @foreach (var day in con.Days)
+                {
+                    <li>יום @day.GetDescription() מהשעה @day.StartTime.ToString("HH:mm", CultureInfo.CurrentCulture) עד השעה @day.EndTime.ToString("HH:mm", CultureInfo.CurrentCulture)</li>
+                }
+            </ul>
+        </p>
+    </div>
+</div>
+
+
+<div class="card card-margined right-to-left">
+    <div class="card-body">
+        <h5 class="card-title">חובבים עבור חובבים</h5>
+        <p>
+            דרקוניקון הוא כנס משחקים שבו אתם יכולים לשחק בכל משחק שבו אתם חפצים - משחקי תפקידים, מבוכים ודרקונים, משחקי לוח, קלפים ועוד.
+            <br />
+            הכנס מאורגן בהתנדבות על-ידי קהילו חובבים מכל הארץ, עבור חובבים. רבים מאנשי הסגל, המנחים והמתנדבים בכנס, התחילו כמשתתפים.
+        </p>
+    </div>
+</div>
+
+<div class="card card-margined right-to-left">
+    <div class="card-body">
+        <h5 class="card-title">פעם ראשונה?</h5>
+        <p>
+            ברוכים הבאים - אנחנו תמיד שמחים לפגוש משתתפים חדשים בכנס.
+            <br />
+            כנס דרקוניקון מתמקד במשחקי תחביב, כשמדובר במשחקים חברתיים המבוססים על דמיון בהם השחקנים משתפים פעולה או מתחרים אחד בשני.
+            <br />
+            <br />
+            סוג אחד של משחקים הם משחקי-תפקידים, שבהם כל שחקן מגלם דמות דמיונית. המשחק הידוע ביותר הוא מבוכים ודרקונים שמתרחש בעולם פנטזיה בהשראת שר הטבעות וספרים אחרים. דרקוניקון זו הזדמנות מצוינת לשחק בפעם הראשונה במשחק תפקידים - לבד, עם חברים או עם המשפחה.
+            <br />
+            <br />
+            משחקי תחביב כוללים גם משחקי-לוח שבשנים האחרונות משגשגים - לא רק משחקי קופסה כגון מונופול או סיכון אלא משחקי לוח בדמות המתיישבים של קטאן, מנצ'קין, שם-קוד וכך הלאה. בכנס תוכלו לשחק בעשרות משחקים שונים ועשירים, המיועדים לגילאים שונים, ובעלי רמות מורכבות הנעות ממשחקים בני חצי שעה ועד שלוש או ארבע שעות. סגל הכנס ישמח ללמד אותכם לשחק בהם.
+            <br />
+            <br />
+            משחקי מיניאטורות, אותם ניתן ללמוד בכנס וגם להשתתף בסדנת צביעה, או להביא מהבית צבא של "חיילים" ולהשתתף בטורניר.
+            <br />
+            <br />
+            משחקי קלפים אסיפים, שהידוע מתוכם הוא מג'יק, כל שחקן מרכיב לעצמו חבילת קלפים, עמם הוא מתמודד בטורניר. בכנס יש גם טורנירים מסוג דראפט, בהם רוכשים ופותחים במקום חבילות של קלפים מהם מרכיבים את החפיסה למשחק.
+            <br />
+            <br />
+            הצוות שלנו ישמח להדריך אותכם במהלך הכנס. אם יש לכם שאלות או קושיות, אתם מוזמנים ליצור עמנו קשר.
+        </p>
+        <br />
+        <h6 class="card-subtitle mb-2 text-muted">קישורים שימושיים</h6>
+        <ul>
+            <li><a href="https://www.pundak.co.il/library/roleplaying/581-playing-guide">מה זה משחקי תפקידים?</a></li>
+            <li><a href="https://www.pundak.co.il/library/dnd"> על מבוכים ודרקונים</a></li>
+            <li><a href="http://www.mtgil.co.il/">עוד על מאג'יק</a></li>
+            <li><a href="https://www.pundak.co.il/">אתר הפונדק - עוד מלא תוכן</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="card card-margined right-to-left">
+    <div class="card-body">
+        <h5 class="card-title">אתר קוד פתוח</h5>
+        <p>אתר זה נכתב כקוד פתוח, ותחת רשיון חופשי GPL-2.0 המאפשר שימוש בקוד תחת ההגבלות הרשומות ברשיון.</p>
+        <p>אתר זה נכתב עבור כנס דרקוניקון, על ידי מתנדבי דרקוניקון.</p>
+        <br />
+        <h6 class="card-subtitle mb-2 text-muted">קישורים</h6>
+        <ul>
+            <li><a href="https://github.com/TheMadKow/DragonCon">הקוד ב-GitHub</a></li>
+            <li><a href="https://github.com/TheMadKow/DragonCon/blob/master/LICENSE">פרטי הרשיון</a></li>
+            <li><a href="https://app.gitkraken.com/glo/board/XXZE9QtDJAAPHO8t">לוח המשימות</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="card card-margined">
+    <div class="card-body">
+        <h5 class="card-title">תכנות</h5>
+        <br />
+        <h6 class="card-subtitle mb-2 text-muted">כתיבת קוד ועיצוב אתר</h6>
+        <ul>
+            <li><a href="https://www.facebook.com/TheMadKow">אלירן טלר</a></li>
+            <li><a href="https://www.facebook.com/adi.unger">עדי אונגר</a></li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="card card-margined">
+    <div class="card-body">
+        <h5 class="card-title">משאבים ותשתיות</h5>
+        <ul>
+            <li><a href="https://dotnet.microsoft.com/learn/aspnet/what-is-aspnet-core/">Server Infrastructure - ASP Core</a></li>
+            <li><a href="https://getbootstrap.com/">Web Infrastructure - Bootstrap 4.0</a></li>
+            <li><a href="https://fontawesome.com/">Fonts - Font Awesome</a></li>
+            <li><a href="https://cloud.ravendb.net/">Database - RavenDB Cloud</a></li>
+        </ul>
+    </div>
+</div>
+
+<br />

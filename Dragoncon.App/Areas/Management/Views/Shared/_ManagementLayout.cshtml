@@ -71,12 +71,13 @@
 
         <li class="list-divider"></li>
         <li>
-            <a asp-area="" asp-controller="Home" asp-action="Index"><i class="fa fa-fw fa-angle-right"></i>חזרה</a>
+            <a asp-area="" asp-controller="Convention" asp-action="Index"><i class="fa fa-fw fa-angle-right"></i>חזרה</a>
         </li>
     </ul>
     <div class="container">
         <div class="container-admin">
             <h4 class="Title-Text">@ViewBag.Title <small class="text-secondary">&nbsp;&nbsp; @Actor.State.ActiveConvention.Name</small></h4>
+
             @RenderSection("Subheader", required: false)
 
             <div class="modal-placeholder" id="modal-placeholder" style="display: none;">

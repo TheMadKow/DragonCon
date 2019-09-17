@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragonCon.Modeling", "Drago
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragonCon.Logical", "DragonCon.Logical\DragonCon.Logical.csproj", "{01104336-B4A8-4E32-93DF-FF94D9F05F27}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "specs", "specs", "{0B0EB427-B7BB-4807-94EE-F1230C98642E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragonCon.Specs", "DragonCon.Specs\DragonCon.Specs.csproj", "{95F76461-2223-4738-BB29-E84945687AD6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragonCon.RavenDB", "DragonCon.Gateway.RavenDB\DragonCon.RavenDB.csproj", "{C65D8688-8E96-4F6D-892C-BBE367B4AD34}"
@@ -66,7 +64,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4A2EF32A-AA56-4459-9B2F-8BE1ACB4C1E6} = {AEA8F518-0248-40F9-8DF9-5CB96D13A4A6}
-		{95F76461-2223-4738-BB29-E84945687AD6} = {0B0EB427-B7BB-4807-94EE-F1230C98642E}
+		{95F76461-2223-4738-BB29-E84945687AD6} = {AEA8F518-0248-40F9-8DF9-5CB96D13A4A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1934379-A22B-4239-B57B-A4EB560DFA9C}
