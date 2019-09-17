@@ -73,6 +73,8 @@ namespace DragonCon.RavenDB.Gateways.Management
             {
                 Name = convention.Name,
                 Id = convention.Id,
+                Location = convention.Location,
+                TagLine = convention.TagLine,
                 Days = days.Select(x => new DaysViewModel(x.Value)).ToList()
             };
             if (result.NameDate.Days.Any() == false)

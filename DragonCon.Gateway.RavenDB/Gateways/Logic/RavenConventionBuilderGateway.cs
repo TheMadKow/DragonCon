@@ -70,6 +70,8 @@ namespace DragonCon.RavenDB.Gateways.Logic
         {
             conventionData.CreateTimeStamp = wrapperData.CreateTimeStamp;
             conventionData.UpdateTimeStamp = wrapperData.UpdateTimeStamp;
+            conventionData.Location = wrapperData.Location;
+            conventionData.TagLine = wrapperData.TagLine;
         }
 
 

@@ -23,8 +23,10 @@ namespace DragonCon.Modeling.Models.Conventions
         public Dictionary<string, string> Metadata { get;set; } = new Dictionary<string, string>();
 
         
-
         public Instant CreateTimeStamp { get; set; }
         public Instant UpdateTimeStamp { get; set; }
+        
+        public string TagLine { get; set; }
+        public string Location { get; set; }
     }
 }

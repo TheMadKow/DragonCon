@@ -53,6 +53,13 @@ namespace DragonCon.Logical.Convention
             return this;
         }
 
+        public ConventionBuilder AddExtraDetails(string location, string tagLine)
+        {
+            _convention.Location = location;
+            _convention.TagLine = tagLine;
+            return this;
+        }
+
         private void ThrowIfStringIsEmpty(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -139,6 +146,7 @@ namespace DragonCon.Logical.Convention
             _gateway.StoreConvention(_convention, DeletedEntityIds);
             return this;
         }
+
 
     }
 }

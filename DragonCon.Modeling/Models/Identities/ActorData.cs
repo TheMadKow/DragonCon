@@ -48,6 +48,7 @@ namespace DragonCon.Modeling.Models.Identities
                 public string Id { get; set; }
                 public string Name { get; set; }
                 public string Location { get; set; }
+                public string TagLine { get; set; }
                 public List<Hall> Halls { get; set; } = new List<Hall>();
                 public List<Ticket> Tickets { get; set; } = new List<Ticket>();
                 public List<Day> Days { get; set; } = new List<Day>();

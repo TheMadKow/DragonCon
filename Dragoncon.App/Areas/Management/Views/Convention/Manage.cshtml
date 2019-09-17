@@ -23,7 +23,7 @@
             </div>
             <table class="table table-hover table-stripped text-right">
                 <thead>
-                    <tr>
+                    <tr class="text-bold">
                         <td class="tw-1"></td>
                         <td class="tw-5">שם</td>
                         <td class="tw-3">תאריכים</td>
@@ -37,14 +37,14 @@
                             <td>
                                 @if (Model.Configuration.ActiveConventionId == con.Id)
                                 {
-                                    <i title="כנס פעיל" class="fa fa-fw fa-globe-europe" style="color: #2484ff"></i>
+                                    <i title="כנס פעיל" style="font-size: 1.35em; padding-top: 5px; color: #ff24a7;" class="fa fa-fw fa-ankh"></i>
                                 }
                             </td>
                             <td>@con.Name</td>
                             <td>
                                 @foreach (var day in con.Days.GroupBy(x => x.Date))
                                 {
-                                    <span>@day.Key.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</span><br />
+                                    <span>@day.Key.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</span> <br />
                                 }
                             </td>
 
@@ -63,7 +63,7 @@
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" href="#"><i class="fa fa-fw fa-clone"></i> שכפל כנס זה</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#" onclick="SetActiveConvention('@con.Id')"><i class="fa fa-fw fa-globe-europe"></i> קבע ככנס פעיל</a>
+                                                <a class="dropdown-item" href="#" onclick="SetActiveConvention('@con.Id')"><i class="fa fa-fw fa-ankh"></i> קבע ככנס פעיל</a>
                                             </div>
                                         </div>
 

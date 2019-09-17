@@ -7,7 +7,10 @@ namespace DragonCon.Modeling.Helpers
 {
     public static class GeneralExtensions
     {
-
+        public static string AsYesNoHebrew(this bool toggle)
+        {
+            return toggle ? "כן" : "לא";
+        }
         public static string InHebrew(this IsoDayOfWeek dow)
         {
             switch (dow)

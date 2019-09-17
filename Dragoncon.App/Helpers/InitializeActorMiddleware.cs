@@ -42,13 +42,21 @@ namespace DragonCon.App.Helpers
         {
             return new Actor.ParticipantActor()
             {
-                Id = "Test Admin User",
+                Id = "test@dragoncon.com",
+                FullName = "משתמש מערכת",
                 SystemRoles =
                 {
-                    SystemRoles.ContentManager, SystemRoles.ConventionManager, SystemRoles.ReceptionStaff,
+                    SystemRoles.ContentManager, 
+                    SystemRoles.ConventionManager, 
+                    SystemRoles.ReceptionStaff,
                     SystemRoles.UsersManager
                 },
-                FullName = "System Test User"
+                ConventionRoles =
+                {
+                    ConventionRoles.Staff,
+                    ConventionRoles.GameMaster,
+                    ConventionRoles.Volunteer
+                }
             };
         }
 
@@ -92,6 +100,8 @@ namespace DragonCon.App.Helpers
                     {
                         Id = convention.Id,
                         Name = convention.Name,
+                        Location = convention.Location,
+                        TagLine = convention.TagLine,
                         Halls = halls.Where(x => x.Value != null).Select(x => x.Value).ToList(),
                         Days = days.Where(x => x.Value != null).Select(x => x.Value).ToList(),
                         Tickets = tickets.Where(x => x.Value != null).Select(x => x.Value).ToList()

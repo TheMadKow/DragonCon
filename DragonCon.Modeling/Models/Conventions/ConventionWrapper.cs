@@ -27,6 +27,8 @@ namespace DragonCon.Modeling.Models.Conventions
    
         public Instant CreateTimeStamp { get => Model.CreateTimeStamp; set => Model.CreateTimeStamp = value; }
         public Instant UpdateTimeStamp { get => Model.UpdateTimeStamp; set => Model.UpdateTimeStamp = value; }
+        public string Location { get; set; }
+        public string TagLine { get; set; }
 
 
         public T GetById<T>(string key)

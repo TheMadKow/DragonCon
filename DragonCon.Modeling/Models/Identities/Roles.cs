@@ -7,20 +7,22 @@ namespace DragonCon.Modeling.Models.Identities
     {
         [Description("ניהול משתמשים")]
         UsersManager,
-        [Description("ניהול תוכן")]
+        [Description("ניהול אירועים")]
         ContentManager,
-        [Description("ניהול אירוע")]
+        [Description("ניהול כנסים")]
         ConventionManager,
-        [Description("צוות קבלה")]
+        [Description("צוות מודיעין")]
         ReceptionStaff
     }
 
 
     public enum ConventionRoles
     {
-        [Description("צוות מתנדבים")]
-        Volunteer,
+        [Description("סגל כנס")]
+        Staff,
         [Description("צוות הנחיה")]
-        GameMaster
+        GameMaster,
+        [Description("צוות מתנדבים")]
+        Volunteer
     }
 }
