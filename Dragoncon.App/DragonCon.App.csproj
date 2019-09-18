@@ -6,12 +6,16 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Controllers\**" />
+    <Compile Remove="Certificates\**" />
     <Compile Remove="wwwroot\lib\**" />
     <Content Remove="Areas\Controllers\**" />
+    <Content Remove="Certificates\**" />
     <Content Remove="wwwroot\lib\**" />
     <EmbeddedResource Remove="Areas\Controllers\**" />
+    <EmbeddedResource Remove="Certificates\**" />
     <EmbeddedResource Remove="wwwroot\lib\**" />
     <None Remove="Areas\Controllers\**" />
+    <None Remove="Certificates\**" />
     <None Remove="wwwroot\lib\**" />
   </ItemGroup>
 
@@ -43,6 +47,16 @@
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+  
+  <ItemGroup>
+      
+    <_LibFiles Include="$(MSBuildProjectDirectory)/wwwroot/lib/**" />
+    <DotNetPublishFiles Include="@(_LibFiles)">
+      <DestinationRelativePath>wwwroot/lib/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+    </DotNetPublishFiles>
+   
+
   </ItemGroup>
 
   <ItemGroup>

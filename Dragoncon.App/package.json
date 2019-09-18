@@ -2,7 +2,11 @@
   "version": "1.0.0",
   "name": "asp.net",
   "private": true,
+  "scripts": {
+    "clean": "node ./Deployment/copy-files.js"
+  },
   "devDependencies": {
+    "fs": "0.0.2" ,
     "@fortawesome/fontawesome-free": "^5.6.1",
     "bootstrap": "4.3.1",
     "bootstrap-select": "1.13.10",
@@ -19,4 +23,4 @@
     "pretty-json-string": "1.0.3",
     "sweetalert2": "7.33.1"
   }
-}
+  }
