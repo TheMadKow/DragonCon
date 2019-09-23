@@ -1,0 +1,104 @@
+﻿.toggle-button {
+    width: auto;
+    background: #343a40 !important;
+    color: white;
+    margin: 5px;
+}
+
+.toggle-button:hover {
+    color: white;
+}
+
+.toggle-button.open {
+    text-align: left;
+    float: left;
+    width: 50px;
+}
+
+.toggle-button > .text-close {
+    display: inline-block;
+}
+.toggle-button > .text-open {
+    display: none;
+}
+
+.toggle-button.open > .text-close { 
+    display: none;
+}
+.toggle-button.open > .text-open {
+    display: inline-block;
+}
+
+.container-admin {
+    width: 100%;
+    margin-left: 20px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media only screen and (max-width: 767px) {
+    .container-admin {
+        padding-right: 15px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .container-admin {
+        padding-right: 50px;
+    }
+}
+
+.admin-navbar {
+    z-index: 99;
+    padding-right: 0;
+    width: 200px;
+    text-align: right;
+    right: 0;
+    height: 100%;
+    padding-top: 10px;
+    top: 0;
+    box-shadow: -1px 0px 7px #b1b1b1;
+}
+
+
+@media only screen and (max-width: 767px) {
+    .admin-navbar {
+        position: absolute;
+        right: 5px;
+        top: 50px;
+        border-radius: 5px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .admin-navbar {
+        position: fixed;
+    }
+}
+
+
+.admin-navbar-brand {
+    font-weight: bold;
+    padding-right: 0 !important;
+}
+.admin-navbar-brand-link {
+    font-size: 1.4rem !important;
+    padding-right: 0 !important;
+}
+
+.admin-navbar > li {
+    list-style: none;
+    padding: 5px;
+    padding-right: 30px;
+    padding-top: 15px;
+}
+
+.admin-navbar > li > a {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.admin-navbar > li > a:hover {
+    text-decoration: none;
+    color: #c9c9ff;
+}

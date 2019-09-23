@@ -1,0 +1,83 @@
+﻿@using DragonCon.Features.Management.Events
+@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Common
+@using DragonCon.Modeling.Models.Events
+@using DragonCon.Modeling.Models.Tickets
+@model DragonCon.Features.Management.Events.EventsManagementViewModel
+
+@{
+    ViewBag.Title = "ניהול - אירועים";
+}
+
+<div class="right-to-left">
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-item-events" data-toggle="tab" href="#tab-pan-events" role="tab" aria-controls="nav-cons" aria-selected="true">רשימת אירועים</a>
+            <a class="nav-item nav-link" id="nav-item-settings" data-toggle="tab" href="#tab-pan-settings" role="tab" aria-controls="nav-profile" aria-selected="false">הגדרות</a>
+        </div>
+    </nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="tab-pan-events" role="tabpanel" aria-labelledby="nav-contact-tab">
+        @await Html.PartialAsync("_PartialDisplay")
+
+    </div>
+
+    <div class="tab-pane fade" id="tab-pan-settings" role="tabpanel" aria-labelledby="tab-pane-settings">
+        @await Html.PartialAsync("_PartialSettings")
+    </div>
+</div>
+</div>
+
+
+@section Scripts
+{
+    <script>
+
+        function DeleteActivity(actId) {
+            Swal.fire({
+                title: '?האם למחוק פעילות',
+                text: "!מחיקת הפעילות תגרום למחיקת כל השיטות הקשורות",
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#3085d6',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'אישור מחיקה',
+                cancelButtonText: 'ביטול מחיקה'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Management/Events/DeleteEventActivity?activityId=" + actId,
+                        data: CreateDefaultPostData(),
+                        success: function() {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+        }
+
+        function DeleteAgeRestriction(ageId) {
+            Swal.fire({
+                title: '?האם למחוק קבוצת גיל',
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#3085d6',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'אישור מחיקה',
+                cancelButtonText: 'ביטול מחיקה'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Management/Events/DeleteAgeRestriction?restrictionId=" + ageId,
+                        data: CreateDefaultPostData(),
+                        success: function() {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

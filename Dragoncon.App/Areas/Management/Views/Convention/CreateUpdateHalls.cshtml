@@ -1,0 +1,69 @@
+﻿@model DragonCon.Features.Management.Convention.HallsUpdateViewModel
+@{
+    var loadedHalls = Model.Halls.Where(x => x.IsDeleted == false).ToList();
+    var initialCount = Math.Max(0, loadedHalls.Count - 1);
+
+}
+
+<form asp-area="Management" asp-controller="Convention" asp-action="CreateUpdateHalls" method="post" class="right-to-left" style="padding: 10px;">
+    <input asp-for="ConventionId" hidden />
+
+    @* Convention Halls *@
+    <div class="form-group">
+        <label>אולמות</label>
+        <div id="last-hall-template" data-counter="@initialCount" class="row last-hall-row" style="padding-bottom: 5px;" hidden>
+            <input type="text" class="update-deleted" value="false" hidden>
+            <div class="col">
+                <input type="text" class="form-control update-name" placeholder="שם">
+            </div>
+            <div class="col">
+                <input type="text" class="form-control update-desc" placeholder="תיאור">
+            </div>
+            <div class="col-2">
+                <input type="number" class="form-control update-first" placeholder="שולחן ראשון">
+            </div>
+            <div class="col-2">
+                <input type="number" class="form-control update-last" placeholder="שולחן אחרון">
+            </div>
+            <div class="col-1">
+                <a href="#" class="form-control">
+                    <i title="הסר אולם" class="fa fa-fw fa-times"></i>
+                </a>
+            </div>
+        </div>
+
+        @if (loadedHalls.Any())
+        {
+            for (int i = 0; i < loadedHalls.Count; i++)
+            {
+
+                <div class="row last-hall-row" style="padding-bottom: 5px;">
+                    <input class="update-deleted" name="Halls[@i].IsDeleted" value="false" hidden>
+                    <div class="col">
+                        <input asp-for="@Model.Halls[i].Name" type="text" class="form-control" placeholder="שם">
+                        <input asp-for="@Model.Halls[i].Id" hidden/>
+                    </div>
+                    <div class="col">
+                        <input asp-for="@Model.Halls[i].Description" type="text" class="form-control" placeholder="תיאור">
+                    </div>
+                    <div class="col-2">
+                        <input asp-for="@Model.Halls[i].FirstTable" type="number" class="form-control" placeholder="שולחן ראשון">
+                    </div>
+                    <div class="col-2">
+                        <input asp-for="@Model.Halls[i].LastTable" type="number" class="form-control" placeholder="שולחן אחרון">
+                    </div>
+                    <div class="col-1">
+                        <a href="#" onclick="RemoveRow(this)" class="form-control">
+                            <i title="הסר אולם" class="fa fa-fw fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+        <a href="#" onclick="AddNewHall()"><i class="fa fa-fw fa-plus"></i> הוספת אולם</a>
+    </div>
+    <br />
+    <div class="btn-save-container">
+        <button type="submit" class="btn btn-primary btn-save">שמירת אולמות </button>
+    </div>
+</form>

@@ -1,0 +1,16 @@
+﻿@using DragonCon.Modeling.Helpers
+@model bool
+
+@if (Model)
+{
+    <div class=" text-primary">
+        <i class="fa fa-fw fa-check"></i> @Model.AsYesNoHebrew()
+    </div>
+}
+else
+{
+    <div class=" text-danger">
+        <i class="fa fa-fw fa-times"></i> @Model.AsYesNoHebrew()
+    </div>
+
+}

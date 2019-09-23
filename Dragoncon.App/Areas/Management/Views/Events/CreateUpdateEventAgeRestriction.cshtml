@@ -1,0 +1,42 @@
+﻿@model DragonCon.Features.Management.Events.AgeSystemCreateUpdateViewModel
+@{
+    if (Model.Id != null)
+    {
+        ViewBag.Title = "עריכת קבוצת גיל";
+    }
+    else
+    {
+        ViewBag.Title = "הוספת קבוצת גיל חדשה";
+    }
+}
+
+
+<form asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventAgeRestrictionPost" method="post" class="right-to-left" style="padding: 10px;">
+    <input asp-for="Id" hidden />
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>שם קבוצת הגיל</label>
+                <input asp-for="Name" class="form-control" placeholder="למשל - 'ללא הגבלה'">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>גיל מינימלי</label>
+                <input type="number" min="1" max="99" asp-for="MinAge" placeholder="ללא הגבלת גיל מינימלי" class="form-control">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>גיל מקסימלי</label>
+                <input type="number" min="1" max="99" asp-for="MaxAge" placeholder="ללא הגבלת גיל מקסימלי" class="form-control">
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="btn-save-container">
+        <button type="submit" class="btn btn-primary btn-save">שמירת קבוצת גיל </button>
+    </div>
+</form>

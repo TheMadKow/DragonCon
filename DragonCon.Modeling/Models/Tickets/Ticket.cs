@@ -11,6 +11,6 @@ namespace DragonCon.Modeling.Models.Tickets
         public string TransactionCode { get; set; }
 
         public int? ActivitiesAllowed { get; set; }
-        public TicketLimitation TicketLimitation { get; set; }
+        public TicketType TicketType { get; set; }
     }
 }

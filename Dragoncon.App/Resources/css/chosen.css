@@ -1,0 +1,87 @@
+﻿.chosen-container-single .chosen-single {
+    height: 38px;
+    font-size: 1.2em;
+    line-height: 2.5;
+    margin-top: -7px;
+    border-radius: 1%;
+}
+
+.chosen-container-multi .chosen-choices {
+    font-size: 1.2em;
+    line-height: 2.5;
+    margin-top: -7px;
+    border-radius: 1%;
+}
+
+.chosen-container.form-control {
+    padding-top: 0.45rem;
+    padding-bottom: 0.35rem;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.chosen-rtl .chosen-choices li.search-choice {
+    margin: 8px 6px 3px 0;
+}
+
+.chosen-results {
+    font-size: 1.2em;
+}
+
+.chosen-container .chosen-results li {
+    padding: 8px 6px;
+    line-height: 20px;
+}
+
+.chosen-container-single.form-control {
+    border: none;
+}
+
+
+.chosen-container-multi.form-control {
+    border: none;
+}
+
+.chosen-rtl.chosen-container-single.chosen-with-drop .chosen-single div b {
+    background-position: -12px 10px;
+}
+
+.chosen-rtl.chosen-container-multi.chosen-with-drop .chosen-choices div b {
+    background-position: -12px 10px;
+}
+
+.chosen-rtl.chosen-container-single .chosen-single div b {
+    background-position: 6px 10px;
+}
+
+.chosen-rtl.chosen-container-multi .chosen-choices div b {
+    background-position: 6px 10px;
+}
+
+.chosen-container .chosen-drop { 
+    position: relative; 
+}
+
+.chosen-container-single .chosen-drop {
+    margin-top: -21px;
+}
+
+.chosen-container-multi .chosen-drop {
+     margin-top: -21px;
+ }
+
+.chosen-container .chosen-single .group-name, .chosen-container .search-choice .group-name {
+    font-weight: 500;
+    color: #1400b7;
+}
+
+.group-result {
+    color: #1400b7;
+    font-weight: 500 !important;
+}
+
+.chosen-container-single .chosen-single {
+    color: #000000 !important;
+}
+
+.chosen-container .chosen-single .group-name:after, .chosen-container .search-choice .group-name:after { content: " - "; }

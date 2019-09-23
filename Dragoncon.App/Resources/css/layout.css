@@ -1,0 +1,52 @@
+﻿.right-to-left {
+    direction: rtl;
+    text-align: right !important;
+}
+
+.dropdown-item {
+    text-align: right;
+}
+
+body {
+    background: #efefef45;
+}
+
+.Title-Text {
+    direction: rtl;
+    text-align: right;
+    padding-top: 15px;
+}
+
+
+.body-content {
+    margin-top: 20px;
+    background: white;
+    border-radius: 5px;
+    min-height: 500px;
+}
+
+.list-divider {
+    border-bottom: 1px solid #cecece6e;
+    width: 80%;
+    margin-right: 19px;
+}
+
+.toggle-off.btn {
+    padding-left: 12px;
+}
+
+.toggle-on.btn {
+    padding-right: 12px;
+}
+
+.checkbox label .toggle, .checkbox-inline .toggle {
+    margin-left: 0;
+}
+
+.toggle-text {
+    padding-right: 10px;
+}
+
+.card.card-grayed {
+    background: #f7f7f7;
+}

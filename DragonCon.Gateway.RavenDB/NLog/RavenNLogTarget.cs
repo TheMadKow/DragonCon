@@ -5,7 +5,7 @@ using NLog.Targets;
 using NodaTime;
 using Raven.Client.Documents;
 
-namespace DragonCon.Gateway.RavenDB.NLog
+namespace DragonCon.RavenDB.NLog
 {
     [Target("RavenDb")]
     public class RavenNLogTarget : TargetWithLayout 

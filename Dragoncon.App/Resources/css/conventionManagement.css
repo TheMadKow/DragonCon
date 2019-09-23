@@ -1,0 +1,17 @@
+﻿.toggle-padding-list {
+    padding: 5px;
+    padding-top: 10px;
+}
+
+.toggle-padding {
+    padding-top: 2px;
+}
+
+.ticket-container {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding: 5px;
+    border-radius: 5px;
+    background: #f7f7f773;
+    border: 1px solid #adadad;
+}

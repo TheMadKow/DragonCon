@@ -1,0 +1,55 @@
+﻿.nice-pickers {
+    color: #060064;
+    background: #f7fffe;
+    background-color: #f7fffe !important;
+    text-align: center;
+}
+
+.pull-left {
+    float: left !important;
+}
+
+.btn-save {
+    width: 250px;
+    margin: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-save-container {
+    text-align: center;
+    border-top: 1px solid #ced4da;
+    margin-top: -5px;
+}
+
+.table-couple-striped tbody tr:nth-child(4n+1), .table-couple-striped tbody tr:nth-child(4n+2) {
+    background-color: rgba(0,0,0,.05);
+}
+
+.table-no-border td {
+    border-top: none !important;
+}
+
+.table-no-background tbody tr {
+    background-color: transparent !important;
+}
+
+.btn-filter {
+    width: 100px;
+}
+
+.text-black {
+    color: black;
+}
+
+.text-light-bold {
+    font-weight: 500;
+}
+
+.text-bold {
+    font-weight: 600
+}
+
+.text-heavy-bold {
+    font-weight: 700;
+}

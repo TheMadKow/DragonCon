@@ -1,0 +1,147 @@
+﻿@using System.Globalization
+@using DragonCon.Features.Management.Events
+@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Common
+@using DragonCon.Modeling.Models.Events
+@using DragonCon.Modeling.Models.Identities
+@using DragonCon.Modeling.Models.Tickets
+@using NodaTime
+@model DragonCon.Features.Management.Users.UsersManagementViewModel
+
+@{
+    ViewBag.Title = "ניהול - משתמשים";
+}
+
+    <div class="right-to-left">
+
+        @if (Actor.HasSystemRole(SystemRoles.UsersManager))
+        {
+            <div class="text-right" style="padding: 15px;">
+                <a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEvent">
+                    <i class="fa fa-fw fa-plus-square"></i> הוספת משתמש
+                </a>
+            </div>
+        }
+
+        <div class="filter-container">
+            <strong>חיפוש חופשי</strong>
+            <div class="row">
+                <div class="col-10">
+                    <input class="form-control" placeholder="חיפוש לפי שם משתמש" />
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-filter btn-info"><i class="fa fa-fw fa-search"></i> חיפוש</button>
+                </div>
+            </div>
+            <br />
+            <strong>סינון לפי</strong>
+            <br />
+            <div class="row">
+                <div class="col-1">
+                    <label>בעל תפקיד</label>
+                </div>
+                <div class="col-4">
+                    <select class="form-control chosen-select"
+                            asp-for="ActiveFilters.Role"
+                            data-placeholder="בעל תפקיד">
+                        <option value="" selected>הכל</option>
+                        @foreach (var type in Enums.AsSelectListItem<SystemRoles>())
+                        {
+                            <option value="@type.Value">@type.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-2">
+                    סטטוס תשלום
+                </div>
+            </div>
+        </div>
+        <table id="accordion" class="table table-couple-striped text-right">
+            <tbody>
+                @foreach (var part in Model.FullParticipants.OrderByDescending(x => x.Model.FullName))
+                {
+                    var statusColor = "";
+                    if (part.ConventionInvoice != null)
+                    {
+                        switch (part.ConventionInvoice.IsPaid)
+                        {
+                            case true:
+                                statusColor = "text-success";
+                                break;
+                            case false:
+                                statusColor = "text-danger";
+                                break;
+                        }
+                    }
+
+                    <tr>
+                        <td>
+                            <a class="text-primary" data-toggle="collapse" href="#extra-data-@part.Model.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
+                                <strong>@part.Model.FullName</strong>
+                            </a>
+                            <br />
+                            @part.Model.PhoneNumber 
+                            <br/>
+                            @part.Model.Email
+                            <br>
+                            @part.Model.DayOfBirth
+                        </td>
+                        <td class="tw-3">
+                            @part.Model.DayOfBirth
+
+                            <span class="@statusColor">
+                                @part.ConventionInvoice.IsPaid
+                            </span>
+                            
+                        </td>
+                        <td>
+                            <div class="dropdown pull-left">
+                                <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm">
+                                    <i class="fa fa-fw fa-ellipsis-h"></i>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                       asp-action="UpdateEventAgeRestriction">
+                                        <i class="fa fa-fw fa-pencil-alt"></i> שינוי מהיר
+                                    </a>
+                                    <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                       asp-action="UpdateEventAgeRestriction">
+                                        <i class="fa fa-fw fa-edit"></i> עדכון מלא
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                       asp-action="UpdateEventAgeRestriction">
+                                        <i class="fa fa-fw fa-clone"></i> שכפול אירוע
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="extra-data-@part.Model.Id.GetNumberFromId()"
+                        class="collapse" data-parent="#accordion">
+                        <td colspan="100%">
+                            <table class="table table-no-border table-no-background">
+                                <tr>
+                                    <td class="tw-2">
+                                        <strong>תפקידים בכנס </strong>
+                                    </td>
+                                    <td class="tw-10">
+                                        @foreach (var role in part.ConventionsRoles)
+                                        {
+                                            <span>@role.ToTextual()</span><br />
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+@section Scripts
+{
+    <script>
+    </script>
+}

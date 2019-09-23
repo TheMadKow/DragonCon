@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DragonCon.Logical.Gateways.Management;
+using DragonCon.Logical.Gateways;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Tickets;
@@ -19,14 +19,16 @@ namespace DragonCon.Logical.Convention
         }
 
         private ConventionWrapper _convention = null;
-        private readonly ISystemGateway _gateway;
+        private readonly IConventionBuilderGateway _gateway;
+
+        public List<string> DeletedEntityIds { get; set; } = new List<string>();
 
         public DaysBuilder Days { get; private set; }
-        public TicketBuilder Tickets { get; set; }
+        public TicketsBuilder Tickets { get; set; }
         public HallsBuilder Halls { get; set; }
         public string ConventionName => _convention.Name;
 
-        public ConventionBuilder(ISystemGateway gateway)
+        public ConventionBuilder(IConventionBuilderGateway gateway)
         {
             _gateway = gateway;
         }
@@ -36,9 +38,9 @@ namespace DragonCon.Logical.Convention
             _convention = new ConventionWrapper
             {
                 Name = name,
-                Days = new Dictionary<LocalDate, ConDayWrapper>(),
-                NameAndHall = new Dictionary<string, HallWrapper>(),
-                NameAndTickets = new Dictionary<string, TicketWrapper>()
+                Halls = new List<Hall>(),
+                Tickets = new List<Ticket>(),
+                Days = new List<Day>()
             };
             CreateSubBuilders();
             return this;
@@ -48,6 +50,13 @@ namespace DragonCon.Logical.Convention
         {
             ThrowIfStringIsEmpty(name);
             _convention.Name = name;
+            return this;
+        }
+
+        public ConventionBuilder AddExtraDetails(string location, string tagLine)
+        {
+            _convention.Location = location;
+            _convention.TagLine = tagLine;
             return this;
         }
 
@@ -79,16 +88,16 @@ namespace DragonCon.Logical.Convention
 
         private void MigrateTickets(ConventionWrapper oldCon)
         {
-            foreach (var ticket in oldCon.NameAndTickets)
+            foreach (var ticket in oldCon.Tickets)
             {
-                Tickets.AddLimitedTicket(ticket.Value.TicketLimitation, ticket.Key, ticket.Value.Days.Select(x => x.Date).ToArray());
-                Tickets.SetTicketPrice(ticket.Key, ticket.Value.Price);
-                Tickets.SetTransactionCode(ticket.Key, ticket.Value.TransactionCode);
+                //Tickets.AddLimitedTicket(ticket.Value.TicketType, ticket.Key, ticket.Value.Days.Select(x => x.Date).ToArray());
+                //Tickets.SetTicketPrice(ticket.Key, ticket.Value.Price);
+                //Tickets.SetTransactionCode(ticket.Key, ticket.Value.TransactionCode);
 
-                if (ticket.Value.IsUnlimited)
-                    Tickets.SetUnlimitedActivities(ticket.Key);
-                else if (ticket.Value.ActivitiesAllowed != null)
-                    Tickets.SetNumberOfActivities(ticket.Key, ticket.Value.ActivitiesAllowed.Value);
+                //if (ticket.Value.IsUnlimited)
+                //    Tickets.SetUnlimitedActivities(ticket.Key);
+                //else if (ticket.Value.ActivitiesAllowed != null)
+                //    Tickets.SetNumberOfActivities(ticket.Key, ticket.Value.ActivitiesAllowed.Value);
             }
         }
         private void ThrowIfRequestInvalid(params Migrate[] migrations)
@@ -100,14 +109,13 @@ namespace DragonCon.Logical.Convention
 
         private void MigrateHalls(ConventionWrapper oldCon)
         {
-            foreach (var hall in _convention.NameAndHall)
+            foreach (var hall in _convention.Halls)
             {
-                Halls.AddHall(hall.Key, hall.Value.Description);
-                var newTables = hall.Value.Tables.Select(x => new Table(hall.Key, x.Name)
-                {
-                    Notes = x.Notes
-                });
-                Halls.SetHallTables(hall.Key, newTables);
+                var prevHall = hall;
+                Halls.AddHall(prevHall.Name,
+                    prevHall.Description,
+                    prevHall.FirstTable,
+                    prevHall.LastTable);
             }
         }
 
@@ -115,23 +123,30 @@ namespace DragonCon.Logical.Convention
         {
             foreach (var day in oldCon.Days)
             {
-                Days.AddDay(day.Key, day.Value.StartTime, day.Value.EndTime);
-                Days.SetTimeSlotStrategy(day.Key, day.Value.TimeSlotStrategy);
+                //Days.AddDay(day.Key, day.Value.StartTime, day.Value.EndTime);
+                //Days.SetTimeSlotStrategy(day.Key, day.Value.TimeSlotStrategy);
             }
         }
 
         private void CreateSubBuilders()
         {
             Days = new DaysBuilder(this, _convention);
-            Tickets = new TicketBuilder(this, _convention);
+            Tickets = new TicketsBuilder(this, _convention);
             Halls = new HallsBuilder(this, _convention);
         }
 
 
         public ConventionBuilder Save()
         {
-            _gateway.StoreConvention(_convention);
+            if (_convention.CreateTimeStamp == Instant.MinValue)
+                _convention.CreateTimeStamp = SystemClock.Instance.GetCurrentInstant();
+
+            _convention.UpdateTimeStamp = SystemClock.Instance.GetCurrentInstant();
+
+            _gateway.StoreConvention(_convention, DeletedEntityIds);
             return this;
         }
+
+
     }
 }

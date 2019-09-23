@@ -1,0 +1,92 @@
+﻿@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Common
+@model DragonCon.Features.Management.Events.EventsManagementViewModel
+
+<br />
+<h3>גילאים</h3>
+<a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventAgeRestriction">
+    <i class="fa fa-fw fa-plus-square"></i> הוספת קבוצת גיל
+</a>
+
+            @foreach (AgeGroup ageRestriction in Model.AgeGroups.OrderBy(x => x.Name))
+            {
+                <div class="card card-body card-margined">
+                    <div class="row">
+                        <div class="col-2">@ageRestriction.Name</div>
+                        <div class="col">
+                            @if (ageRestriction.MinAge.HasValue)
+                            {
+                                <span>מגיל @ageRestriction.MinAge</span>
+                            }
+                            @if (ageRestriction.MaxAge.HasValue)
+                            {
+                                <span>עד גיל @ageRestriction.MaxAge</span>
+                            }
+                            @if (ageRestriction.MaxAge.HasValue == false &&
+                                 ageRestriction.MinAge.HasValue == false)
+                            {
+                                <span class="text-info">ללא הגבלת גיל</span>
+                            }
+                        </div>
+                        <div class="col-1">
+                            <div class="dropdown pull-left">
+                                <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm">
+                                    <i class="fa fa-fw fa-ellipsis-h"></i>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                       asp-action="UpdateEventAgeRestriction" asp-route-restrictionId="@ageRestriction.Id.GetNumberFromId()">
+                                        <i class="fa fa-fw fa-edit"></i> עדכון קבוצת גיל
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" onclick="DeleteAgeRestriction('@ageRestriction.Id')" href="#"><i class="fa fa-fw fa-trash"></i> מחיקת קבוצת גיל </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+<br />
+<h3>פעילויות</h3>
+<a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventActivity">
+    <i class="fa fa-fw fa-plus-square"></i> הוספת פעילות ושיטות
+</a>
+@foreach (var activity in Model.Activities.OrderBy(x => x.Name))
+{
+    <div class="card card-body card-margined">
+        <h5>
+            @activity.Name
+
+            <div class="dropdown pull-left">
+                <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm">
+                    <i class="fa fa-fw fa-ellipsis-h"></i>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                       asp-action="UpdateEventActivity" asp-route-activityId="@activity.Id.GetNumberFromId()">
+                        <i class="fa fa-fw fa-edit"></i> עדכון פעילות
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" onclick="DeleteActivity('@activity.Id')" href="#"><i class="fa fa-fw fa-trash"></i> מחיקת פעילות </a>
+                </div>
+            </div>
+
+        </h5>
+        
+        @if (activity.SubActivities.Any())
+        {
+            <table class="table table-hover table-stripped text-right">
+                <tbody>
+                @foreach (var system in activity.SubActivities.OrderBy(x => x.Name))
+                {
+                    <tr class="d-flex">
+                        <td class="col">@system.Name</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+    </div>
+}

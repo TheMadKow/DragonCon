@@ -1,20 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Raven.Client.Documents;
+using DragonCon.Modeling.Models.Identities;
 using Raven.Client.Documents.Session;
 
-namespace DragonCon.Gateway.RavenDB.Gateways
+namespace DragonCon.RavenDB.Gateways
 {
-    public abstract class RavenGateway
+    public abstract class RavenGateway : IDisposable
     {
         private readonly StoreHolder _holder;
-        protected IDocumentSession Session => _holder.Store.OpenSession();
-        protected IAsyncDocumentSession AsyncSession => _holder.Store.OpenAsyncSession();
+        protected IActor Actor { get; private set; }
 
-        protected RavenGateway(StoreHolder holder)
+        private readonly IDocumentSession _session;
+        public IDocumentSession Session => _session;
+
+
+        protected RavenGateway(StoreHolder holder, IActor actor)
         {
             _holder = holder;
+            Actor = actor;
+            _session = _holder.Store.OpenSession();
+        }
+
+        private void ReleaseUnmanagedResources()
+        {
+            _session?.Dispose();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            ReleaseUnmanagedResources();
+            if (disposing)
+            {
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~RavenGateway()
+        {
+            Dispose(false);
         }
     }
 }

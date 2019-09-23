@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using DragonCon.Logical.Gateways.Users;
+using DragonCon.Features.Home;
+using DragonCon.Features.Home.Convention;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Events;
+using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.ViewModels;
-using Microsoft.AspNetCore.Authentication;
 using SystemClock = NodaTime.SystemClock;
 
-namespace DragonCon.Gateway.RavenDB.Gateways.Users
+namespace DragonCon.RavenDB.Gateways.Users
 {
     public class RavenEventsGateway : RavenGateway, IEventsGateway
     {
-        public RavenEventsGateway(StoreHolder holder) : 
-            base(holder)
+        public RavenEventsGateway(StoreHolder holder, IActor actor) : base(holder, actor)
         {
         }
 
@@ -21,51 +20,37 @@ namespace DragonCon.Gateway.RavenDB.Gateways.Users
         {
             try
             {
-
-            using (var session = Session)
-            {
-                var lazyAge = session.Advanced.Lazily.Load<AgeRestrictionTemplate>(viewmodel.AgeRestrictionId);
-                var conEvent = new ConEvent()
-                {
-                    Name = viewmodel.Name,
-                    ConventionDayId = viewmodel.DayId,
-                    Description = viewmodel.Description,
-                    SpecialRequests = viewmodel.Requests,
-                    ActivityId = viewmodel.ActivityId,
-                    SystemId = viewmodel.SystemId,
-                    TimeSlot = new TimeSlot
+                    var lazyAge = Session.Advanced.Lazily.Load<AgeGroup>(viewmodel.AgeRestrictionId);
+                    var conEvent = new Event()
                     {
-                        From = viewmodel.StartTime,
-                        To = viewmodel.StartTime.Plus(viewmodel.Period)
-                    },
-                    Size = viewmodel.SizeRestrictions,
-                    GameMasterId = viewmodel.CreatorId,
-                    HelperIds = viewmodel.HelperIds,
-                    ParticipantIds = new List<string>(),
-                    HasBeenRevised = false,
-                    Status = EventStatus.Pending,
-                    Tags = viewmodel.Tags,
-                    TableId = string.Empty,
-                    Changes = new List<string>()
-                };
+                        Name = viewmodel.Name,
+                        ConventionDayId = viewmodel.DayId,
+                        Description = viewmodel.Description,
+                        SpecialRequests = viewmodel.Requests,
+                        ActivityId = viewmodel.ActivityId,
+                        SubActivityId = viewmodel.SystemId,
+                        TimeSlot = new TimeSlot
+                        {
+                            From = viewmodel.StartTime,
+                            To = viewmodel.StartTime.Plus(viewmodel.Period)
+                        },
+                        Size = viewmodel.SizeRestrictions,
+                        GameMasterIds = new List<string> {viewmodel.CreatorId},
+                        ParticipantIds = new List<string>(),
+                        Status = EventStatus.Pending,
+                        Tags = viewmodel.Tags,
+                        HallId = string.Empty,
+                        HallTable = null,
+                    };
 
-                session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
-                conEvent.Age = lazyAge.Value;
+                    Session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
+                    conEvent.AgeId = lazyAge.Value.Id;
+
+                    Session.Store(conEvent);
+                    Session.SaveChanges();
+
+                    return new Answer(AnswerType.Success);
                 
-                var create = new EventChange
-                {
-                    ExecutorId = viewmodel.CreatorId,
-                    IsCreationChange = true,
-                    Changes = new List<EventChange.FieldChange>()
-                };
-                session.Store(create);
-
-                conEvent.Changes.Add(create.Id);
-                session.Store(conEvent);
-                session.SaveChanges();
-
-                return new Answer(AnswerType.Success);
-            }
             }
             catch (Exception e)
             {

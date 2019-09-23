@@ -8,3 +8,6 @@
 **/obj
 **/wwwroot
 **/node_modules
+/_NCrunch_DragonCon
+/Dragoncon.App/Certificates
+/Dragoncon.App/yarn-error.log

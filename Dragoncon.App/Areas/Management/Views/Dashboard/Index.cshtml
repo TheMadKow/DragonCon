@@ -1,0 +1,155 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@{
+    ViewBag.Title = "לוח מחוונים";
+    var me = Actor.Participant;
+    var state = Actor.State;
+}
+
+<br/>
+<div class="card card-margined card-grayed">
+    <div class="card-body">
+        <h5 class="card-title">אני</h5>
+        <table class="table table-hover text-right">
+            <tr>
+                <td class="tw-4">שם</td>
+                <td class="tw-8">@me.FullName</td>
+            </tr>
+            <tr>
+                <td>דוא"ל</td>
+                <td>@me.Id</td>
+            </tr>
+            <tr>
+                <td>הרשאות אתר</td>
+                <td> 
+                    @foreach (var role in me.SystemRoles.Select(x => x.ToTextual()).OrderBy(x => x))
+                    {
+                        <span>@role<br/></span>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>תפקידי כנס</td>
+                <td>
+                    @foreach (var role in me.ConventionRoles.Select(x => x.ToTextual()).OrderBy(x => x))
+                    {
+                        <span>@role<br /></span>
+                    }
+                </td>
+            </tr>
+        </table>
+            <div class="row">
+            </div>
+    </div>
+</div>
+
+
+<div class="card card-margined card-grayed">
+    <div class="card-body">
+        <h5 class="card-title">הכנס</h5>
+        <table class="table table-hover text-right">
+            <tr>
+                <td class="tw-4">כנס</td>
+                <td class="tw-8">@state.ActiveConvention?.Name</td>
+            </tr>
+            @if (state.HasActiveConvention)
+            {
+                <tr>
+                    <td>מיקום</td>
+                    <td>
+                        @state.ActiveConvention.Location
+                    </td>
+                </tr>
+                <tr>
+                    <td>קליט</td>
+                    <td>
+                        @state.ActiveConvention.TagLine
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>ימים</td>
+                    <td>
+                        @foreach (var day in state.ActiveConvention.Days.OrderBy(x => x.Date))
+                        {
+                            <div>
+                                <strong>
+                                    <i class="far fa-fw fa-calendar"></i> @day.GetDescription()
+                                </strong>
+                                <br />
+                                <i class="far fa-fw fa-clock"></i> @day.StartTime.ToString("HH:mm", CultureInfo.CurrentCulture) - @day.EndTime.ToString("HH:mm", CultureInfo.CurrentCulture)
+                                <br />
+                                <i class="fa fa-fw fa-cog"></i> @day.TimeSlotStrategy.ToTextual()
+                            </div>
+                            <br />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>אולמות</td>
+                    <td>
+                        @foreach (var hall in state.ActiveConvention.Halls.OrderBy(x => x.FirstTable))
+                        {
+                            <div class="row">
+                                <div class="col-4">
+                                    @hall.Name
+                                </div>
+                                <div class="col-4">
+                                    @hall.Description
+                                </div>
+                                <div class="col-4">
+                                    שולחנות &nbsp; &nbsp; @hall.FirstTable - @hall.LastTable
+                                </div>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>כרטיסים</td>
+                    <td>
+                        @foreach (var ticket in state.ActiveConvention.Tickets.OrderBy(x => x.Name))
+                        {
+                            <div class="row">
+                                @ticket.TicketType @ticket.Name @ticket.Price @DragonConstants.NIS_SYMBOL @ticket.ActivitiesAllowed
+                            </div>
+                        }
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td>מותר להציע אירועים</td>
+                    <td>
+                        @await Html.PartialAsync("_PartialParameter", state.Configurations.AllowEventsSuggestions)
+                    </td>
+                </tr>
+                <tr>
+                    <td>מותר להרשם לאירועים</td>
+                    <td>
+                        @await Html.PartialAsync("_PartialParameter", state.Configurations.AllowEventsRegistration)
+                    </td>
+                </tr>
+                <tr>
+                    <td>מותר לשנות רישום</td>
+                    <td>
+                        @await Html.PartialAsync("_PartialParameter", state.Configurations.AllowEventsRegistrationChanges)
+                    </td>
+                </tr>
+                <tr>
+                    <td>מותר לקנות כרטיס</td>
+                    <td>
+                        @await Html.PartialAsync("_PartialParameter", state.Configurations.AllowPayments)
+                    </td>
+                </tr>
+                <tr>
+                    <td>מותר לשנות כרטיס</td>
+                    <td>
+                        @await Html.PartialAsync("_PartialParameter", state.Configurations.AllowPaymentChanges)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<br />

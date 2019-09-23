@@ -1,15 +1,18 @@
 ﻿using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Raven.Client.Documents;
 
-namespace DragonCon.Gateway.RavenDB
+namespace DragonCon.RavenDB
 {
     public class StoreHolder
     {
-        public StoreHolder(string dbName, params string[] connectionStrings)
+        public StoreHolder(string dbName, string certPath, params string[] connectionStrings)
         {
-            Store = new DocumentStore
+            var cert = new X509Certificate2(certPath);
+                Store = new DocumentStore
             {
-                Urls = connectionStrings.ToArray(),
+                Urls = connectionStrings,
+                Certificate = cert,
                 Database = dbName
             };
         }
