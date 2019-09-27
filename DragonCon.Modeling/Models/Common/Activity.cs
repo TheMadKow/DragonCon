@@ -4,10 +4,22 @@ namespace DragonCon.Modeling.Models.Common
 {
     public class Activity
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public static Activity General => new GeneralActivity();
+
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         
         public bool IsSubActivity { get; set; }
         public List<Activity> SubActivities { get; set; } = new List<Activity>();
+
+        private class GeneralActivity : Activity
+        {
+            public GeneralActivity()
+            {
+                Name = "כללי";
+                IsSubActivity = true;
+            }
+        }
+
     }
 }

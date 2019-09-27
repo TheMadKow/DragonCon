@@ -262,13 +262,13 @@ namespace DragonCon.RavenDB.Gateways.Management
             model.Tags = viewmodel.Tags;
             model.SpecialRequests = viewmodel.SpecialRequests;
 
-            var activity = viewmodel.SystemId.Split(new[] {','}, StringSplitOptions.None);
-            model.ActivityId = activity[0];
-            model.SubActivityId = activity[1];
+            var activity = viewmodel.SystemId.SplitTuples();
+            model.ActivityId = activity.Major;
+            model.SubActivityId = activity.Minor;
 
-            var hall = viewmodel.Table.Split(new[] {','}, StringSplitOptions.None);
-            model.HallId = hall[0];
-            model.HallTable = int.Parse(hall[1]);
+            var hall = viewmodel.Table.SplitTuples();
+            model.HallId = hall.Major;
+            model.HallTable = int.Parse(hall.Minor);
 
             var startTime = new LocalTime(viewmodel.StartTime.Value.Hour,
                 viewmodel.StartTime.Value.Minute,
@@ -406,7 +406,7 @@ namespace DragonCon.RavenDB.Gateways.Management
         }
 
         public EventsManagementViewModel BuildIndex(IDisplayPagination pagination,
-            EventsManagementViewModel.Filters filters = null)
+            EventsManagementViewModel.Filters? filters = null)
         {
             var result = new EventsManagementViewModel();
 
@@ -416,16 +416,60 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .Include(x => x.GameMasterIds)
                 .Include(x => x.HallId)
                 .Include(x => x.AgeId)
-                .Where(x => x.ConventionId == Actor.SystemState.ConventionId)
-                .OrderBy(x => x.Name)
+                .Where(x => x.ConventionId == Actor.SystemState.ConventionId);
+
+            if (filters is {})
+            {
+                if (filters.AgeGroup.IsNotEmptyString())
+                {
+                    tempEvents = tempEvents.Where(x => x.AgeId == filters.AgeGroup);
+                }
+                if (filters.Duration > 0)
+                {
+                    tempEvents = tempEvents.Where(x => x.TimeSlot.DurationInHours == filters.Duration);
+
+                }
+                if (filters.Activity.IsNotEmptyString())
+                {
+                    var activity = filters.Activity.SplitTuples();
+                    tempEvents = tempEvents.Where(x => x.ActivityId == activity.Major);
+                    if (activity.Minor.IsNotEmptyString())
+                    {
+                        tempEvents = tempEvents.Where(x => x.SubActivityId == activity.Minor);
+                    }
+                }
+
+                if (filters.DayAndTime.IsNotEmptyString())
+                {
+                    var dayTime = filters.DayAndTime.SplitTuples();
+                    tempEvents = tempEvents.Where(x => x.ConventionDayId == dayTime.Major);
+                    if (dayTime.Minor.IsNotEmptyString())
+                    {
+                        //tempEvents.Where(x => x.TimeSlot.From == dayTime.Minor);
+                    }
+                }
+
+                if (filters.Status.IsNotEmptyString())
+                {
+                    if (Enum.TryParse(filters.Status, true, out EventStatus status))
+                    {
+                        tempEvents = tempEvents.Where(x => x.Status == status);
+                    }
+                }
+            }
+
+            var results = tempEvents.OrderBy(x => x.Name)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)
                 .ToList();
-            result.Events = tempEvents.Select(x => new EventWrapper(x)
+
+            result.Events = results.Select(x => new EventWrapper(x)
             {
                 Day = Session.Load<Day>(x.ConventionDayId),
                 Activity = Session.Load<Activity>(x.ActivityId),
-                SubActivity = Session.Load<Activity>(x.SubActivityId),
+                SubActivity = x.SubActivityId.IsNotEmptyString() 
+                    ? Session.Load<Activity>(x.SubActivityId) 
+                    : Activity.General,
                 GameMasters =
                     Session.Load<FullParticipant>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
                 Hall = Session.Load<Hall>(x.HallId),

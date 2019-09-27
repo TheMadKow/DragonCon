@@ -14,7 +14,7 @@ namespace DragonCon.Features.Management.Events
             public string Status { get; set; }
             public string AgeGroup { get; set; }
             public string DayAndTime { get; set; }
-            public string Duration { get; set; }
+            public double Duration { get; set; }
         }
 
         public IDisplayPagination Pagination { get; set; }

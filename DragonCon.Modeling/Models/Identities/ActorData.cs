@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
@@ -86,12 +87,15 @@ namespace DragonCon.Modeling.Models.Identities
 
                 foreach (var eventActivity in _state.Activities.OrderBy(x => x.Name))
                 {
-                    var group = new SelectListGroup {Name = eventActivity.Name};
+                    var group = new SelectListGroup
+                    {
+                        Name = eventActivity.Name
+                    };
                     if (addGeneralSelect)
                     {
                         items.Add(new SelectListItem
                         {
-                            Value = eventActivity.Id,
+                            Value = $"{eventActivity.Id},",
                             Text = "כללי",
                             Group = group
                         });
@@ -101,7 +105,7 @@ namespace DragonCon.Modeling.Models.Identities
                     {
                         var item = new SelectListItem
                         {
-                            Value = subActivity.Id,
+                            Value = $"{eventActivity.Id},{subActivity.Id}",
                             Text = subActivity.Name,
                             Group = group
                         };
@@ -135,11 +139,34 @@ namespace DragonCon.Modeling.Models.Identities
                     {
                         var item = new SelectListItem
                         {
-                            Value = $"{starTime}",
-                            Text = $"{starTime}",
+                            Value = $"{day.Id},{starTime.ToString("HH:mm", CultureInfo.CurrentCulture)}",
+                            Text = $"{starTime.ToString("HH:mm", CultureInfo.CurrentCulture)}",
                             Group = group
                         };
                         items.Add(item);
+                    }
+                }
+
+                return items;
+            }
+
+            public Dictionary<string, List<SelectListItem>> BuildDateTimeDuration()
+            {
+                if (_state.Days is null)
+                    return new Dictionary<string, List<SelectListItem>>();
+
+                var items = new Dictionary<string, List<SelectListItem>>();
+                foreach (var day in _state.Days.OrderBy(x => x.Date))
+                {
+                    var timeSlots = _factory.GenerateTimeSlots(day.StartTime, day.EndTime, day.TimeSlotStrategy);
+                    foreach (var option in timeSlots.StartTimeAndDurations)
+                    {
+                        var key = $"{day.Id},{option.Key.ToString("HH:mm", CultureInfo.CurrentCulture)}";
+                        var values = option.Value.Select(x => new SelectListItem() {
+                            Text = $"{x} שעות",
+                            Value = x.ToString() });
+
+                        items[key] = values.ToList();
                     }
                 }
 
@@ -165,7 +192,7 @@ namespace DragonCon.Modeling.Models.Identities
                 durations = durations.Distinct().ToList();
                 foreach (var duration in durations.OrderBy(x => x))
                 {
-                    items.Add(new SelectListItem(duration.ToString(), duration.ToString()));
+                    items.Add(new SelectListItem($"{duration} שעות", duration.ToString()));
                 }
 
                 return items;

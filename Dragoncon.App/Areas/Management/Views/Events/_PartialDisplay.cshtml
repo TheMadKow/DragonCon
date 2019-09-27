@@ -20,22 +20,25 @@
             <button class="btn btn-filter btn-info"><i class="fa fa-fw fa-search"></i> חיפוש</button>
         </div>
     </div>
-    </div>
+</div>
+
 <div class="filter-container">
-    <strong>סינון לפי</strong>
-    <br/>
-    
-    <div class="row">
-        <div class="col-1">
-            <label>סטטוס</label>
-        </div>
-        <div class="col-2">
-            <select class="form-control chosen-select"
-                    asp-for="ActiveFilters.Status"
-                    asp-items="Actor.DropDowns.BuildStatus()"
-                    data-placeholder="סטטוס אירוע">
-            </select>
-        </div>
+    <form asp-area="Management" asp-controller="Events" asp-action="Manage">
+        <strong>סינון לפי</strong>
+        <br />
+
+        <div class="row">
+            <div class="col-1">
+                <label>סטטוס</label>
+            </div>
+            <div class="col-2">
+                <select class="form-control chosen-select"
+                        asp-for="ActiveFilters.Status"
+                        asp-items="Actor.DropDowns.BuildStatus()"
+                        data-placeholder="סטטוס אירוע">
+                    <option value="" selected>הכל</option>
+                </select>
+            </div>
             <div class="col-1">
                 <label>שעה</label>
             </div>
@@ -44,9 +47,10 @@
                         asp-for="ActiveFilters.DayAndTime"
                         asp-items="Actor.DropDowns.BuildDaysTimes()"
                         data-placeholder="מועד התחלה">
+                    <option value="" selected>הכל</option>
                 </select>
             </div>
-        
+
             <div class="col-1">
                 <label>משך</label>
             </div>
@@ -55,47 +59,50 @@
                         asp-for="ActiveFilters.Duration"
                         asp-items="Actor.DropDowns.BuildDurations()"
                         data-placeholder="משך">
+                    <option value="" selected>הכל</option>
                 </select>
             </div>
 
-      
-    </div>
-    <br />
-    <div class="row">
-
-        <div class="col-1">
-            <label class="label-control">פעילות</label>
 
         </div>
-        <div class="col-4">
-            <select class="form-control chosen-select"
-                    asp-for="ActiveFilters.Activity"
-                    asp-items="Actor.DropDowns.Activities()" data-placeholder="פעילות ושיטות">
-                <option value="" selected>הכל</option>
-            </select>
-        </div>
+        <br />
+        <div class="row">
 
-        <div class="col-1">
-            <label>גיל</label>
-        </div>
-        <div class="col-3">
-            <select class="form-control chosen-select"
-                    asp-for="ActiveFilters.AgeGroup"
-                    asp-items="Actor.DropDowns.BuildAgeGroups()"
-                    data-placeholder="קבוצת גיל">
-            </select>
-        </div>
+            <div class="col-1">
+                <label class="label-control">פעילות</label>
+
+            </div>
+            <div class="col-4">
+                <select class="form-control chosen-select"
+                        asp-for="ActiveFilters.Activity"
+                        asp-items="Actor.DropDowns.Activities()" data-placeholder="פעילות ושיטות">
+                    <option value="" selected>הכל</option>
+                </select>
+            </div>
+
+            <div class="col-1">
+                <label>גיל</label>
+            </div>
+            <div class="col-3">
+                <select class="form-control chosen-select"
+                        asp-for="ActiveFilters.AgeGroup"
+                        asp-items="Actor.DropDowns.BuildAgeGroups()"
+                        data-placeholder="קבוצת גיל">
+                    <option value="" selected>הכל</option>
+                </select>
+            </div>
 
 
-        <div class="col-3">
-            <button class="btn btn-filter btn-info" type="submit"><i class="fa fa-fw fa-filter"></i> סינון </button>
-            <button class="btn btn-danger" type="submit">
-                <i class="fa fa-fw fa-times"></i>
-                איפוס
+            <div class="col-3">
+                <button class="btn btn-filter btn-info" type="submit"><i class="fa fa-fw fa-filter"></i> סינון </button>
+                <a class="btn btn-danger" asp-area="Management" asp-controller="Events" asp-action="Manage">
+                    <i class="fa fa-fw fa-times"></i>
+                    איפוס
 
-            </button>
+                </a>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 <table id="accordion" class="table table-couple-striped text-right">
     <tbody>

@@ -33,11 +33,10 @@ namespace DragonCon.Features.Management.Dashboard
 
         [HttpPost]
         [Authorize(policy: Policies.Types.AtLeastEventsManager)]
-        public IActionResult Manage(EventsManagementViewModel.Filters filters, 
+        public IActionResult Manage(EventsManagementViewModel.Filters ActiveFilters, 
                                     int page = 0, int perPage = ResultsPerPage)
         {
-            var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage), 
-                                               filters);
+            var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage), ActiveFilters);
             return View(viewModel);
 
         }

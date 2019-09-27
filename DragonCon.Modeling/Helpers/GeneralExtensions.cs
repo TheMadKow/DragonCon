@@ -27,6 +27,12 @@ namespace DragonCon.Modeling.Helpers
             };
         }
 
+        public static (string Major, string Minor) SplitTuples(this string input)
+        {
+            var result = input.Split(new[] {','}, StringSplitOptions.None);
+            return (result[0], result[1]);
+        }
+
 
         public static bool IsEmptyString(this string? s)
         {
