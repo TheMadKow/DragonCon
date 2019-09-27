@@ -12,6 +12,7 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Identities;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NodaTime;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
@@ -192,13 +193,7 @@ namespace DragonCon.RavenDB.Gateways.Management
 
         public EventCreateUpdateViewModel GetEventViewModel(string eventId)
         {
-            var viewModel = new EventCreateUpdateViewModel
-            {
-                Activities = Actor.State.Activities,
-                Days = Actor.State.ActiveConvention.Days,
-                Halls = Actor.State.ActiveConvention.Halls,
-                AgeGroups = Actor.State.AgeGroups
-            };
+            var viewModel = new EventCreateUpdateViewModel();
 
             if (eventId.IsNotEmptyString())
             {
@@ -327,7 +322,7 @@ namespace DragonCon.RavenDB.Gateways.Management
             var model = new Event
             {
                 CreatedOn = SystemClock.Instance.GetCurrentInstant(),
-                ConventionId = Actor.State.ActiveConvention.Id,
+                ConventionId = Actor.SystemState.ConventionId,
                 IsSpecialPrice = viewmodel.IsSpecialPrice,
                 SpecialPrice = viewmodel.SpecialPrice,
                 Name = viewmodel.Name,
@@ -414,9 +409,6 @@ namespace DragonCon.RavenDB.Gateways.Management
             EventsManagementViewModel.Filters filters = null)
         {
             var result = new EventsManagementViewModel();
-            result.ActiveConvention = Actor.State.ActiveConvention.Id;
-            result.Activities = Actor.State.Activities;
-            result.AgeGroups = Actor.State.AgeGroups;
 
             var tempEvents = Session.Query<Event>()
                 .Statistics(out var stats)
@@ -424,7 +416,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .Include(x => x.GameMasterIds)
                 .Include(x => x.HallId)
                 .Include(x => x.AgeId)
-                .Where(x => x.ConventionId == Actor.State.ActiveConvention.Id)
+                .Where(x => x.ConventionId == Actor.SystemState.ConventionId)
                 .OrderBy(x => x.Name)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)

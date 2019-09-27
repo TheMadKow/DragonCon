@@ -10,6 +10,7 @@ using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.System;
 using DragonCon.Modeling.Models.Tickets;
+using DragonCon.Modeling.TimeSlots;
 using DragonCon.RavenDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -27,20 +28,29 @@ namespace DragonCon.App.Helpers
             _next = next;
         }
 
-        public Task Invoke(HttpContext httpContext, IActor actor, StoreHolder holder)
+        public Task Invoke(HttpContext httpContext, 
+            IActor actor, 
+            StoreHolder holder,
+            IStrategyFactory factory)
         {
             using (var session = holder.Store.OpenSession())
             {
-                actor.State = LoadSystemState(session);
                 actor.Participant = LoadParticipant(session);
+                actor.SystemState = LoadSystemState(session);
+                actor.DropDowns = LoadDropDowns(factory, actor.SystemState);
             }
 
             return _next(httpContext);
         }
 
-        private Actor.ParticipantActor LoadParticipant(IDocumentSession session)
+        private Actor.ActorDropDowns LoadDropDowns(IStrategyFactory factory, Actor.ActorSystemState actorSystemState)
         {
-            return new Actor.ParticipantActor()
+            return new Actor.ActorDropDowns(factory, actorSystemState);
+        }
+
+        private Actor.ActorParticipant LoadParticipant(IDocumentSession session)
+        {
+            return new Actor.ActorParticipant()
             {
                 Id = "test@dragoncon.com",
                 FullName = "משתמש מערכת",
@@ -60,7 +70,7 @@ namespace DragonCon.App.Helpers
             };
         }
 
-        private Actor.SystemState LoadSystemState(IDocumentSession _session)
+        private Actor.ActorSystemState LoadSystemState(IDocumentSession _session)
         {
             var stopwatch = Stopwatch.StartNew();
             using (_session.Advanced.DocumentStore.AggressivelyCacheFor(TimeSpan.FromDays(1)))
@@ -89,23 +99,20 @@ namespace DragonCon.App.Helpers
                 var tickets = _session.Load<Ticket>(convention.TicketIds);
                 var days = _session.Load<Day>(convention.DayIds);
 
-                var result = new Actor.SystemState
+                var result = new Actor.ActorSystemState()
                 {
                     Configurations = config,
 
                     AgeGroups = ageGroups,
                     Activities = activities.Where(x => x.IsSubActivity == false).ToList(),
 
-                    ActiveConvention = new Actor.SystemState.ActiveConventionState()
-                    {
-                        Id = convention.Id,
-                        Name = convention.Name,
-                        Location = convention.Location,
-                        TagLine = convention.TagLine,
-                        Halls = halls.Where(x => x.Value != null).Select(x => x.Value).ToList(),
-                        Days = days.Where(x => x.Value != null).Select(x => x.Value).ToList(),
-                        Tickets = tickets.Where(x => x.Value != null).Select(x => x.Value).ToList()
-                    }
+                    ConventionId = convention.Id,
+                    ConventionName = convention.Name,
+                    Location = convention.Location,
+                    TagLine = convention.TagLine,
+                    Halls = halls.Where(x => x.Value != null).Select(x => x.Value).ToList(),
+                    Days = days.Where(x => x.Value != null).Select(x => x.Value).ToList(),
+                    Tickets = tickets.Where(x => x.Value != null).Select(x => x.Value).ToList()
                 };
                 stopwatch.Stop();
                 result.BuildMilliseconds = stopwatch.ElapsedMilliseconds;

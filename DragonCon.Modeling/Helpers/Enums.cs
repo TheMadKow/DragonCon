@@ -49,7 +49,8 @@ namespace DragonCon.Modeling.Helpers
                     }
                 }
             }
-            return default(T);
+
+            return default;
         }
 
         private static bool HasDescription<T>(this T k)

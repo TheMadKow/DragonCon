@@ -66,7 +66,7 @@
             <div class="form-group">
                 <label>פעילות</label>
                 <select class="form-control chosen-select" asp-for="SystemId"
-                        asp-items="Model.GetActivitiesDropDown">
+                        asp-items="Actor.DropDowns.Activities()">
                     <option value="" disabled selected>בחירת אפשרות</option>
                 </select>
             </div>
@@ -78,7 +78,7 @@
             <div class="form-group">
                 <label>קבוצת גיל</label>
                 <select class="form-control chosen-select" asp-for="AgeRestrictionId"
-                        asp-items="Model.GetAgeRestrictionDropDown">
+                        asp-items="Actor.DropDowns.BuildAgeGroups()">
                     <option value="" disabled selected>בחירת אפשרות</option>
                 </select>
             </div>
@@ -104,7 +104,7 @@
             <div class="form-group">
                 <label>יום</label>
                 <select class="form-control chosen-select" asp-for="ConventionDayId"
-                        asp-items="Model.GetDaysDropDown" onchange="ChangedEventDay(this)">
+                        asp-items="Actor.DropDowns.BuildDaysTimes()" onchange="ChangedEventDay(this)">
                     <option value="" disabled selected>בחירת יום</option>
                 </select>
             </div>
@@ -143,7 +143,7 @@
             <div class="form-group">
                 <label>אולם ושולחן</label>
                 <select class="form-control chosen-select" asp-for="Table"
-                        asp-items="Model.GetHallsDropdown">
+                        asp-items="Actor.DropDowns.BuildHalls()">
                     <option value="" disabled selected>בחירת אולם שולחן</option>
                 </select>
             </div>
@@ -210,7 +210,7 @@
 </form>
 
 
-<div hidden>
+@*<div hidden>
     @foreach (var day in Model.GetDayOptions())
     {
         <select id="template-starttime-@day.Key.Id" class="form-control" asp-for="StartTime" onchange="ChangedEventStartTime('@day.Key.Id', this)">
@@ -236,4 +236,4 @@
             </select>
         }
     }
-</div>
+</div>*@

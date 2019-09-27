@@ -5,6 +5,8 @@
 
 <br />
 
+<h4 class="card-margined">על הכנס</h4>
+
 <div class="card card-margined right-to-left">
     <div class="card-body">
         <h5 class="card-title">אודות דרקוניקון</h5>
@@ -15,12 +17,12 @@
 </div>
 
 @{
-    var con = Actor.State.ActiveConvention;
+    var con = Actor.SystemState;
 }
 
 <div class="card card-margined right-to-left">
     <div class="card-body">
-        <h5 class="card-title">הכנס הנוכחי - @con.Name</h5>
+        <h5 class="card-title">הכנס הנוכחי - @con.ConventionName</h5>
         מיקום: @con.Location <br />
         ימים:
         <p>
@@ -41,7 +43,7 @@
         <p>
             דרקוניקון הוא כנס משחקים שבו אתם יכולים לשחק בכל משחק שבו אתם חפצים - משחקי תפקידים, מבוכים ודרקונים, משחקי לוח, קלפים ועוד.
             <br />
-            הכנס מאורגן בהתנדבות על-ידי קהילו חובבים מכל הארץ, עבור חובבים. רבים מאנשי הסגל, המנחים והמתנדבים בכנס, התחילו כמשתתפים.
+            הכנס מאורגן בהתנדבות על-ידי קהילות חובבים מכל הארץ, עבור חובבים. רבים מאנשי הסגל, המנחים והמתנדבים בכנס, התחילו כמשתתפים.
         </p>
     </div>
 </div>
@@ -80,6 +82,8 @@
     </div>
 </div>
 
+<h4 class="card-margined">על האתר</h4>
+
 <div class="card card-margined right-to-left">
     <div class="card-body">
         <h5 class="card-title">אתר קוד פתוח</h5>
@@ -90,7 +94,6 @@
         <ul>
             <li><a href="https://github.com/TheMadKow/DragonCon">הקוד ב-GitHub</a></li>
             <li><a href="https://github.com/TheMadKow/DragonCon/blob/master/LICENSE">פרטי הרשיון</a></li>
-            <li><a href="https://app.gitkraken.com/glo/board/XXZE9QtDJAAPHO8t">לוח המשימות</a></li>
         </ul>
     </div>
 </div>

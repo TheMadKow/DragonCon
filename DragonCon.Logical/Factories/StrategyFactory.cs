@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using DragonCon.Modeling.Models.Common;
+using DragonCon.Modeling.TimeSlots;
 using NodaTime;
 
 namespace DragonCon.Logical.Factories
 {
-    public class StrategyFactory
+    public class StrategyFactory : IStrategyFactory
     {
-        public TimeSlotOptions TimeSlots(LocalTime start, LocalTime end, TimeSlotStrategy strategy)
+        public TimeSlotOptions GenerateTimeSlots(LocalTime start, LocalTime end, TimeSlotStrategy strategy)
         {
             switch (strategy)
             {

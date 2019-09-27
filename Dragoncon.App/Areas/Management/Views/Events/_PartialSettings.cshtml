@@ -8,7 +8,7 @@
     <i class="fa fa-fw fa-plus-square"></i> הוספת קבוצת גיל
 </a>
 
-            @foreach (AgeGroup ageRestriction in Model.AgeGroups.OrderBy(x => x.Name))
+            @foreach (AgeGroup ageRestriction in Actor.SystemState.AgeGroups.OrderBy(x => x.Name))
             {
                 <div class="card card-body card-margined">
                     <div class="row">
@@ -53,7 +53,7 @@
 <a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventActivity">
     <i class="fa fa-fw fa-plus-square"></i> הוספת פעילות ושיטות
 </a>
-@foreach (var activity in Model.Activities.OrderBy(x => x.Name))
+@foreach (var activity in Actor.SystemState.Activities.OrderBy(x => x.Name))
 {
     <div class="card card-body card-margined">
         <h5>

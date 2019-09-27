@@ -20,7 +20,8 @@
             <button class="btn btn-filter btn-info"><i class="fa fa-fw fa-search"></i> חיפוש</button>
         </div>
     </div>
-    <br/>
+    </div>
+<div class="filter-container">
     <strong>סינון לפי</strong>
     <br/>
     
@@ -28,30 +29,71 @@
         <div class="col-1">
             <label>סטטוס</label>
         </div>
-        <div class="col-4">
+        <div class="col-2">
             <select class="form-control chosen-select"
                     asp-for="ActiveFilters.Status"
+                    asp-items="Actor.DropDowns.BuildStatus()"
                     data-placeholder="סטטוס אירוע">
-                <option value="" selected>הכל</option>
-                @foreach (var type in Enums.AsSelectListItem<EventStatus>())
-                {
-                    <option value="@type.Value">@type.Text</option>
-                }
             </select>
         </div>
+            <div class="col-1">
+                <label>שעה</label>
+            </div>
+            <div class="col-4">
+                <select class="form-control chosen-select"
+                        asp-for="ActiveFilters.DayAndTime"
+                        asp-items="Actor.DropDowns.BuildDaysTimes()"
+                        data-placeholder="מועד התחלה">
+                </select>
+            </div>
+        
+            <div class="col-1">
+                <label>משך</label>
+            </div>
+            <div class="col-2">
+                <select class="form-control chosen-select"
+                        asp-for="ActiveFilters.Duration"
+                        asp-items="Actor.DropDowns.BuildDurations()"
+                        data-placeholder="משך">
+                </select>
+            </div>
+
+      
+    </div>
+    <br />
+    <div class="row">
+
         <div class="col-1">
             <label class="label-control">פעילות</label>
 
         </div>
         <div class="col-4">
-            <select class="form-control chosen-select" 
+            <select class="form-control chosen-select"
                     asp-for="ActiveFilters.Activity"
-                    asp-items="Model.GetActivitiesDropDown" data-placeholder="פעילות ושיטות">
+                    asp-items="Actor.DropDowns.Activities()" data-placeholder="פעילות ושיטות">
                 <option value="" selected>הכל</option>
             </select>
         </div>
-        <div class="col-2">
+
+        <div class="col-1">
+            <label>גיל</label>
+        </div>
+        <div class="col-3">
+            <select class="form-control chosen-select"
+                    asp-for="ActiveFilters.AgeGroup"
+                    asp-items="Actor.DropDowns.BuildAgeGroups()"
+                    data-placeholder="קבוצת גיל">
+            </select>
+        </div>
+
+
+        <div class="col-3">
             <button class="btn btn-filter btn-info" type="submit"><i class="fa fa-fw fa-filter"></i> סינון </button>
+            <button class="btn btn-danger" type="submit">
+                <i class="fa fa-fw fa-times"></i>
+                איפוס
+
+            </button>
         </div>
     </div>
 </div>
@@ -203,13 +245,13 @@
                         </li>
                         <li>
                             <a title="עריכה מהירה" class="btn text-primary" asp-area="Management" asp-controller="Events"
-                               asp-action="CreateUpdateEvent" asp-route-eventId="@evnt.Model.Id.GetNumberFromId()">
+                               asp-action="CreateUpdateEvent" asp-route-eventConventionId="@evnt.Model.ConventionId.GetNumberFromConventionId()">
                                 <i class="fa fa-fw fa-pencil-alt"></i>
                             </a>
                         </li>
                         <li class="list-inline-item">
                             <a title="עריכת אירוע" class="btn text-primary" asp-area="Management" asp-controller="Events"
-                               asp-action="CreateUpdateEvent" asp-route-eventId="@evnt.Model.Id.GetNumberFromId()">
+                               asp-action="CreateUpdateEvent" asp-route-eventConventionId="@evnt.Model.ConventionId.GetNumberFromConventionId()">
                                 <i class="fa fa-fw fa-edit"></i>
                             </a>
                         </li>
