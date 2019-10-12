@@ -7,8 +7,8 @@ namespace DragonCon.Modeling.Models.Conventions
 {
     public class Convention
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         
         public List<string> DayIds { get; set; } = new List<string>();
         public List<string> TicketIds { get; set; }= new List<string>();
@@ -26,7 +26,7 @@ namespace DragonCon.Modeling.Models.Conventions
         public Instant CreateTimeStamp { get; set; }
         public Instant UpdateTimeStamp { get; set; }
         
-        public string TagLine { get; set; }
-        public string Location { get; set; }
+        public string TagLine { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
     }
 }

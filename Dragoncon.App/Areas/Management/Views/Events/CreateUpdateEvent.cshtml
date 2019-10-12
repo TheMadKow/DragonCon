@@ -66,7 +66,7 @@
             <div class="form-group">
                 <label>פעילות</label>
                 <select class="form-control chosen-select" asp-for="SystemId"
-                        asp-items="Model.GetActivitiesDropDown">
+                        asp-items="Actor.DropDowns.Activities()">
                     <option value="" disabled selected>בחירת אפשרות</option>
                 </select>
             </div>
@@ -78,7 +78,7 @@
             <div class="form-group">
                 <label>קבוצת גיל</label>
                 <select class="form-control chosen-select" asp-for="AgeRestrictionId"
-                        asp-items="Model.GetAgeRestrictionDropDown">
+                        asp-items="Actor.DropDowns.BuildAgeGroups()">
                     <option value="" disabled selected>בחירת אפשרות</option>
                 </select>
             </div>
@@ -100,26 +100,16 @@
     <br />
 
     <div class="row">
-        <div class="col">
+        <div class="col-5">
             <div class="form-group">
-                <label>יום</label>
+                <label>מועד</label>
                 <select class="form-control chosen-select" asp-for="ConventionDayId"
-                        asp-items="Model.GetDaysDropDown" onchange="ChangedEventDay(this)">
-                    <option value="" disabled selected>בחירת יום</option>
+                        asp-items="Actor.DropDowns.BuildDaysTimes()" onchange="ChangedEventDay(this)">
+                    <option value="" disabled selected>בחירת מועד</option>
                 </select>
             </div>
         </div>
-        <div class="col">
-            <div class="form-group">
-                <label>שעת התחלה</label>
-                <div id="event-start-time">
-                    <select class="form-control chosen-select" asp-for="StartTime">
-                        <option value="" disabled selected>יש לבחור יום</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="col">
+        <div class="col-3">
             <div class="form-group">
                 <label>משך</label>
                 <div id="event-duration">
@@ -127,7 +117,15 @@
                         <option value="" disabled selected>יש לבחור שעת התחלה</option>
                     </select>
                 </div>
-
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>אולם ושולחן</label>
+                <select class="form-control chosen-select" asp-for="Table"
+                        asp-items="Actor.DropDowns.BuildHalls()">
+                    <option value="" disabled selected>בחירת אולם שולחן</option>
+                </select>
             </div>
         </div>
     </div>
@@ -137,15 +135,6 @@
             <div class="form-group">
                 <label>מנחים</label>
                 <input asp-for="GameMasterIds" class="form-control" placeholder="שמות המנחים">
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <label>אולם ושולחן</label>
-                <select class="form-control chosen-select" asp-for="Table"
-                        asp-items="Model.GetHallsDropdown">
-                    <option value="" disabled selected>בחירת אולם שולחן</option>
-                </select>
             </div>
         </div>
     </div>
@@ -211,29 +200,12 @@
 
 
 <div hidden>
-    @foreach (var day in Model.GetDayOptions())
+    @foreach (var day in Actor.DropDowns.BuildDateTimeDuration())
     {
-        <select id="template-starttime-@day.Key.Id" class="form-control" asp-for="StartTime" onchange="ChangedEventStartTime('@day.Key.Id', this)">
-            <option value="" disabled selected>בחירת שעת התחלה</option>
-            @foreach (var startTime in day.Value.StartTimeAndDurations.Keys)
-            {
-                <option value="@startTime">@startTime.ToString("HH:mm", CultureInfo.DefaultThreadCurrentCulture)</option>
-            }
+        <select id="template-duration-@day.Key" class="form-control" 
+                asp-for="Duration"
+                asp-items="day.Value">
+            <option value="" disabled selected>בחירת משך אירוע</option>
         </select>
-    }
-
-
-    @foreach (var day in Model.GetDayOptions())
-    {
-        @foreach (var startTime in day.Value.StartTimeAndDurations)
-        {
-            <select id="template-duration-@day.Key.Id-@startTime.Key" class="form-control" asp-for="Duration">
-                <option value="" disabled selected>בחירת משך אירוע</option>
-                @foreach (var duration in startTime.Value)
-                {
-                    <option value="@duration">@duration שעות</option>
-                }
-            </select>
-        }
     }
 </div>

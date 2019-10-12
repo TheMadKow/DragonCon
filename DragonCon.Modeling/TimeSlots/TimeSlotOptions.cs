@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using NodaTime;
 
-namespace DragonCon.Logical.Factories
+namespace DragonCon.Modeling.TimeSlots
 {
     public class TimeSlotOptions
     {

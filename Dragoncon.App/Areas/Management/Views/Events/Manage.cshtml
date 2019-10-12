@@ -47,7 +47,7 @@
                 if (result.value) {
                     $.ajax({
                         type: "POST",
-                        url: "/Management/Events/DeleteEventActivity?activityId=" + actId,
+                        url: "/Management/Events/DeleteEventActivity?activityConventionId=" + actId,
                         data: CreateDefaultPostData(),
                         success: function() {
                             location.reload();
@@ -70,7 +70,7 @@
                 if (result.value) {
                     $.ajax({
                         type: "POST",
-                        url: "/Management/Events/DeleteAgeRestriction?restrictionId=" + ageId,
+                        url: "/Management/Events/DeleteAgeRestriction?restrictionConventionId=" + ageId,
                         data: CreateDefaultPostData(),
                         success: function() {
                             location.reload();

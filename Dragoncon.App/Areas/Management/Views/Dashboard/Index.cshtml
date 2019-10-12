@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "לוח מחוונים";
     var me = Actor.Participant;
-    var state = Actor.State;
+    var state = Actor.SystemState;
 }
 
 <br/>
@@ -50,27 +50,27 @@
         <table class="table table-hover text-right">
             <tr>
                 <td class="tw-4">כנס</td>
-                <td class="tw-8">@state.ActiveConvention?.Name</td>
+                <td class="tw-8">@state.ConventionName</td>
             </tr>
             @if (state.HasActiveConvention)
             {
                 <tr>
                     <td>מיקום</td>
                     <td>
-                        @state.ActiveConvention.Location
+                        @state.Location
                     </td>
                 </tr>
                 <tr>
                     <td>קליט</td>
                     <td>
-                        @state.ActiveConvention.TagLine
+                        @state.TagLine
                     </td>
                 </tr>
 
                 <tr>
                     <td>ימים</td>
                     <td>
-                        @foreach (var day in state.ActiveConvention.Days.OrderBy(x => x.Date))
+                        @foreach (var day in state.Days.OrderBy(x => x.Date))
                         {
                             <div>
                                 <strong>
@@ -88,7 +88,7 @@
                 <tr>
                     <td>אולמות</td>
                     <td>
-                        @foreach (var hall in state.ActiveConvention.Halls.OrderBy(x => x.FirstTable))
+                        @foreach (var hall in state.Halls.OrderBy(x => x.FirstTable))
                         {
                             <div class="row">
                                 <div class="col-4">
@@ -107,7 +107,7 @@
                 <tr>
                     <td>כרטיסים</td>
                     <td>
-                        @foreach (var ticket in state.ActiveConvention.Tickets.OrderBy(x => x.Name))
+                        @foreach (var ticket in state.Tickets.OrderBy(x => x.Name))
                         {
                             <div class="row">
                                 @ticket.TicketType @ticket.Name @ticket.Price @DragonConstants.NIS_SYMBOL @ticket.ActivitiesAllowed

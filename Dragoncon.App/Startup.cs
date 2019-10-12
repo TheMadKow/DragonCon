@@ -5,9 +5,11 @@ using DragonCon.Features.Management.Convention;
 using DragonCon.Features.Management.Dashboard;
 using DragonCon.Features.Shared;
 using DragonCon.Logical.Convention;
+using DragonCon.Logical.Factories;
 using DragonCon.Logical.Gateways;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Identities.Policy;
+using DragonCon.Modeling.TimeSlots;
 using DragonCon.RavenDB;
 using DragonCon.RavenDB.Gateways.Logic;
 using DragonCon.RavenDB.Gateways.Management;
@@ -144,6 +146,7 @@ namespace DragonCon.App
             services.AddScopedPolicyHandlers();
 
             services.AddScoped<IActor, Actor>();
+            services.AddSingleton<IStrategyFactory, StrategyFactory>();
             services.AddScoped<NullGateway, NullGateway>();
             services.AddScoped<IManagementConventionGateway, RavenManagementConventionGateway>();
             services.AddScoped<IManagementEventsGateway, RavenManagementEventsGateway>();

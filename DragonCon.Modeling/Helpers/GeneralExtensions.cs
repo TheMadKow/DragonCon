@@ -13,36 +13,33 @@ namespace DragonCon.Modeling.Helpers
         }
         public static string InHebrew(this IsoDayOfWeek dow)
         {
-            switch (dow)
+            return dow switch
             {
-                case IsoDayOfWeek.None:
-                    return "";
-                case IsoDayOfWeek.Sunday:
-                    return "ראשון";
-                case IsoDayOfWeek.Monday:
-                    return "שני";
-                case IsoDayOfWeek.Tuesday:
-                    return "שלישי";
-                case IsoDayOfWeek.Wednesday:
-                    return "רביעי";
-                case IsoDayOfWeek.Thursday:
-                    return "חמישי";
-                case IsoDayOfWeek.Friday:
-                    return "שישי";
-                case IsoDayOfWeek.Saturday:
-                    return "שבת";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(dow), dow, null);
-            }
+                IsoDayOfWeek.None       => "",
+                IsoDayOfWeek.Sunday     => "ראשון",
+                IsoDayOfWeek.Monday     => "שני",
+                IsoDayOfWeek.Tuesday    => "שלישי",
+                IsoDayOfWeek.Wednesday  => "רביעי",
+                IsoDayOfWeek.Thursday   => "חמישי",
+                IsoDayOfWeek.Friday     => "שישי",
+                IsoDayOfWeek.Saturday   => "שבת",
+                _                       => throw new ArgumentOutOfRangeException(nameof(dow), dow, null)
+            };
+        }
+
+        public static (string Major, string Minor) SplitTuples(this string input)
+        {
+            var result = input.Split(new[] {','}, StringSplitOptions.None);
+            return (result[0], result[1]);
         }
 
 
-        public static bool IsEmptyString(this string s)
+        public static bool IsEmptyString(this string? s)
         {
             return string.IsNullOrWhiteSpace(s);
         }
 
-        public static bool IsNotEmptyString(this string s) => IsEmptyString(s) == false;
+        public static bool IsNotEmptyString(this string? s) => IsEmptyString(s) == false;
 
         public static bool IsAlphaNumeric(this string s) => s.All(x => char.IsLetterOrDigit(x) || char.IsWhiteSpace(x));
 
