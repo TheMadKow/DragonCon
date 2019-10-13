@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using DragonCon.Modeling.Helpers;
@@ -219,6 +220,11 @@ namespace DragonCon.Modeling.Models.Identities
             public List<AgeGroup> AgeGroups { get; set; } = new List<AgeGroup>();
             public SystemConfiguration Configurations { get; set; }
             public bool HasActiveConvention => ConventionId.IsNotEmptyString();
+
+            public Day GetDayById(string dayId)
+            {
+                return Days.SingleOrDefault(x => x.Id == dayId);
+            }
         }
     }
 }

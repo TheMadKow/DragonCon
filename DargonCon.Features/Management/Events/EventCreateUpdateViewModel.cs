@@ -25,8 +25,8 @@ namespace DragonCon.Features.Management.Events
         public SizeRestriction Size { get;set; }
         public string AgeRestrictionId { get; set; }
 
-        public DateTime? StartTime { get; set; }
-        public int? Duration { get; set; }
+        public string StartTime { get; set; }
+        public double? Duration { get; set; }
 
         public List<string> Tags { get;set; }
         public string Table { get; set; }

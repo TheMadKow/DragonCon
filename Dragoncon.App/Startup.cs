@@ -152,6 +152,7 @@ namespace DragonCon.App
             services.AddScoped<IManagementEventsGateway, RavenManagementEventsGateway>();
             services.AddScoped<IConventionBuilderGateway, RavenConventionBuilderGateway>();
             services.AddScoped<ConventionBuilder, ConventionBuilder>();
+        
             services.AddAntiforgery();
         }
 

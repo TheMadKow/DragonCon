@@ -211,26 +211,32 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <a class="dropdown-item" asp-area="Management" asp-controller="Events"
-                               asp-action="UpdateEventAgeRestriction">
-                                <i class="fa fa-fw fa-pencil-alt"></i> שינוי מהיר
+                               asp-action="ViewEventHistory">
+                                <i class="fa fa-fw fa-history"></i> היסטוריה
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                               asp-action="QuickUpdateEvent">
+                                <i class="fa fa-fw fa-pencil-alt"></i> עדכון מהיר
                             </a>
                             <a class="dropdown-item" asp-area="Management" asp-controller="Events"
-                               asp-action="UpdateEventAgeRestriction">
+                               asp-action="CreateUpdateEvent"
+                               asp-route-eventId="@evnt.Model.Id.GetNumberFromId()">
                                 <i class="fa fa-fw fa-edit"></i> עדכון מלא
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" asp-area="Management" asp-controller="Events"
-                               asp-action="UpdateEventAgeRestriction">
+                               asp-action="CloneEvent">
                                 <i class="fa fa-fw fa-clone"></i> שכפול אירוע
                             </a>
                             @if (evnt.GameMasters.Any(x => x != null))
                             {
                                 <div class="dropdown-divider"></div>
-                                 <div class="text-center">
+                                <div class="text-center">
                                     <a>עריכת מנחים</a>
                                 </div>
                             }
-                            @foreach(var gm in evnt.GameMasters)
+                            @foreach (var gm in evnt.GameMasters)
                             {
                                 if (gm == null)
                                 {
@@ -244,25 +250,6 @@
                             }
 
                         </div>
-                    </div>
-                  
-
-                    @*<ul class="list-inline">
-                        <li class="list-inline-item">
-                        </li>
-                        <li>
-                            <a title="עריכה מהירה" class="btn text-primary" asp-area="Management" asp-controller="Events"
-                               asp-action="CreateUpdateEvent" asp-route-eventConventionId="@evnt.Model.ConventionId.GetNumberFromConventionId()">
-                                <i class="fa fa-fw fa-pencil-alt"></i>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a title="עריכת אירוע" class="btn text-primary" asp-area="Management" asp-controller="Events"
-                               asp-action="CreateUpdateEvent" asp-route-eventConventionId="@evnt.Model.ConventionId.GetNumberFromConventionId()">
-                                <i class="fa fa-fw fa-edit"></i>
-                            </a>
-                        </li>
-                    </ul>*@
                 </td>
             </tr>
             <tr id="extra-data-@evnt.Model.Id.GetNumberFromId()" 

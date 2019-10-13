@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using DragonCon.Features.Management.Dashboard;
@@ -199,9 +200,8 @@ namespace DragonCon.RavenDB.Gateways.Management
             {
                 eventId = eventId.FixRavenId("Events");
                 var existing = Session.Load<Event>(eventId);
-                viewModel.Duration = (int) existing.TimeSlot.Span.Hours;
-                viewModel.StartTime = new DateTime(1, 1, 1, existing.TimeSlot.From.Hour, existing.TimeSlot.From.Minute,
-                    existing.TimeSlot.From.Second);
+                viewModel.Duration = existing.TimeSlot?.Duration;
+                viewModel.StartTime = $"{existing.ConventionDayId},{existing.TimeSlot?.From.ToString("HH:mm", CultureInfo.CurrentCulture)}";
                 viewModel.Name = existing.Name;
                 viewModel.GameMasterIds = existing.GameMasterIds;
                 viewModel.SpecialRequests = existing.SpecialRequests;
@@ -270,15 +270,17 @@ namespace DragonCon.RavenDB.Gateways.Management
             model.HallId = hall.Major;
             model.HallTable = int.Parse(hall.Minor);
 
-            var startTime = new LocalTime(viewmodel.StartTime.Value.Hour,
-                viewmodel.StartTime.Value.Minute,
-                viewmodel.StartTime.Value.Second);
-            var endTime = startTime.PlusHours(viewmodel.Duration.Value);
-            model.TimeSlot = new TimeSlot
-            {
-                From = startTime,
-                To = endTime
-            };
+
+            // TODO
+            //var startTime = new LocalTime(viewmodel.StartTime.Value.Hour,
+            //    viewmodel.StartTime.Value.Minute,
+            //    viewmodel.StartTime.Value.Second);
+            ////var endTime = startTime.PlusHours(viewmodel.Duration.Value);
+            //model.TimeSlot = new TimeSlot
+            //{
+            //    From = startTime,
+            //  //  To = endTime
+            //};
 
             Session.SaveChanges();
             return Answer.Success;
@@ -294,15 +296,17 @@ namespace DragonCon.RavenDB.Gateways.Management
                 if (compareProperty != null)
                 {
                     var value2 = compareProperty.GetValue(viewmodel, null);
-                    if (!value1.Equals(value2))
+                    if ((value1 is null && value2 is {}) ||
+                        (value1 is {} && value2 is null) ||
+                        (value1 is {} && value2 is {} && value1.Equals(value2) == false))
                     {
                         result.Add(new UserAction()
                         {
 
                             UserId = "",
                             Field = property.Name,
-                            OldValue = value1.ToString(),
-                            NewValue = value2.ToString(),
+                            OldValue = value1?.ToString() ?? string.Empty,
+                            NewValue = value2?.ToString() ?? string.Empty,
                             TimeStamp = NodaTime.SystemClock.Instance.GetCurrentInstant()
                         });
                     }
@@ -350,17 +354,26 @@ namespace DragonCon.RavenDB.Gateways.Management
                 model.HallTable = int.Parse(hall[1]);
             }
 
-            if (viewmodel.StartTime.HasValue && viewmodel.Duration.HasValue)
+            if (viewmodel.StartTime.IsNotEmptyString() && viewmodel.Duration.HasValue)
             {
-
-                var startTime = new LocalTime(viewmodel.StartTime.Value.Hour,
-                    viewmodel.StartTime.Value.Minute,
-                    viewmodel.StartTime.Value.Second);
-                var endTime = startTime.PlusHours(viewmodel.Duration.Value);
+                var split = viewmodel.StartTime.Split(',');
+                var day = split[0];
+                var time = split[1];
+                var timeSplit = time.Split(':');
+                var hours = int.Parse(timeSplit[0]);
+                var minutes = int.Parse(timeSplit[1]);
+                var num = (int) viewmodel.Duration.Value / 1;
+                var denum = (int) viewmodel.Duration.Value % 1;
+                
+                model.ConventionDayId = day;
+                var startTime = new LocalTime(hours, minutes);
+                var endTime = startTime.PlusHours(num).PlusMinutes(denum);
+                
                 model.TimeSlot = new TimeSlot
                 {
                     From = startTime,
-                    To = endTime
+                    To = endTime,
+                    Duration = viewmodel.Duration.Value
                 };
             }
 
@@ -395,7 +408,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                     return Answer.Error("אי אפשר לאשר אירוע ללא קבוצת גיל");
                 if (viewmodel.ConventionDayId.IsEmptyString())
                     return Answer.Error("אי אפשר לאשר אירוע ללא יום");
-                if (viewmodel.StartTime.HasValue == false || viewmodel.Duration.HasValue == false ||
+                if (viewmodel.StartTime.IsNotEmptyString() || viewmodel.Duration.HasValue == false ||
                     viewmodel.Duration <= 0)
                     return Answer.Error("אי אפשר לאשר אירוע ללא מסגרת זמן");
                 if (viewmodel.GameMasterIds.Any() == false)
@@ -426,7 +439,8 @@ namespace DragonCon.RavenDB.Gateways.Management
                 }
                 if (filters.Duration > 0)
                 {
-                    tempEvents = tempEvents.Where(x => x.TimeSlot.DurationInHours == filters.Duration);
+                    // ReSharper disable once CompareOfFloatsByEqualityOperator
+                    tempEvents = tempEvents.Where(x => x.TimeSlot.Duration == filters.Duration);
 
                 }
                 if (filters.Activity.IsNotEmptyString())
