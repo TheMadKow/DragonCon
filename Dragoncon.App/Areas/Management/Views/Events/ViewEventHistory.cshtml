@@ -1,0 +1,62 @@
+﻿@using System.Globalization
+@using  DragonCon.Modeling.Helpers
+@model DragonCon.Features.Management.Events.EventHistoryViewModel
+@{
+    Layout = "";
+    var grouped = Model.Actions.GroupBy(x => x.TimeStamp).OrderByDescending(x => x.Key);
+}
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <div class="right-to-left">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="סגור חלון">
+                    <span aria-hidden="true" class="text-danger"><i class="fa fa-fw fa-window-close"></i></span>
+                </button>
+                <h4>היסטורית שינויים</h4>
+            </div>
+        </div>
+
+        <div class="modal-body right-to-left">
+            <table class="table">
+                @foreach (var group in grouped)
+                {
+                    var whoChanged = group.FirstOrDefault()?.UserId;
+
+                    <tr>
+                        <td class="tw-2">
+                            @* TODO Israel Time*@
+                            @group.Key.ToString("dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture)
+                        </td>
+                        <td class="tw-2">
+                            @* TODO Load Actual Users *@
+                            @whoChanged
+                        </td>
+                        <td class="tw-8">
+                            @foreach (var item in group)
+                            {
+                                <span>
+                                    <strong> @Model.GetHebrewName(item.Field) </strong>
+                                </span>
+                                @if (item.Field.Contains("Creation") == false)
+                                {
+
+                                    <br/>
+                                    <span>
+                                        ערך קודם: @Actor.SystemState.GetValue(item.OldValue)
+                                    </span>
+                                    <br/>
+                                    <span>
+                                        ערך חדש: @Actor.SystemState.GetValue(item.NewValue)
+                                    </span>
+                                    <br /><br />
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

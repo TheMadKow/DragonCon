@@ -25,9 +25,10 @@ namespace DragonCon.Features.Management.Dashboard
         [HttpGet]
         public IActionResult Manage(int page = 0, int perPage = ResultsPerPage, string tab = null)
         {
-            ViewBag.HelperTab = tab;
-            var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage));
-            return View(viewModel);
+            //ViewBag.HelperTab = tab;
+            //var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage));
+            //return View(viewModel);
+            return null;
         }
 
         [HttpPost]
