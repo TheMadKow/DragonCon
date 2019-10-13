@@ -65,7 +65,7 @@
         <div class="col">
             <div class="form-group">
                 <label>פעילות</label>
-                <select class="form-control chosen-select" asp-for="SystemId"
+                <select class="form-control chosen-select" asp-for="ActivitySelector"
                         asp-items="Actor.DropDowns.Activities()">
                     <option value="" disabled selected>בחירת אפשרות</option>
                 </select>
@@ -77,7 +77,7 @@
         <div class="col">
             <div class="form-group">
                 <label>קבוצת גיל</label>
-                <select class="form-control chosen-select" asp-for="AgeRestrictionId"
+                <select class="form-control chosen-select" asp-for="AgeId"
                         asp-items="Actor.DropDowns.BuildAgeGroups()">
                     <option value="" disabled selected>בחירת אפשרות</option>
                 </select>
@@ -103,7 +103,7 @@
         <div class="col-5">
             <div class="form-group">
                 <label>מועד</label>
-                <select class="form-control chosen-select" asp-for="StartTime"
+                <select id="event-start-time" class="form-control chosen-select" asp-for="StartTimeSelector"
                         asp-items="Actor.DropDowns.BuildDaysTimes()" onchange="ChangedEventDay(this)">
                     <option value="" disabled selected>בחירת מועד</option>
                 </select>
@@ -122,7 +122,7 @@
         <div class="col-4">
             <div class="form-group">
                 <label>אולם ושולחן</label>
-                <select class="form-control chosen-select" asp-for="Table"
+                <select class="form-control chosen-select" asp-for="HallTableSelector"
                         asp-items="Actor.DropDowns.BuildHalls()">
                     <option value="" disabled selected>בחירת אולם שולחן</option>
                 </select>
@@ -202,10 +202,20 @@
 <div hidden>
     @foreach (var day in Actor.DropDowns.BuildDateTimeDuration())
     {
-        <select id="template-duration-@day.Key" class="form-control" 
+        <select id="template-duration-@day.Key" class="form-control"
                 asp-for="Duration"
                 asp-items="day.Value">
             <option value="" disabled selected>בחירת משך אירוע</option>
         </select>
     }
 </div>
+
+
+@if (Model.StartTimeSelector.IsNotEmptyString())
+{
+    @section Scripts  {
+        <script>
+            SetupEventDay();
+        </script>
+    }
+}

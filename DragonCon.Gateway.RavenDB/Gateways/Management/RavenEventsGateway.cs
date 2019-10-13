@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NodaTime;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
+using StackExchange.Profiling.Internal;
 using Activity = DragonCon.Modeling.Models.Common.Activity;
 
 namespace DragonCon.RavenDB.Gateways.Management
@@ -201,21 +202,20 @@ namespace DragonCon.RavenDB.Gateways.Management
                 eventId = eventId.FixRavenId("Events");
                 var existing = Session.Load<Event>(eventId);
                 viewModel.Duration = existing.TimeSlot?.Duration;
-                viewModel.StartTime = $"{existing.ConventionDayId},{existing.TimeSlot?.From.ToString("HH:mm", CultureInfo.CurrentCulture)}";
                 viewModel.Name = existing.Name;
                 viewModel.GameMasterIds = existing.GameMasterIds;
                 viewModel.SpecialRequests = existing.SpecialRequests;
                 viewModel.Status = existing.Status;
                 viewModel.Tags = existing.Tags;
-                viewModel.AgeRestrictionId = existing.AgeId;
+                viewModel.AgeId = existing.AgeId;
                 viewModel.Size = existing.Size;
-                viewModel.ConventionDayId = existing.ConventionDayId;
                 viewModel.Description = existing.Description;
                 viewModel.Id = existing.Id;
                 viewModel.IsSpecialPrice = existing.IsSpecialPrice;
                 viewModel.SpecialPrice = existing.SpecialPrice;
-                viewModel.Table = $"{existing.HallId},{existing.HallTable}";
-                viewModel.SystemId = $"{existing.ActivityId},{existing.SubActivityId}";
+                viewModel.HallTableSelector = $"{existing.HallId},{existing.HallTable}";
+                viewModel.ActivitySelector = $"{existing.ActivityId},{existing.SubActivityId}";
+                viewModel.StartTimeSelector = $"{existing.ConventionDayId},{existing.TimeSlot?.From.ToString("HH:mm", CultureInfo.CurrentCulture)}";
             }
             else
             {
@@ -244,12 +244,12 @@ namespace DragonCon.RavenDB.Gateways.Management
                 return Answer.Error("תקלה בטעינת האירוע");
 
             var userActions = GetUserActions(model, viewmodel);
-            foreach (var userAction in userActions)
+            foreach (var userAction in userActions.list)
             {
                 Session.Store(userAction);
             }
 
-            model.UpdatedOn = NodaTime.SystemClock.Instance.GetCurrentInstant();
+            model.UpdatedOn = SystemClock.Instance.GetCurrentInstant();
             model.IsSpecialPrice = viewmodel.IsSpecialPrice;
             model.SpecialPrice = viewmodel.SpecialPrice;
             model.Name = viewmodel.Name;
@@ -258,36 +258,55 @@ namespace DragonCon.RavenDB.Gateways.Management
             model.Status = viewmodel.Status;
             model.GameMasterIds = viewmodel.GameMasterIds;
             model.Size = viewmodel.Size;
-            model.AgeId = viewmodel.AgeRestrictionId;
+            model.AgeId = viewmodel.AgeId;
             model.Tags = viewmodel.Tags;
             model.SpecialRequests = viewmodel.SpecialRequests;
+            model.ActivityId = viewmodel.ActivityId;
+            model.SubActivityId = viewmodel.SubActivityId;
+            model.HallId = viewmodel.HallId;
+            model.HallTable = int.Parse(viewmodel.HallTable);
+            
+            if (viewmodel.StartTimeSelector.IsNotEmptyString() && viewmodel.Duration.HasValue)
+            {
+                var timeSplit = viewmodel.StartTime.Split(':');
+                var hours = int.Parse(timeSplit[0]);
+                var minutes = int.Parse(timeSplit[1]);
+                var num = (int) viewmodel.Duration.Value / 1;
+                var denum = (int) viewmodel.Duration.Value % 1;
+                
+                var startTime = new LocalTime(hours, minutes);
+                var endTime = startTime.PlusHours(num).PlusMinutes(denum);
+                
+                var tempTimeSlot = new TimeSlot
+                {
+                    From = startTime,
+                    To = endTime,
+                    Duration = viewmodel.Duration.Value
+                };
 
-            var activity = viewmodel.SystemId.SplitTuples();
-            model.ActivityId = activity.Major;
-            model.SubActivityId = activity.Minor;
-
-            var hall = viewmodel.Table.SplitTuples();
-            model.HallId = hall.Major;
-            model.HallTable = int.Parse(hall.Minor);
-
-
-            // TODO
-            //var startTime = new LocalTime(viewmodel.StartTime.Value.Hour,
-            //    viewmodel.StartTime.Value.Minute,
-            //    viewmodel.StartTime.Value.Second);
-            ////var endTime = startTime.PlusHours(viewmodel.Duration.Value);
-            //model.TimeSlot = new TimeSlot
-            //{
-            //    From = startTime,
-            //  //  To = endTime
-            //};
+                if (model.TimeSlot.AsJson() != tempTimeSlot.AsJson())
+                {
+                    var action = new UserAction()
+                    {
+                        TimeStamp = userActions.timestamp,
+                        Field = "TimeSlot",
+                        DocumentId = model.Id,
+                        NewValue = tempTimeSlot.AsJson(),
+                        OldValue = model.TimeSlot.AsJson(),
+                        UserId = Actor.Participant.Id
+                    };
+                    model.TimeSlot = tempTimeSlot;
+                    Session.Store(action);
+                }
+            }
 
             Session.SaveChanges();
             return Answer.Success;
         }
 
-        private List<UserAction> GetUserActions(Event model, EventCreateUpdateViewModel viewmodel)
+        private (Instant timestamp, List<UserAction> list) GetUserActions(Event model, EventCreateUpdateViewModel viewmodel)
         {
+            var timestamp = SystemClock.Instance.GetCurrentInstant();
             var result = new List<UserAction>();
             foreach (PropertyInfo property in model.GetType().GetProperties())
             {
@@ -296,24 +315,29 @@ namespace DragonCon.RavenDB.Gateways.Management
                 if (compareProperty != null)
                 {
                     var value2 = compareProperty.GetValue(viewmodel, null);
+
+                    var value1AsJson = value1.AsJson();
+                    var value2AsJson = value2.AsJson();
+
                     if ((value1 is null && value2 is {}) ||
                         (value1 is {} && value2 is null) ||
-                        (value1 is {} && value2 is {} && value1.Equals(value2) == false))
+                        (value1 is {} && value2 is {} && value1AsJson != value2AsJson))
                     {
-                        result.Add(new UserAction()
-                        {
 
-                            UserId = "",
+                        result.Add(new UserAction
+                        {
+                            DocumentId = model.Id,
+                            UserId = Actor.Participant.Id,
                             Field = property.Name,
-                            OldValue = value1?.ToString() ?? string.Empty,
-                            NewValue = value2?.ToString() ?? string.Empty,
-                            TimeStamp = NodaTime.SystemClock.Instance.GetCurrentInstant()
+                            OldValue = value1AsJson ?? string.Empty,
+                            NewValue = value2AsJson ?? string.Empty,
+                            TimeStamp = timestamp
                         });
                     }
                 }
             }
 
-            return result;
+            return (timestamp, result);
         }
 
 
@@ -335,28 +359,28 @@ namespace DragonCon.RavenDB.Gateways.Management
                 Status = viewmodel.Status,
                 GameMasterIds = viewmodel.GameMasterIds,
                 Size = viewmodel.Size,
-                AgeId = viewmodel.AgeRestrictionId,
+                AgeId = viewmodel.AgeId,
                 Tags = viewmodel.Tags,
                 SpecialRequests = viewmodel.SpecialRequests
             };
 
-            if (viewmodel.SystemId.IsNotEmptyString())
+            if (viewmodel.ActivitySelector.IsNotEmptyString())
             {
-                var activity = viewmodel.SystemId.Split(new[] {','}, StringSplitOptions.None);
+                var activity = viewmodel.ActivitySelector.Split(new[] {','}, StringSplitOptions.None);
                 model.ActivityId = activity[0];
                 model.SubActivityId = activity[1];
             }
 
-            if (viewmodel.Table.IsNotEmptyString())
+            if (viewmodel.HallTableSelector.IsNotEmptyString())
             {
-                var hall = viewmodel.Table.Split(new[] {','}, StringSplitOptions.None);
+                var hall = viewmodel.HallTableSelector.Split(new[] {','}, StringSplitOptions.None);
                 model.HallId = hall[0];
                 model.HallTable = int.Parse(hall[1]);
             }
 
-            if (viewmodel.StartTime.IsNotEmptyString() && viewmodel.Duration.HasValue)
+            if (viewmodel.StartTimeSelector.IsNotEmptyString() && viewmodel.Duration.HasValue)
             {
-                var split = viewmodel.StartTime.Split(',');
+                var split = viewmodel.StartTimeSelector.Split(',');
                 var day = split[0];
                 var time = split[1];
                 var timeSplit = time.Split(':');
@@ -397,18 +421,18 @@ namespace DragonCon.RavenDB.Gateways.Management
         private static Answer ValidateEventFields(EventCreateUpdateViewModel viewmodel)
         {
             if (viewmodel.IsSpecialPrice && viewmodel.SpecialPrice == null)
-                return Answer.Error("אי אפשר הגדיר מחיר מיוחד ריק");
+                return Answer.Error("אי אפשר להגדיר מחיר מיוחד ריק");
             if (viewmodel.Name.IsEmptyString())
                 return Answer.Error("אי אפשר להגדיר אירוע ללא שם");
             if (viewmodel.Status == EventStatus.Approved)
             {
-                if (viewmodel.SystemId.IsEmptyString())
+                if (viewmodel.ActivitySelector.IsEmptyString())
                     return Answer.Error("אי אפשר לאשר אירוע ללא סוג פעילות");
-                if (viewmodel.AgeRestrictionId.IsEmptyString())
+                if (viewmodel.AgeId.IsEmptyString())
                     return Answer.Error("אי אפשר לאשר אירוע ללא קבוצת גיל");
                 if (viewmodel.ConventionDayId.IsEmptyString())
                     return Answer.Error("אי אפשר לאשר אירוע ללא יום");
-                if (viewmodel.StartTime.IsNotEmptyString() || viewmodel.Duration.HasValue == false ||
+                if (viewmodel.StartTimeSelector.IsNotEmptyString() || viewmodel.Duration.HasValue == false ||
                     viewmodel.Duration <= 0)
                     return Answer.Error("אי אפשר לאשר אירוע ללא מסגרת זמן");
                 if (viewmodel.GameMasterIds.Any() == false)
@@ -472,7 +496,8 @@ namespace DragonCon.RavenDB.Gateways.Management
                 }
             }
 
-            var results = tempEvents.OrderBy(x => x.Name)
+            var results =
+                tempEvents.OrderBy(x => x.Name)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)
                 .ToList();
@@ -496,6 +521,19 @@ namespace DragonCon.RavenDB.Gateways.Management
                 pagination.ResultsPerPage);
 
             return result;
+        }
+
+        public EventHistoryViewModel CreateEventHistory(string eventId)
+        {
+            var actions = Session.Query<UserAction>()
+                .Where(x => x.DocumentId == eventId)
+                .OrderByDescending(x => x.TimeStamp)
+                .ToList();
+ 
+            return new EventHistoryViewModel()
+            {
+                Actions = actions
+            };
         }
     }
 }

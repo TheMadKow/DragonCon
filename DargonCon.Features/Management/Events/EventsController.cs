@@ -214,6 +214,14 @@ namespace DragonCon.Features.Management.Dashboard
                 return View("CreateUpdateEvent", viewmodel);
             }
         }
+
+        [HttpGet]
+        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        public IActionResult ViewEventHistory(string eventId)
+        {
+            var vm = Gateway.CreateEventHistory(eventId);
+            return View(vm);
+        }
     }
 
     public interface IManagementEventsGateway : IGateway
@@ -234,5 +242,7 @@ namespace DragonCon.Features.Management.Dashboard
         EventCreateUpdateViewModel GetEventViewModel(string eventId);
         Answer UpdateEvent(EventCreateUpdateViewModel viewmodel);
         Answer CreateEvent(EventCreateUpdateViewModel viewmodel);
+
+        EventHistoryViewModel CreateEventHistory(string eventId);
     }
 }

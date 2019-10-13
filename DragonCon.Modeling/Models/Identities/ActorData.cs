@@ -221,6 +221,22 @@ namespace DragonCon.Modeling.Models.Identities
             public SystemConfiguration Configurations { get; set; }
             public bool HasActiveConvention => ConventionId.IsNotEmptyString();
 
+
+            public Dictionary<string,string> ObjectIdAndValue = new Dictionary<string, string>();
+
+            public string GetValue(string id)
+            {
+                if (id.IsEmptyString())
+                    return id;
+
+                id = id.Replace("\"", "");
+
+                if (ObjectIdAndValue.ContainsKey(id))
+                    return ObjectIdAndValue[id];
+
+                return id;
+            }
+
             public Day GetDayById(string dayId)
             {
                 return Days.SingleOrDefault(x => x.Id == dayId);
