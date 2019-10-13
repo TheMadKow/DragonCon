@@ -13,6 +13,7 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Identities;
+using DragonCon.RavenDB.Index;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NodaTime;
 using Raven.Client.Documents;
@@ -440,6 +441,47 @@ namespace DragonCon.RavenDB.Gateways.Management
             }
 
             return Answer.Success;
+        }
+
+        public EventsManagementViewModel BuildIndex(IDisplayPagination pagination, string searchWords)
+        {
+            if (searchWords.IsEmptyString())
+                return new EventsManagementViewModel();
+
+            var result = new EventsManagementViewModel();
+            var results = Session.Query<EventsIndex_ByTitleDescription.Result, EventsIndex_ByTitleDescription>()
+                .Statistics(out var stats)
+                .Search(x => x.SearchText, searchWords)
+                .Include(x => x.ConventionDayId)
+                .Include(x => x.GameMasterIds)
+                .Include(x => x.HallId)
+                .Include(x => x.AgeId)
+                .Where(x => x.ConventionId == Actor.SystemState.ConventionId)
+                .OrderBy(x => x.Name)
+                .Skip(pagination.SkipCount)
+                .Take(pagination.ResultsPerPage)
+                .As<Event>()
+                .ToList();
+
+            result.Events = results.Select(x => new EventWrapper(x)
+            {
+                Day = Session.Load<Day>(x.ConventionDayId),
+                Activity = Session.Load<Activity>(x.ActivityId),
+                SubActivity = x.SubActivityId.IsNotEmptyString()
+                    ? Session.Load<Activity>(x.SubActivityId)
+                    : Activity.General,
+                GameMasters =
+                    Session.Load<FullParticipant>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
+                Hall = Session.Load<Hall>(x.HallId),
+                AgeGroup = Session.Load<AgeGroup>(x.AgeId)
+            }).ToList();
+
+            result.Pagination = DisplayPagination.BuildForView(
+                stats.TotalResults,
+                pagination.SkipCount,
+                pagination.ResultsPerPage);
+
+            return result;
         }
 
         public EventsManagementViewModel BuildIndex(IDisplayPagination pagination,

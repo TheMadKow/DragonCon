@@ -107,7 +107,7 @@ namespace DragonCon.App
                 holder.Store.Maintenance.Server.Send(new CreateDatabaseOperation(databaseRecord));
             };
 
-            //IndexCreation.CreateIndexes(typeof(MastersByConventionIndex).Assembly, holder.Store);
+            IndexCreation.CreateIndexes(typeof(EventsIndex_ByTitleDescription).Assembly, holder.Store);
 
             services.AddSingleton<StoreHolder>(holder);
             services // Create a RavenDB IAsyncDocumentSession for each request.
@@ -195,6 +195,7 @@ namespace DragonCon.App
             });
 
             // TODO verify database
+
         }
     }
 }
