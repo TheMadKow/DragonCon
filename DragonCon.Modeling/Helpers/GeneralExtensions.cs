@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Newtonsoft.Json;
 using NodaTime;
+using NodaTime.Serialization.JsonNet;
 
 namespace DragonCon.Modeling.Helpers
 {
@@ -89,5 +92,36 @@ namespace DragonCon.Modeling.Helpers
                 }
             }
         }
+
+        private static JsonSerializerSettings BuildDefaultJsonSettings()
+        {
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Culture = CultureInfo.CurrentCulture,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                DateFormatHandling = DateFormatHandling.IsoDateFormat,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+            };
+            settings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+            return settings;
+        }
+
+        public static string? AsJson(this object input, bool indented = false)
+        {
+            if (input is null)
+                return null;
+
+            var defaults = BuildDefaultJsonSettings();
+            defaults.Formatting = (indented) ? Formatting.Indented : Formatting.None;
+            return JsonConvert.SerializeObject(input, defaults);
+        }
+
+        public static T ObjectFromJson<T>(this string input)
+        {
+            return JsonConvert.DeserializeObject<T>(input, BuildDefaultJsonSettings());
+        }
+
+
     }
 }

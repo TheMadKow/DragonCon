@@ -40,6 +40,15 @@ namespace DragonCon.Features.Management.Dashboard
             return View(viewModel);
 
         }
+
+        [HttpPost]
+        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        public IActionResult ManageSearch(string searchWords, int page = 0, int perPage = ResultsPerPage)
+        {
+            var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage), searchWords);
+            return View("Manage", viewModel);
+
+        }
         #endregion
 
         #region Activity
@@ -214,12 +223,20 @@ namespace DragonCon.Features.Management.Dashboard
                 return View("CreateUpdateEvent", viewmodel);
             }
         }
+
+        [HttpGet]
+        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        public IActionResult ViewEventHistory(string eventId)
+        {
+            var vm = Gateway.CreateEventHistory(eventId);
+            return View(vm);
+        }
     }
 
     public interface IManagementEventsGateway : IGateway
     {
         EventsManagementViewModel BuildIndex(IDisplayPagination pagination, EventsManagementViewModel.Filters filters = null);
-
+        EventsManagementViewModel BuildIndex(IDisplayPagination displayPagination, string searchWords);
 
         Answer AddNewActivity(string name, List<string> subActivities);
         Answer UpdateExistingActivity(string viewmodelId, string viewmodelName, List<SubActivityViewModel> filteredList);
@@ -234,5 +251,7 @@ namespace DragonCon.Features.Management.Dashboard
         EventCreateUpdateViewModel GetEventViewModel(string eventId);
         Answer UpdateEvent(EventCreateUpdateViewModel viewmodel);
         Answer CreateEvent(EventCreateUpdateViewModel viewmodel);
+
+        EventHistoryViewModel CreateEventHistory(string eventId);
     }
 }

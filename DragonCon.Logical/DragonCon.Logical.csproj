@@ -9,7 +9,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MiniProfiler.AspNetCore" Version="4.0.180" />

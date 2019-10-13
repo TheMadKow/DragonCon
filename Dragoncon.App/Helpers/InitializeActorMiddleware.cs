@@ -114,6 +114,26 @@ namespace DragonCon.App.Helpers
                     Days = days.Where(x => x.Value != null).Select(x => x.Value).ToList(),
                     Tickets = tickets.Where(x => x.Value != null).Select(x => x.Value).ToList()
                 };
+                
+                foreach (var activity in activities)
+                {
+                    result.ObjectIdAndValue[activity.Id] = activity.Name;
+                }
+                foreach (var day in days)
+                {
+                    result.ObjectIdAndValue[day.Key] = day.Value.GetDescription();
+                }
+
+                foreach (var age in ageGroups)
+                {
+                    result.ObjectIdAndValue[age.Id] = age.GetDescription();
+                }
+               
+                foreach (var hall in halls)
+                {
+                    result.ObjectIdAndValue[hall.Key] = hall.Value.Name;
+                }
+
                 stopwatch.Stop();
                 result.BuildMilliseconds = stopwatch.ElapsedMilliseconds;
                 return result;

@@ -107,7 +107,7 @@ namespace DragonCon.App
                 holder.Store.Maintenance.Server.Send(new CreateDatabaseOperation(databaseRecord));
             };
 
-            //IndexCreation.CreateIndexes(typeof(MastersByConventionIndex).Assembly, holder.Store);
+            IndexCreation.CreateIndexes(typeof(EventsIndex_ByTitleDescription).Assembly, holder.Store);
 
             services.AddSingleton<StoreHolder>(holder);
             services // Create a RavenDB IAsyncDocumentSession for each request.
@@ -152,6 +152,7 @@ namespace DragonCon.App
             services.AddScoped<IManagementEventsGateway, RavenManagementEventsGateway>();
             services.AddScoped<IConventionBuilderGateway, RavenConventionBuilderGateway>();
             services.AddScoped<ConventionBuilder, ConventionBuilder>();
+        
             services.AddAntiforgery();
         }
 
@@ -194,6 +195,7 @@ namespace DragonCon.App
             });
 
             // TODO verify database
+
         }
     }
 }

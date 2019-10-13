@@ -16,18 +16,19 @@
             <a class="nav-item nav-link" id="nav-item-settings" data-toggle="tab" href="#tab-pan-settings" role="tab" aria-controls="nav-profile" aria-selected="false">הגדרות</a>
         </div>
     </nav>
-<div class="tab-content" id="nav-tabContent">
-    <div class="tab-pane fade show active" id="tab-pan-events" role="tabpanel" aria-labelledby="nav-contact-tab">
-        @await Html.PartialAsync("_PartialDisplay")
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="tab-pan-events" role="tabpanel" aria-labelledby="nav-contact-tab">
+            @await Html.PartialAsync("_PartialDisplay")
 
-    </div>
+        </div>
 
-    <div class="tab-pane fade" id="tab-pan-settings" role="tabpanel" aria-labelledby="tab-pane-settings">
-        @await Html.PartialAsync("_PartialSettings")
+        <div class="tab-pane fade" id="tab-pan-settings" role="tabpanel" aria-labelledby="tab-pane-settings">
+            @await Html.PartialAsync("_PartialSettings")
+        </div>
     </div>
 </div>
-</div>
 
+<div class="modal fade" id="event-history-ajax" tabindex="-1" role="dialog"></div>
 
 @section Scripts
 {
@@ -49,7 +50,7 @@
                         type: "POST",
                         url: "/Management/Events/DeleteEventActivity?activityConventionId=" + actId,
                         data: CreateDefaultPostData(),
-                        success: function() {
+                        success: function () {
                             location.reload();
                         }
                     });
@@ -72,7 +73,7 @@
                         type: "POST",
                         url: "/Management/Events/DeleteAgeRestriction?restrictionConventionId=" + ageId,
                         data: CreateDefaultPostData(),
-                        success: function() {
+                        success: function () {
                             location.reload();
                         }
                     });
