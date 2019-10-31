@@ -246,6 +246,54 @@
                             <i class="fa fa-fw fa-user-edit"></i> @gm?.FirstName
                         </a>
                     }
+                    else
+                    {
+                        <span>
+                            <br/>
+                            שולחן @evnt.Model?.HallTable<br/>
+                        </span>
+                    }
+                </td>
+                <td>
+                    <strong class="@statusColor">@evnt.Model.Status.ToTextual()</strong>
+                </td>
+                <td>
+                    <div class="dropdown pull-left">
+                        <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm">
+                            <i class="fa fa-fw fa-ellipsis-h"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                               asp-action="QuickUpdateEvent">
+                                <i class="fa fa-fw fa-pencil-alt"></i> עדכון מהיר
+                            </a>
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                               asp-action="CreateUpdateEvent"
+                               asp-route-eventId="@evnt.Model.Id.GetNumberFromId()">
+                                <i class="fa fa-fw fa-edit"></i> עדכון מלא
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" onclick="ViewEventHistory('@evnt.Model.Id')">
+                                <i class="fa fa-fw fa-history"></i> היסטוריה
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                               asp-action="CloneEvent">
+                                <i class="fa fa-fw fa-clone"></i> שכפול אירוע
+                            </a>
+                            @if (evnt.GameMasters.Any(x => x != null))
+                            {
+                                <div class="dropdown-divider"></div>
+                                <div class="text-center">
+                                    <a>עריכת מנחים</a>
+                                </div>
+                            }
+                            @foreach (var gm in evnt.GameMasters)
+                            {
+                                if (gm == null)
+                                {
+                                    continue;
+                                }
 
                 </div>
             </div>
@@ -276,6 +324,29 @@
                     </td>
                     <td class="tw-10">
                         @if (evnt.Model.Description.IsEmptyString())
+                        </div>
+                </td>
+            </tr>
+            <tr id="extra-data-@evnt.Model.Id.GetNumberFromId()" 
+                class="collapse" data-parent="#accordion">
+                <td colspan="100%">
+                    <table class="table table-no-border table-no-background">
+                        <tr>
+                            <td class="tw-2">
+                                <strong>תיאור </strong>
+                            </td>
+                            <td class="tw-10">
+                                @if (evnt.Model.Description.IsEmptyString())
+                                {
+                                    <span class="text-danger">חסר תיאור</span>
+                                }
+                                else
+                                {
+                                    @evnt.Model.Description
+                                }
+                            </td>
+                        </tr>
+                        @if (evnt.Model.SpecialRequests.IsNotEmptyString())
                         {
                             <span class="text-danger">חסר תיאור</span>
                         }

@@ -164,6 +164,8 @@ namespace DragonCon.App
             services.AddScoped<IManagementParticipantsGateway, RavenManagementParticipantsGateway>();
             services.AddScoped<IConventionBuilderGateway, RavenConventionBuilderGateway>();
             services.AddScoped<ConventionBuilder, ConventionBuilder>();
+        
+            services.AddAntiforgery();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
