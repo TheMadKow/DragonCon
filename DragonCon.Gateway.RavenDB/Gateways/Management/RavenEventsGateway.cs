@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using DragonCon.Features.Management.Dashboard;
 using DragonCon.Features.Management.Events;
@@ -304,6 +305,81 @@ namespace DragonCon.RavenDB.Gateways.Management
             Session.SaveChanges();
             return Answer.Success;
         }
+
+        public Answer QuickUpdate(string id, string status, string hall)
+        {
+            var model = Session.Load<Event>(id);
+
+            if (model == null)
+                return Answer.Error("תקלה בטעינת האירוע");
+
+            var userActions = new List<UserAction>();
+            model.UpdatedOn = SystemClock.Instance.GetCurrentInstant();
+
+            if (Enum.TryParse(status, true, out EventStatus statusEnum) == false)
+            {
+                return Answer.Error("תקלה בעדכון סטטוס");
+            }
+
+            if (model.Status != statusEnum)
+            {
+                userActions.Add(new UserAction
+                {
+                    DocumentId = id,
+                    UserId = Actor.Participant.Id,
+                    TimeStamp = model.UpdatedOn,
+                    Field = "Status [quick]",
+                    OldValue = model.Status.ToString(),
+                    NewValue = statusEnum.ToString()
+                });
+            }
+            model.Status = statusEnum;
+
+            if (hall.IsNotEmptyString())
+            {
+
+                var hallTuple = hall.SplitTuples();
+
+                if (model.HallId != hallTuple.Major)
+                {
+                    userActions.Add(new UserAction
+                    {
+                        DocumentId = id,
+                        UserId = Actor.Participant.Id,
+                        TimeStamp = model.UpdatedOn,
+                        Field = "Hall [quick]",
+                        OldValue = model.HallId,
+                        NewValue = hallTuple.Major
+                    });
+                }
+
+                if (model.HallTable.ToString() != hallTuple.Minor)
+                {
+                    userActions.Add(new UserAction
+                    {
+                        DocumentId = id,
+                        UserId = Actor.Participant.Id,
+                        TimeStamp = model.UpdatedOn,
+                        Field = "Table [quick]",
+                        OldValue = model.HallTable.ToString(),
+                        NewValue = hallTuple.Minor
+                    });
+                }
+
+                model.HallId = hallTuple.Major;
+                model.HallTable = int.Parse(hallTuple.Minor);
+            }
+
+            foreach (var userAction in userActions)
+            {
+                Session.Store(userAction);
+            }
+
+            Session.SaveChanges();
+            return Answer.Success;
+        }
+
+
 
         private (Instant timestamp, List<UserAction> list) GetUserActions(Event model, EventCreateUpdateViewModel viewmodel)
         {

@@ -53,3 +53,7 @@
 .text-heavy-bold {
     font-weight: 700;
 }
+
+.clickable {
+    cursor: pointer;
+}

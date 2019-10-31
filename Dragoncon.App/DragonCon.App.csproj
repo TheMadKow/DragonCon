@@ -7,16 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Controllers\**" />
     <Compile Remove="Certificates\**" />
     <Compile Remove="wwwroot\lib\**" />
-    <Content Remove="Areas\Controllers\**" />
     <Content Remove="Certificates\**" />
     <Content Remove="wwwroot\lib\**" />
-    <EmbeddedResource Remove="Areas\Controllers\**" />
     <EmbeddedResource Remove="Certificates\**" />
     <EmbeddedResource Remove="wwwroot\lib\**" />
-    <None Remove="Areas\Controllers\**" />
     <None Remove="Certificates\**" />
     <None Remove="wwwroot\lib\**" />
   </ItemGroup>
@@ -63,6 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Controllers\" />
     <Folder Include="Areas\Users\Views\Events\" />
   </ItemGroup>
 

@@ -224,6 +224,21 @@ namespace DragonCon.Features.Management.Dashboard
             }
         }
 
+        [HttpPost]
+        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        public IActionResult QuickUpdate(string id, string status, string hall)
+        {
+            var answer = Gateway.QuickUpdate(id, status, hall);
+
+            if (answer.AnswerType != AnswerType.Success)
+            {
+                // TODO Popup on failure.
+            }
+
+            return RedirectToAction("Manage");
+        }
+
+
         [HttpGet]
         [Authorize(policy: Policies.Types.AtLeastEventsManager)]
         public IActionResult ViewEventHistory(string eventId)
@@ -231,6 +246,7 @@ namespace DragonCon.Features.Management.Dashboard
             var vm = Gateway.CreateEventHistory(eventId);
             return View(vm);
         }
+
     }
 
     public interface IManagementEventsGateway : IGateway
@@ -251,6 +267,7 @@ namespace DragonCon.Features.Management.Dashboard
         EventCreateUpdateViewModel GetEventViewModel(string eventId);
         Answer UpdateEvent(EventCreateUpdateViewModel viewmodel);
         Answer CreateEvent(EventCreateUpdateViewModel viewmodel);
+        Answer QuickUpdate(string id, string status, string hall);
 
         EventHistoryViewModel CreateEventHistory(string eventId);
     }
