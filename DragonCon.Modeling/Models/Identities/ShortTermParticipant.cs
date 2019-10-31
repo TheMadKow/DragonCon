@@ -5,7 +5,7 @@ using NodaTime;
 
 namespace DragonCon.Modeling.Models.Identities
 {
-    public class LimitedParticipant : IParticipant
+    public class ShortTermParticipant : IParticipant
     {
         public string Id { get; set;}
         public LocalDate DayOfBirth { get; set; }
@@ -29,10 +29,8 @@ namespace DragonCon.Modeling.Models.Identities
         }
 
         public string FullName { get; set; }
-
-        public string LimitedToConventionId { get; set; }
+        public string ConventionIdTerm { get; set; }
         public string CreatedById { get; set; }
-
         public PaymentInvoice PaymentInvoice { get; set; }
     }
 }

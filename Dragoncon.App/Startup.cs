@@ -112,7 +112,7 @@ namespace DragonCon.App
             services.AddSingleton<StoreHolder>(holder);
             services // Create a RavenDB IAsyncDocumentSession for each request.
                 .AddRavenDbAsyncSession(holder.Store)
-                .AddRavenDbIdentity<FullParticipant>();
+                .AddRavenDbIdentity<LongTermParticipant>();
 
             services.Configure<IdentityOptions>(options =>
             {

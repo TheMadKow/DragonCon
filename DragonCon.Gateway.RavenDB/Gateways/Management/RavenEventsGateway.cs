@@ -547,7 +547,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                     ? Session.Load<Activity>(x.SubActivityId)
                     : Activity.General,
                 GameMasters =
-                    Session.Load<FullParticipant>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
+                    Session.Load<LongTermParticipant>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
                 Hall = Session.Load<Hall>(x.HallId),
                 AgeGroup = Session.Load<AgeGroup>(x.AgeId)
             }).ToList();
@@ -628,7 +628,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                     ? Session.Load<Activity>(x.SubActivityId) 
                     : Activity.General,
                 GameMasters =
-                    Session.Load<FullParticipant>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
+                    Session.Load<LongTermParticipant>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
                 Hall = Session.Load<Hall>(x.HallId),
                 AgeGroup = Session.Load<AgeGroup>(x.AgeId)
             }).ToList();

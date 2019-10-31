@@ -7,16 +7,16 @@ using DragonCon.Modeling.Models.Payment;
 
 namespace DragonCon.Modeling.Models.Identities
 {
-    public class FullParticipantWrapper : Wrapper<FullParticipant>
+    public class FullParticipantWrapper : Wrapper<LongTermParticipant>
     {
-        public List<LimitedParticipant> ConventionLimitedTickets { get; set; }
+        public List<ShortTermParticipant> ConventionLimitedTickets { get; set; }
 
         public List<ConventionRoles> ConventionsRoles { get; set; }
         public IPaymentInvoice ConventionInvoice { get; set; }
     }
 
-    public class LimitedParticipantWrapper : Wrapper<LimitedParticipant>
+    public class LimitedParticipantWrapper : Wrapper<ShortTermParticipant>
     {
-        private FullParticipant CreatedBy { get; set; }
+        private LongTermParticipant CreatedBy { get; set; }
     }
 }
