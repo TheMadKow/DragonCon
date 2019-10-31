@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DragonCon.Features.Management.Convention;
 using DragonCon.Features.Shared;
@@ -14,9 +15,8 @@ namespace DragonCon.RavenDB.Gateways.Management
 {
     public class RavenManagementConventionGateway : RavenGateway, IManagementConventionGateway
     {
-        public RavenManagementConventionGateway(StoreHolder holder, IActor actor) : base(holder, actor)
-        {
-        }
+        public RavenManagementConventionGateway(IServiceProvider provider) 
+            : base(provider) { }
 
 
         public ConventionManagementViewModel BuildConventionList(IDisplayPagination pagination)

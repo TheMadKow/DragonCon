@@ -10,9 +10,9 @@ using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace DragonCon.Features.Management.Users
+namespace DragonCon.Features.Management.Participants
 {
-    public class UsersManagementViewModel : IDisplayPaginationViewModel
+    public class ParticipantsManagementViewModel : IDisplayPaginationViewModel
     {
         public class Filters {
             public string Role { get; set; }
@@ -20,12 +20,7 @@ namespace DragonCon.Features.Management.Users
         }
 
         public IDisplayPagination Pagination { get; set; }
-        
-        public Filters ActiveFilters { get; set; }
-        public string ActiveConvention { get;set; } 
-        
-
-        public List<FullParticipantWrapper> FullParticipants { get; set; } = new List<FullParticipantWrapper>();
-        public List<LimitedParticipantWrapper> LimitedParticipants { get; set; } = new List<LimitedParticipantWrapper>();
+        public Filters filters { get; set; }
+        public List<ParticipantWrapper> Participants { get; set; } = new List<ParticipantWrapper>();
     }
 }

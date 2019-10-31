@@ -12,7 +12,7 @@ namespace DragonCon.RavenDB.Gateways.Users
 {
     public class RavenEventsGateway : RavenGateway, IEventsGateway
     {
-        public RavenEventsGateway(StoreHolder holder, IActor actor) : base(holder, actor)
+        public RavenEventsGateway(IServiceProvider provider) : base(provider)
         {
         }
 

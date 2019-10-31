@@ -1,4 +1,10 @@
-﻿.nice-pickers {
+﻿.form-control-inline {
+    display: inline-block;
+    margin-left: 15px;
+    margin-right: 5px;
+}
+
+.nice-pickers {
     color: #060064;
     background: #f7fffe;
     background-color: #f7fffe !important;

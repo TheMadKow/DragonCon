@@ -15,8 +15,6 @@ namespace DragonCon.Modeling.Models.Identities
  
         public Dictionary<string, PaymentInvoice> ConventionAndPayment { get;set; }
 
-        public Dictionary<string, List<string>> ConventionAndLimitedTickets { get; set; }
-        
         public LocalDate DayOfBirth { get; set; }
 
         public string FirstName

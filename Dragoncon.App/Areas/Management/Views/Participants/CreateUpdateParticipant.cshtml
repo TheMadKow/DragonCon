@@ -1,0 +1,66 @@
+﻿@using System.Globalization
+@model DragonCon.Features.Management.Participants.ParticipantCreateUpdateViewModel
+@{
+    if (Model.Id != null)
+    {
+        ViewBag.Title = "עריכת משתתף";
+    }
+    else
+    {
+        ViewBag.Title = "הוספת משתתף";
+    }
+}
+
+
+@section Subheader {
+    <a class="text-info" asp-area="Management" asp-controller="Participants" asp-action="Manage"><i class="fa fa-fw fa-chevron-circle-right"></i> חזרה לניהול משתתפים</a>
+}
+
+<form asp-area="Management" asp-controller="Participants" asp-action="CreateUpdateParticipant" method="post" class="right-to-left" style="padding: 10px;">
+    <input asp-for="Id" hidden />
+    <div class="col">
+        <div class="form-group">
+            <label>שם מלא</label>
+            <input asp-for="FullName" class="form-control" placeholder="שם מלא ">
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label>טלפון</label>
+            <input asp-for="PhoneNumber" type="tel" class="form-control" placeholder="טלפון ">
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label>תאריך לידה </label>
+            <br />
+            <input class="combo-date" asp-for="DayOfBirth" value=""
+                   data-custom-class="form-control form-control-inline"
+                   data-first-item="empty"
+                   data-format="YYYY-MM-DD"
+                   data-template="יום DD חודש MM שנה YYYY">
+        </div>
+    </div>
+    <div class="card">
+        <div class="col">
+            <br />
+            <div class="input-group">
+                <input asp-for="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="checkbox" asp-for="IsAllowingPromotions" aria-label="Checkbox for following text input">
+                        <span class="toggle-text">צירוף לרשימת דיוור</span>
+                    </div>
+                </div>
+            </div>
+            <lable class="text-danger">* בהזנת דואר אלקטרוני יווצר משתמש קבוע ותשלח סיסמת התחברות ראשונית</lable>
+            <br />
+            <br />
+        </div>
+    </div>
+    <br />
+    <div class="btn-save-container">
+        <button type="submit" class="btn btn-primary btn-save">שמירת משתתף </button>
+    </div>
+
+</form>

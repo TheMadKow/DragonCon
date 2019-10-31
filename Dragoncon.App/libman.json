@@ -6,6 +6,10 @@
       "provider": "filesystem",
       "library": "Resources/Images/",
       "destination": "wwwroot/images/"
+    },
+    {
+      "library": "Resources/lib/combodate-1.0.7/",
+      "destination": "wwwroot/lib/combodate-1.0/"
     }
   ]
 }

@@ -26,8 +26,8 @@ namespace DragonCon.RavenDB.Gateways.Management
 {
     public class RavenManagementEventsGateway : RavenGateway, IManagementEventsGateway
     {
-        public RavenManagementEventsGateway(StoreHolder holder, IActor actor) :
-            base(holder, actor)
+        public RavenManagementEventsGateway(IServiceProvider provider) :
+            base(provider)
         {
         }
 

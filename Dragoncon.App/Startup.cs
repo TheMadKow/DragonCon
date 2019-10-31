@@ -3,7 +3,10 @@ using System.IO;
 using DragonCon.App.Helpers;
 using DragonCon.Features.Management.Convention;
 using DragonCon.Features.Management.Dashboard;
+using DragonCon.Features.Management.Participants;
 using DragonCon.Features.Shared;
+using DragonCon.Logical;
+using DragonCon.Logical.Communication;
 using DragonCon.Logical.Convention;
 using DragonCon.Logical.Factories;
 using DragonCon.Logical.Gateways;
@@ -13,6 +16,7 @@ using DragonCon.Modeling.TimeSlots;
 using DragonCon.RavenDB;
 using DragonCon.RavenDB.Gateways.Logic;
 using DragonCon.RavenDB.Gateways.Management;
+using DragonCon.RavenDB.Identities;
 using DragonCon.RavenDB.Index;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -144,16 +148,22 @@ namespace DragonCon.App
             });
 
             services.AddScopedPolicyHandlers();
+            StartupDependencyInjection(services);
+            services.AddAntiforgery();
+        }
 
+        private static void StartupDependencyInjection(IServiceCollection services)
+        {
             services.AddScoped<IActor, Actor>();
             services.AddSingleton<IStrategyFactory, StrategyFactory>();
             services.AddScoped<NullGateway, NullGateway>();
+            services.AddScoped<IIdentityFacade, RavenIdentityFacade>();
+            services.AddScoped<ICommunicationHub, CommunicationHub>();
             services.AddScoped<IManagementConventionGateway, RavenManagementConventionGateway>();
             services.AddScoped<IManagementEventsGateway, RavenManagementEventsGateway>();
+            services.AddScoped<IManagementParticipantsGateway, RavenManagementParticipantsGateway>();
             services.AddScoped<IConventionBuilderGateway, RavenConventionBuilderGateway>();
             services.AddScoped<ConventionBuilder, ConventionBuilder>();
-        
-            services.AddAntiforgery();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

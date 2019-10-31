@@ -39,7 +39,7 @@
             <a asp-area="Management" asp-controller="Events" asp-action="Information">מידע - אירועים</a>
         </li>
         <li>
-            <a asp-area="Management" asp-controller="Participants" asp-action="Information">מידע - משתמשים</a>
+            <a asp-area="Management" asp-controller="Participants" asp-action="Information">מידע - משתתפים</a>
         </li>
         @if (Actor.HasSystemRole(SystemRoles.ContentManager) ||
            Actor.HasSystemRole(SystemRoles.UsersManager) ||
@@ -58,7 +58,7 @@
                Actor.HasSystemRole(SystemRoles.ConventionManager))
             {
                 <li>
-                    <a asp-area="Management" asp-controller="Participants" asp-action="Manage">ניהול - משתמשים</a>
+                    <a asp-area="Management" asp-controller="Participants" asp-action="Manage">ניהול - משתתפים</a>
                 </li>
             }
 

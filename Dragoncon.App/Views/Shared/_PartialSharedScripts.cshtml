@@ -1,4 +1,5 @@
 ﻿<script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+<script src="~/lib/moment/moment.js" asp-append-version="true"></script>
 <script src="~/lib/popper.js/dist/umd/popper.min.js" asp-append-version="true"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
 <script src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js" asp-append-version="true"></script>
@@ -7,12 +8,14 @@
 <script src="~/lib/pickadate/lib/picker.date.js" asp-append-version="true"></script>
 <script src="~/lib/pickadate/lib/picker.time.js" asp-append-version="true"></script>
 <script src="~/lib/chosen-js/chosen.jquery.min.js" asp-append-version="true"></script>
+<script src="~/lib/combodate-1.0/combodate.js" asp-append-version="true"></script>
 <script src="~/js/site.min.js" asp-append-version="true"></script>
 <script>
     $(document).ready(function () {
         setupToggles();
         setupPickers();
         setupChosen();
+        setupCombodate();
         setupOpenTab();
     });
 
@@ -45,6 +48,16 @@
             width: "100%"
         });
         $('.chosen-select').removeClass('chosen-select');
+    }
+
+    function setupCombodate() {
+        var now = new Date().year;
+        $('.combo-date').combodate({
+            minYear: 1930,
+            maxYear: now,
+            minuteStep: 30,
+            smartDays: true
+        });   
     }
 
     function setupPickers() {

@@ -1,15 +1,8 @@
-﻿@using System.Globalization
-@using DragonCon.Features.Management.Events
-@using DragonCon.Modeling.Helpers
-@using DragonCon.Modeling.Models.Common
-@using DragonCon.Modeling.Models.Events
-@using DragonCon.Modeling.Models.Identities
-@using DragonCon.Modeling.Models.Tickets
-@using NodaTime
-@model DragonCon.Features.Management.Users.UsersManagementViewModel
+﻿@using DragonCon.Modeling.Helpers
+@model DragonCon.Features.Management.Participants.ParticipantsManagementViewModel
 
 @{
-    ViewBag.Title = "ניהול - משתמשים";
+    ViewBag.Title = "ניהול - משתתפים";
 }
 
     <div class="right-to-left">
@@ -17,8 +10,8 @@
         @if (Actor.HasSystemRole(SystemRoles.UsersManager))
         {
             <div class="text-right" style="padding: 15px;">
-                <a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEvent">
-                    <i class="fa fa-fw fa-plus-square"></i> הוספת משתמש
+                <a asp-area="Management" asp-controller="Participants" asp-action="CreateUpdateParticipant">
+                    <i class="fa fa-fw fa-plus-square"></i> הוספת משתתף 
                 </a>
             </div>
         }
@@ -27,7 +20,7 @@
             <strong>חיפוש חופשי</strong>
             <div class="row">
                 <div class="col-10">
-                    <input class="form-control" placeholder="חיפוש לפי שם משתמש" />
+                    <input class="form-control" placeholder="חיפוש לפי שם, דואל או טלפון" />
                 </div>
                 <div class="col-2">
                     <button class="btn btn-filter btn-info"><i class="fa fa-fw fa-search"></i> חיפוש</button>
@@ -42,7 +35,7 @@
                 </div>
                 <div class="col-4">
                     <select class="form-control chosen-select"
-                            asp-for="ActiveFilters.Role"
+                            asp-for="filters.Role"
                             data-placeholder="בעל תפקיד">
                         <option value="" selected>הכל</option>
                         @foreach (var type in Enums.AsSelectListItem<SystemRoles>())
@@ -58,7 +51,7 @@
         </div>
         <table id="accordion" class="table table-couple-striped text-right">
             <tbody>
-                @foreach (var part in Model.FullParticipants.OrderByDescending(x => x.Model.FullName))
+                @foreach (var part in Model.Participants.OrderByDescending(x => x.Model.FullName))
                 {
                     var statusColor = "";
                     if (part.ConventionInvoice != null)
@@ -76,13 +69,13 @@
 
                     <tr>
                         <td>
-                            <a class="text-primary" data-toggle="collapse" href="#extra-data-@part.Model.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
+                            <a class="text-primary" data-toggle="collapse" href="#extra-data-@part.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
                                 <strong>@part.Model.FullName</strong>
                             </a>
                             <br />
                             @part.Model.PhoneNumber 
                             <br/>
-                            @part.Model.Email
+                            @*@part.Model.Email*@
                             <br>
                             @part.Model.DayOfBirth
                         </td>
@@ -117,7 +110,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr id="extra-data-@part.Model.Id.GetNumberFromId()"
+                    <tr id="extra-data-@part.Id.GetNumberFromId()"
                         class="collapse" data-parent="#accordion">
                         <td colspan="100%">
                             <table class="table table-no-border table-no-background">
@@ -126,10 +119,11 @@
                                         <strong>תפקידים בכנס </strong>
                                     </td>
                                     <td class="tw-10">
-                                        @foreach (var role in part.ConventionsRoles)
+                                        // TODO Type Casting
+                                        @*@foreach (var role in part.ConventionsRoles)
                                         {
                                             <span>@role.ToTextual()</span><br />
-                                        }
+                                        }*@
                                     </td>
                                 </tr>
                             </table>
