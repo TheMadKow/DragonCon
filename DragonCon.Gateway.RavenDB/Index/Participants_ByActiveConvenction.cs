@@ -19,13 +19,14 @@ namespace DragonCon.RavenDB.Index
                 select new
                 {
                     FullName = s.FullName,
-                    ActiveConventionTerm = s.ActiveConventionTerm
+                    ActiveConventionTerm = s.ActiveConventionTerm,
                 });
             AddMap<LongTermParticipant>(longs => from l in longs
                 select new
                 {
                     FullName = l.FullName,
                     ActiveConventionTerm = l.ActiveConventionTerm
+
                 });
         }
     }

@@ -122,23 +122,22 @@
                                 <i class="fa fa-fw fa-ellipsis-h"></i>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
                                    asp-action="UpdateEventAgeRestriction">
                                     <i class="fa fa-fw fa-edit"></i> עדכון פרטים
                                 </a>
-                                <a class="dropdown-item" asp-area="Management" asp-controller="Events"
-                                   asp-action="UpdateEventAgeRestriction">
+                                <a class="dropdown-item" asp-area="Management" asp-controller="Participants" asp-action="UpdateRoles" asp-route-collection="@participantId.GetCollectionFromId()" asp-route-id="@participantId.GetNumberFromId()">
                                     <i class="fa fa-fw fa-user-cog"></i> עדכון תפקידים
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
                                    asp-action="UpdateEventAgeRestriction">
                                     <i class="fa fa-fw fa-ticket-alt"></i> הרשמה וכרטיסים
                                 </a>
                                 @if (isShortTerm == false)
                                 {
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                    <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
                                        asp-action="UpdateEventAgeRestriction">
                                         <i class="fa fa-fw fa-unlock-alt"></i> איפוס סיסמה
                                     </a>
@@ -160,7 +159,6 @@
                                             <strong>תפקידים באתר </strong>
                                         </td>
                                         <td class="tw-10">
-                                            // TODO Type Casting
                                             @foreach (var role in longTerm.SystemRoles)
                                         {
                                             <span>@role.ToTextual()</span>

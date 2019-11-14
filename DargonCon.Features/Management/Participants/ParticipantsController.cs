@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DragonCon.Features.Management.Events;
 using DragonCon.Features.Shared;
@@ -36,6 +38,29 @@ namespace DragonCon.Features.Management.Participants
         }
         #endregion
 
+        [HttpPost]
+        public IActionResult UpdateRoles(UpdateRolesViewModel viewmodel)
+        {
+            var conKeys = Request.Form.Keys.Where(x => x.StartsWith("con_")).Select(x => x.Replace("con_", "")).ToArray();
+            var sysKeys = Request.Form.Keys.Where(x => x.StartsWith("sys_")).Select(x => x.Replace("sys_", "")).ToArray();
+            var answer = Gateway.UpdateRoles(viewmodel.ParticipantId, sysKeys, conKeys);
+            if (answer.AnswerType != AnswerType.Success)
+            {
+                // TODO Add Error Message
+                return View("CreateUpdateParticipant", viewmodel);
+            }
+
+            return RedirectToAction("Manage");
+        }
+
+        [HttpGet]
+        public IActionResult UpdateRoles(string collection, string id)
+        {
+            var participantId = id.FixRavenId(collection);
+            var viewModel = Gateway.GetRolesViewModel(participantId);
+            return View("UpdateRoles", viewModel);
+        }
+
         [HttpGet]
         public IActionResult CreateUpdateParticipant(string participantId = null)
         {
@@ -65,6 +90,8 @@ namespace DragonCon.Features.Management.Participants
     {
         ParticipantsManagementViewModel BuildIndex(IDisplayPagination pagination, ParticipantsManagementViewModel.Filters filters = null);
         ParticipantCreateUpdateViewModel GetParticipantViewModel(string participantId);
+        UpdateRolesViewModel GetRolesViewModel(string participantId);
+        Answer UpdateRoles(string viewmodelParticipantId, string[] sysKeys, string[] conKeys);
         Task<Answer> UpdateParticipant(ParticipantCreateUpdateViewModel viewmodel);
         Task<Answer> CreateParticipant(ParticipantCreateUpdateViewModel viewmodel);
     }

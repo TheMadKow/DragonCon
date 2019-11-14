@@ -7,6 +7,7 @@ using DragonCon.Features.Shared;
 using DragonCon.Logical.Communication;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
+using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Payment;
 using DragonCon.RavenDB.Index;
@@ -31,6 +32,96 @@ namespace DragonCon.RavenDB.Gateways.Management
             else
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        public UpdateRolesViewModel GetRolesViewModel(string participantId)
+        {
+            var result = new UpdateRolesViewModel
+            {
+                ParticipantId = participantId
+            };
+
+            if (participantId.StartsWith("LongTerm"))
+            {
+                var longTerm = Session.Load<LongTermParticipant>(participantId);
+                if (longTerm != null)
+                {
+                    result.IsLongTerm = true;
+                    result.ParticipantName = longTerm.FullName;
+                    result.ConventionRoles = longTerm.ActiveConventionRoles;
+                    result.SystemRoles = longTerm.SystemRoles;
+                    return result;
+                }
+
+            }
+
+            if (participantId.StartsWith("ShortTerm"))
+            {
+                var shortTerm = Session.Load<ShortTermParticipant>(participantId);
+
+                if (shortTerm != null)
+                {
+                    result.IsLongTerm = false;
+                    result.ParticipantName = shortTerm.FullName;
+                    result.ConventionRoles = shortTerm.ActiveConventionRoles;
+                    return result;
+                }
+
+            }
+
+
+            throw new Exception("Unknown Participant Term or Participant not found");
+        }
+
+        public Answer UpdateRoles(string participantId, string[] sysKeys, string[] conKeys)
+        {
+            IParticipant participant = null;
+            if (participantId.StartsWith("ShortTerm"))
+            {
+                participant = Session.Load<ShortTermParticipant>(participantId);
+            }
+
+            if (participantId.StartsWith("LongTerm"))
+            {
+                participant = Session.Load<LongTermParticipant>(participantId);
+            }
+
+            if (participant != null)
+            {
+                foreach (ConventionRoles convention in Enum.GetValues(typeof(ConventionRoles)))
+                {
+                    if (conKeys.Contains(convention.ToString()))
+                    {
+                        participant.AddRole(convention);
+                    }
+                    else
+                    {
+                        participant.RemoveRole(convention);
+                    }
+                }
+
+                if (participant is LongTermParticipant longTerm)
+                {
+                    foreach (SystemRoles system in Enum.GetValues(typeof(SystemRoles)))
+                    {
+                        if (sysKeys.Contains(system.ToString()))
+                        {
+                            longTerm.AddRole(system);
+                        }
+                        else
+                        {
+                            longTerm.RemoveRole(system);
+                        }
+                    }
+                }
+
+                Session.SaveChanges();
+                return Answer.Success;
+            }
+            else
+            {
+                return Answer.Error("Couldn't find participant");
             }
         }
 

@@ -13,7 +13,6 @@ namespace DragonCon.Modeling.Models.Identities
         public bool IsAllowingPromotions { get; set; }
  
         public Dictionary<string, PaymentInvoice> ConventionAndPayment { get;set; }
-        public string ActiveConventionTerm { get; set; } = string.Empty;
         public LocalDate DayOfBirth { get; set; }
 
         public string FirstName
@@ -39,27 +38,16 @@ namespace DragonCon.Modeling.Models.Identities
         public override IReadOnlyList<string> Roles => new List<string>();
 
         public IList<SystemRoles> SystemRoles { get; } = new List<SystemRoles>();
-        public IList<(string ConventionId, ConventionRoles Role)> ConventionRoles { get; } = new List<(string ConventionId, ConventionRoles Role)>();
 
-        public IList<ConventionRoles> ActiveConventionRoles
-        {
-            get
-            {
-                return ConventionRoles
-                    .Where(x => x.ConventionId == ActiveConventionTerm)
-                    .Select(x => x.Role).ToList();
-            }
-        }
+        
+        public string ActiveConventionTerm { get; set; } = string.Empty;
+      
+        public IList<ConventionRoles> ActiveConventionRoles { get; set; } = new List<ConventionRoles>();
 
 
         public bool HasRole(SystemRoles role)
         {
             return SystemRoles.Contains(role);
-        }
-        public bool HasRole(ConventionRoles role, string conventionId)
-        {
-            return ConventionRoles.Any(x => x.ConventionId == conventionId && 
-                                            x.Role == role);
         }
 
         public void AddRole(SystemRoles role)
@@ -68,27 +56,33 @@ namespace DragonCon.Modeling.Models.Identities
                 SystemRoles.Add(role);
         }
 
-        public void AddRole(ConventionRoles role, string conventionId)
-        {
-            var exists = ConventionRoles.Any(x => x.ConventionId == conventionId && x.Role == role);
-            if (exists == false)
-            {
-                ConventionRoles.Add((conventionId, role));
-            }
-        }
-
         public void RemoveRole(SystemRoles role)
         {
             if (SystemRoles.Contains(role))
                 SystemRoles.Remove(role);
         }
 
-        public void RemoveRole(ConventionRoles role, string conventionId)
+
+        public bool HasRole(ConventionRoles role)
         {
-            var exists = ConventionRoles.Any(x => x.ConventionId == conventionId && x.Role == role);
+            return ActiveConventionRoles.Contains(role);
+        }
+
+        public void AddRole(ConventionRoles role)
+        {
+            var missing = ActiveConventionRoles.Missing(role);
+            if (missing)
+            {
+                ActiveConventionRoles.Add(role);
+            }
+        }
+
+        public void RemoveRole(ConventionRoles role)
+        {
+            var exists = ActiveConventionRoles.Contains(role);
             if (exists)
             {
-                ConventionRoles.Remove((conventionId, role));
+                ActiveConventionRoles.Remove(role);
             }
         }
 

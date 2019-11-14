@@ -6,6 +6,17 @@ namespace DragonCon.Modeling.Helpers
 {
     public static class IdsHelper
     {
+        public static string GetCollectionFromId(this string ravenIdent)
+        {
+            try
+            {
+                return ravenIdent.Split('/')[0];
+            }
+            catch
+            {
+                return ravenIdent;
+            }
+        }
         public static string GetNumberFromId(this string ravenIdent)
         {
             try
