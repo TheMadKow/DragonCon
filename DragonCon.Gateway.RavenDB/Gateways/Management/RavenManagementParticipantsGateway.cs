@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DragonCon.Features.Management.Participants;
 using DragonCon.Features.Shared;
@@ -8,7 +9,9 @@ using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Payment;
+using DragonCon.RavenDB.Index;
 using NodaTime;
+using Raven.Client.Documents;
 
 namespace DragonCon.RavenDB.Gateways.Management
 {
@@ -48,7 +51,7 @@ namespace DragonCon.RavenDB.Gateways.Management
             {
                 model = new ShortTermParticipant
                 {
-                    ConventionIdTerm = Actor.SystemState.ConventionId,
+                    ActiveConventionTerm = Actor.SystemState.ConventionId,
                     CreatedById = Actor.Participant.Id
                 };
             }
@@ -56,6 +59,7 @@ namespace DragonCon.RavenDB.Gateways.Management
             {
                 model = new LongTermParticipant
                 {
+                    ActiveConventionTerm = Actor.SystemState.ConventionId,
                     UserName = viewmodel.Email,
                     Email = viewmodel.Email,
                     IsAllowingPromotions = viewmodel.IsAllowingPromotions,
@@ -100,6 +104,49 @@ namespace DragonCon.RavenDB.Gateways.Management
                 int.Parse(parsedDate[2]));
         }
 
+        public ParticipantsManagementViewModel BuildIndex(IDisplayPagination pagination,
+            ParticipantsManagementViewModel.Filters? filters = null)
+        {
+            var currentConvention = Actor.SystemState.ConventionId;
+            var participants = Session.Query<IParticipant, Participants_ByActiveConvention>()
+                .Where(x => x.ActiveConventionTerm == currentConvention)
+                .ToList();
+
+            var participantsUpgraded = participants.Select(ParticipantWrapperBuilder).ToList();
+
+            var result = new ParticipantsManagementViewModel
+            {
+                filters = filters,
+                Pagination = pagination, 
+                Participants = participantsUpgraded
+            };
+            return result;
+        }
+
+        private ParticipantWrapper ParticipantWrapperBuilder(IParticipant participant)
+        {
+            switch (participant)
+            {
+                case LongTermParticipant longTerm:
+                    IPaymentInvoice lastPayment = null;
+                    if (longTerm.ConventionAndPayment.ContainsKey(Actor.SystemState.ConventionId))
+                        lastPayment = longTerm.ConventionAndPayment[Actor.SystemState.ConventionId];
+
+                    return new LongTermParticipantWrapper(participant)
+                    {
+                        ConventionInvoice = lastPayment,
+                        //ConventionsRoles = longTerm.role
+                    };
+                case ShortTermParticipant shortTerm:
+                    return new ShortTermParticipantWrapper(participant)
+                    {
+                        ConventionInvoice = shortTerm.PaymentInvoice
+                    };
+            }
+
+            return null;
+        }
+
 
         public ParticipantsManagementViewModel BuildIndex(IDisplayPagination pagination, string searchWords)
         {
@@ -123,16 +170,6 @@ namespace DragonCon.RavenDB.Gateways.Management
             //    .As<Event>()
             //    .ToList();
 
-        }
-
-        public ParticipantsManagementViewModel BuildIndex(IDisplayPagination pagination,
-            ParticipantsManagementViewModel.Filters? filters = null)
-        {
-            var result = new ParticipantsManagementViewModel();
-            result.filters = filters;
-            result.Pagination = pagination;
-            result.Participants = new List<ParticipantWrapper>();
-            return result;
         }
 
     }

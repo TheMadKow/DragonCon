@@ -9,19 +9,28 @@ namespace DragonCon.Modeling.Models.Identities
 {
     public class ParticipantWrapper : Wrapper<IParticipant>
     {
-        public string Id { get; set; }
+        protected ParticipantWrapper(IParticipant participant) : base(participant)
+        {
+
+        }
         public IPaymentInvoice ConventionInvoice { get; set; }
 
     }
 
-    public class LongTermParticipantWrapper : Wrapper<ParticipantWrapper>
+    public class LongTermParticipantWrapper : ParticipantWrapper
     {
         public List<ConventionRoles> ConventionsRoles { get; set; }
-        public List<SystemRoles> SystemRoles { get; set; }
+        public LongTermParticipantWrapper(IParticipant participant) : base(participant)
+        {
+        }
     }
 
-    public class ShortTempParticipantWrapper : Wrapper<ParticipantWrapper>
+    public class ShortTermParticipantWrapper : ParticipantWrapper
     {
         private IParticipant CreatedBy { get; set; }
+
+        public ShortTermParticipantWrapper(IParticipant participant) : base(participant)
+        {
+        }
     }
 }

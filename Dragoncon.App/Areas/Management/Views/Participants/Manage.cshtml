@@ -1,4 +1,7 @@
-﻿@using DragonCon.Modeling.Helpers
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@using NodaTime
+@using NodaTime.Extensions
 @model DragonCon.Features.Management.Participants.ParticipantsManagementViewModel
 
 @{
@@ -49,83 +52,139 @@
                 </div>
             </div>
         </div>
+
         <table id="accordion" class="table table-couple-striped text-right">
             <tbody>
                 @foreach (var part in Model.Participants.OrderByDescending(x => x.Model.FullName))
                 {
-                    var statusColor = "";
-                    if (part.ConventionInvoice != null)
+                    var statusColor = "text-danger";
+                    var statusText = "לא שולם";
+                    if (part.ConventionInvoice != null && part.ConventionInvoice.IsPaid)
                     {
-                        switch (part.ConventionInvoice.IsPaid)
-                        {
-                            case true:
-                                statusColor = "text-success";
-                                break;
-                            case false:
-                                statusColor = "text-danger";
-                                break;
-                        }
+                        statusColor = "text-success";
+                        statusText = "שולם";
                     }
 
-                    <tr>
-                        <td>
-                            <a class="text-primary" data-toggle="collapse" href="#extra-data-@part.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
-                                <strong>@part.Model.FullName</strong>
-                            </a>
-                            <br />
-                            @part.Model.PhoneNumber 
-                            <br/>
-                            @*@part.Model.Email*@
-                            <br>
-                            @part.Model.DayOfBirth
-                        </td>
-                        <td class="tw-3">
-                            @part.Model.DayOfBirth
+                    var shortTerm = part.Model as ShortTermParticipant;
+                    var longTerm = part.Model as LongTermParticipant;
+                    var participantId = shortTerm == null ? longTerm.Id : shortTerm.Id;
+                    var isShortTerm = shortTerm != null;
 
-                            <span class="@statusColor">
-                                @part.ConventionInvoice.IsPaid
-                            </span>
-                            
-                        </td>
-                        <td>
-                            <div class="dropdown pull-left">
-                                <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm">
-                                    <i class="fa fa-fw fa-ellipsis-h"></i>
+                <tr>
+                    <td class="tw-5">
+                        <a class="text-primary" data-toggle="collapse" href="#extra-data-@participantId.GetNumberFromId()" title="הצגת פרטים מלאים">
+                            <strong>@part.Model.FullName</strong>
+                        </a>
+
+                        @if (isShortTerm)
+                        {
+                            <div>
+                                <i class="fa fa-fw fa-ankh"></i> משתתף זמני
+                                <br />
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <i class="fa fa-fw fa-envelope"></i> @longTerm.Email
+                                <br />
+                            </div>
+                        }
+
+
+                        @if (part.Model.PhoneNumber.IsNotEmptyString())
+                        {
+                            <div>
+                                <i class="fa fa-fw fa-phone"></i> @part.Model.PhoneNumber <br />
+                            </div>
+                        }
+                    </td>
+                    <td class="tw-5">
+
+                        <strong class="@statusColor">
+                            <i class="fa fa-fw fa-ticket-alt"></i> @statusText
+                        </strong>
+
+
+                        @if (part.Model.DayOfBirth != null)
+                        {
+                            var age = SystemClock.Instance.GetCurrentInstant()
+                                .ToDateTimeUtc().ToLocalDateTime().Date - part.Model.DayOfBirth;
+                            <div>
+                                <i class="fa fa-fw fa-birthday-cake"></i> @part.Model.DayOfBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) (גיל @age.Years) <br />
+                            </div>
+                        }
+
+                    </td>
+                    <td>
+                        <div class="dropdown pull-left">
+                            <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm">
+                                <i class="fa fa-fw fa-ellipsis-h"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                   asp-action="UpdateEventAgeRestriction">
+                                    <i class="fa fa-fw fa-edit"></i> עדכון פרטים
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" asp-area="Management" asp-controller="Events"
-                                       asp-action="UpdateEventAgeRestriction">
-                                        <i class="fa fa-fw fa-pencil-alt"></i> שינוי מהיר
-                                    </a>
-                                    <a class="dropdown-item" asp-area="Management" asp-controller="Events"
-                                       asp-action="UpdateEventAgeRestriction">
-                                        <i class="fa fa-fw fa-edit"></i> עדכון מלא
-                                    </a>
+                                <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                   asp-action="UpdateEventAgeRestriction">
+                                    <i class="fa fa-fw fa-user-cog"></i> עדכון תפקידים
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                   asp-action="UpdateEventAgeRestriction">
+                                    <i class="fa fa-fw fa-ticket-alt"></i> הרשמה וכרטיסים
+                                </a>
+                                @if (isShortTerm == false)
+                                {
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-area="Management" asp-controller="Events"
                                        asp-action="UpdateEventAgeRestriction">
-                                        <i class="fa fa-fw fa-clone"></i> שכפול אירוע
+                                        <i class="fa fa-fw fa-unlock-alt"></i> איפוס סיסמה
                                     </a>
-                                </div>
+                                }
+
+
                             </div>
-                        </td>
-                    </tr>
-                    <tr id="extra-data-@part.Id.GetNumberFromId()"
+                        </div>
+                    </td>
+                </tr>
+                    <tr id="extra-data-@participantId.GetNumberFromId()"
                         class="collapse" data-parent="#accordion">
                         <td colspan="100%">
                             <table class="table table-no-border table-no-background">
+                                @if (longTerm != null && longTerm.SystemRoles.Any())
+                                {
+                                    <tr>
+                                        <td class="tw-2">
+                                            <strong>תפקידים באתר </strong>
+                                        </td>
+                                        <td class="tw-10">
+                                            // TODO Type Casting
+                                            @foreach (var role in longTerm.SystemRoles)
+                                        {
+                                            <span>@role.ToTextual()</span>
+                                            <br />
+                                        }
+                                        </td>
+                                    </tr>
+                                }
+                            @if (part.Model.ActiveConventionRoles.Any())
+                            {
+
                                 <tr>
                                     <td class="tw-2">
                                         <strong>תפקידים בכנס </strong>
                                     </td>
                                     <td class="tw-10">
-                                        // TODO Type Casting
-                                        @*@foreach (var role in part.ConventionsRoles)
+                                        @foreach (var role in part.Model.ActiveConventionRoles)
                                         {
-                                            <span>@role.ToTextual()</span><br />
-                                        }*@
+                                            <span>@role.ToTextual()</span>
+                                            <br/>
+                                        }
                                     </td>
                                 </tr>
+                            }
                             </table>
                         </td>
                     </tr>
