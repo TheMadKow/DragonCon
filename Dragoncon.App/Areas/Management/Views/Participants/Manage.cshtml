@@ -19,16 +19,18 @@
             </div>
         }
 
-        <div class="filter-container">
-            <strong>חיפוש חופשי</strong>
+    <div class="filter-container">
+        <strong>חיפוש חופשי</strong>
+        <form asp-area="Management" asp-controller="Participants" asp-action="ManageSearch">
             <div class="row">
                 <div class="col-10">
-                    <input class="form-control" placeholder="חיפוש לפי שם, דואל או טלפון" />
+                    <input name="searchWords"  class="form-control" placeholder="חיפוש לפי שם, דואל או טלפון" />
                 </div>
                 <div class="col-2">
-                    <button class="btn btn-filter btn-info"><i class="fa fa-fw fa-search"></i> חיפוש</button>
+                    <button class="btn btn-filter btn-info" type="submit"><i class="fa fa-fw fa-search"></i> חיפוש</button>
                 </div>
             </div>
+        </form>
             <br />
             <strong>סינון לפי</strong>
             <br />
@@ -51,7 +53,7 @@
                     סטטוס תשלום
                 </div>
             </div>
-        </div>
+    </div>
 
         <table id="accordion" class="table table-couple-striped text-right">
             <tbody>

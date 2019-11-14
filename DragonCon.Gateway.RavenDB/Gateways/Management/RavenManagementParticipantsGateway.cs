@@ -22,7 +22,8 @@ namespace DragonCon.RavenDB.Gateways.Management
             base(provider)
         {
         }
-        
+
+
         public ParticipantCreateUpdateViewModel GetParticipantViewModel(string participantId)
         {
             if (participantId.IsEmptyString())
@@ -239,28 +240,32 @@ namespace DragonCon.RavenDB.Gateways.Management
         }
 
 
-        public ParticipantsManagementViewModel BuildIndex(IDisplayPagination pagination, string searchWords)
+        public ParticipantsManagementViewModel BuildSearchIndex(IDisplayPagination pagination, string searchWords)
         {
             if (searchWords.IsEmptyString())
                 return new ParticipantsManagementViewModel();
 
-            throw new NotImplementedException();
-            
-            //var result = new ParticipantsManagementViewModel();
-            //var results = Session.Query<EventsIndex_ByTitleDescription.Result, EventsIndex_ByTitleDescription>()
-            //    .Statistics(out var stats)
-            //    .Search(x => x.SearchText, searchWords)
-            //    .Include(x => x.ConventionDayId)
-            //    .Include(x => x.GameMasterIds)
-            //    .Include(x => x.HallId)
-            //    .Include(x => x.AgeId)
-            //    .Where(x => x.ConventionId == Actor.SystemState.ConventionId)
-            //    .OrderBy(x => x.Name)
-            //    .Skip(pagination.SkipCount)
-            //    .Take(pagination.ResultsPerPage)
-            //    .As<Event>()
-            //    .ToList();
+            var result = new ParticipantsManagementViewModel();
+            var results = Session.Query<Participants_BySearchQuery.Result, Participants_BySearchQuery>()
+                .Statistics(out var stats)
+                .Search(x => x.SearchText, searchWords)
+                .Where(x => x.ActiveConventionTerm == Actor.SystemState.ConventionId)
+                .OrderBy(x => x.FullName)
+                .Skip(pagination.SkipCount)
+                .Take(pagination.ResultsPerPage)
+                .As<IParticipant>()
+                .ToList();
 
+            var viewModel = new ParticipantsManagementViewModel
+            {
+                Pagination = DisplayPagination.BuildForView(
+                    stats.TotalResults,
+                    pagination.SkipCount,
+                    pagination.ResultsPerPage),
+                Participants = results.Select(ParticipantWrapperBuilder).ToList(),
+                filters = new ParticipantsManagementViewModel.Filters()
+            };
+            return viewModel;
         }
 
     }

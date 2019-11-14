@@ -36,6 +36,15 @@ namespace DragonCon.Features.Management.Participants
             return View(viewModel);
 
         }
+
+        [HttpPost]
+        public IActionResult ManageSearch(string searchWords, int page = 0, int perPage = ResultsPerPage)
+        {
+            var viewModel = Gateway.BuildSearchIndex(DisplayPagination.BuildForGateway(page, perPage), searchWords);
+            return View("Manage", viewModel);
+
+        }
+
         #endregion
 
         [HttpPost]
@@ -89,6 +98,7 @@ namespace DragonCon.Features.Management.Participants
     public interface IManagementParticipantsGateway : IGateway
     {
         ParticipantsManagementViewModel BuildIndex(IDisplayPagination pagination, ParticipantsManagementViewModel.Filters filters = null);
+        ParticipantsManagementViewModel BuildSearchIndex(IDisplayPagination pagination, string searchWords = null);
         ParticipantCreateUpdateViewModel GetParticipantViewModel(string participantId);
         UpdateRolesViewModel GetRolesViewModel(string participantId);
         Answer UpdateRoles(string viewmodelParticipantId, string[] sysKeys, string[] conKeys);

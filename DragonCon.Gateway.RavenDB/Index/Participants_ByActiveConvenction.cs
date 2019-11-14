@@ -20,14 +20,47 @@ namespace DragonCon.RavenDB.Index
                 {
                     FullName = s.FullName,
                     ActiveConventionTerm = s.ActiveConventionTerm,
+                    ActiveConventionRoles = s.ActiveConventionRoles
                 });
             AddMap<LongTermParticipant>(longs => from l in longs
                 select new
                 {
                     FullName = l.FullName,
-                    ActiveConventionTerm = l.ActiveConventionTerm
-
+                    ActiveConventionTerm = l.ActiveConventionTerm,
+                    ActiveConventionRoles = l.ActiveConventionRoles
                 });
+        }
+    }
+
+
+    public class Participants_BySearchQuery : AbstractMultiMapIndexCreationTask<Participants_BySearchQuery.Result>
+    {
+        public class Result
+        {
+            public string ActiveConventionTerm { get; set; } = string.Empty;
+            public string SearchText { get; set; } = string.Empty;
+            public string FullName { get; set; }
+        }
+
+        public Participants_BySearchQuery()
+        {
+            AddMap<ShortTermParticipant>(shorts => from s in shorts
+                select new
+                {
+                    FullName = s.FullName,
+                    ActiveConventionTerm = s.ActiveConventionTerm,
+                    SearchText = $"{s.Id} {s.FullName} {s.PhoneNumber}",
+                });
+            AddMap<LongTermParticipant>(longs => from l in longs
+                select new
+                {
+                    FullName = l.FullName,
+                    ActiveConventionTerm = l.ActiveConventionTerm,
+                    SearchText = $"{l.Id} {l.FullName} {l.PhoneNumber} {l.Email}",
+                });
+
+            Index("SearchText", FieldIndexing.Search);
+            Analyze("SearchText", "StandardAnalyzer");
         }
     }
 }
