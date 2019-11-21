@@ -1,14 +1,11 @@
 ﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
 @model DragonCon.Features.Management.Participants.ParticipantCreateUpdateViewModel
 @{
-    if (Model.Id != null)
-    {
-        ViewBag.Title = "עריכת משתתף";
-    }
-    else
-    {
-        ViewBag.Title = "הוספת משתתף";
-    }
+    var isUpdated = Model.Id != null;
+    var iShortTerm = Model.Email.IsEmptyString();
+
+    ViewBag.Title = isUpdated ? "עריכת משתתף" : "הוספת משתתף";
 }
 
 
@@ -17,7 +14,7 @@
 }
 
 <form asp-area="Management" asp-controller="Participants" asp-action="CreateUpdateParticipant" method="post" class="right-to-left" style="padding: 10px;">
-    <input asp-for="Id" hidden />
+    <input name="Id" value="@Model.Id"  hidden/>
     <div class="col">
         <div class="form-group">
             <label>שם מלא</label>
@@ -34,31 +31,46 @@
         <div class="form-group">
             <label>תאריך לידה </label>
             <br />
-            <input class="combo-date" asp-for="DayOfBirth" value=""
+            <input class="combo-date" asp-for="DayOfBirth" value="@Model.DayOfBirth"
                    data-custom-class="form-control form-control-inline"
                    data-first-item="empty"
                    data-format="YYYY-MM-DD"
                    data-template="יום DD חודש MM שנה YYYY">
         </div>
     </div>
-    <div class="card">
-        <div class="col">
-            <br />
-            <div class="input-group">
-                <input asp-for="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <input type="checkbox" asp-for="IsAllowingPromotions" aria-label="Checkbox for following text input">
-                        <span class="toggle-text">צירוף לרשימת דיוור</span>
+    @if (isUpdated == false || iShortTerm == false)
+    {
+        <div class="card">
+            <div class="col">
+                <br />
+                <div class="input-group">
+                    @{
+                        var isLocked = isUpdated ? "readonly" : "";
+                    }
+
+                    <input @isLocked asp-for="Email" value="@Model.Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" asp-for="IsAllowingPromotions" aria-label="Checkbox for following text input">
+                            <span class="toggle-text">צירוף לרשימת דיוור</span>
+                        </div>
                     </div>
                 </div>
+                @if (isUpdated)
+                {
+                    <lable class="text-danger">* לא ניתן לשנות כתובת דואר אלקטרוני של משתתף</lable>
+                }
+                else
+                {
+                    <lable class="text-danger">* בהזנת דואר אלקטרוני יווצר משתמש קבוע ותשלח סיסמת התחברות ראשונית</lable>
+                }
+                <br />
+                <br />
             </div>
-            <lable class="text-danger">* בהזנת דואר אלקטרוני יווצר משתמש קבוע ותשלח סיסמת התחברות ראשונית</lable>
-            <br />
-            <br />
         </div>
-    </div>
-    <br />
+        <br />
+    }
+
     <div class="btn-save-container">
         <button type="submit" class="btn btn-primary btn-save">שמירת משתתף </button>
     </div>

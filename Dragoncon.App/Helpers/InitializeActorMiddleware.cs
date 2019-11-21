@@ -56,8 +56,8 @@ namespace DragonCon.App.Helpers
                 FullName = "משתמש מערכת",
                 SystemRoles =
                 {
-                    SystemRoles.ContentManager, 
-                    SystemRoles.ConventionManager, 
+                    SystemRoles.ContentManager,
+                    SystemRoles.ConventionManager,
                     SystemRoles.ReceptionStaff,
                     SystemRoles.UsersManager
                 },

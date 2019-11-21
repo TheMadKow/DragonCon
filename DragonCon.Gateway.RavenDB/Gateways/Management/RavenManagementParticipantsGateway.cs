@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using DragonCon.Features.Management.Participants;
@@ -32,7 +33,41 @@ namespace DragonCon.RavenDB.Gateways.Management
             }
             else
             {
-                throw new NotImplementedException();
+                var result = new ParticipantCreateUpdateViewModel
+                {
+                    Id = participantId,
+                };
+
+                if (participantId.StartsWith("LongTerm"))
+                {
+                    var longTerm = Session.Load<LongTermParticipant>(participantId);
+                    if (longTerm != null)
+                    {
+                        result.DayOfBirth = longTerm.DayOfBirth.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
+                        result.Email = longTerm.Email;
+                        result.FullName = longTerm.FullName;
+                        result.IsAllowingPromotions = longTerm.IsAllowingPromotions;
+                        result.PhoneNumber = longTerm.PhoneNumber;
+                        return result;
+                    }
+
+                }
+
+                if (participantId.StartsWith("ShortTerm"))
+                {
+                    var shortTerm = Session.Load<ShortTermParticipant>(participantId);
+
+                    if (shortTerm != null)
+                    {
+                        result.Email = string.Empty;
+                        result.DayOfBirth = shortTerm.DayOfBirth.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
+                        result.FullName = shortTerm.FullName;
+                        result.PhoneNumber = shortTerm.PhoneNumber;
+                        return result;
+                    }
+                }
+
+                return result;
             }
         }
 
@@ -126,10 +161,44 @@ namespace DragonCon.RavenDB.Gateways.Management
             }
         }
 
-        public Task<Answer> UpdateParticipant(ParticipantCreateUpdateViewModel viewmodel)
+        public async Task<Answer> UpdateParticipant(ParticipantCreateUpdateViewModel viewmodel)
         {
+            var answer = ValidateParticipantFields(viewmodel);
+            if (answer.AnswerType != AnswerType.Success)
+                return answer;
 
-            throw new NotImplementedException();
+            var participantId = viewmodel.Id;
+            IParticipant participant = null;
+            if (participantId.StartsWith("ShortTerm"))
+            {
+                participant = Session.Load<ShortTermParticipant>(participantId);
+            }
+
+            if (participantId.StartsWith("LongTerm"))
+            {
+                participant = Session.Load<LongTermParticipant>(participantId);
+            }
+
+            if (participant != null)
+            {
+                if (participant is LongTermParticipant longTerm)
+                {
+                    longTerm.IsAllowingPromotions = viewmodel.IsAllowingPromotions;
+                }
+
+                participant.FullName = viewmodel.FullName;
+                participant.PhoneNumber = viewmodel.PhoneNumber ?? string.Empty;
+                participant.DayOfBirth = CreateLocalDate(viewmodel.DayOfBirth);
+
+                Session.Store(participant, participant.Id);
+                Session.SaveChanges();
+
+                return await Task.FromResult(Answer.Success);
+            }
+            else
+            {
+                return await Task.FromResult(Answer.Error("Can't find participant"));
+            }
         }
         
         public async Task<Answer> CreateParticipant(ParticipantCreateUpdateViewModel viewmodel)

@@ -71,8 +71,14 @@ namespace DragonCon.Features.Management.Participants
         }
 
         [HttpGet]
-        public IActionResult CreateUpdateParticipant(string participantId = null)
+        public IActionResult CreateUpdateParticipant(string collection = null, string id = null)
         {
+            var participantId = string.Empty;
+            if (collection != null && id != null)
+            {
+                participantId = id.FixRavenId(collection);
+            }
+
             var viewModel = Gateway.GetParticipantViewModel(participantId);
             return View("CreateUpdateParticipant", viewModel);
         }
