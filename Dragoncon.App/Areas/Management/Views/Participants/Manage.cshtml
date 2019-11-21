@@ -12,11 +12,31 @@
 
     @if (Actor.HasSystemRole(SystemRoles.UsersManager))
     {
-        <div class="text-right" style="padding: 15px;">
-            <a asp-area="Management" asp-controller="Participants" asp-action="CreateUpdateParticipant">
-                <i class="fa fa-fw fa-plus-square"></i> הוספת משתתף 
-            </a>
-        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="text-right" style="padding: 15px;">
+                    <a asp-area="Management" asp-controller="Participants" asp-action="CreateUpdateParticipant">
+                        <i class="fa fa-fw fa-plus-square"></i> הוספת משתתף
+                    </a>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="text-left" style="padding: 15px;">
+                    @if (Model.AllowHistoryParticipants)
+                    {
+                        <a asp-area="Management" asp-controller="Participants" asp-action="Manage" asp-route-allowHistory="false">
+                            <i class="fa fa-fw fa-square"></i> רק כנס נוכחי
+                        </a>
+
+                    }
+                    else
+                    {
+                        <a asp-area="Management" asp-controller="Participants" asp-action="Manage" asp-route-allowHistory="true">
+                            <i class="fa fa-fw fa-check-square"></i> רק כנס נוכחי
+                        </a>
+                    }
+                </div>
+            </div></div>
     }
 
     <div class="filter-container">
@@ -24,7 +44,8 @@
         <form asp-area="Management" asp-controller="Participants" asp-action="ManageSearch">
             <div class="row">
                 <div class="col-10">
-                    <input name="searchWords"  class="form-control" placeholder="חיפוש לפי שם, דואל או טלפון" />
+                    <input name="allowHistory" value="@Model.AllowHistoryParticipants.ToString()" hidden />
+                    <input name="searchWords" class="form-control" placeholder="חיפוש לפי שם, דואל או טלפון" />
                 </div>
                 <div class="col-2">
                     <button class="btn btn-filter btn-info" type="submit"><i class="fa fa-fw fa-search"></i> חיפוש</button>
@@ -64,12 +85,20 @@
         <tbody>
         @foreach (var part in Model.Participants.OrderByDescending(x => x.Model.FullName))
         {
-            var statusColor = "text-danger";
-            var statusText = "לא שולם";
-            if (part.ConventionInvoice != null && part.ConventionInvoice.IsPaid)
+            var statusColor = "text-primary";
+            var statusText = "אין כרטיס";
+
+            if (part.ConventionInvoice != null)
             {
-                statusColor = "text-success";
-                statusText = "שולם";
+                if (part.ConventionInvoice.IsPaid)
+                {
+                    statusColor = "text-success";
+                    statusText = "שולם";
+                } else
+                {
+                    statusColor = "text-danger";
+                    statusText = "לא שולם";
+                }
             }
 
             var shortTerm = part.Model as ShortTermParticipant;
@@ -130,25 +159,33 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
-                               asp-action="CreateUpdateParticipant" 
+                               asp-action="UpdateEventAgeRestriction">
+                                <i class="fa fa-fw fa-ticket-alt"></i> הרשמה וכרטיסים
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
+                               asp-action="CreateUpdateParticipant"
                                asp-route-collection="@participantId.GetCollectionFromId()" asp-route-id="@participantId.GetNumberFromId()">
                                 <i class="fa fa-fw fa-edit"></i> עדכון פרטים
                             </a>
                             @if (Actor.Participant.SystemRoles.Contains(SystemRoles.UsersManager) ||
-                                 Actor.Participant.SystemRoles.Contains(SystemRoles.ConventionManager))
+                             Actor.Participant.SystemRoles.Contains(SystemRoles.ConventionManager))
                             {
                                 <a class="dropdown-item" asp-area="Management" asp-controller="Participants" asp-action="UpdateRoles"
                                    asp-route-collection="@participantId.GetCollectionFromId()" asp-route-id="@participantId.GetNumberFromId()">
                                     <i class="fa fa-fw fa-user-cog"></i> עדכון תפקידים
                                 </a>
                             }
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
-                               asp-action="UpdateEventAgeRestriction">
-                                <i class="fa fa-fw fa-ticket-alt"></i> הרשמה וכרטיסים
-                            </a>
+                            @if (isShortTerm == false)
+                            {
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
+                                   asp-action="UpdateEventAgeRestriction">
+                                    <i class="fa fa-fw fa-history"></i> מידע היסטורי
+                                </a>
+                            }
                             @if (Actor.Participant.SystemRoles.Contains(SystemRoles.UsersManager) ||
-                                 Actor.Participant.SystemRoles.Contains(SystemRoles.ConventionManager))
+                             Actor.Participant.SystemRoles.Contains(SystemRoles.ConventionManager))
                             {
                                 @if (isShortTerm == false)
                                 {
@@ -186,7 +223,7 @@
 
                             <tr>
                                 <td class="tw-2">
-                                    <strong>תפקידים בכנס </strong>
+                                    <strong>תפקידים בכנס נוכחי </strong>
                                 </td>
                                 <td class="tw-10">
                                     @foreach (var role in part.Model.ActiveConventionRoles)

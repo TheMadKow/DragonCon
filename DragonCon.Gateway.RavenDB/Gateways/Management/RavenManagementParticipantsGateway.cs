@@ -285,13 +285,17 @@ namespace DragonCon.RavenDB.Gateways.Management
         }
 
         public ParticipantsManagementViewModel BuildIndex(IDisplayPagination pagination,
+            bool allowHistory = false,
             ParticipantsManagementViewModel.Filters? filters = null)
         {
             var currentConvention = Actor.SystemState.ConventionId;
-            var participants = Session.Query<IParticipant, Participants_ByActiveConvention>()
-                .Where(x => x.ActiveConventionTerm == currentConvention)
-                .ToList();
+            var query = Session.Query<IParticipant, Participants_ByActiveConvention>().AsQueryable();
+            if (allowHistory == false)
+            {
+                query = query.Where(x => x.ActiveConventionTerm == currentConvention);
+            }
 
+            var participants = query.ToList();
             var participantsUpgraded = participants.Select(ParticipantWrapperBuilder).ToList();
 
             var result = new ParticipantsManagementViewModel
@@ -328,16 +332,21 @@ namespace DragonCon.RavenDB.Gateways.Management
         }
 
 
-        public ParticipantsManagementViewModel BuildSearchIndex(IDisplayPagination pagination, string searchWords)
+        public ParticipantsManagementViewModel BuildSearchIndex(IDisplayPagination pagination, bool allowHistory = false, string searchWords = "")
         {
             if (searchWords.IsEmptyString())
                 return new ParticipantsManagementViewModel();
 
             var result = new ParticipantsManagementViewModel();
-            var results = Session.Query<Participants_BySearchQuery.Result, Participants_BySearchQuery>()
+            var query = Session.Query<Participants_BySearchQuery.Result, Participants_BySearchQuery>()
                 .Statistics(out var stats)
-                .Search(x => x.SearchText, searchWords)
-                .Where(x => x.ActiveConventionTerm == Actor.SystemState.ConventionId)
+                .Search(x => x.SearchText, searchWords).AsQueryable();
+            if (allowHistory == false)
+            {
+                query = query.Where(x => x.ActiveConventionTerm == Actor.SystemState.ConventionId);
+            }
+
+            var results = query
                 .OrderBy(x => x.FullName)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)

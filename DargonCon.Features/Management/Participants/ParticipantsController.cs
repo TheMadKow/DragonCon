@@ -22,9 +22,10 @@ namespace DragonCon.Features.Management.Participants
 
         #region Display
         [HttpGet]
-        public IActionResult Manage(int page = 0, int perPage = ResultsPerPage)
+        public IActionResult Manage(int page = 0, bool allowHistory = false, int perPage = ResultsPerPage)
         {
-            var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage));
+            var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage), allowHistory);
+            viewModel.AllowHistoryParticipants = allowHistory;
             return View(viewModel);
         }
 
@@ -39,17 +40,19 @@ namespace DragonCon.Features.Management.Participants
 
         [HttpPost]
         public IActionResult Manage(ParticipantsManagementViewModel.Filters filters, 
-                                    int page = 0, int perPage = ResultsPerPage)
+                                    bool allowHistory = false, int page = 0, int perPage = ResultsPerPage)
         {
-            var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage), filters);
+            var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage), allowHistory, filters);
+            viewModel.AllowHistoryParticipants = allowHistory;
             return View(viewModel);
 
         }
 
         [HttpPost]
-        public IActionResult ManageSearch(string searchWords, int page = 0, int perPage = ResultsPerPage)
+        public IActionResult ManageSearch(string searchWords, bool allowHistory = false, int page = 0, int perPage = ResultsPerPage)
         {
-            var viewModel = Gateway.BuildSearchIndex(DisplayPagination.BuildForGateway(page, perPage), searchWords);
+            var viewModel = Gateway.BuildSearchIndex(DisplayPagination.BuildForGateway(page, perPage), allowHistory, searchWords);
+            viewModel.AllowHistoryParticipants = allowHistory;
             return View("Manage", viewModel);
 
         }
@@ -112,8 +115,8 @@ namespace DragonCon.Features.Management.Participants
 
     public interface IManagementParticipantsGateway : IGateway
     {
-        ParticipantsManagementViewModel BuildIndex(IDisplayPagination pagination, ParticipantsManagementViewModel.Filters filters = null);
-        ParticipantsManagementViewModel BuildSearchIndex(IDisplayPagination pagination, string searchWords = null);
+        ParticipantsManagementViewModel BuildIndex(IDisplayPagination pagination, bool allowHistory = false, ParticipantsManagementViewModel.Filters filters = null);
+        ParticipantsManagementViewModel BuildSearchIndex(IDisplayPagination pagination, bool allowHistory = false, string searchWords = null);
         ParticipantCreateUpdateViewModel GetParticipantViewModel(string participantId);
         UpdateRolesViewModel GetRolesViewModel(string participantId);
         Answer UpdateRoles(string viewmodelParticipantId, string[] sysKeys, string[] conKeys);

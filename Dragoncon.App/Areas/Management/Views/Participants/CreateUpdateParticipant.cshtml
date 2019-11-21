@@ -14,7 +14,7 @@
 }
 
 <form asp-area="Management" asp-controller="Participants" asp-action="CreateUpdateParticipant" method="post" class="right-to-left" style="padding: 10px;">
-    <input name="Id" value="@Model.Id"  hidden/>
+    <input name="Id" value="@Model.Id" hidden />
     <div class="col">
         <div class="form-group">
             <label>שם מלא</label>
@@ -48,7 +48,7 @@
                         var isLocked = isUpdated ? "readonly" : "";
                     }
 
-                    <input @isLocked asp-for="Email" value="@Model.Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                    <input @isLocked name="Email" value="@Model.Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
                             <input type="checkbox" asp-for="IsAllowingPromotions" aria-label="Checkbox for following text input">
@@ -72,7 +72,8 @@
     }
 
     <div class="btn-save-container">
-        <button type="submit" class="btn btn-primary btn-save">שמירת משתתף </button>
+        <button type="submit" class="btn btn-primary btn-save">שמירת וחזרה </button>
+        <button type="submit" class="btn btn-success btn-save">שמירה ורישום </button>
     </div>
 
 </form>
