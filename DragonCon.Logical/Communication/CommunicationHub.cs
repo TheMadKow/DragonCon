@@ -10,6 +10,7 @@ namespace DragonCon.Logical.Communication
     public interface ICommunicationHub
     {
         Task<Answer> SendCreationPasswordAsync(IParticipant participant, string password);
+        Task<Answer> ResetParticipantPasswordAsync(IParticipant participant, string password);
     }
 
     public class CommunicationHub : ICommunicationHub
@@ -19,5 +20,9 @@ namespace DragonCon.Logical.Communication
             return Task.FromResult(Answer.Success);
         }
 
+        public Task<Answer> ResetParticipantPasswordAsync(IParticipant participant, string password)
+        {
+            return Task.FromResult(Answer.Success);
+        }
     }
 }

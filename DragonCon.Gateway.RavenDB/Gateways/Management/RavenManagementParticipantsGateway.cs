@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DragonCon.Features.Management.Participants;
 using DragonCon.Features.Shared;
 using DragonCon.Logical.Communication;
+using DragonCon.Logical.Identities;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
@@ -242,6 +243,24 @@ namespace DragonCon.RavenDB.Gateways.Management
                 return Answer.Error(result.Errors?.AsJson());
 
             return Answer.Success;
+        }
+
+        public async Task<Answer> ResetPassword(string id)
+        {
+            var participant = Session.Load<LongTermParticipant>(id);
+            if (participant != null)
+            {
+                var randomPassword = new RandomPasswordGenerator().Generate();
+                var result = await Identities.SetPasswordAsync(participant, randomPassword);
+                if (result.IsSuccess)
+                {
+                    await Hub.ResetParticipantPasswordAsync(participant, result.Token);
+                    return Answer.Success;
+                }
+                return Answer.Error("Can't change password");
+            }
+            else 
+                return Answer.Error("Can't find participant");
         }
 
         private Answer ValidateParticipantFields(ParticipantCreateUpdateViewModel viewmodel)

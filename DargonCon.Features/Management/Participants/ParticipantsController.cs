@@ -28,6 +28,15 @@ namespace DragonCon.Features.Management.Participants
             return View(viewModel);
         }
 
+
+        [HttpPost]
+        public async Task<Answer> ResetPassword(string id)
+        {
+            var answer = await Gateway.ResetPassword(id);
+            return answer;
+        }
+
+
         [HttpPost]
         public IActionResult Manage(ParticipantsManagementViewModel.Filters filters, 
                                     int page = 0, int perPage = ResultsPerPage)
@@ -110,5 +119,6 @@ namespace DragonCon.Features.Management.Participants
         Answer UpdateRoles(string viewmodelParticipantId, string[] sysKeys, string[] conKeys);
         Task<Answer> UpdateParticipant(ParticipantCreateUpdateViewModel viewmodel);
         Task<Answer> CreateParticipant(ParticipantCreateUpdateViewModel viewmodel);
+        Task<Answer> ResetPassword(string id);
     }
 }

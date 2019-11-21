@@ -149,7 +149,8 @@ namespace DragonCon.RavenDB.Identities
                 return new IdentityResults.Password { IsSuccess = false };
 
             await _session.SaveChangesAsync();
-            var result = await _userManager.AddPasswordAsync(storeUser, newPassword);
+            var result = await _userManager.RemovePasswordAsync(storeUser);
+            result = await _userManager.AddPasswordAsync(storeUser, newPassword);
             await _session.SaveChangesAsync();
             return ToPassword(result);
         }
