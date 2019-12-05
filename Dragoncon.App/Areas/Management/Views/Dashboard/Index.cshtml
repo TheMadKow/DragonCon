@@ -121,7 +121,7 @@
                                 @for (int i = 0; i < ticket.DayIds.Count; i++)
                                 {
                                     var date = Actor.SystemState.GetDayById(ticket.DayIds[i]);
-                                    <span class="text-info">@date.Date.DayOfWeek.InHebrew()</span>
+                                    <span class="text-info">@date?.Date.DayOfWeek.InHebrew()</span>
                                     @if (i != ticket.DayIds.Count - 1)
                                     {
                                         <span class="text-primary">,</span>

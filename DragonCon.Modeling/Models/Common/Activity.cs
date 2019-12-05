@@ -6,7 +6,7 @@ namespace DragonCon.Modeling.Models.Common
     {
         public static Activity General => new GeneralActivity();
 
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = null;
         public string Name { get; set; } = string.Empty;
         
         public bool IsSubActivity { get; set; }

@@ -115,7 +115,7 @@
                 if (result.value) {
                     $.ajax({
                         type: "POST",
-                        url: "/Management/Events/DeleteAgeRestriction?restrictionConventionId=" + ageId,
+                        url: "/Management/Events/DeleteAgeRestriction?restrictionId=" + ageId,
                         data: CreateDefaultPostData(),
                         success: function () {
                             location.reload();

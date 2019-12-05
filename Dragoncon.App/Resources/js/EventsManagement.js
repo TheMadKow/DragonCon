@@ -1,4 +1,4 @@
-﻿function AddNewSystem() {
+﻿function AddNewSubActivity() {
     var $lastSystemTemplate = $("#last-system-template");
     var $lastSystemCounter = parseInt($lastSystemTemplate.data("counter")) +1;
     $lastSystemTemplate.data("counter", $lastSystemCounter.toString());
@@ -7,7 +7,7 @@
     clone.attr("id", "");
     clone.prop("hidden", "");
 
-    clone.find(".update-system").attr("name", `Systems[${$lastSystemCounter}].Name`);
+    clone.find(".update-system").attr("name", `SubActivities[${$lastSystemCounter}].Name`);
     clone.find("a").click(function () { RemoveRow(this); });
 
     $(".last-system-row").last().after(clone);

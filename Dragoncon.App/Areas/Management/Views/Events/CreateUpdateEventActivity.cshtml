@@ -30,8 +30,8 @@
                 <input class="form-control update-system" placeholder="סוג הפעילות">
             </div>
             <div class="col-1">
-                <a href="#" class="form-control">
-                    <i title="הסר סוג פעילות" class="fa fa-fw fa-times"></i>
+                <a href="#" class="text-center form-control">
+                    <i title="הסר סוג פעילות" class="text-danger  fa fa-fw fa-times"></i>
                 </a>
             </div>
         </div>
@@ -41,20 +41,20 @@
             for (int i = 0; i < loadedSystems.Count; i++)
             {
                 <div class="row last-system-row" style="padding-bottom: 5px;">
-                    <input class="update-deleted" name="Systems[@i].IsDeleted" value="false" hidden>
+                    <input class="update-deleted" name="SubActivities[@i].IsDeleted" value="false" hidden>
                     <div class="col">
                         <input asp-for="@Model.SubActivities[i].Id" hidden/>
                         <input asp-for="@Model.SubActivities[i].Name" class="form-control" placeholder="סוג הפעילות">
                     </div>
-                    <div class="col-1">
+                    <div class="col-1 text-center">
                         <a href="#" onclick="RemoveRow(this)" class="form-control">
-                            <i title="הסר סוג פעילות" class="fa fa-fw fa-times"></i>
+                            <i title="הסר סוג פעילות" class="text-danger fa fa-fw fa-times"></i>
                         </a>
                     </div>
                 </div>
             }
         }
-        <a href="#" onclick="AddNewSystem()"><i class="fa fa-fw fa-plus"></i> הוספת סוג פעילות</a>
+        <a href="#" onclick="AddNewSubActivity()"><i class="fa fa-fw fa-plus"></i> הוספת סוג פעילות</a>
     </div>
     <br />
     <div class="btn-save-container">
