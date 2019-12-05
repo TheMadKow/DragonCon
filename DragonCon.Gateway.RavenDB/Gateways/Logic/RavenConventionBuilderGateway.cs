@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DragonCon.Logical.Gateways;
+using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Tickets;
@@ -33,6 +34,9 @@ namespace DragonCon.RavenDB.Gateways.Logic
                 return new ConventionWrapper
                 {
                     Name = convention.Name,
+                    TagLine = convention.TagLine,
+                    Location = convention.Location,
+                    TimeStrategy = convention.TimeStrategy,
                     Id = convention.Id,
                     Days = session.Load<Day>(convention.DayIds).Select(x => x.Value).ToList(),
                     Halls = session.Load<Hall>(convention.HallIds).Select(x => x.Value).ToList(),
@@ -45,7 +49,9 @@ namespace DragonCon.RavenDB.Gateways.Logic
         {
             using (var session = _holder.Store.OpenSession())
             {
-                var conventionData = session.Load<Convention>(convention.Id) ?? new Convention();
+                var conventionData = convention.Id.IsNotEmptyString() ? 
+                    session.Load<Convention>(convention.Id) : 
+                    new Convention();
 
                 StoreGeneralInformation(convention, conventionData);
                 StoreConvDays(convention, conventionData, session);
@@ -60,7 +66,6 @@ namespace DragonCon.RavenDB.Gateways.Logic
                     }
                 }
 
-                conventionData.Name = convention.Name;
                 session.Store(conventionData);
                 session.SaveChanges();
             }
@@ -68,8 +73,10 @@ namespace DragonCon.RavenDB.Gateways.Logic
 
         private void StoreGeneralInformation(ConventionWrapper wrapperData, Convention conventionData)
         {
+            conventionData.Name = wrapperData.Name;
             conventionData.CreateTimeStamp = wrapperData.CreateTimeStamp;
             conventionData.UpdateTimeStamp = wrapperData.UpdateTimeStamp;
+            conventionData.TimeStrategy = wrapperData.TimeStrategy;
             conventionData.Location = wrapperData.Location;
             conventionData.TagLine = wrapperData.TagLine;
         }

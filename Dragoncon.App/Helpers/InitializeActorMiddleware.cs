@@ -110,6 +110,7 @@ namespace DragonCon.App.Helpers
                     ConventionName = convention.Name,
                     Location = convention.Location,
                     TagLine = convention.TagLine,
+                    TimeStrategy = convention.TimeStrategy,
                     Halls = halls.Where(x => x.Value != null).Select(x => x.Value).ToList(),
                     Days = days.Where(x => x.Value != null).Select(x => x.Value).ToList(),
                     Tickets = tickets.Where(x => x.Value != null).Select(x => x.Value).ToList()

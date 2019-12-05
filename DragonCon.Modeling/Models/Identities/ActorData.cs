@@ -209,6 +209,7 @@ namespace DragonCon.Modeling.Models.Identities
         public class ActorSystemState
         {
             public long BuildMilliseconds { get; set; }
+            public TimeSlotStrategy TimeStrategy { get; set; }
             public string ConventionId { get; set; }
             public string ConventionName { get; set; }
             public string Location { get; set; }

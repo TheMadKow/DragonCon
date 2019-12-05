@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 
 namespace DragonCon.Features.Management.Convention
@@ -14,6 +16,8 @@ namespace DragonCon.Features.Management.Convention
         public string TagLine { get; set; }
         public string Location { get; set; }
 
+        public TimeSlotStrategy TimeStrategy { get; set; }
+
         public List<DaysViewModel> Days {get; set; }
     }
 
@@ -26,18 +30,18 @@ namespace DragonCon.Features.Management.Convention
             IsDeleted = false;
 
             Id = day.Id;
-            Date = day.Date.ToDateTimeUnspecified();
-            From = new DateTime(1, 1, 1, day.StartTime.Hour, day.StartTime.Minute, 0);
-            To = new DateTime(1, 1, 1, day.EndTime.Hour, day.EndTime.Minute, 0);
+            Date = day.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+            From = $"{day.StartTime.Hour}:{day.StartTime.Minute}";
+            To = $"{day.EndTime.Hour}:{day.EndTime.Minute}";
         }
 
         public string Id { get; set; }
 
 
         public bool IsDeleted {get; set; }
-        public DateTime Date {get; set; }
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public string Date {get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
 
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DragonCon.Logical.Gateways;
+using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Tickets;
@@ -43,6 +44,12 @@ namespace DragonCon.Logical.Convention
                 Days = new List<Day>()
             };
             CreateSubBuilders();
+            return this;
+        }
+
+        public ConventionBuilder SetTimeSlotStrategy(TimeSlotStrategy strategy)
+        {
+            _convention.TimeStrategy = strategy;
             return this;
         }
 
@@ -146,7 +153,6 @@ namespace DragonCon.Logical.Convention
             _gateway.StoreConvention(_convention, DeletedEntityIds);
             return this;
         }
-
 
     }
 }

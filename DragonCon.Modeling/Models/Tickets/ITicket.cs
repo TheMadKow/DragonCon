@@ -12,7 +12,6 @@ namespace DragonCon.Modeling.Models.Tickets
         List<string> DayIds { get; set; }
         string Name { get; set; }
         double Price { get; set; }
-        string TransactionCode { get; set; }
 
         int? ActivitiesAllowed { get; set; }
         TicketType TicketType { get; set; }

@@ -217,7 +217,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 viewModel.SpecialPrice = existing.SpecialPrice;
                 viewModel.HallTableSelector = $"{existing.HallId},{existing.HallTable}";
                 viewModel.ActivitySelector = $"{existing.ActivityId},{existing.SubActivityId}";
-                viewModel.StartTimeSelector = $"{existing.ConventionDayId},{existing.TimeSlot?.From.ToString("HH:mm", CultureInfo.CurrentCulture)}";
+                viewModel.StartTimeSelector = $"{existing.ConventionDayId},{existing.TimeSlot?.From.ToString("HH:mm", CultureInfo.InvariantCulture)}";
             }
             else
             {

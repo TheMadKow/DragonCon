@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using DragonCon.Features.Shared;
 using DragonCon.Logical.Convention;
@@ -101,11 +102,11 @@ namespace DragonCon.Features.Management.Convention
                 viewmodel.Days = new List<DaysViewModel>();
             }
 
-            viewmodel.Days.Add(new DaysViewModel()
+            viewmodel.Days.Add(new DaysViewModel
             {
-                Date = DateTime.Today,
-                From = new DateTime(1,1,1, 9, 0, 0, DateTimeKind.Unspecified),
-                To = new DateTime(1, 1, 1, 21, 0, 0, DateTimeKind.Unspecified)
+                Date = DateTime.Today.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+                From = "09:00",
+                To = "21:00"
             });
             return View("CreateUpdateNameDates", viewmodel);
         }
@@ -143,10 +144,14 @@ namespace DragonCon.Features.Management.Convention
             var results = new List<Day>();
             foreach (var day in days)
             {
+                var dateSplit = day.Date.Split('/').Select(int.Parse).ToArray();
+                var fromSplit = day.From.Split(':').Select(int.Parse).ToArray();
+                var toSplit = day.To.Split(':').Select(int.Parse).ToArray();
+
                 results.Add(new Day(
-                    LocalDate.FromDateTime(day.Date), 
-                    LocalTime.FromHourMinuteSecondTick(day.From.Hour, day.From.Minute, 0, 0),
-                    LocalTime.FromHourMinuteSecondTick(day.To.Hour, day.To.Minute, 0, 0)));
+                    new LocalDate(dateSplit[2], dateSplit[1], dateSplit[0]),
+                    new LocalTime(fromSplit[0], fromSplit[1]),
+                    new LocalTime(toSplit[0], toSplit[1])));
             }
 
             return results;
@@ -209,7 +214,7 @@ namespace DragonCon.Features.Management.Convention
                         builder.Days.UpdateDay(parsedDay.Date, parsedDay.StartTime, parsedDay.EndTime);
                     }
 
-                    builder.Days.SetTimeSlotStrategy(parsedDay.Date, TimeSlotStrategy.StartEvery2Hours_Duration246Windows);
+                    builder.Days.SetTimeSlotStrategy(parsedDay.Date, viewmodel.TimeStrategy);
                 }
 
                 foreach (var parsedDay in deletedFiltered)
@@ -221,6 +226,7 @@ namespace DragonCon.Features.Management.Convention
                     }
                 }
 
+                builder.SetTimeSlotStrategy(viewmodel.TimeStrategy);
                 builder.ChangeName(viewmodel.Name);
                 builder.AddExtraDetails(viewmodel.Location, viewmodel.TagLine);
                 builder.Save();
@@ -277,11 +283,8 @@ namespace DragonCon.Features.Management.Convention
                 var builder = Builder.LoadConvention(viewmodel.ConventionId);
                 foreach (var hall in deletedFiltered)
                 {
-                    if (nonDeletedFiltered.Any() == false)
-                    {
-                        if (builder.Halls.KeyExists(hall.Id))
-                            builder.Halls.RemoveHall(hall.Id);
-                    }
+                    if (builder.Halls.KeyExists(hall.Id))
+                        builder.Halls.RemoveHall(hall.Id);
                 }
 
                 foreach (var hall in nonDeletedFiltered)
@@ -383,7 +386,6 @@ namespace DragonCon.Features.Management.Convention
                         builder.Tickets.AddTicket(
                             ticket.Name,
                             ticket.Days,
-                            ticket.TransactionCode,
                             ticket.IsLimited ? ticket.NumOfActivities : null,
                             ticket.Price,
                             ticket.TicketType);
@@ -393,7 +395,6 @@ namespace DragonCon.Features.Management.Convention
                         builder.Tickets.UpdateTicket(ticket.Id,
                             ticket.Name,
                             ticket.Days,
-                            ticket.TransactionCode,
                             ticket.IsLimited ? ticket.NumOfActivities : null,
                             ticket.Price,
                             ticket.TicketType);

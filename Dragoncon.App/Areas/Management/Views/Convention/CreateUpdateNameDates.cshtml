@@ -1,4 +1,5 @@
-﻿@using DragonCon.Modeling.Helpers
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
 @using DragonCon.Modeling.Models.Common
 @using DragonCon.Modeling.Models.Events
 @model DragonCon.Features.Management.Convention.NameDatesCreateUpdateViewModel
@@ -25,13 +26,24 @@
             <input asp-for="Name" class="form-control" placeholder="למשל - 'דרקוניקון 2022'">
         </div>
         <div class="form-group">
-            <label>קליט</label>
+            <label>כותרת משנה</label>
             <input asp-for="TagLine" class="form-control" placeholder="למשל - 'כנס המשחקים של הקיץ'">
         </div>
         <div class="form-group">
             <label>מיקום</label>
             <input asp-for="Location" class="form-control" placeholder="מרכז הכנסים בתל אביב, כתובת 21א">
         </div>
+        <div class="form-group">
+            <label>חלונות זמן</label>
+            <select asp-for="TimeStrategy" class="form-control chosen-select" data-placeholder="אסטרטגיה">
+                <option selected="selected" disabled>בחירת אסטרטגיית ניהול זמן</option>
+                @foreach (var type in Enums.AsSelectListItem<TimeSlotStrategy>())
+                {
+                    <option value="@type.Value">@type.Text</option>
+                }
+            </select>
+        </div>
+
         @* Convention Days *@
         <div class="form-group">
             <label>ימי הכנס</label>
@@ -46,9 +58,9 @@
                 <div class="col">
                     <input type="time" class="form-control timepicker update-to" placeholder="שעת סיום">
                 </div>
-                <div class="col-1">
+                <div class="col-1 text-center">
                     <a href="#" class="form-control">
-                        <i title="הסר יום" class="fa fa-fw fa-times"></i>
+                        <i title="הסר יום" class="text-danger fa fa-fw fa-times"></i>
                     </a>
                 </div>
             </div>
@@ -58,39 +70,28 @@
                 for (int i = 0; i < loadedDays.Count; i++)
                 {
 
-                    <div class="row last-day-row" style="padding-bottom: 5px;">
-                        <input class="update-deleted" name="Days[@i].IsDeleted" value="false" hidden>
-                        <div class="col">
-                            @{
-                                var date = Model.Days[i].Date;
-                                var from = Model.Days[i].From;
-                                var to = Model.Days[i].To;
-                            }
-                            <input data-value="@date.ToString("dd/MM/yyyy")" asp-for="@Model.Days[i].Date" type="date" class="datepicker nice-pickers form-control" placeholder="יום כנס">
-                        </div>
-                        <div class="col">
-                            <input 
-                                data-value="@from.ToString("HH:mm")" asp-for="@Model.Days[i].From" type="time" class="timepicker nice-pickers form-control" placeholder="שעת התחלה">
-                        </div>
-                        <div class="col">
-                            <input data-value="@to.ToString("HH:mm")" asp-for="@Model.Days[i].To" type="time" class="timepicker nice-pickers form-control" placeholder="שעת סיום">
-                        </div>
-                        <div class="col">
-                            <select class="form-control chosen-select"
-                                    data-placeholder="אסטרטגיה">
-                                @foreach (var type in Enums.AsSelectListItem<TimeSlotStrategy>())
-                                {
-                                    <option value="@type.Value">@type.Text</option>
-                                }
-                            </select>
-
-                        </div>
-                        <div class="col-1">
-                            <a href="#" onclick="RemoveRow(this)" class="form-control">
-                                <i title="הסר יום" class="fa fa-fw fa-times"></i>
-                            </a>
-                        </div>
-                    </div>
+        <div class="row last-day-row" style="padding-bottom: 5px;">
+            <input class="update-deleted" name="Days[@i].IsDeleted" value="false" hidden>
+            <div class="col">
+                @{
+                    var date = Model.Days[i].Date;
+                    var from = Model.Days[i].From;
+                    var to = Model.Days[i].To;
+                }
+                <input data-value="@date" asp-for="@Model.Days[i].Date" type="date" class="datepicker nice-pickers form-control" placeholder="יום כנס">
+            </div>
+            <div class="col">
+                <input data-value="@from" asp-for="@Model.Days[i].From" type="time" class="timepicker nice-pickers form-control" placeholder="שעת התחלה">
+            </div>
+            <div class="col">
+                <input data-value="@to" asp-for="@Model.Days[i].To" type="time" class="timepicker nice-pickers form-control" placeholder="שעת סיום">
+            </div>
+            <div class="col-1 text-center">
+                <a href="#" onclick="RemoveRow(this)" class="form-control">
+                    <i title="הסר יום" class="text-danger fa fa-fw fa-times"></i>
+                </a>
+            </div>
+        </div>
                 }
             }
             <a href="#" onclick="AddNewDay()"><i class="fa fa-fw fa-plus"></i> הוספת יום</a>

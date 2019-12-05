@@ -20,6 +20,7 @@ namespace DragonCon.Modeling.Models.Conventions
 
         public string Id { get => Model.Id; set => Model.Id = value; }
         public string Name { get => Model.Name; set => Model.Name = value; }
+        public TimeSlotStrategy TimeStrategy { get => Model.TimeStrategy; set => Model.TimeStrategy = value; }
 
         public List<Hall> Halls { get; set; } = new List<Hall>();
         public List<Ticket> Tickets { get; set; } = new List<Ticket>();

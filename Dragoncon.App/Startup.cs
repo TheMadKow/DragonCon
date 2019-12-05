@@ -72,6 +72,10 @@ namespace DragonCon.App
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 })
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.DateFormatString = "dd/MM/yyyy";
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             //services.AddHsts(opt =>

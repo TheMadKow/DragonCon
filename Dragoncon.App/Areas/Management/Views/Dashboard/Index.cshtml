@@ -61,9 +61,17 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>קליט</td>
+                    <td>כותרת משנה</td>
                     <td>
                         @state.TagLine
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        אסטרטגית זמנים
+                    </td>
+                    <td>
+                        @state.TimeStrategy.ToTextual()
                     </td>
                 </tr>
 
@@ -77,11 +85,8 @@
                                     <i class="far fa-fw fa-calendar"></i> @day.GetDescription()
                                 </strong>
                                 <br />
-                                <i class="far fa-fw fa-clock"></i> @day.StartTime.ToString("HH:mm", CultureInfo.CurrentCulture) - @day.EndTime.ToString("HH:mm", CultureInfo.CurrentCulture)
-                                <br />
-                                <i class="fa fa-fw fa-cog"></i> @day.TimeSlotStrategy.ToTextual()
+                                <i class="far fa-fw fa-clock"></i> @day.StartTime.ToString("HH:mm", CultureInfo.InvariantCulture) - @day.EndTime.ToString("HH:mm", CultureInfo.CurrentCulture)
                             </div>
-                            <br />
                         }
                     </td>
                 </tr>
@@ -109,9 +114,34 @@
                     <td>
                         @foreach (var ticket in state.Tickets.OrderBy(x => x.Name))
                         {
-                            <div class="row">
-                                @ticket.TicketType @ticket.Name @ticket.Price @DragonConstants.NIS_SYMBOL @ticket.ActivitiesAllowed
+                        <div class="row">
+                            <div class="col-4">
+                                @ticket.Name (@ticket.TicketType.ToTextual())
+                                <br />
+                                @for (int i = 0; i < ticket.DayIds.Count; i++)
+                                {
+                                    var date = Actor.SystemState.GetDayById(ticket.DayIds[i]);
+                                    <span class="text-info">@date.Date.DayOfWeek.InHebrew()</span>
+                                    @if (i != ticket.DayIds.Count - 1)
+                                    {
+                                        <span class="text-primary">,</span>
+                                    }
+                                }
                             </div>
+                            <div class="col-4">
+                                @if (ticket.ActivitiesAllowed.HasValue)
+                                {
+                                    <span>מוגבל ל-@ticket.ActivitiesAllowed פעילויות</span>
+                                }
+                                else
+                                {
+                                    <span>ללא הגבלה</span>
+                                }
+                            </div>
+                            <div class="col-4">
+                                @ticket.Price ש"ח
+                            </div>
+                        </div>
                         }
                     </td>
                 </tr>

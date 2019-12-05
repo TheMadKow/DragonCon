@@ -1,4 +1,5 @@
-﻿@using DragonCon.Modeling.Models.Tickets
+﻿@using System.Globalization
+@using DragonCon.Modeling.Models.Tickets
 @using DragonCon.Modeling.Helpers
 @model DragonCon.Features.Management.Convention.TicketsUpdateViewModel
 @{
@@ -17,29 +18,16 @@
         <div class="row" style="padding-bottom: 7px;">
             <input type="text" class="update-deleted" value="false" hidden>
             <input type="text" class="update-id" value="" hidden>
-            <div class="col">
+            <div class="col-6">
                 <input type="text" class="form-control update-name" placeholder="שם כרטיס">
             </div>
-            <div class="col-1">
-                <a href="#" onclick="RemoveTicket(this)" class="form-control ticket-removal">
-                    <i title="הסר כרטיס" class="fa fa-fw fa-times"></i>
-                </a>
-            </div>
-        </div>
-        <div class="row" style="padding-bottom: 7px;">
-            <div class="col input-group">
+            <div class="col-2 input-group">
                 <input type="number" class="form-control update-price" placeholder="מחיר">
                 <div class="input-group-prepend">
                     <span class="input-group-text" style="">@Html.Raw(@DragonConstants.NIS_SYMBOL)</span>
                 </div>
             </div>
-            <div class="col input-group">
-                <input type="text" class="form-control  update-transaction" placeholder="קוד PayPal">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" style="">@@PayPal</span>
-                </div>
-            </div>
-            <div class="col">
+            <div class="col-3">
                 <select class="form-control update-ticket-type" data-placeholder="בחר סוג">
                     @foreach (var type in Enums.AsSelectListItem<TicketType>())
                     {
@@ -47,6 +35,12 @@
                     }
                 </select>
             </div>
+            <div class="col-1 text-center">
+                <a href="#" onclick="RemoveTicket(this)" class="form-control ticket-removal">
+                    <i title="הסר כרטיס" class="text-danger fa fa-fw fa-times"></i>
+                </a>
+            </div>
+
         </div>
         <div class="row" style="padding-bottom: 5px;">
             <div class="col">
@@ -78,7 +72,7 @@
                 <select class="form-control  update-days" data-placeholder="בחר ימים" multiple>
                     @foreach (var day in Model.AvailableDays)
                     {
-                        <option value="@day.Id">@day.Date.ToShortDateString()</option>
+                        <option value="@day.Id">@day.Date</option>
                     }
                 </select>
             </div>
@@ -92,35 +86,27 @@
                 <input asp-for="@Model.Tickets[j].Id" hidden />
                 <input type="text" class="update-deleted" asp-for="@Model.Tickets[@j].IsDeleted" value="false" hidden>
                 <input type="text" class="update-id" value="" hidden>
-                <div class="col">
+                <div class="col-6">
                     <input type="text" class="form-control" asp-for="@Model.Tickets[@j].Name" placeholder="שם כרטיס">
                 </div>
-                <div class="col-1">
-                    <a href="#" onclick="RemoveTicket(this)" class="form-control ticket-removal">
-                        <i title="הסר כרטיס" class="fa fa-fw fa-times"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="row" style="padding-bottom: 7px;">
-                <div class="col input-group">
+                <div class="col-2 input-group">
                     <input type="number" class="form-control" asp-for="@Model.Tickets[@j].Price" placeholder="מחיר">
                     <div class="input-group-prepend">
                         <span class="input-group-text" style="">@Html.Raw(@DragonConstants.NIS_SYMBOL)</span>
                     </div>
                 </div>
-                <div class="col input-group">
-                    <input type="text" class="form-control" asp-for="@Model.Tickets[@j].TransactionCode" placeholder="קוד PayPal">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" style="">@@PayPal</span>
-                    </div>
-                </div>
-                <div class="col">
+                <div class="col-3">
                     <select class="form-control chosen-select" asp-for="@Model.Tickets[@j].TicketType" data-placeholder="בחר סוג">
                         @foreach (var type in Enums.AsSelectListItem<TicketType>())
                         {
                             <option value="@type.Value">@type.Text</option>
                         }
                     </select>
+                </div>
+                <div class="col-1 text-center ">
+                    <a href="#" onclick="RemoveTicket(this)" class="form-control ticket-removal">
+                        <i title="הסר כרטיס" class="text-danger fa fa-fw fa-times"></i>
+                    </a>
                 </div>
             </div>
             <div class="row" style="padding-bottom: 5px;">
@@ -170,7 +156,7 @@
                     <select class="form-control chosen-select" asp-for="@Model.Tickets[@j].Days" data-placeholder="בחר ימים" multiple>
                         @foreach (var day in Model.AvailableDays)
                         {
-                            <option value="@day.Id">@day.Date.ToShortDateString()</option>
+                            <option value="@day.Id">@day.Date</option>
                         }
                     </select>
                 </div>

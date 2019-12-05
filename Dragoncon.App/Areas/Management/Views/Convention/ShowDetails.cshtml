@@ -12,13 +12,31 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="סגור חלון">
                     <span aria-hidden="true" class="text-danger"><i class="fa fa-fw fa-window-close"></i></span>
                 </button>
-                <h4>@Model.NameDate.Name</h4>
-                <h6>@Model.NameDate.TagLine</h6>
-                <h6>@Model.NameDate.Location</h6>
+                <h3>@Model.NameDate.Name</h3>
             </div>
         </div>
 
         <div class="modal-body right-to-left">
+            <div class="card card-grayed">
+                <div class="card-body">
+                    <h5 class="card-title">מידע כללי</h5>
+                    <table class="table">
+                        <tr class="d-flex">
+                            <td class="col-3"> כותרת משנה</td>
+                            <td class="col-6">@Model.NameDate.TagLine</td>
+                        </tr>
+                        <tr class="d-flex">
+                            <td class="col-3"> מיקום</td>
+                            <td class="col-6">@Model.NameDate.Location</td>
+                        </tr>
+                        <tr class="d-flex">
+                            <td class="col-3"> אסטרטגית זמנים</td>
+                            <td class="col-6">@Model.NameDate.TimeStrategy.ToTextual()</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <br/>
             <div class="card card-grayed">
                 <div class="card-body">
                     <h5 class="card-title">ימי הכנס</h5>
@@ -26,13 +44,13 @@
                     {
                         <table class="table">
                             @foreach (var day in Model.NameDate.Days
-                                .Where(x => x.Id.IsNotEmptyString())
-                                .OrderBy(x => x.Date))
+                               .Where(x => x.Id.IsNotEmptyString())
+                               .OrderBy(x => x.Date))
                             {
                                 <tr class="d-flex">
-                                    <td class="col-3"> @day.Date.ToShortDateString()</td>
-                                    <td class="col-2">@day.From.ToShortTimeString()</td>
-                                    <td class="col-2">@day.To.ToShortTimeString()</td>
+                                    <td class="col-3"> @day.Date</td>
+                                    <td class="col-2">@day.From</td>
+                                    <td class="col-2">@day.To</td>
                                 </tr>
                             }
                         </table>
@@ -43,6 +61,7 @@
                     }
                 </div>
             </div>
+
             <br />
 
             <div class="card card-grayed">
@@ -52,8 +71,8 @@
                     {
                         <table class="table">
                             @foreach (var hall in Model.Halls.Halls
-                                .Where(x => x.Id.IsNotEmptyString())
-                                .OrderBy(x => x.FirstTable))
+                               .Where(x => x.Id.IsNotEmptyString())
+                               .OrderBy(x => x.FirstTable))
                             {
                                 <tr class="d-flex">
                                     <td class="col-4"> @hall.Name</td>
@@ -80,12 +99,12 @@
                     <h5 class="card-title">כרטיסים</h5>
 
                     @if (Model.Tickets.Tickets != null && Model.Tickets.Tickets
-                        .Any(x => x.Id.IsNotEmptyString()))
+                       .Any(x => x.Id.IsNotEmptyString()))
                     {
                         <table class="table">
                             @foreach (var ticket in Model.Tickets.Tickets
-                                .Where(x => x.Id.IsNotEmptyString())
-                                .OrderBy(x => x.Name))
+                               .Where(x => x.Id.IsNotEmptyString())
+                               .OrderBy(x => x.Name))
                             {
                                 <tr class="d-flex">
                                     <td class="col-3"> @ticket.Name</td>
@@ -105,22 +124,13 @@
                                         <br />
                                         @foreach (var day in ticket.Days)
                                         {
-                                            <span>@Model.NameDate.Days.FirstOrDefault(x => x.Id == day)?.Date.ToShortDateString()<br /></span>
+                                            <span>@Model.NameDate.Days.FirstOrDefault(x => x.Id == day)?.Date<br /></span>
                                         }
                                     <td class="col-2">
                                         @if (ticket.Price > 0)
                                         {
                                             <span>
                                                 @ticket.Price ₪
-                                                <br />
-                                                @if (string.IsNullOrEmpty(ticket.TransactionCode))
-                                                {
-                                                    <strong class="text-danger">לא קיים קוד סליקה</strong>
-                                                }
-                                                else
-                                                {
-                                                    <span>סליקה: @ticket.TransactionCode</span>
-                                                }
                                             </span>
                                         }
                                         else
