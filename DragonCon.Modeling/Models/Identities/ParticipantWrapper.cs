@@ -13,13 +13,13 @@ namespace DragonCon.Modeling.Models.Identities
         {
 
         }
-        public IPaymentInvoice ConventionInvoice { get; set; }
+        public List<ConventionRoles> ActiveConventionRoles { get; set; }
+        public IPaymentInvoice ActiveConventionInvoice { get; set; }
 
     }
 
     public class LongTermParticipantWrapper : ParticipantWrapper
     {
-        public List<ConventionRoles> ConventionsRoles { get; set; }
         public LongTermParticipantWrapper(IParticipant participant) : base(participant)
         {
         }
@@ -28,7 +28,6 @@ namespace DragonCon.Modeling.Models.Identities
     public class ShortTermParticipantWrapper : ParticipantWrapper
     {
         private IParticipant CreatedBy { get; set; }
-
         public ShortTermParticipantWrapper(IParticipant participant) : base(participant)
         {
         }

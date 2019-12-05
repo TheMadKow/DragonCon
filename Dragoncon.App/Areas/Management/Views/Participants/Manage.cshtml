@@ -88,9 +88,9 @@
             var statusColor = "text-primary";
             var statusText = "אין כרטיס";
 
-            if (part.ConventionInvoice != null)
+            if (part.ActiveConventionInvoice != null)
             {
-                if (part.ConventionInvoice.IsPaid)
+                if (part.ActiveConventionInvoice.IsPaid)
                 {
                     statusColor = "text-success";
                     statusText = "שולם";
@@ -218,7 +218,7 @@
                                 </td>
                             </tr>
                         }
-                        @if (part.Model.ActiveConventionRoles.Any())
+                        @if (part.ActiveConventionRoles.Any())
                         {
 
                             <tr>
@@ -226,7 +226,7 @@
                                     <strong>תפקידים בכנס נוכחי </strong>
                                 </td>
                                 <td class="tw-10">
-                                    @foreach (var role in part.Model.ActiveConventionRoles)
+                                    @foreach (var role in part.ActiveConventionRoles)
                                     {
                                         <span>@role.ToTextual()</span>
                                         <br/>

@@ -12,13 +12,6 @@ namespace DragonCon.Modeling.Models.Identities
         string FullName { get; set; }
         string PhoneNumber { get; set; }
         LocalDate DayOfBirth { get; set; }
-
-
-        bool HasRole(ConventionRoles role);
-        void AddRole(ConventionRoles role);
-        void RemoveRole(ConventionRoles role);
-        
         string ActiveConventionTerm { get; set; }
-        IList<ConventionRoles> ActiveConventionRoles { get; }
     }
 }

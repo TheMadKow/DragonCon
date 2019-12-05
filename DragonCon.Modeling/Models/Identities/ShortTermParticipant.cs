@@ -33,22 +33,5 @@ namespace DragonCon.Modeling.Models.Identities
         public string ActiveConventionTerm { get; set; } = string.Empty;
         public string CreatedById { get; set; } = string.Empty;
         public PaymentInvoice PaymentInvoice { get; set; }
-
-        public IList<ConventionRoles> ActiveConventionRoles { get; } = new List<ConventionRoles>();
-
-        public void AddRole(ConventionRoles role)
-        {
-            if (ActiveConventionRoles.Missing(role))
-                ActiveConventionRoles.Add(role);
-        }
-        public bool HasRole(ConventionRoles role)
-        {
-            return ActiveConventionRoles.Contains(role);
-        }
-        public void RemoveRole(ConventionRoles role)
-        {
-            if (ActiveConventionRoles.Contains(role))
-                ActiveConventionRoles.Remove(role);
-        }
     }
 }

@@ -74,6 +74,8 @@ namespace DragonCon.RavenDB.Gateways.Management
 
         public UpdateRolesViewModel GetRolesViewModel(string participantId)
         {
+            var activeRoles = LoadConventionRolesContainer();
+            
             var result = new UpdateRolesViewModel
             {
                 ParticipantId = participantId
@@ -86,7 +88,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 {
                     result.IsLongTerm = true;
                     result.ParticipantName = longTerm.FullName;
-                    result.ConventionRoles = longTerm.ActiveConventionRoles;
+                    result.ConventionRoles = activeRoles.GetRolesForUser(participantId);
                     result.SystemRoles = longTerm.SystemRoles;
                     return result;
                 }
@@ -101,7 +103,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 {
                     result.IsLongTerm = false;
                     result.ParticipantName = shortTerm.FullName;
-                    result.ConventionRoles = shortTerm.ActiveConventionRoles;
+                    result.ConventionRoles = activeRoles.GetRolesForUser(participantId);
                     return result;
                 }
 
@@ -126,17 +128,19 @@ namespace DragonCon.RavenDB.Gateways.Management
 
             if (participant != null)
             {
-                foreach (ConventionRoles convention in Enum.GetValues(typeof(ConventionRoles)))
+                var rolesContainer = LoadConventionRolesContainer();
+                foreach (ConventionRoles conRole in Enum.GetValues(typeof(ConventionRoles)))
                 {
-                    if (conKeys.Contains(convention.ToString()))
+                    if (conKeys.Contains(conRole.ToString()))
                     {
-                        participant.AddRole(convention);
+                        rolesContainer.AddRole(participantId, conRole);
                     }
                     else
                     {
-                        participant.RemoveRole(convention);
+                        rolesContainer.RemoveRole(participantId, conRole);
                     }
                 }
+                StoreConventionRolesContainer(rolesContainer);
 
                 if (participant is LongTermParticipant longTerm)
                 {
@@ -295,8 +299,9 @@ namespace DragonCon.RavenDB.Gateways.Management
                 query = query.Where(x => x.ActiveConventionTerm == currentConvention);
             }
 
+            var container = LoadConventionRolesContainer();
             var participants = query.ToList();
-            var participantsUpgraded = participants.Select(ParticipantWrapperBuilder).ToList();
+            var participantsUpgraded = participants.Select(x => ParticipantWrapperBuilder(x, container)).ToList();
 
             var result = new ParticipantsManagementViewModel
             {
@@ -307,7 +312,7 @@ namespace DragonCon.RavenDB.Gateways.Management
             return result;
         }
 
-        private ParticipantWrapper ParticipantWrapperBuilder(IParticipant participant)
+        private ParticipantWrapper ParticipantWrapperBuilder(IParticipant participant, ConventionRolesContainer container)
         {
             switch (participant)
             {
@@ -318,13 +323,14 @@ namespace DragonCon.RavenDB.Gateways.Management
 
                     return new LongTermParticipantWrapper(participant)
                     {
-                        ConventionInvoice = lastPayment,
-                        //ConventionsRoles = longTerm.role
+                        ActiveConventionInvoice = lastPayment,
+                        ActiveConventionRoles = container.GetRolesForUser(participant.Id)
                     };
                 case ShortTermParticipant shortTerm:
                     return new ShortTermParticipantWrapper(participant)
                     {
-                        ConventionInvoice = shortTerm.PaymentInvoice
+                        ActiveConventionInvoice = shortTerm.PaymentInvoice,
+                        ActiveConventionRoles = container.GetRolesForUser(participant.Id)
                     };
             }
 
@@ -352,14 +358,15 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .Take(pagination.ResultsPerPage)
                 .As<IParticipant>()
                 .ToList();
-
+            
+            var container = LoadConventionRolesContainer();
             var viewModel = new ParticipantsManagementViewModel
             {
                 Pagination = DisplayPagination.BuildForView(
                     stats.TotalResults,
                     pagination.SkipCount,
                     pagination.ResultsPerPage),
-                Participants = results.Select(ParticipantWrapperBuilder).ToList(),
+                Participants = results.Select(x => ParticipantWrapperBuilder(x, container)).ToList(),
                 filters = new ParticipantsManagementViewModel.Filters()
             };
             return viewModel;
