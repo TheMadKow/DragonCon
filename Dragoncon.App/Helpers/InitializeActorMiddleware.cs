@@ -41,10 +41,17 @@ namespace DragonCon.App.Helpers
                 actor.ManagedConvention = LoadConvention(actor.System.ManagersConventionId, session);
                 if (actor.ManagedConvention != null)
                     actor.ManagedDropDowns = LoadDropDowns(factory, actor.ManagedConvention, actor.System);
-            
-                actor.DisplayConvention = LoadConvention(actor.System.DisplayConventionId, session);
-                if (actor.DisplayConvention != null)
-                    actor.DisplayDropDowns = LoadDropDowns(factory, actor.DisplayConvention, actor.System);
+
+                if (actor.System.DisplayConventionId == actor.System.ManagersConventionId)
+                {
+                    actor.DisplayConvention = actor.ManagedConvention;
+                    actor.DisplayDropDowns = actor.ManagedDropDowns;
+                } else
+                {
+                    actor.DisplayConvention = LoadConvention(actor.System.DisplayConventionId, session);
+                    if (actor.DisplayConvention != null)
+                        actor.DisplayDropDowns = LoadDropDowns(factory, actor.DisplayConvention, actor.System);
+                }
             }
 
             return _next(httpContext);
