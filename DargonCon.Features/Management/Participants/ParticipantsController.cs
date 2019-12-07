@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Management.Participants
 {
     [Area("Management")]
-    [Authorize(policy: Policies.Types.AtLeastManagementViewer)]
     public class ParticipantsController : DragonController<IManagementParticipantsGateway>
     {
         public ParticipantsController(IServiceProvider service) : base(service)

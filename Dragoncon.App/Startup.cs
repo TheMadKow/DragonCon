@@ -23,8 +23,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -39,9 +37,9 @@ namespace DragonCon.App
 {
     public class Startup
     {
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment environment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _environment = environment;
             Configuration = configuration;
@@ -59,6 +57,7 @@ namespace DragonCon.App
                 options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
 
+
             services.AddAuthorization(options =>
             {
                 foreach (var policy in Policies.GetPolicies())
@@ -67,28 +66,26 @@ namespace DragonCon.App
                 }
             });
 
-            
-            services.AddMvc(options =>
+
+            services.AddAntiforgery();
+            services.AddControllersWithViews(options =>
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    options.EnableEndpointRouting = true;
                 })
-                .AddJsonOptions(options =>
-                {
-                    options.SerializerSettings.DateFormatString = "dd/MM/yyyy";
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .AddNewtonsoftJson();
+            services.AddRazorPages();
 
-            //services.AddHsts(opt =>
-            //{
-            //    opt.Preload = true;
-            //    opt.IncludeSubDomains = true;
-            //});
-            //services.AddHttpsRedirection(opt =>
-            //{
-            //    opt.HttpsPort = 443;
-            //    opt.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-            //});
-
+            services.AddHsts(opt =>
+            {
+                opt.Preload = true;
+                opt.IncludeSubDomains = true;
+            });
+            services.AddHttpsRedirection(opt =>
+            {
+                opt.HttpsPort = 443;
+                opt.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+            });
 
             services.AddLogging(opt =>
             {
@@ -96,14 +93,15 @@ namespace DragonCon.App
             });
 
             var database = "";
-            if (_environment.IsDevelopment())
+            if (_environment.EnvironmentName == "Development")
                 database = StoreConsts.DatabaseName_Developement;
-            if (_environment.IsStaging())
+            
+            if (_environment.EnvironmentName == "Staging")
                 database = StoreConsts.DatabaseName_Staging;
-            if (_environment.IsProduction())
+            
+            if (_environment.EnvironmentName == "Production")
                 database = StoreConsts.DatabaseName_Production;
-
-
+            
             var certificatePath = Path.Combine(_environment.ContentRootPath, StoreConsts.CertificatePath);
             var holder = new StoreHolder(database, certificatePath, StoreConsts.ConnectionString); 
             
@@ -168,8 +166,6 @@ namespace DragonCon.App
             services.AddScoped<IManagementParticipantsGateway, RavenManagementParticipantsGateway>();
             services.AddScoped<IConventionBuilderGateway, RavenConventionBuilderGateway>();
             services.AddScoped<ConventionBuilder, ConventionBuilder>();
-        
-            services.AddAntiforgery();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -185,9 +181,8 @@ namespace DragonCon.App
                 app.UseExceptionHandler("/Convention/Error");
             }
 
-            //app.UseHsts();
-            //app.UseHttpsRedirection();
-
+            app.UseHsts();
+            app.UseHttpsRedirection();
             
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -199,19 +194,42 @@ namespace DragonCon.App
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseActorInitialization();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "admin",
-                    template: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoint => { });
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{area=Home}/{controller=Convention}/{action=Index}/{id?}");
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapAreaControllerRoute(
+                        name: "Convention Management",
+                        "Management",
+                        pattern: "Management/Convention/{action=Index}/{id?}")
+                    .RequireAuthorization(Policies.Types.ConventionManagement);
+
+
+                endpoints.MapAreaControllerRoute(
+                        name: "Events Management",
+                        "Management",
+                        pattern: "Management/Events/{action=Index}/{id?}")
+                    .RequireAuthorization(Policies.Types.EventsManagement);
+
+                endpoints.MapAreaControllerRoute(
+                        name: "General Management",
+                        "Management",
+                        pattern: "Management/{controller=Dashboard}/{action=Index}/{id?}")
+                    .RequireAuthorization(Policies.Types.ManagementAreaViewer);
+
+                endpoints.MapAreaControllerRoute(
+                        name: "Participants",
+                        "Users",
+                        pattern: "Users/{controller=Home}/{action=Index}/{id?}")
+                    .RequireAuthorization();
+
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
 
             // TODO verify database
-
         }
     }
 }

@@ -16,7 +16,6 @@ using NodaTime;
 namespace DragonCon.Features.Management.Convention
 {
     [Area("Management")]
-    [Authorize(policy: Policies.Types.AtLeastConventionManager)]
     public class ConventionController : DragonController<IManagementConventionGateway>
     {
         private ConventionBuilder Builder;

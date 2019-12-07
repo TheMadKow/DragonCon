@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Management.Dashboard
 {
     [Area("Management")]
-    [Authorize(policy: Policies.Types.AtLeastManagementViewer)]
     public class EventsController : DragonController<IManagementEventsGateway>
     {
         public EventsController(IServiceProvider service) : base(service)
@@ -23,7 +22,7 @@ namespace DragonCon.Features.Management.Dashboard
 
         #region Display
         [HttpGet]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult Manage(int page = 0, int perPage = ResultsPerPage, string tab = null)
         {
             ViewBag.HelperTab = tab;
@@ -32,7 +31,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult Manage(EventsManagementViewModel.Filters ActiveFilters, 
                                     int page = 0, int perPage = ResultsPerPage)
         {
@@ -42,7 +41,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult ManageSearch(string searchWords, int page = 0, int perPage = ResultsPerPage)
         {
             var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage), searchWords);
@@ -53,7 +52,7 @@ namespace DragonCon.Features.Management.Dashboard
 
         #region Activity
         [HttpPost]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public Answer DeleteEventActivity(string activityId)
         {
             var answer = Gateway.DeleteActivity(activityId);
@@ -61,7 +60,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
 
         [HttpGet]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult UpdateEventActivity(string activityId)
         {
             var viewModel = Gateway.GetActivityViewModel(activityId);
@@ -70,7 +69,7 @@ namespace DragonCon.Features.Management.Dashboard
 
 
         [HttpGet]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult CreateUpdateEventActivity(ActivityCreateUpdateViewModel viewModel = null)
         {
             if (viewModel == null)
@@ -90,7 +89,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult CreateUpdateEventActivityPost(ActivityCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Id))
@@ -99,7 +98,7 @@ namespace DragonCon.Features.Management.Dashboard
                 return UpdateEventActivity(viewmodel);
         }
 
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         private IActionResult UpdateEventActivity(ActivityCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
@@ -122,7 +121,7 @@ namespace DragonCon.Features.Management.Dashboard
             });
         }
 
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         private IActionResult CreateEventActivity(ActivityCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
@@ -148,7 +147,7 @@ namespace DragonCon.Features.Management.Dashboard
 
         #region Age Restriction
         [HttpGet]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult UpdateEventAgeRestriction(string restrictionId)
         {
             var viewModel = Gateway.GetAgeRestrictionViewModel(restrictionId);
@@ -156,7 +155,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
 
         [HttpGet]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult CreateUpdateEventAgeRestriction(AgeSystemCreateUpdateViewModel viewModel = null)
         {
             if (viewModel == null)
@@ -168,7 +167,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult CreateUpdateEventAgeRestrictionPost(AgeSystemCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
@@ -191,7 +190,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public Answer DeleteAgeRestriction(string restrictionId)
         {
             return Gateway.DeleteAgeRestriction(restrictionId);
@@ -199,7 +198,7 @@ namespace DragonCon.Features.Management.Dashboard
         #endregion
 
         [HttpGet]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult CreateUpdateEvent(string eventId = null)
         {
             var viewModel = Gateway.GetEventViewModel(eventId);
@@ -207,7 +206,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult CreateUpdateEvent(EventCreateUpdateViewModel viewmodel)
         {
             var answer = Answer.Error();
@@ -225,7 +224,7 @@ namespace DragonCon.Features.Management.Dashboard
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult QuickUpdate(string id, string status, string hall)
         {
             var answer = Gateway.QuickUpdate(id, status, hall);
@@ -240,7 +239,7 @@ namespace DragonCon.Features.Management.Dashboard
 
 
         [HttpGet]
-        [Authorize(policy: Policies.Types.AtLeastEventsManager)]
+        [Authorize(policy: Policies.Types.EventsManagement)]
         public IActionResult ViewEventHistory(string eventId)
         {
             var vm = Gateway.CreateEventHistory(eventId);

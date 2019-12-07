@@ -6,17 +6,17 @@
     <SccLocalPath>SAK</SccLocalPath>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
-	  <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	  <PackageReference Include="NodaTime" Version="2.4.7" />
 	  <PackageReference Include="NodaTime.Serialization.JsonNet" Version="2.2.0" />
-	  <PackageReference Include="RavenDB.Identity" Version="6.1.0" />
+	  <PackageReference Include="RavenDB.Identity" Version="6.2.0.2" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">

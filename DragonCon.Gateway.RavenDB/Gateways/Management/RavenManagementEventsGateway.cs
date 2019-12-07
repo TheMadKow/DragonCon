@@ -19,7 +19,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NodaTime;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
-using StackExchange.Profiling.Internal;
 using Activity = DragonCon.Modeling.Models.Common.Activity;
 
 namespace DragonCon.RavenDB.Gateways.Management
