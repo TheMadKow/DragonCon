@@ -32,6 +32,7 @@ using Raven.Client.ServerWide;
 using Raven.Client.ServerWide.Operations;
 using Raven.DependencyInjection;
 using Raven.Identity;
+using Serilog;
 
 namespace DragonCon.App
 {
@@ -141,7 +142,7 @@ namespace DragonCon.App
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
-                options.Cookie.Expiration = TimeSpan.FromDays(30);
+                //options.Cookie.Expiration = TimeSpan.FromDays(30);
                 options.ExpireTimeSpan = TimeSpan.FromDays(30);
                 options.LoginPath = "/Users/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
                 options.LogoutPath = "/Users/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
@@ -169,11 +170,22 @@ namespace DragonCon.App
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+
+            var dir = env.WebRootPath;
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.File($"{dir}\\Logs\\DragonCon_.txt",
+                    Serilog.Events.LogEventLevel.Warning,
+                    rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+
+            if (env.EnvironmentName == "Development")
             {
-                app.UseBrowserLink();
+                //app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -183,7 +195,7 @@ namespace DragonCon.App
 
             app.UseHsts();
             app.UseHttpsRedirection();
-            
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = res =>
@@ -197,36 +209,24 @@ namespace DragonCon.App
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoint => { });
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapAreaControllerRoute(
-                        name: "Convention Management",
-                        "Management",
-                        pattern: "Management/Convention/{action=Index}/{id?}")
-                    .RequireAuthorization(Policies.Types.ConventionManagement);
-
-
-                endpoints.MapAreaControllerRoute(
-                        name: "Events Management",
-                        "Management",
-                        pattern: "Management/Events/{action=Index}/{id?}")
-                    .RequireAuthorization(Policies.Types.EventsManagement);
-
-                endpoints.MapAreaControllerRoute(
                         name: "General Management",
-                        "Management",
+                        areaName:"Management",
                         pattern: "Management/{controller=Dashboard}/{action=Index}/{id?}")
                     .RequireAuthorization(Policies.Types.ManagementAreaViewer);
 
                 endpoints.MapAreaControllerRoute(
                         name: "Participants",
-                        "Users",
+                        areaName: "Users",
                         pattern: "Users/{controller=Home}/{action=Index}/{id?}")
                     .RequireAuthorization();
 
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapAreaControllerRoute(
+                        name: "default",
+                        areaName: "Convention",
+                        pattern: "{area=Convention}/{controller=Home}/{action=Index}/{id?}");
             });
 
             // TODO verify database

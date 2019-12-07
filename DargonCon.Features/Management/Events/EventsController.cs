@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Management.Dashboard
 {
     [Area("Management")]
+    [Authorize(policy: Policies.Types.EventsManagement)]
     public class EventsController : DragonController<IManagementEventsGateway>
     {
         public EventsController(IServiceProvider service) : base(service)

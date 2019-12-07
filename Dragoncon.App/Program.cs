@@ -14,7 +14,8 @@ namespace DragonCon.App
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.File($"{dir}\\Logs\\DragonCon_.txt", Serilog.Events.LogEventLevel.Warning,
+                .WriteTo.File($"{dir}\\Logs\\DragonCon_.txt", 
+                    Serilog.Events.LogEventLevel.Warning,
                     rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
@@ -38,12 +39,13 @@ namespace DragonCon.App
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder
-                        .UseKestrel()
-                        .ConfigureKestrel(serverOptions =>
-                        {
-                            // Set properties and call methods on options
-                        })
+                        //.UseKestrel()
+                        //.ConfigureKestrel(serverOptions =>
+                        //{
+                        //    // Set properties and call methods on options
+                        //})
                         .UseContentRoot(Directory.GetCurrentDirectory())
+                        .UseIIS()
                         .UseIISIntegration()
                         .UseSerilog()
                         .UseStartup<Startup>();

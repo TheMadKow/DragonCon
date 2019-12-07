@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using DragonCon.Features.Home;
-using DragonCon.Features.Home.Convention;
+using DragonCon.Features.Convention.Home;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Events;
-using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.ViewModels;
-using SystemClock = NodaTime.SystemClock;
 
 namespace DragonCon.RavenDB.Gateways.Users
 {

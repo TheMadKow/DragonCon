@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Management.Participants
 {
     [Area("Management")]
+    [Authorize(Policies.Types.ManagementAreaViewer)]
     public class ParticipantsController : DragonController<IManagementParticipantsGateway>
     {
         public ParticipantsController(IServiceProvider service) : base(service)
@@ -29,6 +30,7 @@ namespace DragonCon.Features.Management.Participants
         }
 
 
+        [Authorize(Policies.Types.EventsManagement)]
         [HttpPost]
         public async Task<Answer> ResetPassword(string id)
         {
@@ -58,6 +60,7 @@ namespace DragonCon.Features.Management.Participants
 
         #endregion
 
+        [Authorize(Policies.Types.EventsManagement)]
         [HttpPost]
         public IActionResult UpdateRoles(UpdateRolesViewModel viewmodel)
         {
@@ -73,6 +76,7 @@ namespace DragonCon.Features.Management.Participants
             return RedirectToAction("Manage");
         }
 
+        [Authorize(Policies.Types.EventsManagement)]
         [HttpGet]
         public IActionResult UpdateRoles(string collection, string id)
         {

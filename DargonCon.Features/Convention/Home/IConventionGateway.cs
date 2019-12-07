@@ -1,6 +1,6 @@
 ﻿using DragonCon.Features.Shared;
 
-namespace DragonCon.Features.Home.Convention
+namespace DragonCon.Features.Convention.Home
 {
     public interface IConventionGateway : IGateway
     {

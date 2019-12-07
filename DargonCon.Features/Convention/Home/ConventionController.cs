@@ -2,12 +2,12 @@
 using DragonCon.Features.Shared;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragonCon.Features.Home.Convention
+namespace DragonCon.Features.Convention.Home
 {
-    [Area("Home")]
-    public class ConventionController : DragonController<NullGateway>
+    [Area("Convention")]
+    public class HomeController : DragonController<NullGateway>
     {
-        public ConventionController(IServiceProvider service) : 
+        public HomeController(IServiceProvider service) : 
             base(service)  { }
 
         public IActionResult Index()
