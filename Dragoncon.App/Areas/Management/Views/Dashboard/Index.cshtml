@@ -1,69 +1,72 @@
 ﻿@using System.Globalization
 @using DragonCon.Modeling.Helpers
 @{
-    ViewBag.Title = "לוח מחוונים";
-    var me = Actor.Participant;
-    var state = Actor.SystemState;
+    ViewBag.Title = "מידע כללי";
+
+    var actorMe = Actor.Me;
+    var manageConvention = Actor.ManagedConvention;
+    var displayConvention = Actor.DisplayConvention;
 }
 
-<br/>
+
+<br />
 <div class="card card-margined card-grayed">
     <div class="card-body">
-        <h5 class="card-title">אני</h5>
+        <h5 class="card-title"><i class="fa fa-fw fa-user"></i> אני</h5>
         <table class="table table-hover text-right">
             <tr>
                 <td class="tw-4">שם</td>
-                <td class="tw-8">@me.FullName</td>
+                <td class="tw-8">@actorMe.FullName</td>
             </tr>
             <tr>
                 <td>דוא"ל</td>
-                <td>@me.Id</td>
+                <td>@actorMe.Id</td>
             </tr>
             <tr>
                 <td>הרשאות אתר</td>
-                <td> 
-                    @foreach (var role in me.SystemRoles.Select(x => x.ToTextual()).OrderBy(x => x))
+                <td>
+                    @foreach (var role in actorMe.SystemRoles.Select(x => x.ToTextual()).OrderBy(x => x))
                     {
-                        <span>@role<br/></span>
+                        <span>@role<br /></span>
                     }
                 </td>
             </tr>
             <tr>
                 <td>תפקידי כנס</td>
                 <td>
-                    @foreach (var role in me.ConventionRoles.Select(x => x.ToTextual()).OrderBy(x => x))
+                    @foreach (var role in actorMe.ConventionRoles.Select(x => x.ToTextual()).OrderBy(x => x))
                     {
                         <span>@role<br /></span>
                     }
                 </td>
             </tr>
         </table>
-            <div class="row">
-            </div>
+        <div class="row">
+        </div>
     </div>
 </div>
 
-
+@* Managed Convention *@
 <div class="card card-margined card-grayed">
     <div class="card-body">
-        <h5 class="card-title">הכנס</h5>
+        <h5 class="card-title"><i class="fa fa-fw fa-users-cog"></i> כנס מנוהל</h5>
         <table class="table table-hover text-right">
-            <tr>
-                <td class="tw-4">כנס</td>
-                <td class="tw-8">@state.ConventionName</td>
-            </tr>
-            @if (state.HasActiveConvention)
+            @if (Actor.HasManagedConvention)
             {
+                <tr>
+                    <td class="tw-4">כנס</td>
+                    <td class="tw-8">@manageConvention?.ConventionName</td>
+                </tr>
                 <tr>
                     <td>מיקום</td>
                     <td>
-                        @state.Location
+                        @manageConvention.Location
                     </td>
                 </tr>
                 <tr>
                     <td>כותרת משנה</td>
                     <td>
-                        @state.TagLine
+                        @manageConvention.TagLine
                     </td>
                 </tr>
                 <tr>
@@ -71,14 +74,14 @@
                         אסטרטגית זמנים
                     </td>
                     <td>
-                        @state.TimeStrategy.ToTextual()
+                        @manageConvention.TimeStrategy.ToTextual()
                     </td>
                 </tr>
 
                 <tr>
                     <td>ימים</td>
                     <td>
-                        @foreach (var day in state.Days.OrderBy(x => x.Date))
+                        @foreach (var day in manageConvention.Days.OrderBy(x => x.Date))
                         {
                             <div>
                                 <strong>
@@ -93,7 +96,7 @@
                 <tr>
                     <td>אולמות</td>
                     <td>
-                        @foreach (var hall in state.Halls.OrderBy(x => x.FirstTable))
+                        @foreach (var hall in manageConvention.Halls.OrderBy(x => x.FirstTable))
                         {
                             <div class="row">
                                 <div class="col-4">
@@ -112,71 +115,96 @@
                 <tr>
                     <td>כרטיסים</td>
                     <td>
-                        @foreach (var ticket in state.Tickets.OrderBy(x => x.Name))
+                        @foreach (var ticket in manageConvention.Tickets.OrderBy(x => x.Name))
                         {
-                        <div class="row">
-                            <div class="col-4">
-                                @ticket.Name (@ticket.TicketType.ToTextual())
-                                <br />
-                                @for (int i = 0; i < ticket.DayIds.Count; i++)
-                                {
-                                    var date = Actor.SystemState.GetDayById(ticket.DayIds[i]);
-                                    <span class="text-info">@date?.Date.DayOfWeek.InHebrew()</span>
-                                    @if (i != ticket.DayIds.Count - 1)
+                            <div class="row">
+                                <div class="col-4">
+                                    @ticket.Name (@ticket.TicketType.ToTextual())
+                                    <br />
+                                    @for (int i = 0; i < ticket.DayIds.Count; i++)
                                     {
-                                        <span class="text-primary">,</span>
+                                        var date = Actor.ManagedConvention.GetDayById(ticket.DayIds[i]);
+                                        <span class="text-info">@date?.Date.DayOfWeek.InHebrew()</span>
+                                        @if (i != ticket.DayIds.Count - 1)
+                                        {
+                                            <span class="text-primary">,</span>
+                                        }
                                     }
-                                }
+                                </div>
+                                <div class="col-4">
+                                    @if (ticket.ActivitiesAllowed.HasValue)
+                                    {
+                                        <span>מוגבל ל-@ticket.ActivitiesAllowed פעילויות</span>
+                                    }
+                                    else
+                                    {
+                                        <span>ללא הגבלה</span>
+                                    }
+                                </div>
+                                <div class="col-4">
+                                    @ticket.Price ש"ח
+                                </div>
                             </div>
-                            <div class="col-4">
-                                @if (ticket.ActivitiesAllowed.HasValue)
-                                {
-                                    <span>מוגבל ל-@ticket.ActivitiesAllowed פעילויות</span>
-                                }
-                                else
-                                {
-                                    <span>ללא הגבלה</span>
-                                }
-                            </div>
-                            <div class="col-4">
-                                @ticket.Price ש"ח
-                            </div>
-                        </div>
                         }
                     </td>
                 </tr>
 
-
-
                 <tr>
                     <td>מותר להציע אירועים</td>
                     <td>
-                        @await Html.PartialAsync("_PartialParameter", state.Configurations.AllowEventsSuggestions)
+                        @await Html.PartialAsync("_PartialParameter", manageConvention.Settings.AllowEventsSuggestions)
                     </td>
                 </tr>
                 <tr>
                     <td>מותר להרשם לאירועים</td>
                     <td>
-                        @await Html.PartialAsync("_PartialParameter", state.Configurations.AllowEventsRegistration)
+                        @await Html.PartialAsync("_PartialParameter", manageConvention.Settings.AllowEventsRegistration)
                     </td>
                 </tr>
                 <tr>
                     <td>מותר לשנות רישום</td>
                     <td>
-                        @await Html.PartialAsync("_PartialParameter", state.Configurations.AllowEventsRegistrationChanges)
+                        @await Html.PartialAsync("_PartialParameter", manageConvention.Settings.AllowEventsRegistrationChanges)
                     </td>
                 </tr>
                 <tr>
                     <td>מותר לקנות כרטיס</td>
                     <td>
-                        @await Html.PartialAsync("_PartialParameter", state.Configurations.AllowPayments)
+                        @await Html.PartialAsync("_PartialParameter", manageConvention.Settings.AllowPayments)
                     </td>
                 </tr>
                 <tr>
                     <td>מותר לשנות כרטיס</td>
                     <td>
-                        @await Html.PartialAsync("_PartialParameter", state.Configurations.AllowPaymentChanges)
+                        @await Html.PartialAsync("_PartialParameter", manageConvention.Settings.AllowPaymentChanges)
                     </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td class="tw-12 text-danger">לא מוגדר כנס מנוהל</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+@* Participant Convention *@
+<div class="card card-margined card-grayed">
+    <div class="card-body">
+        <h5 class="card-title"><i class="fa fa-fw fa-user-friends"></i> כנס תצוגה</h5>
+        <table class="table table-hover text-right h5 text-center">
+            @if (Actor.HasDisplayConvention)
+            {
+                <tr>
+                    <td class="tw-12">@displayConvention.ConventionName</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td class="tw-12 text-danger">לא מוגדר כנס לתצוגה</td>
                 </tr>
             }
         </table>

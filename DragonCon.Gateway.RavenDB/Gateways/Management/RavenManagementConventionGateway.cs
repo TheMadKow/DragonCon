@@ -6,7 +6,6 @@ using DragonCon.Features.Shared;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
-using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.System;
 using DragonCon.Modeling.Models.Tickets;
 using Raven.Client.Documents;
@@ -49,8 +48,6 @@ namespace DragonCon.RavenDB.Gateways.Management
             }).ToList();
 
             result.Pagination = DisplayPagination.BuildForView(stats.TotalResults, pagination.SkipCount, pagination.ResultsPerPage);
-            result.Configuration = Actor.SystemState.Configurations;
-
             return result;
         }
 
@@ -64,6 +61,8 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .Include<Convention>(x => x.HallIds)
                 .Include<Convention>(x => x.TicketIds)
                 .Load<Convention>(conId);
+
+            result.Settings = convention.Settings;
 
             var days = Session.Load<Day>(convention.DayIds);
             var halls = Session.Load<Hall>(convention.HallIds);
@@ -114,14 +113,27 @@ namespace DragonCon.RavenDB.Gateways.Management
             return result;
         }
 
-        public SystemConfiguration LoadSystemConfiguration()
+        private SystemConfiguration LoadOrCreateConfiguration()
         {
-            return Actor.SystemState.Configurations;
+            var config = Session.Load<SystemConfiguration>(SystemConfiguration.Id);
+            if (config == null)
+                config = new SystemConfiguration();
+
+            return config;
         }
 
-
-        public void SaveSystemConfiguration(SystemConfiguration config)
+        public void SetAsManaged(string id)
         {
+            var config = LoadOrCreateConfiguration();
+            config.ManagedConventionId = id;
+            Session.Store(config, SystemConfiguration.Id);
+            Session.SaveChanges();
+        }
+
+        public void SetAsDisplay(string id)
+        {
+            var config = LoadOrCreateConfiguration();
+            config.DisplayConventionId = id;
             Session.Store(config, SystemConfiguration.Id);
             Session.SaveChanges();
         }

@@ -12,6 +12,7 @@ namespace DragonCon.Features.Management.Convention
         public TicketsUpdateViewModel Tickets { get; set; }
         public HallsUpdateViewModel Halls { get; set; }
         public DetailsUpdateViewModel Details { get; set; }
+        public ConventionSettings Settings { get; set; }
         public string ErrorMessage { get; set; }
     }
 

@@ -26,5 +26,16 @@ namespace DragonCon.Modeling.Models.Conventions
         
         public string TagLine { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
+        public ConventionSettings Settings { get; set; } = new ConventionSettings();
+    }
+
+    public class ConventionSettings
+    {
+        public bool AllowEventsRegistration { get; set; } = false;
+        public bool AllowEventsRegistrationChanges { get; set; } = false;
+        public bool AllowEventsSuggestions { get; set; } = false;
+        public bool AllowPayments { get; set; } = false;
+        public bool AllowPaymentChanges { get; set; } = false;
+
     }
 }

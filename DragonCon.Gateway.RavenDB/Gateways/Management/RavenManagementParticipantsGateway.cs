@@ -110,7 +110,7 @@ namespace DragonCon.RavenDB.Gateways.Management
             }
 
 
-            throw new Exception("Unknown Participant Term or Participant not found");
+            throw new Exception("Unknown Me Term or Me not found");
         }
 
         public Answer UpdateRoles(string participantId, string[] sysKeys, string[] conKeys)
@@ -217,15 +217,15 @@ namespace DragonCon.RavenDB.Gateways.Management
             {
                 model = new ShortTermParticipant
                 {
-                    ActiveConventionTerm = Actor.SystemState.ConventionId,
-                    CreatedById = Actor.Participant.Id
+                    ActiveConventionTerm = Actor.ManagedConvention.ConventionId,
+                    CreatedById = Actor.Me.Id
                 };
             }
             else
             {
                 model = new LongTermParticipant
                 {
-                    ActiveConventionTerm = Actor.SystemState.ConventionId,
+                    ActiveConventionTerm = Actor.ManagedConvention.ConventionId,
                     UserName = viewmodel.Email,
                     Email = viewmodel.Email,
                     IsAllowingPromotions = viewmodel.IsAllowingPromotions,
@@ -270,7 +270,7 @@ namespace DragonCon.RavenDB.Gateways.Management
         private Answer ValidateParticipantFields(ParticipantCreateUpdateViewModel viewmodel)
         {
             if (viewmodel.FullName.IsEmptyString())
-                return Answer.Error("No Participant Name");
+                return Answer.Error("No Me Name");
        
             if (viewmodel.DayOfBirth.IsEmptyString())
                 return Answer.Error("No Date of Birth");
@@ -292,7 +292,7 @@ namespace DragonCon.RavenDB.Gateways.Management
             bool allowHistory = false,
             ParticipantsManagementViewModel.Filters? filters = null)
         {
-            var currentConvention = Actor.SystemState.ConventionId;
+            var currentConvention = Actor.ManagedConvention.ConventionId;
             var query = Session.Query<IParticipant, Participants_ByActiveConvention>().AsQueryable();
             if (allowHistory == false)
             {
@@ -318,8 +318,8 @@ namespace DragonCon.RavenDB.Gateways.Management
             {
                 case LongTermParticipant longTerm:
                     IPaymentInvoice lastPayment = null;
-                    if (longTerm.ConventionAndPayment.ContainsKey(Actor.SystemState.ConventionId))
-                        lastPayment = longTerm.ConventionAndPayment[Actor.SystemState.ConventionId];
+                    if (longTerm.ConventionAndPayment.ContainsKey(Actor.ManagedConvention.ConventionId))
+                        lastPayment = longTerm.ConventionAndPayment[Actor.ManagedConvention.ConventionId];
 
                     return new LongTermParticipantWrapper(participant)
                     {
@@ -349,7 +349,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .Search(x => x.SearchText, searchWords).AsQueryable();
             if (allowHistory == false)
             {
-                query = query.Where(x => x.ActiveConventionTerm == Actor.SystemState.ConventionId);
+                query = query.Where(x => x.ActiveConventionTerm == Actor.ManagedConvention.ConventionId);
             }
 
             var results = query

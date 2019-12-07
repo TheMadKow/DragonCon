@@ -36,7 +36,7 @@
             <div class="col-2">
                 <select class="form-control chosen-select"
                         asp-for="ActiveFilters.Status"
-                        asp-items="Actor.DropDowns.BuildStatus()"
+                        asp-items="Actor.ManagedDropDowns.BuildStatus()"
                         data-placeholder="סטטוס אירוע">
                     <option value="" selected>הכל</option>
                 </select>
@@ -47,7 +47,7 @@
             <div class="col-4">
                 <select class="form-control chosen-select"
                         asp-for="ActiveFilters.DayAndTime"
-                        asp-items="Actor.DropDowns.BuildDaysTimes()"
+                        asp-items="Actor.ManagedDropDowns.BuildDaysTimes()"
                         data-placeholder="מועד התחלה">
                     <option value="" selected>הכל</option>
                 </select>
@@ -59,7 +59,7 @@
             <div class="col-2">
                 <select class="form-control chosen-select"
                         asp-for="ActiveFilters.Duration"
-                        asp-items="Actor.DropDowns.BuildDurations()"
+                        asp-items="Actor.ManagedDropDowns.BuildDurations()"
                         data-placeholder="משך">
                     <option value="" selected>הכל</option>
                 </select>
@@ -77,7 +77,7 @@
             <div class="col-4">
                 <select class="form-control chosen-select"
                         asp-for="ActiveFilters.Activity"
-                        asp-items="Actor.DropDowns.Activities()" data-placeholder="פעילות ושיטות">
+                        asp-items="Actor.ManagedDropDowns.Activities()" data-placeholder="פעילות ושיטות">
                     <option value="" selected>הכל</option>
                 </select>
             </div>
@@ -88,7 +88,7 @@
             <div class="col-3">
                 <select class="form-control chosen-select"
                         asp-for="ActiveFilters.AgeGroup"
-                        asp-items="Actor.DropDowns.BuildAgeGroups()"
+                        asp-items="Actor.ManagedDropDowns.BuildAgeGroups()"
                         data-placeholder="קבוצת גיל">
                     <option value="" selected>הכל</option>
                 </select>

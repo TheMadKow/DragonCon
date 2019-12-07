@@ -15,7 +15,7 @@
                 <h3>@Model.NameDate.Name</h3>
             </div>
         </div>
-
+    
         <div class="modal-body right-to-left">
             <div class="card card-grayed">
                 <div class="card-body">
@@ -36,7 +36,37 @@
                     </table>
                 </div>
             </div>
-            <br/>
+            <br />
+
+            <div class="card card-grayed">
+                <div class="card-body">
+                    <h5 class="card-title">הגדרות</h5>
+                    <table class="table">
+                        <tr class="d-flex">
+                            <td class="col-5"> אפשר הגשת אירועים</td>
+                            <td class="col-3"> @Model.Settings.AllowEventsSuggestions.AsYesNoHebrew()</td>
+                        </tr>
+                        <tr class="d-flex">
+                            <td class="col-5"> אפשר רישום לאירועים</td>
+                            <td class="col-3"> @Model.Settings.AllowEventsRegistration.AsYesNoHebrew()</td>
+                        </tr>
+                        <tr class="d-flex">
+                            <td class="col-5"> אפשר שינוי רישום לאירועים</td>
+                            <td class="col-3"> @Model.Settings.AllowEventsRegistrationChanges.AsYesNoHebrew()</td>
+                        </tr>
+                        <tr class="d-flex">
+                            <td class="col-5"> אפשר רכישת כרטיס</td>
+                            <td class="col-3"> @Model.Settings.AllowPayments.AsYesNoHebrew()</td>
+                        </tr>
+                        <tr class="d-flex">
+                            <td class="col-5"> אפשר שינוי כרטיסים</td>
+                            <td class="col-3"> @Model.Settings.AllowPaymentChanges.AsYesNoHebrew()</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <br />
+
             <div class="card card-grayed">
                 <div class="card-body">
                     <h5 class="card-title">ימי הכנס</h5>

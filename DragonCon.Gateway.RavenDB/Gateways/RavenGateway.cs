@@ -34,7 +34,7 @@ namespace DragonCon.RavenDB.Gateways
         protected ConventionRolesContainer LoadConventionRolesContainer(string conventionId = null)
         {
             if (conventionId == null)
-                conventionId = Actor.SystemState.ConventionId;
+                conventionId = Actor.ManagedConvention.ConventionId;
 
             var result = Session.Query<ConventionRolesContainer>().SingleOrDefault(x => x.ConventionId == conventionId);
             if (result == null)

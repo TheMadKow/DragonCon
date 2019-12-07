@@ -25,15 +25,15 @@
                     @if (Model.AllowHistoryParticipants)
                     {
                         <a asp-area="Management" asp-controller="Participants" asp-action="Manage" asp-route-allowHistory="false">
-                            <i class="fa fa-fw fa-square"></i> רק כנס נוכחי
+                            <i class="fa fa-fw fa-square"></i> רק כנס מנוהל
                         </a>
 
                     }
                     else
                     {
-                        <a asp-area="Management" asp-controller="Participants" asp-action="Manage" asp-route-allowHistory="true">
-                            <i class="fa fa-fw fa-check-square"></i> רק כנס נוכחי
-                        </a>
+                <a asp-area="Management" asp-controller="Participants" asp-action="Manage" asp-route-allowHistory="true">
+                    <i class="fa fa-fw fa-check-square"></i> רק כנס מנוהל
+                </a>
                     }
                 </div>
             </div></div>
@@ -52,8 +52,8 @@
                 </div>
             </div>
         </form>
-        @if (Actor.Participant.SystemRoles.Contains(SystemRoles.UsersManager) ||
-             Actor.Participant.SystemRoles.Contains(SystemRoles.ConventionManager))
+        @if (Actor.Me.SystemRoles.Contains(SystemRoles.UsersManager) ||
+             Actor.Me.SystemRoles.Contains(SystemRoles.ConventionManager))
         {
 
             <br/>
@@ -115,7 +115,7 @@
                     @if (isShortTerm)
                     {
                         <div>
-                            <i class="fa fa-fw fa-ankh"></i> משתתף זמני
+                            <i class="fa fa-fw fa-user-clock"></i> משתתף זמני
                             <br />
                         </div>
                     }
@@ -168,8 +168,8 @@
                                asp-route-collection="@participantId.GetCollectionFromId()" asp-route-id="@participantId.GetNumberFromId()">
                                 <i class="fa fa-fw fa-edit"></i> עדכון פרטים
                             </a>
-                            @if (Actor.Participant.SystemRoles.Contains(SystemRoles.UsersManager) ||
-                             Actor.Participant.SystemRoles.Contains(SystemRoles.ConventionManager))
+                            @if (Actor.Me.SystemRoles.Contains(SystemRoles.UsersManager) ||
+                             Actor.Me.SystemRoles.Contains(SystemRoles.ConventionManager))
                             {
                                 <a class="dropdown-item" asp-area="Management" asp-controller="Participants" asp-action="UpdateRoles"
                                    asp-route-collection="@participantId.GetCollectionFromId()" asp-route-id="@participantId.GetNumberFromId()">
@@ -184,8 +184,8 @@
                                     <i class="fa fa-fw fa-history"></i> מידע היסטורי
                                 </a>
                             }
-                            @if (Actor.Participant.SystemRoles.Contains(SystemRoles.UsersManager) ||
-                             Actor.Participant.SystemRoles.Contains(SystemRoles.ConventionManager))
+                            @if (Actor.Me.SystemRoles.Contains(SystemRoles.UsersManager) ||
+                             Actor.Me.SystemRoles.Contains(SystemRoles.ConventionManager))
                             {
                                 @if (isShortTerm == false)
                                 {
@@ -260,7 +260,7 @@
                 if (result.value) {
                     $.ajax({
                         type: "POST",
-                        url: "/Management/Participants/ResetPassword?id=" + participantId,
+                        url: "/Management/Mes/ResetPassword?id=" + participantId,
                         data: CreateDefaultPostData(),
                         success: function() {
                             Swal.fire('סיסמה שונתה בהצלחה - נשלח דואל למשתתפ/ת');

@@ -295,7 +295,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                         DocumentId = model.Id,
                         NewValue = tempTimeSlot.AsJson(),
                         OldValue = model.TimeSlot.AsJson(),
-                        UserId = Actor.Participant.Id
+                        UserId = Actor.Me.Id
                     };
                     model.TimeSlot = tempTimeSlot;
                     Session.Store(action);
@@ -326,7 +326,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 userActions.Add(new UserAction
                 {
                     DocumentId = id,
-                    UserId = Actor.Participant.Id,
+                    UserId = Actor.Me.Id,
                     TimeStamp = model.UpdatedOn,
                     Field = "Status [quick]",
                     OldValue = model.Status.ToString(),
@@ -345,7 +345,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                     userActions.Add(new UserAction
                     {
                         DocumentId = id,
-                        UserId = Actor.Participant.Id,
+                        UserId = Actor.Me.Id,
                         TimeStamp = model.UpdatedOn,
                         Field = "Hall [quick]",
                         OldValue = model.HallId,
@@ -358,7 +358,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                     userActions.Add(new UserAction
                     {
                         DocumentId = id,
-                        UserId = Actor.Participant.Id,
+                        UserId = Actor.Me.Id,
                         TimeStamp = model.UpdatedOn,
                         Field = "Table [quick]",
                         OldValue = model.HallTable.ToString(),
@@ -404,7 +404,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                         result.Add(new UserAction
                         {
                             DocumentId = model.Id,
-                            UserId = Actor.Participant.Id,
+                            UserId = Actor.Me.Id,
                             Field = property.Name,
                             OldValue = value1AsJson ?? string.Empty,
                             NewValue = value2AsJson ?? string.Empty,
@@ -427,7 +427,7 @@ namespace DragonCon.RavenDB.Gateways.Management
             var model = new Event
             {
                 CreatedOn = SystemClock.Instance.GetCurrentInstant(),
-                ConventionId = Actor.SystemState.ConventionId,
+                ConventionId = Actor.ManagedConvention.ConventionId,
                 IsSpecialPrice = viewmodel.IsSpecialPrice,
                 SpecialPrice = viewmodel.SpecialPrice,
                 Name = viewmodel.Name,
@@ -481,7 +481,7 @@ namespace DragonCon.RavenDB.Gateways.Management
             Session.Store(model);
             var userAction = new UserAction
             {
-                UserId = Actor.Participant.Id,
+                UserId = Actor.Me.Id,
                 DocumentId = model.Id,
 
                 Field = "Event Creation",
@@ -532,7 +532,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .Include(x => x.GameMasterIds)
                 .Include(x => x.HallId)
                 .Include(x => x.AgeId)
-                .Where(x => x.ConventionId == Actor.SystemState.ConventionId)
+                .Where(x => x.ConventionId == Actor.ManagedConvention.ConventionId)
                 .OrderBy(x => x.Name)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)
@@ -571,7 +571,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .Include(x => x.GameMasterIds)
                 .Include(x => x.HallId)
                 .Include(x => x.AgeId)
-                .Where(x => x.ConventionId == Actor.SystemState.ConventionId);
+                .Where(x => x.ConventionId == Actor.ManagedConvention.ConventionId);
 
             if (filters is {})
             {

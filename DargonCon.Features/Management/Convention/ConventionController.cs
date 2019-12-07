@@ -39,43 +39,45 @@ namespace DragonCon.Features.Management.Convention
             return View("ShowDetails", conUpdateViewModel);
         }
 
+
         [HttpPost]
-        public Answer ToggleType(string type, bool value)
+        //public Answer ToggleType(string type, bool value)
+        //{
+        //    switch (type)
+        //    {
+        //        case "events":
+        //            config.AllowEventsSuggestions = value;
+        //            break;
+        //        case "registration-add":
+        //            config.AllowEventsRegistration = value;
+        //            break;
+        //        case "registration-change":
+        //            config.AllowEventsRegistrationChanges = value;
+        //            break;
+        //        case "payment":
+        //            config.AllowPayments = value;
+        //            break;
+        //        case "payment-change":
+        //            config.AllowPayments = value;
+        //            break;
+        //        default:
+        //            throw new Exception("Unknown config toggle");
+        //    }
+        //    Gateway.SaveSystemConfiguration(config);
+        //    return Answer.Success;
+        //}
+
+        [HttpPost]
+        public Answer SetAsManaged(string id)
         {
-            var config = Gateway.LoadSystemConfiguration();
-            switch (type)
-            {
-                case "events":
-                    config.AllowEventsSuggestions = value;
-                    break;
-                case "registration-add":
-                    config.AllowEventsRegistration = value;
-                    break;
-                case "registration-change":
-                    config.AllowEventsRegistrationChanges = value;
-                    break;
-                case "payment":
-                    config.AllowPayments = value;
-                    break;
-                case "payment-change":
-                    config.AllowPayments = value;
-                    break;
-                default:
-                    throw new Exception("Unknown config toggle");
-            }
-            Gateway.SaveSystemConfiguration(config);
+            Gateway.SetAsManaged(id);
             return Answer.Success;
         }
 
         [HttpPost]
-        public Answer SetActive(string id)
+        public Answer SetAsDisplay(string id)
         {
-            var config = new SystemConfiguration
-            {
-                ActiveConventionId = id
-            };
-
-            Gateway.SaveSystemConfiguration(config);
+            Gateway.SetAsDisplay(id);
             return Answer.Success;
         }
 

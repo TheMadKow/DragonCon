@@ -40,7 +40,7 @@ namespace DragonCon.RavenDB.Identities
                 return await AddLongTermParticipant(longP);
             }
 
-            throw new Exception("Unknown Participant Type");
+            throw new Exception("Unknown Me Type");
         }
 
         private async Task<IdentityResults.Password> AddLongTermParticipant(LongTermParticipant user)

@@ -26,6 +26,7 @@ namespace DragonCon.Modeling.Models.Conventions
         public List<Ticket> Tickets { get; set; } = new List<Ticket>();
         public List<Day> Days { get; set; } = new List<Day>();
    
+        public ConventionSettings Settings { get => Model.Settings; set => Model.Settings = value; }
         public Instant CreateTimeStamp { get => Model.CreateTimeStamp; set => Model.CreateTimeStamp = value; }
         public Instant UpdateTimeStamp { get => Model.UpdateTimeStamp; set => Model.UpdateTimeStamp = value; }
         

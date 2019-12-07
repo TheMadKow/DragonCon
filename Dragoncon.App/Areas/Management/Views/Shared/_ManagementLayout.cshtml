@@ -69,7 +69,23 @@
     </ul>
     <div class="container">
         <div class="container-admin">
-            <h4 class="Title-Text">@ViewBag.Title <small class="text-secondary">&nbsp;&nbsp; @Actor.SystemState.ConventionName</small></h4>
+            <h4 class="Title-Text">@ViewBag.Title 
+                <small class="text-secondary">
+                    &nbsp;&nbsp;
+                    @if (Actor.HasManagedConvention)
+                    {
+                        <span>
+                            @Actor.ManagedConvention.ConventionName
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">
+                            לא מוגדר כנס מנוהל
+                        </span>
+
+                    }
+                </small></h4>
 
             @RenderSection("Subheader", required: false)
 

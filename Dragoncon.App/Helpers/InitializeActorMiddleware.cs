@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +21,7 @@ namespace DragonCon.App.Helpers
     public class InitializeActorMiddleware
     {
         private readonly RequestDelegate _next;
+        private int CacheDays = 1;
 
         public InitializeActorMiddleware(RequestDelegate next)
         {
@@ -35,22 +35,57 @@ namespace DragonCon.App.Helpers
         {
             using (var session = holder.Store.OpenSession())
             {
-                actor.Participant = LoadParticipant(session);
-                actor.SystemState = LoadSystemState(session);
-                actor.DropDowns = LoadDropDowns(factory, actor.SystemState);
+                actor.System = LoadSystem(session);
+                actor.Me = LoadMe(session);
+
+                actor.ManagedConvention = LoadConvention(actor.System.ManagersConventionId, session);
+                if (actor.ManagedConvention != null)
+                    actor.ManagedDropDowns = LoadDropDowns(factory, actor.ManagedConvention, actor.System);
+            
+                actor.DisplayConvention = LoadConvention(actor.System.DisplayConventionId, session);
+                if (actor.DisplayConvention != null)
+                    actor.DisplayDropDowns = LoadDropDowns(factory, actor.DisplayConvention, actor.System);
             }
 
             return _next(httpContext);
         }
 
-        private Actor.ActorDropDowns LoadDropDowns(IStrategyFactory factory, Actor.ActorSystemState actorSystemState)
+        private Actor.ActorSystemState LoadSystem(IDocumentSession session)
         {
-            return new Actor.ActorDropDowns(factory, actorSystemState);
+            using (session.Advanced.DocumentStore.AggressivelyCacheFor(TimeSpan.FromDays(CacheDays)))
+            {
+                var system = session
+                    .Include<SystemConfiguration>(x => x.ManagedConventionId)
+                    .Include<SystemConfiguration>(x => x.DisplayConventionId)
+                    .Load<SystemConfiguration>(SystemConfiguration.Id);
+
+                var activities = session.Query<Activity>().ToList()
+                    .Where(x => x.IsSubActivity == false).ToList();
+                var ageGroups = session.Query<AgeGroup>().ToList();
+
+                if (system == null)
+                {
+                    system = new SystemConfiguration();
+                }
+
+                return new Actor.ActorSystemState
+                {
+                    ManagersConventionId = system.ManagedConventionId,
+                    DisplayConventionId = system.DisplayConventionId,
+                    Activities = activities,
+                    AgeGroups = ageGroups
+                };
+            }
         }
 
-        private Actor.ActorParticipant LoadParticipant(IDocumentSession session)
+        private Actor.ActorDropDowns LoadDropDowns(IStrategyFactory factory, Actor.ActorConventionState convention, Actor.ActorSystemState system)
         {
-            return new Actor.ActorParticipant()
+            return new Actor.ActorDropDowns(factory, convention, system);
+        }
+
+        private Actor.ActorParticipant LoadMe(IDocumentSession session)
+        {
+            return new Actor.ActorParticipant
             {
                 Id = "test@dragoncon.com",
                 FullName = "משתמש מערכת",
@@ -70,71 +105,41 @@ namespace DragonCon.App.Helpers
             };
         }
 
-        private Actor.ActorSystemState LoadSystemState(IDocumentSession _session)
+        private Actor.ActorConventionState? LoadConvention(string conventionId, IDocumentSession _session)
         {
             var stopwatch = Stopwatch.StartNew();
             using (_session.Advanced.DocumentStore.AggressivelyCacheFor(TimeSpan.FromDays(1)))
             {
-                var activities = _session.Query<Activity>().ToList();
-                var ageGroups = _session.Query<AgeGroup>().ToList();
 
-                var config = _session
-                           .Include<SystemConfiguration>(x => x.ActiveConventionId)
-                           .Load<SystemConfiguration>(SystemConfiguration.Id) ?? new SystemConfiguration();
+                if (conventionId.IsEmptyString())
+                    return null;
 
-                var convention = new Convention();
-                if (config.ActiveConventionId.IsNotEmptyString())
-                {
-                    convention = _session
+                var convention = _session
                         .Include<Convention>(x => x.DayIds)
                         .Include<Convention>(x => x.HallIds)
                         .Include<Convention>(x => x.TicketIds)
-                        .Load<Convention>(config.ActiveConventionId);
-                }
+                        .Load<Convention>(conventionId);
 
                 if (convention == null)
-                    convention = new Convention();
+                    return null;
 
                 var halls = _session.Load<Hall>(convention.HallIds);
                 var tickets = _session.Load<Ticket>(convention.TicketIds);
                 var days = _session.Load<Day>(convention.DayIds);
 
-                var result = new Actor.ActorSystemState()
+                var result = new Actor.ActorConventionState
                 {
-                    Configurations = config,
-
-                    AgeGroups = ageGroups,
-                    Activities = activities.Where(x => x.IsSubActivity == false).ToList(),
-
                     ConventionId = convention.Id,
                     ConventionName = convention.Name,
                     Location = convention.Location,
                     TagLine = convention.TagLine,
                     TimeStrategy = convention.TimeStrategy,
+              
                     Halls = halls.Where(x => x.Value != null).Select(x => x.Value).ToList(),
                     Days = days.Where(x => x.Value != null).Select(x => x.Value).ToList(),
                     Tickets = tickets.Where(x => x.Value != null).Select(x => x.Value).ToList()
                 };
                 
-                foreach (var activity in activities)
-                {
-                    result.ObjectIdAndValue[activity.Id] = activity.Name;
-                }
-                foreach (var day in days)
-                {
-                    result.ObjectIdAndValue[day.Key] = day.Value.GetDescription();
-                }
-
-                foreach (var age in ageGroups)
-                {
-                    result.ObjectIdAndValue[age.Id] = age.GetDescription();
-                }
-               
-                foreach (var hall in halls)
-                {
-                    result.ObjectIdAndValue[hall.Key] = hall.Value.Name;
-                }
-
                 stopwatch.Stop();
                 result.BuildMilliseconds = stopwatch.ElapsedMilliseconds;
                 return result;

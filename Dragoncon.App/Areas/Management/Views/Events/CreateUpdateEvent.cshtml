@@ -65,7 +65,7 @@
             <div class="form-group">
                 <label>פעילות</label>
                 <select class="form-control chosen-select" asp-for="ActivitySelector"
-                        asp-items="Actor.DropDowns.Activities()">
+                        asp-items="Actor.ManagedDropDowns.Activities()">
                     <option value="" disabled selected>בחירת אפשרות</option>
                 </select>
             </div>
@@ -77,7 +77,7 @@
             <div class="form-group">
                 <label>קבוצת גיל</label>
                 <select class="form-control chosen-select" asp-for="AgeId"
-                        asp-items="Actor.DropDowns.BuildAgeGroups()">
+                        asp-items="Actor.ManagedDropDowns.BuildAgeGroups()">
                     <option value="" disabled selected>בחירת אפשרות</option>
                 </select>
             </div>
@@ -103,7 +103,7 @@
             <div class="form-group">
                 <label>מועד</label>
                 <select id="event-start-time" class="form-control chosen-select" asp-for="StartTimeSelector"
-                        asp-items="Actor.DropDowns.BuildDaysTimes()" onchange="ChangedEventDay(this)">
+                        asp-items="Actor.ManagedDropDowns.BuildDaysTimes()" onchange="ChangedEventDay(this)">
                     <option value="" disabled selected>בחירת מועד</option>
                 </select>
             </div>
@@ -122,7 +122,7 @@
             <div class="form-group">
                 <label>אולם ושולחן</label>
                 <select class="form-control chosen-select" asp-for="HallTableSelector"
-                        asp-items="Actor.DropDowns.BuildHalls()">
+                        asp-items="Actor.ManagedDropDowns.BuildHalls()">
                     <option value="" disabled selected>בחירת אולם שולחן</option>
                 </select>
             </div>
@@ -199,7 +199,7 @@
 
 
 <div hidden>
-    @foreach (var day in Actor.DropDowns.BuildDateTimeDuration())
+    @foreach (var day in Actor.ManagedDropDowns.BuildDateTimeDuration())
     {
         <select id="template-duration-@day.Key" class="form-control"
                 asp-for="Duration"
