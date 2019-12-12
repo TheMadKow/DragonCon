@@ -15,20 +15,39 @@ namespace DragonCon.Features.Convention.Home
             return View();
         }
 
-        public IActionResult Error(string err)
+        public IActionResult Info()
         {
             return View();
         }
+
+        public IActionResult Events()
+        {
+            return View();
+        }
+
+        public IActionResult Volunteering()
+        {
+            return View();
+        }
+
         public IActionResult About()
         {
             return View();
         }
+
 
         public IActionResult Contact()
         {
             return View();
         }
         public IActionResult Usage()
+        {
+            return View();
+        }
+
+
+
+        public IActionResult Error(string err)
         {
             return View();
         }

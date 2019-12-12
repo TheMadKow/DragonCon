@@ -11,12 +11,84 @@ body {
     background: #efefef45;
 }
 
+.image-background {
+    background-image: url(/images/1.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-blend-mode: multiply;
+}
+
+.ripple-background {
+    background-image: url(/images/ripples.png);
+    background-color: #d9ebff;
+    background-position: center;
+    background-repeat: repeat;
+    background-blend-mode: multiply;
+}
+
 .Title-Text {
     direction: rtl;
     text-align: right;
     padding-top: 15px;
 }
 
+.navbar-dragon {
+    background-color: #272727;
+}
+
+.navbar-dragon .navbar-brand {
+
+    color: #fff;
+}
+
+.navbar-dragon .navbar-brand:hover, .navbar-dragon .navbar-brand:focus {
+    color: #fff;
+}
+
+    .navbar-dragon .navbar-nav .nav-link {
+        color: rgb(255, 255, 255);
+    }
+
+        .navbar-dragon .navbar-nav .nav-link:hover, .navbar-dragon .navbar-nav .nav-link:focus {
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+        }
+
+.navbar-dragon .navbar-nav .nav-link.disabled {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+        .navbar-dragon .navbar-nav .show > .nav-link,
+        .navbar-dragon .navbar-nav .active > .nav-link,
+        .navbar-dragon .navbar-nav .nav-link.show,
+        .navbar-dragon .navbar-nav .nav-link.active {
+            background-color: #FFF;
+            font-weight: bold;
+            color: #04003c;
+            border-radius: 5px;
+        }
+
+.navbar-dragon .navbar-toggler {
+    color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-dragon .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-dragon .navbar-text {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-dragon .navbar-text a {
+    color: #fff;
+}
+
+.navbar-dragon .navbar-text a:hover, .navbar-dragon .navbar-text a:focus {
+    color: #fff;
+}
 
 .body-content {
     margin-top: 20px;
@@ -24,6 +96,10 @@ body {
     border-radius: 5px;
     min-height: 500px;
 }
+
+    .body-content.no-background {
+        background: none !important;
+    }
 
 .list-divider {
     border-bottom: 1px solid #cecece6e;

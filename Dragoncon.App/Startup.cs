@@ -69,13 +69,13 @@ namespace DragonCon.App
 
 
             services.AddAntiforgery();
-            services.AddControllersWithViews(options =>
+            services.AddMvc(options =>
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                     options.EnableEndpointRouting = true;
                 })
+                .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson();
-            services.AddRazorPages();
 
             services.AddHsts(opt =>
             {

@@ -1,31 +1,50 @@
 ﻿<hr />
 <footer>
-    <ul class="nav nav-pills nav-justified">
-        <li class="nav-item">
-            <a class="nav-link">
-                &copy; אתר דרקוניקון @DateTime.Today.Year
-            </a>
-        </li>
 
-        <li class="nav-item">
-            <a class="nav-link"
-               asp-area="Home"
-               asp-controller="Convention"
-               asp-action="Contact">התנדבות ויצירת קשר</a>
-        </li>
+    <div class="card right-to-left">
+        <div class="card-body">
+            <h5 class="card-title">הכנס בחסות</h5>
 
-        <li class="nav-item">
-            <a class="nav-link"
-               asp-area="Home"
-               asp-controller="Convention"
-               asp-action="Usage">תנאי שימוש ופרטיות</a>
-        </li>
+            <div class="text-center">
+                <img style="width: 100px;" src="~/images/sponsers/Amutalogo.jpg" />
+                <img style="width: 100px;" src="~/images/sponsers/green-ronin.jpg" />
+                <img style="width: 100px;" src="~/images/sponsers/paizo.png" />
+                <img style="width: 100px;" src="~/images/sponsers/modiphius.jpg" />
+                <img style="width: 100px;" src="~/images/sponsers/Ultra-ProLogo.jpg" />
 
-        <li class="nav-item">
-            <a class="nav-link"
-               asp-area="Home"
-               asp-controller="Convention"
-               asp-action="About">על הכנס והאתר</a>
-        </li>
-    </ul>
+            </div>
+        </div></div>
+    <br />
+
+
+            <ul class="nav nav-pills nav-justified" style="        border-radius: 5px;
+        background-color: #2f2f2f;
+        color: whitesmoke;">
+                <li class="nav-item">
+                    <a class="nav-link">
+                        &copy; אתר דרקוניקון @DateTime.Today.Year
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       asp-area="Convention"
+                       asp-controller="Home"
+                       asp-action="Contact">יצירת קשר</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       asp-area="Convention"
+                       asp-controller="Home"
+                       asp-action="Usage">תנאי שימוש ופרטיות</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       asp-area="Convention"
+                       asp-controller="Home"
+                       asp-action="About">על הכנס והאתר</a>
+                </li>
+            </ul>
 </footer>

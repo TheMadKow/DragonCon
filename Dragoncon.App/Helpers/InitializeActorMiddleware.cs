@@ -38,15 +38,23 @@ namespace DragonCon.App.Helpers
                 actor.System = LoadSystem(session);
                 actor.Me = LoadMe(session);
 
-                actor.ManagedConvention = LoadConvention(actor.System.ManagersConventionId, session);
-                if (actor.ManagedConvention != null)
-                    actor.ManagedDropDowns = LoadDropDowns(factory, actor.ManagedConvention, actor.System);
+                if (actor.HasSystemRole(SystemRoles.ContentManager) ||
+                    actor.HasSystemRole(SystemRoles.ConventionManager) ||
+                    actor.HasSystemRole(SystemRoles.ReceptionStaff) ||
+                    actor.HasSystemRole(SystemRoles.UsersManager))
+                {
+                    actor.ManagedConvention = LoadConvention(actor.System.ManagersConventionId, session);
+                    if (actor.ManagedConvention != null)
+                        actor.ManagedDropDowns = LoadDropDowns(factory, actor.ManagedConvention, actor.System);
+                }
 
-                if (actor.System.DisplayConventionId == actor.System.ManagersConventionId)
+                if (actor.ManagedConvention != null &&
+                    actor.System.DisplayConventionId == actor.System.ManagersConventionId)
                 {
                     actor.DisplayConvention = actor.ManagedConvention;
                     actor.DisplayDropDowns = actor.ManagedDropDowns;
-                } else
+                }
+                else
                 {
                     actor.DisplayConvention = LoadConvention(actor.System.DisplayConventionId, session);
                     if (actor.DisplayConvention != null)
