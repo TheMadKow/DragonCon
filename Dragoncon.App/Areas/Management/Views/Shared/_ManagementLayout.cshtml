@@ -31,19 +31,19 @@
         <li>
             <a asp-area="Management" asp-controller="Dashboard" asp-action="Index">מידע כללי</a>
         </li>
-        <li class="list-divider"></li>
         <li>
-            <a asp-area="Management" asp-controller="Events" asp-action="Information">אירועים</a>
-        </li>
-        <li>
-            <a asp-area="Management" asp-controller="Participants" asp-action="Manage">משתתפים</a>
+            <a asp-area="Management" asp-controller="Events" asp-action="Information">קופות</a>
         </li>
         @if (Actor.HasSystemRole(SystemRoles.ContentManager) ||
-       Actor.HasSystemRole(SystemRoles.ConventionManager))
+      Actor.HasSystemRole(SystemRoles.ConventionManager))
         {
             <li class="list-divider"></li>
+            <li>
+                <a asp-area="Management" asp-controller="Participants" asp-action="Manage">ניהול - משתתפים</a>
+            </li>
+
             @if (Actor.HasSystemRole(SystemRoles.ContentManager) ||
-           Actor.HasSystemRole(SystemRoles.ConventionManager))
+          Actor.HasSystemRole(SystemRoles.ConventionManager))
             {
                 <li>
                     <a asp-area="Management" asp-controller="Events" asp-action="Manage">ניהול - אירועים</a>

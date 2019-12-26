@@ -10,6 +10,7 @@
 
 <div class="card card-margined card-grayed">
     <h5 class="card-title"><i class="fa fa-fw fa-mouse-pointer"></i>מציג - @Model.SelectedConvention.Name </h5>
+    <h6><a href="#">יצא רשימת משתתפים</a></h6>
 </div>
 
 <div class="card card-margined card-grayed">
@@ -53,4 +54,42 @@
         </table>
     </div>
 
+</div>
+
+
+<div class="card card-margined card-grayed">
+    <h5 class="card-title">תשלומים </h5>
+    <div class="card-body">
+        <table class="table table-hover text-right">
+            <tr>
+                <td class="tw-4">סוג כרטיס</td>
+                <td class="tw-4">כמות</td>
+            </tr>
+            @foreach (var paid in Model.PaymentCompleted)
+            {
+                <tr>
+                    <td>@paid.Key</td>
+                    <td>
+                        @paid.Value
+                    </td>
+                </tr>
+            }
+
+            <tr>
+                <td>ללא כרטיס</td>
+                <td>
+                    @Model.PaymentPendingCount
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+
+<div class="card card-margined card-grayed">
+    <h5 class="card-title">אירועים </h5>
+    <div class="card-body">
+     
+    </div>
 </div>

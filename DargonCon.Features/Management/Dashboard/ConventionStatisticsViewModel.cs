@@ -9,23 +9,20 @@ namespace DragonCon.Features.Management.Dashboard
     {
         #region Payments
         public Dictionary<string, int> PaymentCompleted { get; set; } = new Dictionary<string, int>();
-        public Dictionary<string, int> PaymentPending { get; set; } = new Dictionary<string, int>();
+        
+        public int PaymentPendingCount = 1;
 
         public void AddPayment(string ticketName, bool isPaid)
         {
-            if (PaymentCompleted.MissingKey(ticketName))
-                PaymentCompleted[ticketName] = 0;
-          
-            if (PaymentPending.MissingKey(ticketName))
-                PaymentPending[ticketName] = 0;
-
             if (isPaid)
             {
+                if (PaymentCompleted.MissingKey(ticketName))
+                    PaymentCompleted[ticketName] = 0;
                 PaymentCompleted[ticketName]++;
             }
             else
             {
-                PaymentPending[ticketName]++;
+                PaymentPendingCount++;
             }
 
         }
