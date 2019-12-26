@@ -62,7 +62,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .Include<Convention>(x => x.TicketIds)
                 .Load<Convention>(conId);
 
-            result.Settings = convention.Settings;
+            result.Settings = new SettingsUpdateViewModel(conId, convention.Settings);
 
             var days = Session.Load<Day>(convention.DayIds);
             var halls = Session.Load<Hall>(convention.HallIds);
@@ -135,6 +135,14 @@ namespace DragonCon.RavenDB.Gateways.Management
             var config = LoadOrCreateConfiguration();
             config.DisplayConventionId = id;
             Session.Store(config, SystemConfiguration.Id);
+            Session.SaveChanges();
+        }
+
+        public void UpdateSettings(string convetionId, ConventionSettings settings)
+        {
+            var convention = Session.Load<Convention>(convetionId);
+            convention.Settings = settings;
+            Session.Store(convention);
             Session.SaveChanges();
         }
     }

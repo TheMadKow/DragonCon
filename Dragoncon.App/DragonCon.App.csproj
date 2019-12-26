@@ -48,6 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Controllers\" />
     <Folder Include="Areas\Convention\Views\Landing\" />
     <Folder Include="Areas\Convention\Views\Events\" />
     <Folder Include="Areas\Users\" />

@@ -1,0 +1,27 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model DragonCon.Features.Management.Dashboard.ConventionStatisticsViewModel
+@{
+    ViewBag.Title = "סטטיסטיקות";
+}
+
+<br />
+
+<div class="card card-margined card-grayed">
+    <h5 class="card-title"><i class="fa fa-fw fa-mouse-pointer"></i>מציג - @Model.SelectedConvention.Name </h5>
+</div>
+
+<div class="card card-margined card-grayed">
+    @*<h5 class="card-title">שינוי כנס </h5>*@
+    <div class="card-body">
+        <select class="chosen-select">
+            @foreach (var con in Model.AllConventions)
+            {
+                var isSelected = con.Value == Model.SelectedConvention.Id ? "selected" : "";
+                <option selected="@isSelected" value="@con.Value">@con.Key</option>
+            }
+        </select>
+    </div>
+
+</div>

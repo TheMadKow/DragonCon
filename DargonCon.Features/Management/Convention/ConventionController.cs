@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using DragonCon.Features.Shared;
 using DragonCon.Logical.Convention;
+using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Identities;
@@ -39,33 +40,6 @@ namespace DragonCon.Features.Management.Convention
             return View("ShowDetails", conUpdateViewModel);
         }
 
-
-        [HttpPost]
-        //public Answer ToggleType(string type, bool value)
-        //{
-        //    switch (type)
-        //    {
-        //        case "events":
-        //            config.AllowEventsSuggestions = value;
-        //            break;
-        //        case "registration-add":
-        //            config.AllowEventsRegistration = value;
-        //            break;
-        //        case "registration-change":
-        //            config.AllowEventsRegistrationChanges = value;
-        //            break;
-        //        case "payment":
-        //            config.AllowPayments = value;
-        //            break;
-        //        case "payment-change":
-        //            config.AllowPayments = value;
-        //            break;
-        //        default:
-        //            throw new Exception("Unknown config toggle");
-        //    }
-        //    Gateway.SaveSystemConfiguration(config);
-        //    return Answer.Success;
-        //}
 
         [HttpPost]
         public Answer SetAsManaged(string id)
@@ -422,6 +396,43 @@ namespace DragonCon.Features.Management.Convention
             });
         }
 
+        #endregion
+
+        #region Settings
+        [HttpPost]
+        public IActionResult UpdateSettings(SettingsUpdateViewModel settings)
+        {
+            if (settings.ConventionId.IsEmptyString())
+            {
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = settings.ConventionId,
+                    activeTab = "settings",
+                    errorMessage = "לא נמצא כנס עם הזיהוי הזה"
+                });
+            }
+
+            try
+            {
+                Gateway.UpdateSettings(settings.ConventionId, settings.CreateSettings());
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("UpdateConvention", new
+                {
+                    conId = settings.ConventionId,
+                    activeTab = "settings",
+                    errorMessage = $"כשלון בעדכון - {e.Message}"
+                });
+            }
+
+            return RedirectToAction("UpdateConvention", new
+            {
+                conId = settings.ConventionId,
+                activeTab = "settings",
+            });
+
+        }
         #endregion
     }
 }

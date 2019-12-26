@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using DragonCon.App.Helpers;
+using DragonCon.Features.Management;
 using DragonCon.Features.Management.Convention;
 using DragonCon.Features.Management.Dashboard;
 using DragonCon.Features.Management.Participants;
@@ -163,6 +164,7 @@ namespace DragonCon.App
             services.AddScoped<IIdentityFacade, RavenIdentityFacade>();
             services.AddScoped<ICommunicationHub, CommunicationHub>();
             services.AddScoped<IManagementConventionGateway, RavenManagementConventionGateway>();
+            services.AddScoped<IManagementStatisticsGateway, RavenManagementStatisticsGateway>();
             services.AddScoped<IManagementEventsGateway, RavenManagementEventsGateway>();
             services.AddScoped<IManagementParticipantsGateway, RavenManagementParticipantsGateway>();
             services.AddScoped<IConventionBuilderGateway, RavenConventionBuilderGateway>();

@@ -10,5 +10,6 @@ namespace DragonCon.Features.Management.Convention
         ConventionUpdateViewModel BuildConventionUpdate(string conId);
         void SetAsManaged(string id);
         void SetAsDisplay(string id);
+        void UpdateSettings(string conventionId, ConventionSettings settings);
     }
 }

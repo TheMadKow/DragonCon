@@ -12,9 +12,37 @@ namespace DragonCon.Features.Management.Convention
         public TicketsUpdateViewModel Tickets { get; set; }
         public HallsUpdateViewModel Halls { get; set; }
         public DetailsUpdateViewModel Details { get; set; }
-        public ConventionSettings Settings { get; set; }
+        public SettingsUpdateViewModel Settings { get; set; }
         public string ErrorMessage { get; set; }
     }
+    public class SettingsUpdateViewModel : ConventionSettings
+    {
+        public SettingsUpdateViewModel() { }
+        public SettingsUpdateViewModel(string conId, ConventionSettings settings)
+        {
+            ConventionId = conId;
+            AllowEventsSuggestions = settings.AllowEventsSuggestions;
+            AllowEventsRegistration = settings.AllowEventsRegistration;
+            AllowEventsRegistrationChanges = settings.AllowEventsRegistrationChanges;
+            AllowPaymentChanges = settings.AllowPaymentChanges;
+            AllowPayments = settings.AllowPayments;
+        }
+
+        public string ConventionId { get; set; }
+
+        public ConventionSettings CreateSettings()
+        {
+            return new ConventionSettings()
+            {
+                AllowEventsRegistration = AllowEventsRegistration,
+                AllowEventsSuggestions = AllowEventsSuggestions,
+                AllowPaymentChanges = AllowPaymentChanges,
+                AllowEventsRegistrationChanges = AllowEventsRegistrationChanges,
+                AllowPayments = AllowPayments
+            };
+        }
+    }
+
 
     public class DetailsUpdateViewModel
     {
