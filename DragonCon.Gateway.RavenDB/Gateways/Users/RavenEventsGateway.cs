@@ -33,7 +33,6 @@ namespace DragonCon.RavenDB.Gateways.Users
                         },
                         Size = viewmodel.SizeRestrictions,
                         GameMasterIds = new List<string> {viewmodel.CreatorId},
-                        ParticipantIds = new List<string>(),
                         Status = EventStatus.Pending,
                         Tags = viewmodel.Tags,
                         HallId = string.Empty,

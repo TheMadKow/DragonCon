@@ -12,6 +12,5 @@ namespace DragonCon.Modeling.Models.Identities
         string FullName { get; set; }
         string PhoneNumber { get; set; }
         LocalDate DayOfBirth { get; set; }
-        string ActiveConventionTerm { get; set; }
     }
 }

@@ -25,3 +25,32 @@
     </div>
 
 </div>
+
+
+<div class="card card-margined card-grayed">
+    <h5 class="card-title">משתתפים </h5>
+    <div class="card-body">
+        <table class="table table-hover text-right">
+            <tr>
+                <td class="tw-4">סוג</td>
+                <td class="tw-8">כמות</td>
+            </tr>
+            <tr>
+                <td>סך הכל</td>
+                <td>
+                    @Model.TotalParticipants
+                </td>
+            </tr>
+            <tr>
+                <td>קבועים</td>
+                <td>@Model.TotalLongTermParticipants</td>
+            </tr>
+            <tr>
+                <td>זמניים</td>
+                <td>@Model.TotalShortTermParticipants</td>
+
+            </tr>
+        </table>
+    </div>
+
+</div>

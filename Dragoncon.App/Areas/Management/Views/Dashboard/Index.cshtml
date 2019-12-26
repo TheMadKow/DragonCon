@@ -13,6 +13,7 @@
         <div class="card-body">
             <h5 class="card-title"><i class="fa fa-fw fa-mouse-pointer"></i> פעולות נפוצות</h5>
             <div class="card-deck">
+
                 <div class="card">
                     <div class="card-body text-center clickable">
                         <i class="fa fa-2x fa-fw fa-user-plus"></i>
@@ -29,6 +30,21 @@
                         צפיה במצב האירועים
                     </div>
                 </div>
+                @if (Actor.HasSystemRole(SystemRoles.ConventionManager) && Actor.HasManagedConvention)
+                {
+                    <div class="card">
+                        <div class="card-body text-center clickable">
+                            <i class="fa fa-2x fa-fw fa-pen-nib"></i>
+                            <br />
+                            <br />
+                            עריכת כנס מנוהל
+                        </div>
+                    </div>
+                    @*<a asp-area="Management" asp-controller="Convention"
+               asp-action="UpdateConvention" asp-route-conId="@manageConvention.ConventionId.GetNumberFromId()">
+                עריכה
+            </a>*@
+                }
             </div>
         </div>
 </div>
@@ -72,7 +88,10 @@
 @* Managed Convention *@
 <div class="card card-margined card-grayed">
     <div class="card-body">
-        <h5 class="card-title"><i class="fa fa-fw fa-users-cog"></i> כנס מנוהל</h5>
+        <h5 class="card-title">
+            <i class="fa fa-fw fa-users-cog"></i> כנס מנוהל
+        </h5>
+
         <table class="table table-hover text-right">
             @if (Actor.HasManagedConvention)
             {

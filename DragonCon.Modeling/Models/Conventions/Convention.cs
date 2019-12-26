@@ -2,10 +2,30 @@
 using System.ComponentModel.DataAnnotations;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Identities;
+using DragonCon.Modeling.Models.Payment;
 using NodaTime;
 
 namespace DragonCon.Modeling.Models.Conventions
 {
+    public interface IConventionEngagement
+    {
+        string ConventionId { get; set; }
+        string ParticipantId { get; set; }
+        IPaymentInvoice Payment { get; set; }
+        bool IsLongTerm { get; set; }
+        List<string> EventIds { get; set; }
+    }
+
+    public class ConventionEngagement : IConventionEngagement
+    {
+        public string Id { get; set; }
+        public string ConventionId { get; set; }
+        public string ParticipantId { get; set; }
+        public IPaymentInvoice Payment { get; set; }
+        public bool IsLongTerm { get; set; }
+        public List<string> EventIds { get; set; } = new List<string>();
+    }
+
     public class Convention
     {
         public string Id { get; set; } = null;

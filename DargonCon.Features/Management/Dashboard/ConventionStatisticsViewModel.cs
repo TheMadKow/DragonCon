@@ -7,14 +7,32 @@ namespace DragonCon.Features.Management.Dashboard
 {
     public class ConventionStatisticsViewModel
     {
-        public void AddTicketCount(string ticketName, int count)
-        {
-            if (TicketRegistration == null)
-                TicketRegistration = new Dictionary<string, int>();
+        #region Payments
+        public Dictionary<string, int> PaymentCompleted { get; set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> PaymentPending { get; set; } = new Dictionary<string, int>();
 
-            TicketRegistration.Add(ticketName, count);
+        public void AddPayment(string ticketName, bool isPaid)
+        {
+            if (PaymentCompleted.MissingKey(ticketName))
+                PaymentCompleted[ticketName] = 0;
+          
+            if (PaymentPending.MissingKey(ticketName))
+                PaymentPending[ticketName] = 0;
+
+            if (isPaid)
+            {
+                PaymentCompleted[ticketName]++;
+            }
+            else
+            {
+                PaymentPending[ticketName]++;
+            }
+
         }
-        public void AddEventCount(string major, LocalDateTime localStart, int count)
+        #endregion
+
+        #region Events
+        public void AddEvent(string major, LocalDateTime localStart)
         {
             if (EventTimeRegistration == null)
                 EventTimeRegistration = new Dictionary<string, Dictionary<LocalDateTime, int>>();
@@ -22,17 +40,24 @@ namespace DragonCon.Features.Management.Dashboard
             if (EventTimeRegistration.MissingKey(major))
                 EventTimeRegistration.Add(major, new Dictionary<LocalDateTime, int>());
 
-            EventTimeRegistration[major].Add(localStart, count);
+            if (EventTimeRegistration[major].MissingKey(localStart))
+                EventTimeRegistration[major][localStart] = 0;
+
+            EventTimeRegistration[major][localStart]++;
         }
+
+        #endregion
 
         public Modeling.Models.Conventions.Convention SelectedConvention { get; set; }
         public Dictionary<string, string> AllConventions { get; set; } = new Dictionary<string, string>();
 
-        public Dictionary<string, int> TicketRegistration { get; set; } = new Dictionary<string, int>();
-        public int TotalTickets => TicketRegistration.Sum(ticket => ticket.Value);
 
         
         public Dictionary<string, Dictionary<LocalDateTime, int>> EventTimeRegistration { get; set; } = new Dictionary<string, Dictionary<LocalDateTime, int>>();
         public int TotalEvents => EventTimeRegistration.Sum(events => events.Value.Sum(y => y.Value));
+        
+        public int TotalLongTermParticipants { get; set; }
+        public int TotalShortTermParticipants { get; set; }
+        public int TotalParticipants => TotalLongTermParticipants + TotalShortTermParticipants;
     }
 }

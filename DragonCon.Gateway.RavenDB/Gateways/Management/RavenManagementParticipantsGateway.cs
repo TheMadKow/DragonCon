@@ -213,11 +213,16 @@ namespace DragonCon.RavenDB.Gateways.Management
                 return answer;
 
             IParticipant model;
+            IConventionEngagement engagement = new ConventionEngagement
+            {
+                ConventionId = Actor.ManagedConvention.ConventionId,
+                Payment = new PaymentInvoice()
+            };
+
             if (viewmodel.Email.IsEmptyString())
             {
                 model = new ShortTermParticipant
                 {
-                    ActiveConventionTerm = Actor.ManagedConvention.ConventionId,
                     CreatedById = Actor.Me.Id
                 };
             }
@@ -225,12 +230,11 @@ namespace DragonCon.RavenDB.Gateways.Management
             {
                 model = new LongTermParticipant
                 {
-                    ActiveConventionTerm = Actor.ManagedConvention.ConventionId,
                     UserName = viewmodel.Email,
                     Email = viewmodel.Email,
                     IsAllowingPromotions = viewmodel.IsAllowingPromotions,
-                    ConventionAndPayment = new Dictionary<string, PaymentInvoice>()
                 };
+                engagement.IsLongTerm = true;
             }
 
             model.FullName = viewmodel.FullName;
@@ -238,6 +242,14 @@ namespace DragonCon.RavenDB.Gateways.Management
             model.DayOfBirth = CreateLocalDate(viewmodel.DayOfBirth);
 
             var result = await Identities.AddNewParticipant(model);
+
+            engagement.ParticipantId = model.Id;
+            if (result.IsSuccess)
+            {
+                Session.Store(engagement);
+                Session.SaveChanges();
+            }
+
             if (result.IsSuccess && result.IsLongTerm)
             {
                 await Hub.SendCreationPasswordAsync(model, result.Token);
@@ -293,15 +305,19 @@ namespace DragonCon.RavenDB.Gateways.Management
             ParticipantsManagementViewModel.Filters? filters = null)
         {
             var currentConvention = Actor.ManagedConvention.ConventionId;
-            var query = Session.Query<IParticipant, Participants_ByActiveConvention>().AsQueryable();
+            var query = Session.Query<ConventionEngagement>()
+                .Include(x => x.ParticipantId)
+                .Include(x => x.EventIds)
+                .AsQueryable();
             if (allowHistory == false)
             {
-                query = query.Where(x => x.ActiveConventionTerm == currentConvention);
+                query = query.Where(x => x.ConventionId == currentConvention);
             }
 
             var container = LoadConventionRolesContainer();
-            var participants = query.ToList();
-            var participantsUpgraded = participants.Select(x => ParticipantWrapperBuilder(x, container)).ToList();
+            var engagements = query.ToList();
+            var participantsUpgraded = 
+                engagements.Select(x => ParticipantWrapperBuilder(x, container)).ToList();
 
             var result = new ParticipantsManagementViewModel
             {
@@ -312,29 +328,34 @@ namespace DragonCon.RavenDB.Gateways.Management
             return result;
         }
 
-        private ParticipantWrapper ParticipantWrapperBuilder(IParticipant participant, ConventionRolesContainer container)
+        private IParticipant GetLoadedParticipant(IConventionEngagement x)
         {
-            switch (participant)
+            if (x.IsLongTerm)
+                return Session.Load<LongTermParticipant>(x.ParticipantId);
+
+            return Session.Load<ShortTermParticipant>(x.ParticipantId);
+        }
+
+        private ParticipantWrapper ParticipantWrapperBuilder(IConventionEngagement engagement, ConventionRolesContainer container)
+        {
+            var participant = GetLoadedParticipant(engagement);
+            if (engagement.IsLongTerm)
             {
-                case LongTermParticipant longTerm:
-                    IPaymentInvoice lastPayment = null;
-                    if (longTerm.ConventionAndPayment.ContainsKey(Actor.ManagedConvention.ConventionId))
-                        lastPayment = longTerm.ConventionAndPayment[Actor.ManagedConvention.ConventionId];
-
-                    return new LongTermParticipantWrapper(participant)
-                    {
-                        ActiveConventionInvoice = lastPayment,
-                        ActiveConventionRoles = container.GetRolesForUser(participant.Id)
-                    };
-                case ShortTermParticipant shortTerm:
-                    return new ShortTermParticipantWrapper(participant)
-                    {
-                        ActiveConventionInvoice = shortTerm.PaymentInvoice,
-                        ActiveConventionRoles = container.GetRolesForUser(participant.Id)
-                    };
+                return new LongTermParticipantWrapper(participant)
+                {
+                    ActiveConventionInvoice = engagement.Payment,
+                    ActiveConventionRoles = container.GetRolesForUser(participant.Id)
+                };
             }
+            else
+            {
 
-            return null;
+                return new ShortTermParticipantWrapper(participant)
+                {
+                    ActiveConventionInvoice = engagement.Payment,
+                    ActiveConventionRoles = container.GetRolesForUser(participant.Id)
+                };
+            }
         }
 
 
@@ -345,18 +366,20 @@ namespace DragonCon.RavenDB.Gateways.Management
 
             var result = new ParticipantsManagementViewModel();
             var query = Session.Query<Participants_BySearchQuery.Result, Participants_BySearchQuery>()
+                .Include<Participants_BySearchQuery.Result>(x => x.ParticipantId)
                 .Statistics(out var stats)
                 .Search(x => x.SearchText, searchWords).AsQueryable();
+
             if (allowHistory == false)
             {
-                query = query.Where(x => x.ActiveConventionTerm == Actor.ManagedConvention.ConventionId);
+                query = query.Where(x => x.ConventionTerm == Actor.ManagedConvention.ConventionId);
             }
 
             var results = query
                 .OrderBy(x => x.FullName)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)
-                .As<IParticipant>()
+                .As<IConventionEngagement>()
                 .ToList();
             
             var container = LoadConventionRolesContainer();

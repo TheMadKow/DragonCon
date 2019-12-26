@@ -8,11 +8,12 @@ using Raven.Identity;
 
 namespace DragonCon.Modeling.Models.Identities
 {
+
+
+
     public class LongTermParticipant : IdentityUser, IParticipant
     {
         public bool IsAllowingPromotions { get; set; }
- 
-        public Dictionary<string, PaymentInvoice> ConventionAndPayment { get;set; } = new Dictionary<string, PaymentInvoice>();
         public LocalDate DayOfBirth { get; set; }
 
         public string FirstName
@@ -40,8 +41,6 @@ namespace DragonCon.Modeling.Models.Identities
         public IList<SystemRoles> SystemRoles { get; } = new List<SystemRoles>();
 
         
-        public string ActiveConventionTerm { get; set; } = string.Empty;
-      
         public bool HasRole(SystemRoles role)
         {
             return SystemRoles.Contains(role);

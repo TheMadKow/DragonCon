@@ -30,8 +30,6 @@ namespace DragonCon.Modeling.Models.Identities
         }
 
         public string FullName { get; set; } = string.Empty;
-        public string ActiveConventionTerm { get; set; } = string.Empty;
         public string CreatedById { get; set; } = string.Empty;
-        public PaymentInvoice PaymentInvoice { get; set; }
     }
 }

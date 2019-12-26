@@ -10,51 +10,37 @@ using Raven.Client.Documents.Indexes;
 
 namespace DragonCon.RavenDB.Index
 {
-    public class Participants_ByActiveConvention : AbstractMultiMapIndexCreationTask
-    {
-
-        public Participants_ByActiveConvention()
-        {
-            AddMap<ShortTermParticipant>(shorts => from s in shorts
-                select new
-                {
-                    FullName = s.FullName,
-                    ActiveConventionTerm = s.ActiveConventionTerm,
-                });
-            AddMap<LongTermParticipant>(longs => from l in longs
-                select new
-                {
-                    FullName = l.FullName,
-                    ActiveConventionTerm = l.ActiveConventionTerm,
-                });
-        }
-    }
-
-
     public class Participants_BySearchQuery : AbstractMultiMapIndexCreationTask<Participants_BySearchQuery.Result>
     {
         public class Result
         {
-            public string ActiveConventionTerm { get; set; } = string.Empty;
+            public string ConventionTerm { get; set; } = string.Empty;
             public string SearchText { get; set; } = string.Empty;
-            public string FullName { get; set; }
+            public string FullName { get; set; } = string.Empty;
+            public string ParticipantId { get; set; } = string.Empty;
         }
 
         public Participants_BySearchQuery()
         {
-            AddMap<ShortTermParticipant>(shorts => from s in shorts
+            AddMap<ConventionEngagement>(shorts => from s in shorts
+                where s.IsLongTerm == false
+                      let shortTerm = LoadDocument<ShortTermParticipant>(s.ParticipantId)
                 select new
                 {
-                    FullName = s.FullName,
-                    ActiveConventionTerm = s.ActiveConventionTerm,
-                    SearchText = $"{s.Id} {s.FullName} {s.PhoneNumber}",
+                    FullName = shortTerm.FullName,
+                    ParticipantId = s.ParticipantId,
+                    ConventionTerm = s.ConventionId,
+                    SearchText = $"{shortTerm.Id} {shortTerm.FullName} {shortTerm.PhoneNumber}",
                 });
-            AddMap<LongTermParticipant>(longs => from l in longs
+            AddMap<ConventionEngagement>(longs => from l in longs
+                where l.IsLongTerm
+                let longTerm = LoadDocument<LongTermParticipant>(l.ParticipantId)
                 select new
                 {
-                    FullName = l.FullName,
-                    ActiveConventionTerm = l.ActiveConventionTerm,
-                    SearchText = $"{l.Id} {l.FullName} {l.PhoneNumber} {l.Email}",
+                    FullName = longTerm.FullName,
+                    ParticipantId = l.ParticipantId,
+                    ConventionTerm = l.ConventionId,
+                    SearchText = $"{longTerm.Id} {longTerm.FullName} {longTerm.PhoneNumber}",
                 });
 
             Index("SearchText", FieldIndexing.Search);
