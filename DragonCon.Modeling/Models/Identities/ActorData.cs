@@ -29,7 +29,6 @@ namespace DragonCon.Modeling.Models.Identities
 
 
         bool HasSystemRole(SystemRoles role);
-        bool HasDisplayConventionRole(ConventionRoles role);
     }
 
     public class Actor : IActor
@@ -53,7 +52,6 @@ namespace DragonCon.Modeling.Models.Identities
         public ActorDropDowns? ManagedDropDowns { get; set; } = null;
 
         public bool HasSystemRole(SystemRoles role) => Me.SystemRoles.Contains(role);
-        public bool HasDisplayConventionRole(ConventionRoles role) => Me.ConventionRoles.Contains(role);
 
         #region Subclasses
         public class ActorDropDowns
@@ -253,9 +251,7 @@ namespace DragonCon.Modeling.Models.Identities
         {
             public string Id { get; set; }
             public string FullName { get; set; }
-            
             public IList<SystemRoles> SystemRoles { get; } = new List<SystemRoles>();
-            public IList<ConventionRoles> ConventionRoles { get;set; } = new List<ConventionRoles>();
         }
 
         public class ActorConventionState

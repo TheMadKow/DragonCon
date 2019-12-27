@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DragonCon.Features.Management;
 using DragonCon.Features.Management.Dashboard;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
-using DragonCon.Modeling.Models.Tickets;
-using NodaTime;
 using Raven.Client.Documents;
 
 namespace DragonCon.RavenDB.Gateways.Management
@@ -28,8 +24,8 @@ namespace DragonCon.RavenDB.Gateways.Management
 
             var engagements = Session.Query<ConventionEngagement>()
                 .Include(x => x.ParticipantId)
-                .Include(x => x.EventIds)
-                .Where(x => x.ConventionId == conventionId);
+                .Where(x => x.ConventionId == conventionId)
+                .ToList();
 
             var activities = Session.Query<Activity>().ToDictionary(x => x.Id, x => x);
             var days = Session.Load<Day>(selectConvention.DayIds);
@@ -37,27 +33,34 @@ namespace DragonCon.RavenDB.Gateways.Management
             viewModel.SelectedConvention = selectConvention;
             viewModel.TotalLongTermParticipants = engagements.Count(x => x.IsLongTerm);
             viewModel.TotalShortTermParticipants = engagements.Count(x => x.IsLongTerm == false);
-            
+
+            var actualEvents = Session
+                .Query<Event>()
+                .Where(x => x.ConventionId == conventionId)
+                .ToList();
+
+            foreach (var actualEvent in actualEvents)
+            {
+                var activity = "לא ידוע";
+                if (actualEvent.ActivityId != null &&
+                    activities.ContainsKey(actualEvent.ActivityId))
+                {
+                    activity = activities[actualEvent.ActivityId].Name;
+                }
+
+                viewModel.AddEventSeats(days, actualEvent, activity);
+            }
+
             foreach (var engagement in engagements)
             {
                 var ticketName = engagement.Payment.TicketCopy != null
                     ? engagement.Payment.TicketCopy.Name
                     : "לא שולם";
                 viewModel.AddPayment(ticketName, engagement.Payment.IsPaid);
+
                 foreach (var eventId in engagement.EventIds)
                 {
-                    var evnt = Session.Load<Event>(eventId);
-                    var activity = activities.ContainsKey(evnt.ActivityId)
-                        ? activities[evnt.ActivityId].Name
-                        : "לא ידוע";
-                    var localDateTime = new LocalDateTime(
-                        days[evnt.ConventionDayId].Date.Year,
-                        days[evnt.ConventionDayId].Date.Month,
-                        days[evnt.ConventionDayId].Date.Day,
-                        evnt.TimeSlot.From.Hour,
-                        evnt.TimeSlot.From.Minute);
-                    
-                    viewModel.AddEvent(activity, localDateTime);
+                    viewModel.AddEventTakenSeat(eventId);
                 }
             }
 

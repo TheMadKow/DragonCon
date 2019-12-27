@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Management.Statistics
 {
     [Area("Management")]
-    [Authorize(policy: Policies.Types.ConventionManagement)]
+    [Authorize(policy: Policies.Types.ManagementAreaManager)]
     public class StatisticsController : DragonController<IManagementStatisticsGateway>
     {
         public StatisticsController(IServiceProvider service) : base(service)

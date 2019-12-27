@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using DragonCon.Modeling.Helpers;
-using DragonCon.Modeling.Models.Payment;
-using NodaTime;
 using Raven.Identity;
 
 namespace DragonCon.Modeling.Models.Identities
@@ -14,7 +11,7 @@ namespace DragonCon.Modeling.Models.Identities
     public class LongTermParticipant : IdentityUser, IParticipant
     {
         public bool IsAllowingPromotions { get; set; }
-        public LocalDate DayOfBirth { get; set; }
+        public int YearOfBirth { get; set; }
 
         public string FirstName
         {

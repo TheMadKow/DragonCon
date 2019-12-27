@@ -9,8 +9,8 @@ namespace DragonCon.Modeling.Models.Identities
 {
     public class ShortTermParticipant : IParticipant
     {
-        public string Id { get; set;} = string.Empty;
-        public LocalDate DayOfBirth { get; set; }
+        public string Id { get; set;}
+        public int YearOfBirth { get; set; }
         public string PhoneNumber { get; set; } = string.Empty;
 
         public string FirstName

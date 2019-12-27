@@ -9,34 +9,47 @@
 <br />
 
 <div class="card card-margined card-grayed">
-    <h5 class="card-title"><i class="fa fa-fw fa-mouse-pointer"></i>מציג - @Model.SelectedConvention.Name </h5>
-    <h6><a href="#">יצא רשימת משתתפים</a></h6>
-</div>
-
-<div class="card card-margined card-grayed">
-    @*<h5 class="card-title">שינוי כנס </h5>*@
     <div class="card-body">
-        <select class="chosen-select">
-            @foreach (var con in Model.AllConventions)
-            {
-                var isSelected = con.Value == Model.SelectedConvention.Id ? "selected" : "";
-                <option selected="@isSelected" value="@con.Value">@con.Key</option>
-            }
-        </select>
+        <h4 class="card-title">מציג מידע על  <span class="text-primary">@Model.SelectedConvention.Name</span> </h4>
     </div>
+</div>
 
+<div class="card card-margined card-grayed">
+    <div class="card-body">
+        <h5 class="card-title"><i class="fa fa-fw fa-mouse-pointer"></i> פעולות נפוצות</h5>
+        <div class="card-deck">
+
+
+            <div class="card">
+                <div class="card-body text-center clickable">
+                    <i class="fa fa-2x fa-fw fa-list-ul"></i>
+                    <br />
+                    <br />
+                    בחירת כנס אחר
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body text-center clickable">
+                    <i class="fa fa-2x fa-fw fa-users"></i>
+                    <br />
+                    <br />
+                    יצוא מידע לניתוח
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 <div class="card card-margined card-grayed">
-    <h5 class="card-title">משתתפים </h5>
     <div class="card-body">
+        <h5 class="card-title">משתתפים </h5>
         <table class="table table-hover text-right">
-            <tr>
+            <tr class="text-bold">
                 <td class="tw-4">סוג</td>
                 <td class="tw-8">כמות</td>
             </tr>
-            <tr>
+            <tr class="text-primary">
                 <td>סך הכל</td>
                 <td>
                     @Model.TotalParticipants
@@ -58,13 +71,20 @@
 
 
 <div class="card card-margined card-grayed">
-    <h5 class="card-title">תשלומים </h5>
     <div class="card-body">
+        <h5 class="card-title">כרטיסים </h5>
         <table class="table table-hover text-right">
-            <tr>
+            <tr class="text-bold">
                 <td class="tw-4">סוג כרטיס</td>
                 <td class="tw-4">כמות</td>
             </tr>
+            <tr class="text-primary">
+                <td>סך הכל נרכשו</td>
+                <td>
+                    @Model.PaymentCompletedCount
+                </td>
+            </tr>
+
             @foreach (var paid in Model.PaymentCompleted)
             {
                 <tr>
@@ -88,8 +108,65 @@
 
 
 <div class="card card-margined card-grayed">
-    <h5 class="card-title">אירועים </h5>
     <div class="card-body">
-     
+        <h5 class="card-title">אירועים </h5>
+        <table class="table table-hover text-right">
+            <tr class="text-bold">
+                <td class="tw-4">סוג</td>
+                <td class="tw-8">כמות</td>
+            </tr>
+            <tr class="text-primary">
+                <td>סך כל האירועים</td>
+                <td>
+                    @Model.EventSeats.Count
+                </td>
+            </tr>
+            <tr class="text-primary">
+                <td>סך כל המקומות</td>
+                <td>
+                    @Model.TotalEventSeats
+                </td>
+            </tr>
+            <tr class="text-primary">
+                <td>סך כל התפוסה</td>
+                <td>
+                    @Model.TotalEventTakenSeats
+                </td>
+            </tr>
+        </table>
+        <h6 class="card-title">לפי פעילות </h6>
+        <table class="table table-hover text-right">
+            <tr class="text-bold">
+                <td class="tw-3">זמן</td>
+                <td class="tw-3">מושבים</td>
+                <td class="tw-3">תפוס</td>
+                <td class="tw-3">פנוי</td>
+            </tr>
+            @{
+                var eventsGroup = Model
+                    .EventSeats.GroupBy(x => x.Major)
+                    .OrderBy(x => x.Key);
+
+                foreach (var group in eventsGroup)
+                {
+                    var timeTable = group
+                        .GroupBy(x => x.EventTime)
+                        .OrderBy(x => x.Key);
+                    <tr class="text-bold text-center text-primary">
+                        <td colspan="4">סוג פעילות - @group.Key</td>
+                    </tr>
+                    foreach (var line in timeTable)
+                    {
+                        <tr>
+                            <td class="tw-3">@line.Key.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture)</td>
+                            <td class="tw-3">@line.Sum(y => y.TotalSeats)</td>
+                            <td class="tw-3">@line.Sum(y => y.TakenSeats)</td>
+                            <td class="tw-3">@line.Sum(y => y.FreeSeats)</td>
+                        </tr>
+                    }
+
+                }
+            }
+        </table>
     </div>
 </div>

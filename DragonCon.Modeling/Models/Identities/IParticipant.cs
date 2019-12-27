@@ -11,6 +11,6 @@ namespace DragonCon.Modeling.Models.Identities
         string FirstName { get; }
         string FullName { get; set; }
         string PhoneNumber { get; set; }
-        LocalDate DayOfBirth { get; set; }
+        int YearOfBirth { get; set; }
     }
 }

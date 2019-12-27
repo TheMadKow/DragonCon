@@ -4,6 +4,7 @@ using DragonCon.App.Helpers;
 using DragonCon.Features.Management;
 using DragonCon.Features.Management.Convention;
 using DragonCon.Features.Management.Dashboard;
+using DragonCon.Features.Management.Events;
 using DragonCon.Features.Management.Participants;
 using DragonCon.Features.Shared;
 using DragonCon.Logical;

@@ -40,7 +40,7 @@ namespace DragonCon.App.Helpers
 
                 if (actor.HasSystemRole(SystemRoles.ContentManager) ||
                     actor.HasSystemRole(SystemRoles.ConventionManager) ||
-                    actor.HasSystemRole(SystemRoles.ReceptionStaff) ||
+                    actor.HasSystemRole(SystemRoles.ReceptionManager) ||
                     actor.HasSystemRole(SystemRoles.UsersManager))
                 {
                     actor.ManagedConvention = LoadConvention(actor.System.ManagersConventionId, session);
@@ -108,14 +108,8 @@ namespace DragonCon.App.Helpers
                 {
                     SystemRoles.ContentManager,
                     SystemRoles.ConventionManager,
-                    SystemRoles.ReceptionStaff,
+                    SystemRoles.ReceptionManager,
                     SystemRoles.UsersManager
-                },
-                ConventionRoles =
-                {
-                    ConventionRoles.Staff,
-                    ConventionRoles.GameMaster,
-                    ConventionRoles.Volunteer
                 }
             };
         }

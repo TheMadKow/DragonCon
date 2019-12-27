@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
 using DragonCon.Logical;
 using DragonCon.Logical.Communication;
-using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Identities;
 using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents.Session;
@@ -30,33 +26,6 @@ namespace DragonCon.RavenDB.Gateways
             Hub = provider.GetRequiredService<ICommunicationHub>();
             Identities = provider.GetRequiredService<IIdentityFacade>();
         }
-
-        protected ConventionRolesContainer LoadConventionRolesContainer(string conventionId = null)
-        {
-            if (conventionId == null)
-                conventionId = Actor.ManagedConvention.ConventionId;
-
-            var result = Session.Query<ConventionRolesContainer>().SingleOrDefault(x => x.ConventionId == conventionId);
-            if (result == null)
-            {
-                result = new ConventionRolesContainer
-                {
-                    ConventionId = conventionId,
-                    UsersAndRoles = new Dictionary<string, List<ConventionRoles>>()
-                };
-                Session.Store(result);
-            }
-
-            return result;
-        }
-
-        protected void StoreConventionRolesContainer(ConventionRolesContainer convetion)
-        {
-            Session.Store(convetion);
-        }
-
-
-
         private void ReleaseUnmanagedResources()
         {
             _session?.Dispose();

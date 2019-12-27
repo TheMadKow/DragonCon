@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DragonCon.Modeling.Helpers;
+using DragonCon.Modeling.Models.Conventions;
+using DragonCon.Modeling.Models.Events;
 using NodaTime;
 
 namespace DragonCon.Features.Management.Dashboard
@@ -9,8 +11,9 @@ namespace DragonCon.Features.Management.Dashboard
     {
         #region Payments
         public Dictionary<string, int> PaymentCompleted { get; set; } = new Dictionary<string, int>();
-        
-        public int PaymentPendingCount = 1;
+
+        public int PaymentCompletedCount => PaymentCompleted.Sum(y => y.Value);
+        public int PaymentPendingCount = 0;
 
         public void AddPayment(string ticketName, bool isPaid)
         {
@@ -29,32 +32,67 @@ namespace DragonCon.Features.Management.Dashboard
         #endregion
 
         #region Events
-        public void AddEvent(string major, LocalDateTime localStart)
+        public void AddEventSeats(Dictionary<string,Day> days, Event conEvent, string majorActivity)
         {
-            if (EventTimeRegistration == null)
-                EventTimeRegistration = new Dictionary<string, Dictionary<LocalDateTime, int>>();
+            if (EventSeats == null)
+                EventSeats = new List<EventSeatViewModel>();
 
-            if (EventTimeRegistration.MissingKey(major))
-                EventTimeRegistration.Add(major, new Dictionary<LocalDateTime, int>());
+            var vm = EventSeats.FirstOrDefault(x => x.EventId == conEvent.Id);
+            if (vm == null)
+            {
+                vm = new EventSeatViewModel
+                {
+                    EventId = conEvent.Id
+                };
+                EventSeats.Add(vm);
+            }
 
-            if (EventTimeRegistration[major].MissingKey(localStart))
-                EventTimeRegistration[major][localStart] = 0;
+            var date = days.ContainsKey(conEvent.ConventionDayId)
+                ? days[conEvent.ConventionDayId].Date
+                : new LocalDate(1, 1, 1);
+            var time = conEvent.TimeSlot != null ? conEvent.TimeSlot.From : new LocalTime(0, 0);
+            var localDateTime = new LocalDateTime(
+                date.Year,
+                date.Month,
+                date.Day,
+                time.Hour,
+                time.Minute);
 
-            EventTimeRegistration[major][localStart]++;
+            vm.Major = majorActivity;
+            vm.EventTime = localDateTime;
+            vm.TotalSeats = conEvent.Size.Max.HasValue ? (int) conEvent.Size.Max.Value : 0;
         }
+
+        public void AddEventTakenSeat(string eventId)
+        {
+            var seats = EventSeats.FirstOrDefault(x => x.EventId == eventId);
+            seats.TakenSeats++;
+        }
+
+        public List<EventSeatViewModel> EventSeats { get; set; } = new List<EventSeatViewModel>();
+        public int TotalEventSeats => EventSeats.Sum(y => y.TotalSeats);
+        public int TotalEventTakenSeats => EventSeats.Sum(y => y.TakenSeats);
+        public int TotalEventFreeSeats => EventSeats.Sum(y => y.FreeSeats);
+
 
         #endregion
 
         public Modeling.Models.Conventions.Convention SelectedConvention { get; set; }
-        public Dictionary<string, string> AllConventions { get; set; } = new Dictionary<string, string>();
 
 
-        
-        public Dictionary<string, Dictionary<LocalDateTime, int>> EventTimeRegistration { get; set; } = new Dictionary<string, Dictionary<LocalDateTime, int>>();
-        public int TotalEvents => EventTimeRegistration.Sum(events => events.Value.Sum(y => y.Value));
-        
         public int TotalLongTermParticipants { get; set; }
         public int TotalShortTermParticipants { get; set; }
         public int TotalParticipants => TotalLongTermParticipants + TotalShortTermParticipants;
+    }
+
+    public class EventSeatViewModel
+    {
+        public string EventId { get; set; }
+        public LocalDateTime EventTime { get; set; }
+        public int TotalSeats { get; set; }
+        public int TakenSeats { get; set; }
+        public int FreeSeats => TotalSeats - TakenSeats;
+
+        public string Major { get; internal set; }
     }
 }

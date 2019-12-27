@@ -11,15 +11,15 @@ namespace DragonCon.Modeling.Models.Identities
         ContentManager,
         [Description("ניהול כנסים")]
         ConventionManager,
-        [Description("צוות מודיעין")]
-        ReceptionStaff
+        [Description("ניהול דלפק קבלה")]
+        ReceptionManager
     }
 
 
     public enum ConventionRoles
     {
         [Description("סגל כנס")]
-        Staff,
+        Personal,
         [Description("צוות הנחיה")]
         GameMaster,
         [Description("צוות מתנדבים")]

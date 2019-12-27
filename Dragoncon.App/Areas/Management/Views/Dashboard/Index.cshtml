@@ -40,10 +40,6 @@
                             עריכת כנס מנוהל
                         </div>
                     </div>
-                    @*<a asp-area="Management" asp-controller="Convention"
-               asp-action="UpdateConvention" asp-route-conId="@manageConvention.ConventionId.GetNumberFromId()">
-                עריכה
-            </a>*@
                 }
             </div>
         </div>
@@ -65,15 +61,6 @@
                 <td>הרשאות אתר</td>
                 <td>
                     @foreach (var role in actorMe.SystemRoles.Select(x => x.ToTextual()).OrderBy(x => x))
-                    {
-                        <span>@role<br /></span>
-                    }
-                </td>
-            </tr>
-            <tr>
-                <td>תפקידי כנס</td>
-                <td>
-                    @foreach (var role in actorMe.ConventionRoles.Select(x => x.ToTextual()).OrderBy(x => x))
                     {
                         <span>@role<br /></span>
                     }

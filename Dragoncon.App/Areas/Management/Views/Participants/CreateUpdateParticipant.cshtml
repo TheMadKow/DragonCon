@@ -29,13 +29,13 @@
     </div>
     <div class="col">
         <div class="form-group">
-            <label>תאריך לידה </label>
+            <label>שנת לידה </label>
             <br />
-            <input class="combo-date" asp-for="DayOfBirth" value="@Model.DayOfBirth"
+            <input class="combo-date" asp-for="YearOfBirth" value="@Model.YearOfBirth"
                    data-custom-class="form-control form-control-inline"
                    data-first-item="empty"
-                   data-format="YYYY-MM-DD"
-                   data-template="יום DD חודש MM שנה YYYY">
+                   data-format="YYYY"
+                   data-template="YYYY">
         </div>
     </div>
     @if (isUpdated == false || iShortTerm == false)
@@ -71,9 +71,13 @@
         <br />
     }
 
-    <div class="btn-save-container">
-        <button type="submit" class="btn btn-primary btn-save">שמירת וחזרה </button>
-        <button type="submit" class="btn btn-success btn-save">שמירה ורישום </button>
+    <div class="btn-save-container row">
+        <div class="col-3">
+            <button type="submit" class="btn btn-primary btn-save-just-margin"> שמירה </button>
+        </div>
+        <div class="col-9">
+            <button type="submit" class="btn btn-success btn-save-just-margin"> שמירה ורישום לאירועים <i class="fa fa-fw fa-angle-double-left"></i></button>
+        </div>
     </div>
 
 </form>

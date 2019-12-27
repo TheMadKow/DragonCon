@@ -11,7 +11,7 @@ using DragonCon.Modeling.Models.Identities.Policy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragonCon.Features.Management.Dashboard
+namespace DragonCon.Features.Management.Events
 {
     [Area("Management")]
     [Authorize(policy: Policies.Types.EventsManagement)]

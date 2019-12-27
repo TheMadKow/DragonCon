@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Payment;
@@ -9,11 +9,13 @@ namespace DragonCon.Modeling.Models.Conventions
 {
     public interface IConventionEngagement
     {
-        string ConventionId { get; set; }
-        string ParticipantId { get; set; }
-        IPaymentInvoice Payment { get; set; }
-        bool IsLongTerm { get; set; }
-        List<string> EventIds { get; set; }
+        string ConventionId { get; }
+        string ParticipantId { get; }
+        IPaymentInvoice Payment { get; }
+        bool IsLongTerm { get;}
+        List<string> EventIds { get; }
+        List<ConventionRoles> Roles { get; }
+        Instant CreatedOn { get; }
     }
 
     public class ConventionEngagement : IConventionEngagement
@@ -21,9 +23,28 @@ namespace DragonCon.Modeling.Models.Conventions
         public string Id { get; set; }
         public string ConventionId { get; set; }
         public string ParticipantId { get; set; }
-        public IPaymentInvoice Payment { get; set; }
         public bool IsLongTerm { get; set; }
+        public IPaymentInvoice Payment { get; set; } = new PaymentInvoice();
         public List<string> EventIds { get; set; } = new List<string>();
+        public List<ConventionRoles> Roles { get; set; } = new List<ConventionRoles>();
+        public Instant CreatedOn { get; set; } = SystemClock.Instance.GetCurrentInstant();
+
+        public void AddRole(ConventionRoles role)
+        {
+            if (Roles.Missing(role))
+                Roles.Add(role);
+        }
+
+        public void RemoveRole(ConventionRoles role)
+        {
+            if (Roles.Contains(role))
+                Roles.Remove(role);
+        }
+
+        public bool HasRole(ConventionRoles role)
+        {
+            return Roles.Contains(role);
+        }
     }
 
     public class Convention
@@ -35,7 +56,6 @@ namespace DragonCon.Modeling.Models.Conventions
         public List<string> DayIds { get; set; } = new List<string>();
         public List<string> TicketIds { get; set; }= new List<string>();
         public List<string> HallIds { get; set; }= new List<string>();
-        public List<string> EventIds { get; set; }= new List<string>();
         
         public List<PhoneRecord> PhoneBook { get;set; } = new List<PhoneRecord>();
         public Dictionary<string, string> Metadata { get;set; } = new Dictionary<string, string>();
