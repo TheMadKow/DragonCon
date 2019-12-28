@@ -334,23 +334,22 @@ namespace DragonCon.RavenDB.Gateways.Management
         private ParticipantWrapper ParticipantWrapperBuilder(IConventionEngagement engagement)
         {
             var participant = GetLoadedParticipant(engagement);
+            ParticipantWrapper wrapper = null;
             if (engagement.IsLongTerm)
             {
-                return new LongTermParticipantWrapper(participant)
-                {
-                    ActiveConventionInvoice = engagement.Payment,
-                    ActiveConventionRoles = engagement.Roles
-                };
+                wrapper = new LongTermParticipantWrapper(participant);
             }
             else
             {
-
-                return new ShortTermParticipantWrapper(participant)
-                {
-                    ActiveConventionInvoice = engagement.Payment,
-                    ActiveConventionRoles = engagement.Roles
-                };
+                wrapper = new ShortTermParticipantWrapper(participant);
             }
+
+            var convention = Session.Load<Convention>(engagement.ConventionId);
+            wrapper.EngagedConventionId = engagement.ConventionId;
+            wrapper.EngagedConventionInvoice = engagement.Payment;
+            wrapper.EngagedConventionRoles = engagement.Roles;
+            wrapper.EngagedConventionName = convention.Name;
+            return wrapper;
         }
 
 

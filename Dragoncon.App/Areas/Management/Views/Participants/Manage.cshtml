@@ -76,143 +76,149 @@
 
     <table id="accordion" class="table table-couple-striped text-right">
         <tbody>
-            @foreach (var part in Model.Participants.OrderByDescending(x => x.Model.FullName))
-            {
-                var statusColor = "text-primary";
-                var statusText = "אין כרטיס";
+     
+        @foreach (var part in Model.Participants.OrderByDescending(x => x.Model.FullName))
+        {
+            var statusColor = "text-primary";
+            var statusText = "אין כרטיס";
 
-                if (part.ActiveConventionInvoice != null)
+            if (part.EngagedConventionInvoice != null)
+            {
+                if (part.EngagedConventionInvoice.IsPaid)
                 {
-                    if (part.ActiveConventionInvoice.IsPaid)
+                    statusColor = "text-success";
+                    statusText = "שולם";
+                }
+                else
+                {
+                    statusColor = "text-danger";
+                    statusText = "לא שולם";
+                }
+            }
+
+            var shortTerm = part.Model as ShortTermParticipant;
+            var longTerm = part.Model as LongTermParticipant;
+            var participantId = shortTerm == null ? longTerm.Id : shortTerm.Id;
+            var isShortTerm = shortTerm != null;
+
+            <tr>
+                <td class="tw-7">
+                    <a class="text-primary" data-toggle="collapse" href="#extra-data-@participantId.GetNumberFromId()" title="הצגת פרטים מלאים">
+                        <strong>@part.Model.FullName</strong>
+                    </a>
+
+                    @if (isShortTerm)
                     {
-                        statusColor = "text-success";
-                        statusText = "שולם";
+                        <div>
+                            <i class="fa fa-fw fa-user-clock"></i> משתתף זמני
+                            <br/>
+                        </div>
                     }
                     else
                     {
-                        statusColor = "text-danger";
-                        statusText = "לא שולם";
+                        <div title="שליחת דואל למשתתף">
+                            <i class="fa fa-fw fa-envelope"></i> <a href="mailto:@longTerm.Email">@longTerm.Email</a>
+                            <br/>
+                        </div>
                     }
-                }
-
-                var shortTerm = part.Model as ShortTermParticipant;
-                var longTerm = part.Model as LongTermParticipant;
-                var participantId = shortTerm == null ? longTerm.Id : shortTerm.Id;
-                var isShortTerm = shortTerm != null;
-
-                <tr>
-                    <td class="tw-7">
-                        <a class="text-primary" data-toggle="collapse" href="#extra-data-@participantId.GetNumberFromId()" title="הצגת פרטים מלאים">
-                            <strong>@part.Model.FullName</strong>
-                        </a>
-
-                        @if (isShortTerm)
-                        {
-                            <div>
-                                <i class="fa fa-fw fa-user-clock"></i> משתתף זמני
-                                <br />
-                            </div>
-                        }
-                        else
-                        {
-                            <div title="שליחת דואל למשתתף">
-                                <i class="fa fa-fw fa-envelope"></i> <a href="mailto:@longTerm.Email">@longTerm.Email</a>
-                                <br />
-                            </div>
-                        }
 
 
-                        @if (part.Model.PhoneNumber.IsNotEmptyString())
-                        {
-                            <div title="חיוג למשתתף">
-                                <i class="fa fa-fw fa-phone"></i> 
-                                <a href="tel:@part.Model.PhoneNumber">@part.Model.PhoneNumber</a> <br />
-                            </div>
-                        }
+                    @if (part.Model.PhoneNumber.IsNotEmptyString())
+                    {
+                        <div title="חיוג למשתתף">
+                            <i class="fa fa-fw fa-phone"></i>
+                            <a href="tel:@part.Model.PhoneNumber">@part.Model.PhoneNumber</a> <br/>
+                        </div>
+                    }
 
-                        @if (longTerm != null && longTerm.SystemRoles.Any())
-                        {
-                            <div title="תפקידי מערכת">
-                                <i class="fa fa-fw fa-user-lock"></i>
-                                @foreach (var role in longTerm.SystemRoles)
-                                {
-                                    <span>@role.ToTextual(). &nbsp; </span>
-                                }
-                            </div>
-
-                        }
-
-                        @if (part.ActiveConventionRoles.Any())
-                        {
-                            <div title="תפקידי כנס">
-                                <i class="fa fa-fw fa-id-card-alt"></i>
-                                @foreach (var role in part.ActiveConventionRoles)
-                                {
-                                    <span>@role.ToTextual(). &nbsp; </span>
-                                }
-                            </div>
-                        }
-                    </td>
-                    <td class="tw-3">
-                            <strong class="@statusColor">
-                                <i class="fa fa-fw fa-ticket-alt"></i> @statusText
-                            </strong>
-                            @{
-                                var age = DateTime.Today.Year - part.Model.YearOfBirth;
+                    @if (longTerm != null && longTerm.SystemRoles.Any())
+                    {
+                        <div title="תפקידי מערכת">
+                            <i class="fa fa-fw fa-user-lock"></i>
+                            @foreach (var role in longTerm.SystemRoles)
+                            {
+                                <span>@role.ToTextual(). &nbsp; </span>
                             }
-                            <div>
-                                <i class="fa fa-fw fa-birthday-cake"></i> @part.Model.YearOfBirth - גיל @age <br />
-                            </div>
+                        </div>
 
-                        </td>
-                        <td>
-                            <div class="dropdown pull-left">
-                                <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm">
-                                    <i class="fa fa-fw fa-ellipsis-h"></i>
+                    }
+
+                    @if (part.EngagedConventionRoles.Any())
+                    {
+                        <div title="תפקידי כנס">
+                            <i class="fa fa-fw fa-id-card-alt"></i>
+                            @foreach (var role in part.EngagedConventionRoles)
+                            {
+                                <span>@role.ToTextual(). &nbsp; </span>
+                            }
+                        </div>
+                    }
+                </td>
+                <td class="tw-3">
+                    @if (Model.AllowHistoryParticipants)
+                    {
+                        <i class="fa fa-fw fa-history"></i> <span>@part.EngagedConventionName (@part.EngagedConventionId.GetNumberFromId())</span>
+                        <br />
+                    }
+                    <strong class="@statusColor">
+                        <i class="fa fa-fw fa-ticket-alt"></i> @statusText
+                    </strong>
+                    @{
+                        var age = DateTime.Today.Year - part.Model.YearOfBirth;
+                    }
+                    <div>
+                        <i class="fa fa-fw fa-birthday-cake"></i> @part.Model.YearOfBirth - גיל @age <br />
+                    </div>
+
+                </td>
+                <td>
+                    <div class="dropdown pull-left">
+                        <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm">
+                            <i class="fa fa-fw fa-ellipsis-h"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
+                               asp-action="UpdateEventAgeRestriction">
+                                <i class="fa fa-fw fa-ticket-alt"></i> הרשמה וכרטיסים
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
+                               asp-action="CreateUpdateParticipant"
+                               asp-route-collection="@participantId.GetCollectionFromId()" asp-route-id="@participantId.GetNumberFromId()">
+                                <i class="fa fa-fw fa-edit"></i> עדכון פרטים
+                            </a>
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Participants" asp-action="UpdateRoles"
+                               asp-route-collection="@participantId.GetCollectionFromId()" asp-route-id="@participantId.GetNumberFromId()">
+                                <i class="fa fa-fw fa-user-lock"></i> עדכון תפקידים
+                            </a>
+                            @if (isShortTerm == false)
+                            {
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
+                                   asp-action="UpdateEventAgeRestriction">
+                                    <i class="fa fa-fw fa-history"></i> מידע היסטורי
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
-                                       asp-action="UpdateEventAgeRestriction">
-                                        <i class="fa fa-fw fa-ticket-alt"></i> הרשמה וכרטיסים
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
-                                       asp-action="CreateUpdateParticipant"
-                                       asp-route-collection="@participantId.GetCollectionFromId()" asp-route-id="@participantId.GetNumberFromId()">
-                                        <i class="fa fa-fw fa-edit"></i> עדכון פרטים
-                                    </a>
-                                    <a class="dropdown-item" asp-area="Management" asp-controller="Participants" asp-action="UpdateRoles"
-                                       asp-route-collection="@participantId.GetCollectionFromId()" asp-route-id="@participantId.GetNumberFromId()">
-                                        <i class="fa fa-fw fa-user-lock"></i> עדכון תפקידים
-                                    </a>
-                                    @if (isShortTerm == false)
-                                    {
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
-                                           asp-action="UpdateEventAgeRestriction">
-                                            <i class="fa fa-fw fa-history"></i> מידע היסטורי
-                                        </a>
-                                    }
-                                    @if (isShortTerm == false)
-                                    {
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" onclick="ResetParticipantPassword('@part.Model.Id', '@part.Model.FullName')">
-                                            <i class="fa fa-fw fa-unlock-alt"></i> איפוס סיסמה
-                                        </a>
-                                    }
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr id="extra-data-@participantId.GetNumberFromId()"
-                        class="collapse" data-parent="#accordion">
-                        <td colspan="100%">
-                            <table class="table table-no-border table-no-background">
-                            </table>
-                        </td>
-                    </tr>
-                }
-                    </tbody>
+                            }
+                            @if (isShortTerm == false)
+                            {
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" onclick="ResetParticipantPassword('@part.Model.Id', '@part.Model.FullName')">
+                                    <i class="fa fa-fw fa-unlock-alt"></i> איפוס סיסמה
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr id="extra-data-@participantId.GetNumberFromId()"
+                class="collapse" data-parent="#accordion">
+                <td colspan="100%">
+                    <table class="table table-no-border table-no-background">
+                    </table>
+                </td>
+            </tr>
+        }
+        </tbody>
                 </table>
             </div>
 

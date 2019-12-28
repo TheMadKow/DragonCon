@@ -13,8 +13,11 @@ namespace DragonCon.Modeling.Models.Identities
         {
 
         }
-        public List<ConventionRoles> ActiveConventionRoles { get; set; }
-        public IPaymentInvoice ActiveConventionInvoice { get; set; }
+
+        public string EngagedConventionId { get; set; }
+        public string EngagedConventionName { get; set; }
+        public List<ConventionRoles> EngagedConventionRoles { get; set; }
+        public IPaymentInvoice EngagedConventionInvoice { get; set; }
 
     }
 
