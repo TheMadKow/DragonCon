@@ -157,7 +157,7 @@
                         {
                             @if (master == null)
                             {
-                                <strong class="text-danger">משתמש לא קיים,</strong>
+                                <strong class="text-danger">משתמש לא קיים</strong>
 
                             }
                             else
@@ -169,6 +169,13 @@
                     else
                     {
                         <span class="text-danger">חסרה הנחיה</span>
+                    }
+
+                    @if (evnt.Model.SpecialRequests.IsNotEmptyString())
+                    {
+                        <br />
+                        <span class="text-danger text-heavy-bold">בקשות מיוחדות: </span> @evnt.Model.SpecialRequests
+
                     }
                 </td>
                 <td class="tw-3">
@@ -284,17 +291,6 @@
                                 }
                             </td>
                         </tr>
-                        @if (evnt.Model.SpecialRequests.IsNotEmptyString())
-                        {
-                            <tr>
-                                <td>
-                                    <strong>בקשות מיוחדות </strong>
-                                </td>
-                                <td>
-                                    @evnt.Model.SpecialRequests
-                                </td>
-                            </tr>
-                        }
                         <tr>
                             <td>
                                 <strong>קבוצת גיל</strong>

@@ -43,7 +43,7 @@
 
 <div class="card card-margined card-grayed">
     <div class="card-body">
-        <h5 class="card-title">משתתפים </h5>
+        <h5 class="card-title"><i class="fa fa-fw fa-users"></i> משתתפים </h5>
         <table class="table table-hover text-right">
             <tr class="text-bold">
                 <td class="tw-4">סוג</td>
@@ -72,7 +72,7 @@
 
 <div class="card card-margined card-grayed">
     <div class="card-body">
-        <h5 class="card-title">כרטיסים </h5>
+        <h5 class="card-title"><i class="fa fa-fw fa-ticket-alt"></i>  כרטיסים </h5>
         <table class="table table-hover text-right">
             <tr class="text-bold">
                 <td class="tw-4">סוג כרטיס</td>
@@ -109,7 +109,42 @@
 
 <div class="card card-margined card-grayed">
     <div class="card-body">
-        <h5 class="card-title">אירועים </h5>
+        <h5 class="card-title"><i class="fa fa-fw fa-calendar-alt"></i>  אירועים </h5>
+        <h6 class="card-title">לפי פעילות </h6>
+        <table class="table table-hover text-right">
+            <tr class="text-bold">
+                <td class="tw-3 text-center">זמן</td>
+                <td class="tw-3 text-center">מושבים</td>
+                <td class="tw-3 text-center">תפוס</td>
+                <td class="tw-3 text-center">פנוי</td>
+            </tr>
+            @{
+                var eventsGroup = Model
+                    .EventSeats.GroupBy(x => x.Major)
+                    .OrderBy(x => x.Key);
+
+                foreach (var group in eventsGroup)
+                {
+                    var timeTable = group
+                        .GroupBy(x => x.EventTime)
+                        .OrderBy(x => x.Key);
+                    <tr class="text-bold text-center" style="color: white; background: #4a4e53;">
+                        <td colspan="4">@group.Key</td>
+                    </tr>
+                    foreach (var line in timeTable)
+                    {
+                        <tr>
+                            <td class="tw-3 text-center">@line.Key.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture)</td>
+                            <td class="tw-3 text-center">@line.Sum(y => y.TotalSeats)</td>
+                            <td class="tw-3 text-center">@line.Sum(y => y.TakenSeats)</td>
+                            <td class="tw-3 text-center">@line.Sum(y => y.FreeSeats)</td>
+                        </tr>
+                    }
+
+                }
+            }
+        </table>
+        <h6 class="card-title">סיכומים </h6>
         <table class="table table-hover text-right">
             <tr class="text-bold">
                 <td class="tw-4">סוג</td>
@@ -134,39 +169,6 @@
                 </td>
             </tr>
         </table>
-        <h6 class="card-title">לפי פעילות </h6>
-        <table class="table table-hover text-right">
-            <tr class="text-bold">
-                <td class="tw-3">זמן</td>
-                <td class="tw-3">מושבים</td>
-                <td class="tw-3">תפוס</td>
-                <td class="tw-3">פנוי</td>
-            </tr>
-            @{
-                var eventsGroup = Model
-                    .EventSeats.GroupBy(x => x.Major)
-                    .OrderBy(x => x.Key);
 
-                foreach (var group in eventsGroup)
-                {
-                    var timeTable = group
-                        .GroupBy(x => x.EventTime)
-                        .OrderBy(x => x.Key);
-                    <tr class="text-bold text-center text-primary">
-                        <td colspan="4">סוג פעילות - @group.Key</td>
-                    </tr>
-                    foreach (var line in timeTable)
-                    {
-                        <tr>
-                            <td class="tw-3">@line.Key.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture)</td>
-                            <td class="tw-3">@line.Sum(y => y.TotalSeats)</td>
-                            <td class="tw-3">@line.Sum(y => y.TakenSeats)</td>
-                            <td class="tw-3">@line.Sum(y => y.FreeSeats)</td>
-                        </tr>
-                    }
-
-                }
-            }
-        </table>
     </div>
 </div>

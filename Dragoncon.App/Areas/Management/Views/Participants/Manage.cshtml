@@ -54,22 +54,39 @@
         <strong>סינון לפי</strong>
         <br />
         <div class="row">
-            <div class="col-1">
+            <div class="col-2">
                 <label>בעל תפקיד</label>
             </div>
             <div class="col-4">
                 <select class="form-control chosen-select"
                         asp-for="filters.Role"
-                        data-placeholder="בעל תפקיד">
+                        data-placeholder="נושאי תפקיד">
                     <option value="" selected>הכל</option>
-                    @foreach (var type in Enums.AsSelectListItem<SystemRoles>())
-                    {
-                        <option value="@type.Value">@type.Text</option>
-                    }
+                    <optgroup label="תפקידי אתר">
+                        @foreach (var type in Enums.AsSelectListItem<SystemRoles>())
+                        {
+                            <option value="@type.Value">@type.Text</option>
+                        }
+                    </optgroup>
+                    <optgroup label="תפקידי כנס">
+                        @foreach (var type in Enums.AsSelectListItem<ConventionRoles>())
+                        {
+                            <option value="@type.Value">@type.Text</option>
+                        }
+                    </optgroup>
                 </select>
             </div>
             <div class="col-2">
-                סטטוס תשלום
+                מצב תשלום
+            </div>
+            <div class="col-4">
+                <select class="form-control chosen-select"
+                        asp-for="filters.Payment"
+                        data-placeholder="מצב תשלום">
+                    <option value="" selected>הכל</option>
+                    <option value="true">שולם</option>
+                    <option value="false">לא שולם</option>
+                </select>
             </div>
         </div>
     </div>

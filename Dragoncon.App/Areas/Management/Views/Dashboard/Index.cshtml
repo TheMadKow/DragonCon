@@ -9,42 +9,7 @@
 }
 
 <br />
-<div class="card card-margined card-grayed">
-        <div class="card-body">
-            <h5 class="card-title"><i class="fa fa-fw fa-mouse-pointer"></i> פעולות נפוצות</h5>
-            <div class="card-deck">
 
-                <div class="card">
-                    <div class="card-body text-center clickable">
-                        <i class="fa fa-2x fa-fw fa-user-plus"></i>
-                        <br />
-                        <br />
-                        הוספת משתתף חדש
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body text-center clickable">
-                        <i class="fa fa-2x fa-fw fa-list-ul"></i>
-                        <br />
-                        <br />
-                        צפיה במצב האירועים
-                    </div>
-                </div>
-                @if (Actor.HasSystemRole(SystemRoles.ConventionManager) && Actor.HasManagedConvention)
-                {
-                    <div class="card">
-                        <div class="card-body text-center clickable">
-                            <i class="fa fa-2x fa-fw fa-pen-nib"></i>
-                            <br />
-                            <br />
-                            עריכת כנס מנוהל
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-</div>
-<br />
 <div class="card card-margined card-grayed">
     <div class="card-body">
         <h5 class="card-title"><i class="fa fa-fw fa-user"></i> אני</h5>
