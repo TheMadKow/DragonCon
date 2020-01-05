@@ -1,0 +1,32 @@
+﻿/* Style the links inside the sidenav */
+#mySidenav a {
+    text-align: left;
+    position: absolute; /* Position them relative to the browser window */
+    right: -105px; /* Position them outside of the screen */
+    transition: 0.3s; /* Add transition on hover */
+    padding: 15px; /* 15px padding */
+    width: 155px; /* Set a specific width */
+    text-decoration: none; /* Remove underline */
+    font-size: 20px; /* Increase font size */
+    color: white; /* White text color */
+}
+
+#mySidenav a:hover {
+    right: 0; /* On mouse-over, make the elements appear as they should */
+}
+
+/* The about link: 20px from the top with a green background */
+#side-news {
+    top: 150px;
+    background-color: #ff7600;
+}
+
+#side-facebook {
+    top: 210px;
+    background-color: #2196F3; /* Blue */
+}
+
+#side-contact {
+    top: 270px;
+    background-color: #555 /* Light Black */
+}

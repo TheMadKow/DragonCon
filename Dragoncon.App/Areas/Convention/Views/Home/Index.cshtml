@@ -6,11 +6,10 @@
     var actor = Actor;
 }
 
-<div 
-    id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" style="">
+<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" style="">
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img class="d-block w-100" style="        height: 400px;
+            <img class="d-block w-100" style="height: 400px;
         " src="~/images/Coursel/image-slider-2.jpg" alt="First slide">
             <div class="carousel-caption d-none d-md-block">
                 <h5>סדנאות צביעה</h5>
@@ -56,7 +55,7 @@
             הכנס מאורגן בהתנדבות ומתקיים כל שנה במהלך אוגוסט מ-2007 ועד היום. <br />
             בכנס תמצאו את כל סוגי המשחקים: משחקי-תפקידים שולחניים וחיים, משחקי לוח, משחקי מיניאטורות, טורנירים ועוד.<br />
             הכנס מיועד לכל הגילאים, שחקנים וותיקים וחדשים, מבוגרים ומשפחות. <br />
-            <span class="dragon-organge-color">אז בואו לשחק בדרקוניקון - פיגשו חברים, צאו להרפתקאות וגלו עולמות חדשים!</span>
+            <span class="dragon-organge-color text-bold">אז בואו לשחק בדרקוניקון - פיגשו חברים, צאו להרפתקאות וגלו עולמות חדשים!</span>
         </p>
     </div>
 </div>
@@ -66,26 +65,30 @@
     <div class="card-body">
         <div class="row">
             <div class="col-6">
-                <h3 class="card-title text-bold">
-                    <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
-                    &nbsp;
-                    על הכנס
-                </h3>
-                <p style="font-size: 1.4em; line-height: 1.85; padding-top: 10px;">
+                <p class="card-paragraph">
                     @if (actor.HasDisplayConvention)
                     {
                         var convention = actor.DisplayConvention;
                         var counter = 1;
-                        @convention.ConventionName
+                        <strong>מיקום </strong>
                         <br />
-                        @convention.TagLine
+
+                        @convention.Location
                         <br />
-                        <strong>מיקום: </strong> @convention.Location <br />
+                        <br />
+
                         @foreach (var day in convention.Days)
                         {
-                            <strong>יום כנס @counter</strong> <br /> <span> @day.Date.DayOfWeek.InHebrew() ה-@day.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) מהשעה @day.StartTime.ToString("HH:mm", CultureInfo.InvariantCulture) ועד השעה @day.EndTime.ToString("HH:mm", CultureInfo.InvariantCulture)<br /></span>
+                            <strong>יום כנס @counter:</strong>
+                            <br />
+                            <span>
+                                @day.Date.DayOfWeek.InHebrew() ה-@day.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+                                <br /> מהשעה @day.StartTime.ToString("HH:mm", CultureInfo.InvariantCulture) ועד השעה @day.EndTime.ToString("HH:mm", CultureInfo.InvariantCulture)<br />
+                            </span>
+                            <br />
                             counter++;
-                        } }
+                        }
+                    }
                     else
                     {
                         <span>
@@ -105,27 +108,54 @@
         </div>
     </div>
 </div>
-<br />
 
+<a class="btn dragon-register-btn" href="#">הרשמה לכנס @Actor.DisplayConvention?.ConventionName</a>
 
-<a class="btn dragon-register-btn"  href="#">הרשמה לכנס @Actor.DisplayConvention?.ConventionName</a>
-<br />
-<br />
-
-
-<div class="card">
+<div class="card card-gray-float">
     <div class="card-body">
-        <h5 class="card-title">רשימת הדיוור</h5>
-        הצטרפו לרשימת הדיוור
-        הצטרפו וקבלו עדכונים למייל עם חדשות מדרקוניקון:
-        דואר אלקטרוני
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            חדשות אחרונות
+        </h3>
+        <p class="card-paragraph">
+            <span><i class="fa fa-fw fa-bullhorn fa-flip-horizontal"></i> 20/01/2020 - איש נשך כלב בדרום תל אביב</span>
+        </p>
+    </div>
+</div>
 
-        הצטרפו לקהילת הפונדק
-        אתר הפונדק - משחקי תפקידים ומשחקי לוח
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            רשימת הדיוור שלנו
+        </h3>
+        <p class="card-paragraph">
+            רוצים לקבל עדכונים לדואר האלקטרוני עם חדשות מדרקוניקון? הרשמו !  <br />
+        </p>
+        <form>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-8">
+                        <input class="form-control" type="text" />
+                    </div>
+                    <div class="col-4">
+                        <input class="form-control" type="button" value="שליחה" />
 
+                    </div>
+                </div>
+            </div>
+        </form>
 
     </div>
 </div>
 
 
 
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-home")
+    </script>
+}

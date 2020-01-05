@@ -8,36 +8,45 @@
     @await Html.PartialAsync("_PartialSharedStyles")
     @RenderSection("Styles", required: false)
 </head>
-<body class="right-to-left image-background" style="text-align: right;">
-    <nav class="navbar navbar-dragon navbar-expand-md" >
+<body class="right-to-left" style="text-align: right;">
+
+    <div id="mySidenav" class="sidenav">
+        <a href="#" id="side-news">חדשות כנס &nbsp;<i class="fa fa-fw fa-rss"></i></a>
+        <a href="#" id="side-facebook">דף פייסבוק &nbsp;<i class="fab fa-fw fa-facebook"></i></a>
+        <a asp-area="Convention" asp-controller="Home" asp-action="Contact" id="side-contact">יצירת קשר &nbsp;<i class="fa fa-fw fa-envelope"></i></a>
+    </div>
+
+    <nav class="navbar navbar-dragon navbar-expand-md">
         <a class="navbar-brand" href="/"><img src="/images/logo.png" style="height: 75px;" /></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" style="font-size: 1.5em;" 
+        <div class="collapse navbar-collapse" style="font-size: 1.5em;"
              id="navbarSupportedContent">
             <ul class="navbar-nav">
-                <li class="nav-item active" style="padding-left:15px">
+                <li id="nav-home" class="nav-item" style="padding-left: 15px">
                     <a class="nav-link" href="/">דף הבית</a>
                 </li>
-                <li class="nav-item" style="padding-left:15px">
+                <li id="nav-info" class="nav-item" style="padding-left: 15px">
                     <a class="nav-link" asp-area="Convention" asp-controller="Home" asp-action="Info">מידע למבקר</a>
                 </li>
-                <li class="nav-item" style="padding-left:15px">
-                    <a class="nav-link" href="#">אירועי הכנס</a>
+                <li id="nav-events" class="nav-item" style="padding-left: 15px">
+                    <a class="nav-link" asp-area="Convention" asp-controller="Home" asp-action="Events">אירועי הכנס</a>
                 </li>
-                <li class="nav-item" style="padding-left:15px">
+                <li id="nav-register" class="nav-item" style="padding-left: 15px">
+                    <a class="nav-link" asp-area="Convention" asp-controller="Home" asp-action="Register">הרשמה לכנס</a>
+                </li>
+                <li id="nav-volunteer" class="nav-item" style="padding-left: 15px">
                     <a class="nav-link" asp-area="Convention" asp-controller="Home" asp-action="Volunteering">הנחיה והתנדבות</a>
                 </li>
-                <li class="nav-item" style="padding-left:15px">
-                    <a class="nav-link" href="#">הרשמה לכנס</a>
+                <li id="nav-about" class="nav-item" style="padding-left: 15px">
+                    <a class="nav-link" asp-area="Convention" asp-controller="Home" asp-action="English">אודות הכנס</a>
                 </li>
-
-                <li class="nav-item" style="padding-left:15px">
-                    <a class="nav-link" href="#">English</a>
+                <li id="nav-english" class="nav-item" style="padding-left: 15px">
+                    <a class="nav-link" asp-area="Convention" asp-controller="Home" asp-action="English">English</a>
                 </li>
-                <li class="nav-item" style="padding-right:35px">
+                <li class="nav-item" style="padding-right: 35px">
                     <a asp-area="Management" asp-controller="Dashboard" asp-action="Index" class="nav-link">
                         <strong class="dragon-organge-color"><i class="fa fa-fw fa-user-cog"></i> אזור הניהול</strong>
                     </a>
@@ -47,27 +56,28 @@
         </div>
     </nav>
 
-<div class="container">
-    <h4 class="Title-Text">
-        @if (Actor.HasDisplayConvention)
-        {
-            @Actor.DisplayConvention.ConventionName
-        }
-    </h4>
-    
-    <div class="modal-placeholder" id="modal-placeholder" style="display: none;">
-        <div class="modal-placeholder-content text-center">
-            <i class="fa fa-fw fa-spin fa-spinner"></i> אנא המתן...
+    <div class="container">
+        <h1 class="Title-Text dragon-organge-color text-bold text-center">
+            @if (Actor.HasDisplayConvention)
+            {
+                @Actor.DisplayConvention.ConventionName <span>&nbsp;</span>
+                <small>
+                    @Actor.DisplayConvention.TagLine
+                </small>
+            }
+        </h1>
+
+        <div class="modal-placeholder" id="modal-placeholder" style="display: none;">
+            <div class="modal-placeholder-content text-center">
+                <i class="fa fa-fw fa-spin fa-spinner"></i> אנא המתן...
+            </div>
         </div>
-    </div>
-    
-    <div class="body-content no-background">
-        @RenderBody()
-    </div>
 
-    @await Html.PartialAsync("_PartialFooter")
-
+        <div class="body-content no-background">
+            @RenderBody()
+        </div>
 </div>
+@await Html.PartialAsync("_PartialFooter")
 
 
     @await Html.PartialAsync("_PartialSharedScripts")

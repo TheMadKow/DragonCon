@@ -20,12 +20,21 @@ namespace DragonCon.Features.Convention.Home
             return View();
         }
 
+        public IActionResult Volunteering()
+        {
+            return View();
+        }
+
+        public IActionResult English()
+        {
+            return View();
+        }
         public IActionResult Events()
         {
             return View();
         }
 
-        public IActionResult Volunteering()
+        public IActionResult Register()
         {
             return View();
         }
