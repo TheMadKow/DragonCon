@@ -10,7 +10,7 @@
 
 <br />
 
-<div class="card card-margined card-grayed">
+<div class="card card-margined card-gray-float">
     <div class="card-body">
         <h5 class="card-title"><i class="fa fa-fw fa-user"></i> אני</h5>
         <table class="table table-hover text-right">
@@ -38,7 +38,7 @@
 </div>
 
 @* Managed Convention *@
-<div class="card card-margined card-grayed">
+<div class="card card-margined card-gray-float">
     <div class="card-body">
         <h5 class="card-title">
             <i class="fa fa-fw fa-users-cog"></i> כנס מנוהל
@@ -185,7 +185,7 @@
 </div>
 
 @* Participant Convention *@
-<div class="card card-margined card-grayed">
+<div class="card card-margined card-gray-float">
     <div class="card-body">
         <h5 class="card-title"><i class="fa fa-fw fa-user-friends"></i> כנס תצוגה</h5>
         <table class="table table-hover text-right h5 text-center">
@@ -201,6 +201,9 @@
                     <td class="tw-12 text-danger">לא מוגדר כנס לתצוגה</td>
                 </tr>
             }
+            <tr>
+                <td class="tw-12"><a asp-area="Convention" asp-controller="Landing" asp-action="Index">מעבר לדף הנחיתה</a></td>
+            </tr>
         </table>
     </div>
 </div>

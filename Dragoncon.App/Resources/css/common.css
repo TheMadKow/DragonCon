@@ -1,4 +1,29 @@
-﻿.form-control-inline {
+﻿body {
+    font-family: "Open Sans Hebrew", "cursive"
+}
+
+.dragon-register-btn {
+    background-color: #ff7600;
+    width: 100%;
+    height: 60px;
+    color: #fff;
+    line-height: 1;
+    font-size: 2.4em;
+    font-weight: bold;
+    border-radius: 0;
+    text-overflow: clip;
+}
+
+.dragon-organge-color {
+    color: #ff7600;
+}
+
+.dragon-orange-background {
+    background-color: #ff7600;
+}
+
+
+.form-control-inline {
     display: inline-block;
     margin-left: 15px;
     margin-right: 5px;

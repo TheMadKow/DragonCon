@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>דרקוניקון - @ViewBag.Title</title>
+
+    @await Html.PartialAsync("_PartialSharedStyles")
+    @RenderSection("Styles", required: false)
+</head>
+<body class="right-to-left image-background" style="text-align: right;">
+
+<div class="container">
+    <h1 class="Title-Text text-center dragon-organge-color text-bold">
+        @if (Actor.HasDisplayConvention)
+        {
+            <span>כנס @Actor.DisplayConvention.ConventionName<br/>
+                <small>@Actor.DisplayConvention.TagLine</small>
+            </span>
+        }
+    </h1>
+
+    <div class="body-content no-background">
+        @RenderBody()
+    </div>
+</div>
+
+
+    @await Html.PartialAsync("_PartialSharedScripts")
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

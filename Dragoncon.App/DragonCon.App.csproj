@@ -35,6 +35,16 @@
   
   <ItemGroup>
     <_LibFiles Include="$(MSBuildProjectDirectory)/wwwroot/lib/**" />
+    <None Remove="Resources\images\1.jpg" />
+    <None Remove="Resources\images\2.jpg" />
+    <Content Include="Resources\images\1.jpg">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Resources\images\2.jpg">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <DotNetPublishFiles Include="@(_LibFiles)">
       <DestinationRelativePath>wwwroot/lib/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
     </DotNetPublishFiles>
@@ -49,7 +59,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Controllers\" />
-    <Folder Include="Areas\Convention\Views\Landing\" />
     <Folder Include="Areas\Convention\Views\Events\" />
     <Folder Include="Areas\Users\" />
   </ItemGroup>

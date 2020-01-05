@@ -1,0 +1,97 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Identities
+@{
+    var actor = Actor;
+    Layout = "_LandingLayout";
+    ViewData["Title"] = $"דף הכנס";
+}
+
+<br />
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            @await Html.PartialAsync("_PartialDragon")
+            מהו דרקוניקון?
+        </h3>
+        <p class="card-paragraph">
+            דרקוניקון הוא כנס המשחקים השולחניים הגדול בישראל. <br />
+            הכנס מאורגן בהתנדבות ומתקיים כל שנה במהלך אוגוסט מ-2007 ועד היום. <br />
+        </p>
+    </div>
+</div>
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            @await Html.PartialAsync("_PartialDragon")
+            תמונות מכנס קודם
+        </h3>
+        <p class="card-paragraph">
+            דרקוניקון הוא כנס המשחקים השולחניים הגדול בישראל. <br />
+            הכנס מאורגן בהתנדבות ומתקיים כל שנה במהלך אוגוסט מ-2007 ועד היום. <br />
+        </p>
+    </div>
+</div>
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            @await Html.PartialAsync("_PartialDragon")
+            איפה ומתי הכנס ?
+        </h3>
+        <p class="card-paragraph">
+            @if (actor.HasDisplayConvention)
+            {
+                var counter = 1;
+                var convention = actor.DisplayConvention;
+                <strong>מיקום: </strong> @convention.Location <br />
+                @foreach (var day in convention.Days)
+                {
+                    <span>יום כנס @counter -  @day.Date.DayOfWeek.InHebrew() ה-@day.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) מהשעה @day.StartTime.ToString("HH:mm", CultureInfo.InvariantCulture) ועד השעה @day.EndTime.ToString("HH:mm", CultureInfo.InvariantCulture)<br /></span>
+                    counter++;
+                }
+            }
+            else
+            {
+                <span>
+                    נתראה בכנס הבא!
+                </span>
+            }
+        </p>
+    </div>
+</div>
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            @await Html.PartialAsync("_PartialDragon")
+            מה תמצאו בכנס ?
+        </h3>
+        <p class="card-paragraph">
+            בכנס יתקיימו עשרות אירועים שונים - <br />
+            משחקי תפקידים שולחניים, משחקי תפקידים חיים, משחקי לוח, טורנירים, משחקי מיניאטרות ועוד. <br />
+            הכס מיועד לכל הגילאים, ולכל השחקנים - ותיקים או חדשים, מבוגרים או צעירים, וגם למשפחות! <br />
+            <br />
+            <h3 class="text-center">
+                <strong class="dragon-organge-color">אז בואו לשחק בדרקוניקון!</strong>
+            </h3>
+        </p>
+    </div>
+</div>
+
+<a class="btn dragon-register-btn" href="#">הרשמה לכנס @Actor.DisplayConvention?.ConventionName</a>
+<br />
+<br />
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            @await Html.PartialAsync("_PartialDragon")
+            שאלות נוספות ?
+        </h3>
+        <br/>
+       @await  Html.PartialAsync("PartailLearnMore")
+    </div>
+</div>
+
+
