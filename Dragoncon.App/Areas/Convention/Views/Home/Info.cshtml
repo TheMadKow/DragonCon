@@ -15,9 +15,10 @@
             במה אפשר לעזור ?
         </h3>
         <hr />
+
         <div class="card-deck ">
             <div class="card">
-                <div class="card-body text-center clickable">
+                <div class="card-body text-center clickable" style="align-items: center">
                     <a class="dragon-organge-link" href="#tag_location">
                         <h4 class="text-bold">
                             מיקום והגעה
@@ -46,20 +47,6 @@
             </div>
             <div class="card">
                 <div class="card-body text-center clickable">
-                    <a class="dragon-organge-link" href="#tag_ages">
-
-                        <h4 class="text-bold">
-                            גילאי המשתתפים
-                        </h4>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-        <br />
-        <div class="card-deck ">
-            <div class="card">
-                <div class="card-body text-center clickable">
                     <a class="dragon-organge-link" href="#tag_tickets">
                         <h4 class="text-bold">
                             מחירון
@@ -68,6 +55,19 @@
 
                 </div>
             </div>
+            <div class="card">
+                <div class="card-body text-center clickable">
+                    <a class="dragon-organge-link" href="#tag_ages">
+                        <h4 class="text-bold">
+                            גילאים
+                        </h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="card-deck ">
+
             <div class="card">
                 <div class="card-body text-center clickable">
                     <a class="dragon-organge-link" href="#tag_stands">
@@ -97,15 +97,11 @@
                     </a>
                 </div>
             </div>
-
-        </div>
-        <br />
-        <div class="card-deck ">
             <div class="card">
                 <div class="card-body text-center clickable">
                     <a class="dragon-organge-link" href="#tag_freebies">
                         <h4 class="text-bold">
-                            אירועים חינמיים
+                            אירועים חופשיים
                         </h4>
                     </a>
 
@@ -120,28 +116,8 @@
                     </a>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-body text-center clickable">
-                    <a class="dragon-organge-link" href="#tag_resources">
-
-                        <h4 class="text-bold">
-                            קבצים וטפסים
-                        </h4>
-                    </a>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body text-center clickable">
-                    <a class="dragon-organge-link" href="#tag_staff">
-
-                        <h4 class="text-bold">
-                            סגל הכנס
-                        </h4>
-                    </a>
-                </div>
-            </div>
-
         </div>
+        <br />
     </div>
 </div>
 <div class="card card-gray-float" id="tag_location">
@@ -152,18 +128,15 @@
             מיקום והגעה
         </h3>
         <p class="card-paragraph">
-            @if (actor.HasDisplayConvention)
-            {
-                var convention = actor.DisplayConvention;
-                @convention.Location
-                <br />
-
-                <span>להוסיף דרכי הגעה</span>
-                <span>להוסיף נוסף מיקום</span>
-                <span>להוסיף מפה</span>
-            }
+            @await Html.PartialAsync("_PartialLocation")
         </p>
     </div>
+    @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
+    {
+        {"ימי הכנס", "tag_location"},
+        {"מחירון", "tag_tickets"},
+    })
+
 </div>
 
 <div class="card card-gray-float" id="tag_days">
@@ -174,25 +147,15 @@
             ימי הכנס
         </h3>
         <p class="card-paragraph">
-            @if (actor.HasDisplayConvention)
-            {
-                var convention = actor.DisplayConvention;
-                var counter = 1;
+            @await Html.PartialAsync("_PartialConvetionDays")
 
-                @foreach (var day in convention.Days)
-                {
-                    <strong>יום כנס @counter:</strong>
-                    <br />
-                    <span>
-                        @day.Date.DayOfWeek.InHebrew() ה-@day.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
-                        <br /> מהשעה @day.StartTime.ToString("HH:mm", CultureInfo.InvariantCulture) ועד השעה @day.EndTime.ToString("HH:mm", CultureInfo.InvariantCulture)<br />
-                    </span>
-                    <br />
-                    counter++;
-                }
-            }
         </p>
     </div>
+    @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
+    {
+        {"ימי הכנס", "tag_days"},
+        {"מחירון", "tag_tickets"},
+    })
 </div>
 
 
@@ -203,23 +166,42 @@
             &nbsp;
             הרישום לאירועים
         </h3>
-        <p class="card-paragraph">
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            הרישום לאירועים מתבצע כאן באתר בהרשמה מוקדמת <strong>או</strong> בעמדות הקבלה במהלך הכנס.<br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            הרישום המוקדם מבטיח את מקומכם באירועים שתרצו! <br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            הרישום המוקדם מתבצע בצורה מאובטחת דרך PayPal. <br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            אם ברצונך לרשום מספר אנשים ביחד לכנס, יש לבצע רישום לכל אדם בנפרד. <br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            ההרשמה לאירועים בעמדות הקבלה היא על בסיס מקום פנוי. <br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            התשלום בכנס מבוצע במזומן או בכרטיס אשראי. <br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            מומלץ להגיע כחצי שעה לפני תחילת האירוע הראשון אליו רשומים! <br />
-        </p>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                הרישום לאירועים מתבצע כאן באתר בהרשמה מוקדמת <strong>או</strong> בעמדות הקבלה במהלך הכנס.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                הרישום המוקדם מבטיח את מקומכם באירועים שתרצו!
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                הרישום המוקדם מתבצע בצורה מאובטחת דרך PayPal. <br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                אם ברצונך לרשום מספר אנשים ביחד לכנס, יש לבצע רישום לכל אדם בנפרד. <br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                ההרשמה לאירועים בעמדות הקבלה היא על בסיס מקום פנוי. <br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                התשלום בכנס מבוצע במזומן או בכרטיס אשראי. <br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                מומלץ להגיע כחצי שעה לפני תחילת האירוע הראשון אליו רשומים! <br />
+            </li>
+        </ul>
     </div>
+    @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
+    {
+        {"מחירון", "tag_tickets"},
+    })
+
 </div>
 
 
@@ -231,16 +213,29 @@
             &nbsp;
             גילאי המשתתפים
         </h3>
-        <p class="card-paragraph">
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            הכנס מיועד לכל הגילאים ולמשפחות.  <br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            רוב הפעילויות של משחקי לוח ומיניאטורות פונות לגילאי 8 ומעלה.  <br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            רוב הפעילויות של משחקי תפקידים פונות לגילאי 11 ומעלה.  <br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            חלק מהמשחקים מוגבלים לטווח גילאים - על מנת לספק את החוויה הטובה ביותר לשחקנים. <br />
-        </p>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                הכנס מיועד לכל הגילאים ומיועד גם למשפחות.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                רוב הפעילויות של משחקי לוח ומיניאטורות פונות לגילאי 8 ומעלה.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                רוב הפעילויות של משחקי תפקידים פונות לגילאי 11 ומעלה.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                חלק מהמשחקים מוגבלים לטווח גילאים - על מנת לספק את החוויה הטובה ביותר לשחקנים.
+            </li>
+        </ul>
+        @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
+        {
+            {"מחירון", "tag_tickets"},
+        })
+
     </div>
 </div>
 <div class="card card-gray-float" id="tag_tickets">
@@ -250,280 +245,336 @@
             &nbsp;
             מחירון
         </h3>
-        <p class="card-paragraph">
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            כרטיס כניסה - מאפשר כניסה חופשית לכנס, ללא אירועים בתשלום.  <br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            כרטיס מוגבל אירועים - מאפשר כניסה חופשית לכנס, עם הגבלה על מספר האירועים.  <br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            כרטיס ללא הגבלה - מאפשר כניסה חופשית לכנס והשתתפות חופשית באירועים. .  <br />
 
-            @if (actor.HasDisplayConvention)
-            {
-                var convention = actor.DisplayConvention;
-                <table class="table" style="font-size: 1.5em">
-                    <thead class="text-bold">
-                        <tr>
-                            <td>שם </td>
-                            <td>עלות</td>
-                            <td>ימים</td>
-                            <td>מספר פעילויות</td>
-                        </tr>
-                    </thead>
-                    @foreach (var ticket in convention.Tickets)
-                    {
-                        <tr>
-                            <td>@ticket.Name</td>
-                            <td>@ticket.Price ש"ח</td>
-                            <td>
-                                @foreach (var dat in ticket.DayIds)
-                                {
-                                    var currentDay = Actor.DisplayConvention.GetDayById(dat);
-                                    <span>@currentDay.Date.DayOfWeek.InHebrew() ה-@currentDay.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)<br /></span>
-                                }
-                            </td>
-                            <td>
-                                @if (ticket.ActivitiesAllowed.HasValue)
-                                {
-                                    <span>@ticket.ActivitiesAllowed</span>
-                                }
-                                else
-                                {
-                                    <span>ללא הגבלה</span>
-                                }
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>כרטיס כניסה</strong> - מאפשר כניסה חופשית לכנס, ללא אירועים בתשלום.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>כרטיס מוגבל</strong> - מאפשר כניסה חופשית לכנס, עם הגבלה על מספר האירועים.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>כרטיס לא מוגבל</strong> - מאפשר כניסה חופשית לכנס והשתתפות חופשית באירועים.
+            </li>
+        </ul>
+        @if (actor.HasDisplayConvention)
+        {
+            var convention = actor.DisplayConvention;
+            <table class="table table-striped card-table">
+                <thead class="text-bold dragon-orange-background">
+                    <tr class="dragon-light-orange-background">
+                        <td>שם </td>
+                        <td>עלות</td>
+                        <td>ימים</td>
+                        <td>מספר פעילויות</td>
+                    </tr>
+                </thead>
+                @foreach (var ticket in convention.Tickets)
+                {
+                    <tr>
+                        <td>@ticket.Name</td>
+                        <td>@ticket.Price ש"ח</td>
+                        <td>
+                            @foreach (var dat in ticket.DayIds)
+                            {
+                                var currentDay = Actor.DisplayConvention.GetDayById(dat);
+                                <span>@currentDay.Date.DayOfWeek.InHebrew() ה-@currentDay.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)<br /></span>
+                            }
+                        </td>
+                        <td>
+                            @if (ticket.ActivitiesAllowed.HasValue)
+                            {
+                                <span>@ticket.ActivitiesAllowed</span>
+                            }
+                            else
+                            {
+                                <span>ללא הגבלה</span>
+                            }
 
-                            </td>
-                        </tr>
-                    }
-                </table>
-            <p class="card-paragraph">
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                הכניסה להורה מלווה בודד של משתתף בכנס בתשלום - היא חינם. <br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                ילדים מתחת לגיל 8 נכנסים לכנס בחינם, בתנאי שבכל עת הם בליווי מבוגר שרכש כרטיסים. <br />
-            </p>
+                        </td>
+                    </tr>
+                }
+            </table>
+            <ul class="fa-ul card-list">
+                <li>
+                    @await Html.PartialAsync("_PartialBulletin")
+                    הכניסה להורה מלווה בודד של משתתף בכנס בתשלום - היא חינם.
+                </li>
+                <li>
+                    @await Html.PartialAsync("_PartialBulletin")
+                    ילדים מתחת לגיל 8 נכנסים לכנס בחינם, בתנאי שבכל עת הם בליווי מבוגר שרכש כרטיסים.
+                </li>
+            </ul>
         }
-        </div>
     </div>
+    @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
+    {
+        {"הרישום לאירועים", "tag_register"},
+        {"גילאי המשתתפים", "tag_ages"},
+    })
 
-
-
-    <div class="card card-gray-float" id="tag_stands">
-        <div class="card-body">
-            <h3 class="card-title text-bold">
-                <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
-                &nbsp;
-                עמדות לקהל
-            </h3>
-            <p class="card-paragraph">
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>עמדת רכישת כרטיסים ורישום לאירועים</strong> - תפעל משעת תחילת הכנס עד שעתיים לפני תום כל יום. <br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>עמדת איסוף כרטיסים שהוזמנו מראש</strong> - העמדה תפעל בשעות העומס בכנס, שתפעל בשעתיים הראשונות כל יום <br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>עמדת מודיעין</strong> - העמדה תציע מידע והמלצות על האירועים, שתפעל בשעתיים הראשונות של היום.  <br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>דוכן יד-שניה</strong> - הדוכן יפעל במהלך כל הכנס ויספק שירות לכל מי שרכש כרטיס.  <br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>עמדת שתיה ומזון</strong> - תהיה עמדת שתיה קלה וחמה זמינה במהלך כל הכנס.  <br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>עמדת הספרייה</strong> - תהיה עמדת משחקים להשאלה במהלך הכנס.  <br />
-            </p>
-        </div>
-    </div>
-
-    <div class="card card-gray-float" id="tag_shops">
-        <div class="card-body">
-            <h3 class="card-title text-bold">
-                <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
-                &nbsp;
-                דוכנים
-            </h3>
-            <p class="card-paragraph">
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>הקוביה</strong> - יבואן לישראל של משחקי-תפקידים ולוח. בנוסף לכך הקוביה מתרגמת לעברית את המשחקים מתיישבי קאטאן, מנצ'קין ועוד.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>מאנקי טיים</strong> - המתרגמת של פאת'פיינדר לעברית, מייבא ומתרגם שלל משחקי-לוח וקלפים.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>הממלכה</strong> - חנות משחקי תחביב בהוד השרון, מוכרת מג'יק, משחקי לוח, קומיקס ומ"ת.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>ממותה</strong> - סטודיו לעיצוב אישי ופנטזיה, המתחתה בעבודות יד מעולמות הפנטזיה והמדע-בדיוני.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>משחקים וחושבים (מו"ח)</strong> - היבואן החדש של משחקי המיניאטורות של Games Workshop לישראל.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>פריק</strong> - חנות תל-אביבית המתמחה במשחקי לוח, משחקי תפקידים, קלפים ועוד.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>הפונדק הוצאה לאור</strong> - עולם מערכה, מוצרי הרחבה והרפתקאות למבוכים ודרקונים ושל פאת'פיינדר.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>הוצאת גיבורים</strong> - ההוצאה לאור של העמותה למשחקי תפקידים בישראל.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>פרש משחקים</strong> - מתרגמים משחקי לוח לעברית.<br />
-                <br />
-                רוצים להפעיל דוכן בכנס? נשמח לארח אתכם - אנא צרו איתנו קשר!
-
-            </p>
-        </div>
-    </div>
-
-
-    <div class="card card-gray-float" id="tag_yad2">
-        <div class="card-body">
-            <h3 class="card-title text-bold">
-                <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
-                &nbsp;
-                דוכן יד-2
-            </h3>
-            <p class="card-paragraph">
-                יש לכם דרקון ספייר בבוידעם? קיבלתם ביום הולדת עוד חרב קסומה? <br />
-                יש לנו פיתרון בשבילכם! בדוכן יד שנייה נעזור לכם למצוא אוצרות, ולהרוויח כסף על המשחקים הישנים שלכם בדוכן. המכירה בדוכן היא ללא תשלום.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>שעות הפעילות</strong>: משעה 10:00 עד 20:00 ביום חמישי, ומשעה 09:00 בבוקר עד 13:00  ביום שישי.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                הדוכן מיועד רק עבור משחקי תפקידים, משחקי לוח, מיניאטורות, משחקי קלפים ופריטים דומים. <Br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                הדוכן ממוקם במתחם הכנס והשימוש בדוכן יד-2 הוא רק למשתתפי הכנס בעלי כרטיס. <br />
-            </p>
-            <br />
-            <h4 class="text-bold">כללי הדוכן</h4>
-
-            <p class="card-paragraph">
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                המוכר ימלא את טופס דוכן יד-שנייה בכתב ברור עם פרטי הפריטים שהוא מעוניין למכור והמחיר הנקוב. הטופס יהיה חתום בידי המוכר. <br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                כנס דרקוניקון אינו מתחייב למכור את הפריטים שיימסרו לדוכן.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                כנס דרקוניקון אינו אחראי על הפריטים בכל מקרה של פגיעה בהם, אובדנם או גניבתם.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                באחריותו הבלעדית של המוכר לאסוף את הפריטים ו/או הכסף תמורתם עד שעת סגירת הדוכן.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                הדוכן אינו מיועד למכירה סיטונאית של פריטים והינו רק לאנשים פרטיים. לא יהיה ניתן להציע שני פריטים או יותר שהם זהים. למשל: סטים של קוביות, חבילות של קלפי מג'יק וכך הלאה.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                כנס דרקוניקון אינו אחראי על הפריטים ו/או הכסף אחרי שעת סגירת הדוכן. פריטים ו/או כסף שיישארו בדוכן לאחר סגירתו ייחשבו כאילו נתרמו לכנס.<br />
-            </p>
-            <br />
-            <h4 class="text-bold">הוראות למילוי טופס לדוכן יד-שנייה</h4>
-            <p class="card-paragraph">
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                יש למלא את הטופס לפני מסירת המשחקים למכירה. מומלץ להוריד את הטופס ולמלא אותו מראש, עם זאת ניתן להביא את המשחקים לכנס ולמלא טופס במקום. במידה שטופס אחד אינו מספיק, ניתן למלא מספר טפסים.
-                <br />
-
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                אין למלא את השדות המסומנים באפור בטופס - הם מיועדים לשימוש צוות הדוכן.
-                <br />
-
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                יש להקפיד ולמלא את כל השדות האחרים, בכתב-יד ברור, ובדגש על פרטי קשר.
-                <br />
-
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                יש לחתום על הטופס, לאחר שקראת והבנת את התנאים לשימוש בדוכן.
-                <br />
-            </p>
-        </div>
-    </div>
-
-    <div class="card card-gray-float" id="tag_freebies">
-        <div class="card-body">
-            <h3 class="card-title text-bold">
-                <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
-                &nbsp;
-                אירועיים חימניים
-            </h3>
-            <p class="card-paragraph">
-                יש לכם דרקון ספייר בבוידעם? קיבלתם ביום הולדת עוד חרב קסומה? <br />
-                יש לנו פיתרון בשבילכם! בדוכן יד שנייה נעזור לכם למצוא אוצרות, ולהרוויח כסף על המשחקים הישנים שלכם בדוכן. המכירה בדוכן היא ללא תשלום.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>שעות הפעילות</strong>: משעה 10:00 עד 20:00 ביום חמישי, ומשעה 09:00 בבוקר עד 13:00  ביום שישי.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                הדוכן מיועד רק עבור משחקי תפקידים, משחקי לוח, מיניאטורות, משחקי קלפים ופריטים דומים. <Br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                הדוכן ממוקם במתחם הכנס והשימוש בדוכן יד-2 הוא רק למשתתפי הכנס בעלי כרטיס. <br />
-            </p>
-
-
-
-        </div>
-    </div>
-
-    <div class="card card-gray-float" id="tag_library">
-        <div class="card-body">
-            <h3 class="card-title text-bold">
-                <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
-                &nbsp;
-                הספריה
-            </h3>
-            <p class="card-paragraph">
-                יש לכם דרקון ספייר בבוידעם? קיבלתם ביום הולדת עוד חרב קסומה? <br />
-                יש לנו פיתרון בשבילכם! בדוכן יד שנייה נעזור לכם למצוא אוצרות, ולהרוויח כסף על המשחקים הישנים שלכם בדוכן. המכירה בדוכן היא ללא תשלום.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                <strong>שעות הפעילות</strong>: משעה 10:00 עד 20:00 ביום חמישי, ומשעה 09:00 בבוקר עד 13:00  ביום שישי.<br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                הדוכן מיועד רק עבור משחקי תפקידים, משחקי לוח, מיניאטורות, משחקי קלפים ופריטים דומים. <Br />
-                <i class="fa fa-fw fa-square dragon-bulletin"></i>
-                הדוכן ממוקם במתחם הכנס והשימוש בדוכן יד-2 הוא רק למשתתפי הכנס בעלי כרטיס. <br />
-            </p>
-
-
-
-        </div>
 </div>
-<div class="card card-gray-float" id="tag_resources">
+
+<div class="card card-gray-float" id="tag_stands">
     <div class="card-body">
         <h3 class="card-title text-bold">
             <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
             &nbsp;
-            קבצים וטפסים
+            עמדות לקהל
+        </h3>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>עמדת רכישת כרטיסים ורישום לאירועים</strong> - תפעל משעת תחילת הכנס עד שעתיים לפני תום כל יום. <br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>עמדת איסוף כרטיסים שהוזמנו מראש</strong> - העמדה תפעל בשעות העומס בכנס, שתפעל בשעתיים הראשונות כל יום <br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>עמדת מודיעין</strong> - העמדה תציע מידע והמלצות על האירועים, שתפעל בשעתיים הראשונות של היום.  <br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>עמדת שתיה ומזון</strong> - תהיה עמדת שתיה קלה וחמה זמינה במהלך כל הכנס.  <br />
+            </li>
+        </ul>
+        @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
+        {
+            {"הרישום לאירועים", "tag_register"},
+            {"הספרייה", "tag_library"},
+            {"יד שניה", "tag_yad2"},
+        })
+
+    </div>
+</div>
+
+<div class="card card-gray-float" id="tag_shops">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            דוכנים
+        </h3>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="http://www.hakubia.com/" target="_blank" class="text-bold">הקוביה</a> - יבואן לישראל של משחקי-תפקידים ולוח. בנוסף לכך הקוביה מתרגמת לעברית את המשחקים מתיישבי קאטאן, מנצ'קין ועוד.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="http://www.monkeytime.co.il/" target="_blank" class="text-bold">מאנקי טיים</a> - המתרגמת של פאת'פיינדר לעברית, מייבא ומתרגם שלל משחקי-לוח וקלפים.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="http://www.thekingdom.co.il/" target="_blank" class="text-bold">הממלכה</a> - חנות משחקי תחביב בהוד השרון, מוכרת מג'יק, משחקי לוח, קומיקס ומ"ת.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.facebook.com/pg/mamootastudio/" target="_blank" class="text-bold">ממותה</a> - סטודיו לעיצוב אישי ופנטזיה, המתחתה בעבודות יד מעולמות הפנטזיה והמדע-בדיוני.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.facebook.com/playandthink" target="_blank" class="text-bold">משחקים וחושבים (מו"ח)</a> - היבואן החדש של משחקי המיניאטורות של Games Workshop לישראל.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="http://www.freak.org.il/" target="_blank" class="text-bold">פריק</a> - חנות תל-אביבית המתמחה במשחקי לוח, משחקי תפקידים, קלפים ועוד.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="http://publishing.pundak.co.il/" target="_blank" class="text-bold">הפונדק הוצאה לאור</a> - עולם מערכה, מוצרי הרחבה והרפתקאות למבוכים ודרקונים ושל פאת'פיינדר.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="http://www.giborim.org.il/" target="_blank" class="text-bold">הוצאת גיבורים</a> - ההוצאה לאור של העמותה למשחקי תפקידים בישראל.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://theinfomancers.com/shop" target="_blank" class="text-bold">פרש משחקים</a> - מתרגמים משחקי לוח לעברית.<br />
+            </li>
+        </ul>
+        <p class="card-paragraph">
+            רוצים להפעיל דוכן בכנס? נשמח לארח אתכם <a asp-controller="Home" asp-action="Contact">אנא צרו איתנו קשר</a>!
+        </p>
+    </div>
+</div>
+
+
+<div class="card card-gray-float" id="tag_yad2">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            דוכן יד-2
         </h3>
         <p class="card-paragraph">
             יש לכם דרקון ספייר בבוידעם? קיבלתם ביום הולדת עוד חרב קסומה? <br />
-            יש לנו פיתרון בשבילכם! בדוכן יד שנייה נעזור לכם למצוא אוצרות, ולהרוויח כסף על המשחקים הישנים שלכם בדוכן. המכירה בדוכן היא ללא תשלום.<br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            <strong>שעות הפעילות</strong>: משעה 10:00 עד 20:00 ביום חמישי, ומשעה 09:00 בבוקר עד 13:00  ביום שישי.<br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            הדוכן מיועד רק עבור משחקי תפקידים, משחקי לוח, מיניאטורות, משחקי קלפים ופריטים דומים. <Br />
-            <i class="fa fa-fw fa-square dragon-bulletin"></i>
-            הדוכן ממוקם במתחם הכנס והשימוש בדוכן יד-2 הוא רק למשתתפי הכנס בעלי כרטיס. <br />
+            יש לנו פיתרון בשבילכם! בדוכן יד שנייה נעזור לכם למצוא אוצרות, ולהרוויח כסף על המשחקים הישנים שלכם בדוכן.<br />
+        </p>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>המכירה בדוכן היא ללא תשלום.</strong>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>שעות הפעילות</strong>: משעה 10:00 עד 20:00 ביום חמישי, ומשעה 09:00 בבוקר עד 13:00  ביום שישי.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                הדוכן מיועד רק עבור פרטי משחקי תפקידים, משחקי לוח, מיניאטורות, משחקי קלפים ודומים. <Br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                הדוכן ממוקם במתחם הכנס והשימוש בדוכן יד-2 הוא רק למשתתפי הכנס בעלי כרטיס בלבד. <br />
+            </li>
+
+        </ul>
+
+        <br />
+        <h4 class="text-bold">כללי הדוכן</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                כנס דרקוניקון אינו מתחייב למכור את הפריטים שיימסרו לדוכן.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                כנס דרקוניקון אינו אחראי על הפריטים בכל מקרה של פגיעה בהם, אובדנם או גניבתם.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                באחריותו הבלעדית של המוכר לאסוף את הפריטים ו/או הכסף תמורתם עד שעת סגירת הדוכן.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                הדוכן אינו מיועד למכירה סיטונאית של פריטים והינו רק לאנשים פרטיים. לא יהיה ניתן להציע שני פריטים או יותר שהם זהים. למשל: סטים של קוביות, חבילות של קלפי מג'יק וכך הלאה.<br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                כנס דרקוניקון אינו אחראי על הפריטים ו/או הכסף אחרי שעת סגירת הדוכן. פריטים ו/או כסף שיישארו בדוכן לאחר סגירתו ייחשבו כאילו נתרמו לכנס.<br />
+            </li>
+        </ul>
+        <br />
+        <h4 class="text-bold">הוראות למילוי טופס לדוכן יד-שנייה</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                המוכר ימלא את טופס דוכן יד-שנייה בכתב ברור עם פרטי הפריטים שהוא מעוניין למכור והמחיר הנקוב. הטופס יהיה חתום בידי המוכר. <br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                יש למלא את הטופס לפני מסירת המשחקים למכירה. מומלץ להוריד את הטופס ולמלא אותו מראש, עם זאת ניתן להביא את המשחקים לכנס ולמלא טופס במקום. במידה שטופס אחד אינו מספיק, ניתן למלא מספר טפסים.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                אין למלא את השדות המסומנים באפור בטופס - הם מיועדים לשימוש צוות הדוכן.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                יש להקפיד ולמלא את כל השדות האחרים, בכתב-יד ברור, ובדגש על פרטי קשר.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                יש לחתום על הטופס, לאחר שקראת והבנת את התנאים לשימוש בדוכן.
+            </li>
+        </ul>
+
+        @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
+        {
+            {"הרישום לאירועים", "tag_register"},
+            {"עמדות לקהל", "tag_stands"}
+        })
+    </div>
+</div>
+
+<div class="card card-gray-float" id="tag_freebies">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            אירועים חופשיים
+        </h3>
+        <p class="card-paragraph">
+            כל המשתתפים בכנס דרקוניקון מוזמנים לשחק במגוון רחב של פעילויות חופשיות שלא מצריכות רכישת כרטיס מיוחד או רישום מראש - <strong>ללא עלות ולכל דורש.</strong>
+        </p>
+        <h4 class="text-bold">הדרכה של משחקי לוח</h4>
+        <p class="card-paragraph">
+            במתחם משחקי הלוח של דרקוניקון תמצאו את המדריכים המיומנים שלנו, שישמחו להדגים לכם, לחברים ולמשפחה מגוון משחקים. המשחקים המודרכים כוללים שילוב בין משחקים משפחתיים לצד המשחקים הלוהטים של אותה שנה, שנבחרים בידי צוות משחקי הלוח שלנו ומיועדים לשחקנים מנוסים יותר.
+        </p>
+        <h4 class="text-bold">ספריית משחקי הלוח</h4>
+        <p class="card-paragraph">
+            במתחם משחקי הלוח תמצאו גם את ספריית משחקי הלוח שלנו, שכולל מגוון רחב של משחקים. בהמשך, בערך הספרייה - תמצאו את רשימת המשחקים המלאה - אז בואו לשחק ולהכיר משחקים חדשים או ליהנות ממשחקים מוכרים.
+        </p>
+        <h4 class="text-bold">שולחנות משחק חופשי</h4>
+        <p class="card-paragraph">
+            בדרקוניקון תמצאו גם אזור רחב ידיים עם שולחנות בו תוכלו לשבת ולשחק בכל זמן שתחפצו, לא נדרש להירשם למשחק באזור. ניתן לשחק במשחקים שהבאתם מהבית, השאלתם מספריית משחקי הלוח או רכשתם במתחם הדוכנים שלנו - השולחנות יהיו זמינים לכל אורך הכנס. שימו לב שמתחם זה אינו מיועד למשחקי תפקידים.
+        </p>
+        <h4 class="text-bold">מתחם הדוכנים</h4>
+        <p class="card-paragraph">
+            במתחם הדוכנים של דרקוניקון תמצאו תריסר דוכנים שונים ומגוונים, של החברות המובילות בישראל למשחקים שולחניים - משחקי תפקידים, משחקי לוח, קלפים, אביזרים ועוד. בנוסף תמצאו במתחם גם את דוכן יד-2  החופשי לשימוש לכל מי שרכש כרטיס לכנס, ללא עמלות.
         </p>
 
+        @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
+        {
+            {"הרישום לאירועים", "tag_register"},
+            {"הספרייה", "tag_library"},
+            {"עמדות לקהל", "tag_stands"}
+        })
 
 
     </div>
 </div>
 
+<div class="card card-gray-float" id="tag_library">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            הספרייה
+        </h3>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                בספרייה תוכלו לבחור משחק לשחק בו עם חברים, ולהחליף למשחקים אחרים כאוות נפשכם - אין מגבלה על כמות המשחקים שתשאילו או משך הזמן שתבלו בספרייה.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                בספריה גם תמצאו את המדגימים שלנו, שיציגו בפניכם משחקים חדשים ויסבירו לכם את החוקים שלהם וכיצד לשחק בהם - הזדמנות מושלמת ללמוד משחק חדש.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                השימוש בספריה חינם לבאי הכנס.
+            </li>
+        </ul>
+        <iframe src="https://geekgroup.app/users/wandering_library/collection" style="width: 100%; height: 600px;"></iframe>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                המשחקים שבספרייה בחסות הספרייה הנודדת.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                הצגת המשחקים באמצעות האתר https://geekgroup.app
 
-
-    <div class="card card-gray-float" id="tag_staff">
-        <div class="card-body">
-            <h3 class="card-title text-bold">
-                <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
-                &nbsp;
-                סגל הכנס
-            </h3>
-            <p class="card-paragraph">
-                אדוה פפו - משחקי-תפקידים |
-                אוריין אינטרטור - מארגן הכנס |
-                אלירן טלר - משחקי לוח |
-                אלכס בודגורנוב - שיווק |
-                אלעד אור - תוכנייה ועיצוב |
-                אסף הדרי - לוגיסטיקה |
-                בר קדוש - שיווק ומשחקי לוח |
-                גלעד גרינברג - משחקי-תפקידים |
-                דניאל רוזנברג - מארגן הכנס |
-                חגי גומפרט - משחקי-תפקידים |
-                יבגני רזניקוב - כח-אדם וקשרי-חוץ |
-                יובל בוזגלו - תוכנייה ועיצוב |
-                יובל זיווני - לוגיסטיקה |
-                לירן שובל - לוגיסטיקה |
-                עדי סינגל - ספריית משחקי לוח |
-                עומר רביב - משחקי-תפקידים |
-                עידן קוקורייב - שיווק ומרצ'נדייז |
-                תומר מלינרסקי - מיחשוב
-            </p>
-        </div>
+            </li>
+        </ul>
+        @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
+{
+ {"הרישום לאירועים", "tag_register"},
+ {"אירועים חופשיים", "tag_freebies"},
+ {"עמדות לקהל", "tag_stands"}
+})
     </div>
+</div>
 
-    @section scripts {
-        <script>
-            SetActiveMenu("nav-info")
-        </script>
-    }
+@section scripts {
+    <script>
+        SetActiveMenu("nav-info")
+    </script>
+}

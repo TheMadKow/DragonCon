@@ -23,11 +23,6 @@
 }
 
 
-.dragon-bulletin {
-    color: #ff7600;
-    font-size: 0.75em;
-}
-
 .dragon-organge-color {
     color: #ff7600;
 }
@@ -45,7 +40,9 @@ a.dragon-organge-link {
         text-decoration: underline #ff7600 !important;
     }
 
-
+.dragon-light-orange-background {
+    background-color: #ff953a;
+}
 
 .dragon-orange-background {
     background-color: #ff7600;

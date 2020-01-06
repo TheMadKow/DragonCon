@@ -1,0 +1,14 @@
+﻿@model Dictionary<string, string>
+
+    <ul class="list-inline">
+        <li class="list-inline-item">
+        נושאים קשורים :
+
+        </li>
+        @foreach (var related in Model)
+        {
+            <li class="list-inline-item" style="margin-right: 10px;">
+                <a href="#@related.Value">@related.Key</a>
+            </li>
+        }
+    </ul>

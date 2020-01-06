@@ -1,46 +1,30 @@
 ﻿@using System.Globalization
 @{
-    ViewData["Title"] = "על הכנס והאתר";
+    ViewData["Title"] = "אודות הכנס והאתר";
 }
 
-<br />
-
-<h4 class="card-margined">על הכנס</h4>
-
-<div class="card card-margined right-to-left">
+<div class="card card-gray-float">
     <div class="card-body">
-        <h5 class="card-title">אודות דרקוניקון</h5>
-        <p>
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            אודות דרקוניקון
+        </h3>
+        <p class="card-paragraph">
             דרקוניקון הוא כנס משחקי שולחן המתקיים כל שנה במהלך אוגוסט בתל-אביב, מ-2007 ועד היום. בכנס תמצאו את כל סוגי המשחקים: משחקי לוח, משחקי תפקידים, מבוכים ודרקונים, לארפים, משחקי קלפים ועוד.
         </p>
     </div>
 </div>
 
-@{
-    var con = Actor.DisplayConvention;
-}
 
-<div class="card card-margined right-to-left">
+<div class="card card-gray-float">
     <div class="card-body">
-        <h5 class="card-title">הכנס הנוכחי - @con.ConventionName</h5>
-        מיקום: @con.Location <br />
-        ימים:
-        <p>
-            <ul>
-                @foreach (var day in con.Days)
-                {
-                    <li>יום @day.GetDescription() מהשעה @day.StartTime.ToString("HH:mm", CultureInfo.CurrentCulture) עד השעה @day.EndTime.ToString("HH:mm", CultureInfo.CurrentCulture)</li>
-                }
-            </ul>
-        </p>
-    </div>
-</div>
-
-
-<div class="card card-margined right-to-left">
-    <div class="card-body">
-        <h5 class="card-title">חובבים עבור חובבים</h5>
-        <p>
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            חובבים עבור חובבים
+        </h3>
+        <p class="card-paragraph">
             דרקוניקון הוא כנס משחקים שבו אתם יכולים לשחק בכל משחק שבו אתם חפצים - משחקי תפקידים, מבוכים ודרקונים, משחקי לוח, קלפים ועוד.
             <br />
             הכנס מאורגן בהתנדבות על-ידי קהילות חובבים מכל הארץ, עבור חובבים. רבים מאנשי הסגל, המנחים והמתנדבים בכנס, התחילו כמשתתפים.
@@ -48,10 +32,15 @@
     </div>
 </div>
 
-<div class="card card-margined right-to-left">
+
+<div class="card card-gray-float">
     <div class="card-body">
-        <h5 class="card-title">פעם ראשונה?</h5>
-        <p>
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            פעם ראשונה בכנס?
+        </h3>
+        <p class="card-paragraph">
             ברוכים הבאים - אנחנו תמיד שמחים לפגוש משתתפים חדשים בכנס.
             <br />
             כנס דרקוניקון מתמקד במשחקי תחביב, כשמדובר במשחקים חברתיים המבוססים על דמיון בהם השחקנים משתפים פעולה או מתחרים אחד בשני.
@@ -71,7 +60,6 @@
             <br />
             הצוות שלנו ישמח להדריך אותכם במהלך הכנס. אם יש לכם שאלות או קושיות, אתם מוזמנים ליצור עמנו קשר.
         </p>
-        <br />
         <h6 class="card-subtitle mb-2 text-muted">קישורים שימושיים</h6>
         <ul>
             <li><a href="https://www.pundak.co.il/library/roleplaying/581-playing-guide">מה זה משחקי תפקידים?</a></li>
@@ -82,11 +70,47 @@
     </div>
 </div>
 
-<h4 class="card-margined">על האתר</h4>
 
-<div class="card card-margined right-to-left">
+<div class="card card-gray-float">
     <div class="card-body">
-        <h5 class="card-title">אתר קוד פתוח</h5>
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            סגל הכנס
+        </h3>
+        <p class="card-paragraph">
+            אדוה פפו - משחקי-תפקידים |
+            אוריין אינטרטור - מארגן הכנס |
+            אלירן טלר - משחקי לוח |
+            אלכס בודגורנוב - שיווק |
+            אלעד אור - תוכנייה ועיצוב |
+            אסף הדרי - לוגיסטיקה |
+            בר קדוש - שיווק ומשחקי לוח |
+            גלעד גרינברג - משחקי-תפקידים |
+            דניאל רוזנברג - מארגן הכנס |
+            חגי גומפרט - משחקי-תפקידים |
+            יבגני רזניקוב - כח-אדם וקשרי-חוץ |
+            יובל בוזגלו - תוכנייה ועיצוב |
+            יובל זיווני - לוגיסטיקה |
+            לירן שובל - לוגיסטיקה |
+            עדי סינגל - ספריית משחקי לוח |
+            עומר רביב - משחקי-תפקידים |
+            עידן קוקורייב - שיווק ומרצ'נדייז |
+            תומר מלינרסקי - מיחשוב
+        </p>
+    </div>
+</div>
+
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            על האתר
+        </h3>
+        <p class="card-paragraph">
         <p>אתר זה נכתב כקוד פתוח, ותחת רשיון חופשי GPL-2.0 המאפשר שימוש בקוד תחת ההגבלות הרשומות ברשיון.</p>
         <p>אתר זה נכתב עבור כנס דרקוניקון, על ידי מתנדבי דרקוניקון.</p>
         <br />
@@ -95,24 +119,12 @@
             <li><a href="https://github.com/TheMadKow/DragonCon">הקוד ב-GitHub</a></li>
             <li><a href="https://github.com/TheMadKow/DragonCon/blob/master/LICENSE">פרטי הרשיון</a></li>
         </ul>
-    </div>
-</div>
-
-<div class="card card-margined">
-    <div class="card-body">
-        <h5 class="card-title">תכנות</h5>
-        <br />
+        </p>
         <h6 class="card-subtitle mb-2 text-muted">כתיבת קוד ועיצוב אתר</h6>
         <ul>
             <li><a href="https://www.facebook.com/TheMadKow">אלירן טלר</a></li>
             <li><a href="https://www.facebook.com/adi.unger">עדי אונגר</a></li>
         </ul>
-    </div>
-</div>
-
-
-<div class="card card-margined">
-    <div class="card-body">
         <h5 class="card-title">משאבים ותשתיות</h5>
         <ul>
             <li><a href="https://dotnet.microsoft.com/learn/aspnet/what-is-aspnet-core/">Server Infrastructure - ASP Core</a></li>
@@ -123,4 +135,10 @@
     </div>
 </div>
 
-<br />
+
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-about")
+    </script>
+}
