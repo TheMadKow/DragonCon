@@ -21,6 +21,7 @@
                 <div class="card-body text-center clickable" style="align-items: center">
                     <a class="dragon-organge-link" href="#tag_location">
                         <h4 class="text-bold">
+                            <i class="fas fa-fw fa-dice-d20" style="margin-bottom: 20px;"></i><br />
                             מיקום והגעה
                         </h4>
                     </a>
@@ -31,6 +32,7 @@
                 <div class="card-body text-center clickable">
                     <a class="dragon-organge-link" href="#tag_days">
                         <h4 class="text-bold">
+                            <i class="fas fa-fw fa-dice-d20" style="margin-bottom: 20px;"></i><br />
                             ימי הכנס
                         </h4>
                     </a>
@@ -40,6 +42,7 @@
                 <div class="card-body text-center clickable">
                     <a class="dragon-organge-link" href="#tag_register">
                         <h4 class="text-bold">
+                            <i class="fas fa-fw fa-dice-d20" style="margin-bottom: 20px;"></i><br />
                             הרישום לאירועים
                         </h4>
                     </a>
@@ -49,6 +52,7 @@
                 <div class="card-body text-center clickable">
                     <a class="dragon-organge-link" href="#tag_tickets">
                         <h4 class="text-bold">
+                            <i class="fas fa-fw fa-dice-d20" style="margin-bottom: 20px;"></i><br />
                             מחירון
                         </h4>
                     </a>
@@ -59,6 +63,7 @@
                 <div class="card-body text-center clickable">
                     <a class="dragon-organge-link" href="#tag_ages">
                         <h4 class="text-bold">
+                            <i class="fas fa-fw fa-dice-d20" style="margin-bottom: 20px;"></i><br />
                             גילאים
                         </h4>
                     </a>
@@ -72,6 +77,7 @@
                 <div class="card-body text-center clickable">
                     <a class="dragon-organge-link" href="#tag_stands">
                         <h4 class="text-bold">
+                            <i class="fas fa-fw fa-dice-d20" style="margin-bottom: 20px;"></i><br />
                             עמדות לקהל
                         </h4>
                     </a>
@@ -82,6 +88,7 @@
                     <a class="dragon-organge-link" href="#tag_shops">
 
                         <h4 class="text-bold">
+                            <i class="fas fa-fw fa-dice-d20" style="margin-bottom: 20px;"></i><br />
                             דוכנים
                         </h4>
                     </a>
@@ -92,6 +99,7 @@
                     <a class="dragon-organge-link" href="#tag_yad2">
 
                         <h4 class="text-bold">
+                            <i class="fas fa-fw fa-dice-d20" style="margin-bottom: 20px;"></i><br />
                             דוכן יד-2
                         </h4>
                     </a>
@@ -101,6 +109,7 @@
                 <div class="card-body text-center clickable">
                     <a class="dragon-organge-link" href="#tag_freebies">
                         <h4 class="text-bold">
+                            <i class="fas fa-fw fa-dice-d20" style="margin-bottom: 20px;"></i><br />
                             אירועים חופשיים
                         </h4>
                     </a>
@@ -111,6 +120,7 @@
                 <div class="card-body text-center clickable">
                     <a class="dragon-organge-link" href="#tag_library">
                         <h4 class="text-bold">
+                            <i class="fas fa-fw fa-dice-d20" style="margin-bottom: 20px;"></i><br />
                             הספרייה
                         </h4>
                     </a>
@@ -484,6 +494,10 @@
                 יש לחתום על הטופס, לאחר שקראת והבנת את התנאים לשימוש בדוכן.
             </li>
         </ul>
+        <div class="text-center">
+            <a href="" class="btn dragon-btn">הורדת טופס דוכן יד-2</a>
+        </div>
+        <br />
 
         @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
         {
@@ -532,6 +546,7 @@
 </div>
 
 <div class="card card-gray-float" id="tag_library">
+    
     <div class="card-body">
         <h3 class="card-title text-bold">
             <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
@@ -560,7 +575,7 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                הצגת המשחקים באמצעות האתר https://geekgroup.app
+                הצגת המשחקים באמצעות האתר <a href="https://geekgroup.app" target="_blank">https://geekgroup.app</a>
 
             </li>
         </ul>

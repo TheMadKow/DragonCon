@@ -23,6 +23,22 @@
 }
 
 
+.dragon-btn {
+    font-size: 1.2em;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    background: rgb(255,118,31);
+    background: linear-gradient(13deg, rgba(255,118,31,1) 0%, rgba(255,192,0,1) 100%);
+    color: #fff;
+    border-radius: 0;
+}
+
+.dragon-btn:hover {
+    color: #fff !important;
+    text-decoration: underline white !important;
+}
+
+
+
 .dragon-organge-color {
     color: #ff7600;
 }

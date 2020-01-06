@@ -31,20 +31,20 @@
         <li>
             <a asp-area="Management" asp-controller="Dashboard" asp-action="Index">מידע כללי</a>
         </li>
-        @if (Actor.HasSystemRole(SystemRoles.ConventionManager) || 
-             Actor.HasSystemRole(SystemRoles.ReceptionManager))
+        @if (Actor.HasSystemRole(SystemRoles.ConventionManager) ||
+            Actor.HasSystemRole(SystemRoles.ReceptionManager))
         {
             <li>
                 <a asp-area="Management" asp-controller="Reception" asp-action="Manage">דלפק קבלה</a>
             </li>
         }
         @if (Actor.HasSystemRole(SystemRoles.ContentManager) ||
-            Actor.HasSystemRole(SystemRoles.ConventionManager) ||
-            Actor.HasSystemRole(SystemRoles.UsersManager))
+           Actor.HasSystemRole(SystemRoles.ConventionManager) ||
+           Actor.HasSystemRole(SystemRoles.UsersManager))
         {
             <li class="list-divider"></li>
             @if (Actor.HasSystemRole(SystemRoles.ConventionManager) ||
-                Actor.HasSystemRole(SystemRoles.ContentManager))
+               Actor.HasSystemRole(SystemRoles.ContentManager))
             {
                 <li>
                     <a asp-area="Management" asp-controller="Participants" asp-action="Manage">ניהול - משתתפים</a>
@@ -52,7 +52,7 @@
             }
 
             @if (Actor.HasSystemRole(SystemRoles.ConventionManager) ||
-                Actor.HasSystemRole(SystemRoles.ContentManager))
+               Actor.HasSystemRole(SystemRoles.ContentManager))
             {
                 <li>
                     <a asp-area="Management" asp-controller="Events" asp-action="Manage">ניהול - אירועים</a>
@@ -61,6 +61,9 @@
 
             @if (Actor.HasSystemRole(SystemRoles.ConventionManager))
             {
+                <li>
+                    <a href="">ניהול - צד לקוח</a>
+                </li>
                 <li>
                     <a asp-area="Management" asp-controller="Convention" asp-action="Manage">ניהול - כנסים</a>
                 </li>

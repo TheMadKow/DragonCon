@@ -15,8 +15,21 @@
             מהו דרקוניקון?
         </h3>
         <p class="card-paragraph">
-            דרקוניקון הוא כנס המשחקים השולחניים הגדול בישראל. <br />
-            הכנס מאורגן בהתנדבות ומתקיים כל שנה במהלך אוגוסט מ-2007 ועד היום. <br />
+            <ul class="fa-ul card-list">
+                <li>
+                    @await Html.PartialAsync("_PartialBulletin")
+                    דרקוניקון הוא כנס המשחקים השולחניים הגדול בישראל. <br />
+                </li>
+                <li>
+                    @await Html.PartialAsync("_PartialBulletin")
+                    בכנס תמצאו עשרות אירועים שונים להשתתף בהם. <br />
+                </li>
+
+                <li>
+                    @await Html.PartialAsync("_PartialBulletin")
+                    הכנס מאורגן בהתנדבות ומתקיים כל שנה במהלך אוגוסט מ-2007 ועד היום. <br />
+                </li>
+            </ul>
         </p>
     </div>
 </div>
@@ -28,8 +41,7 @@
             תמונות מכנס קודם
         </h3>
         <p class="card-paragraph">
-            דרקוניקון הוא כנס המשחקים השולחניים הגדול בישראל. <br />
-            הכנס מאורגן בהתנדבות ומתקיים כל שנה במהלך אוגוסט מ-2007 ועד היום. <br />
+            // TODO
         </p>
     </div>
 </div>
@@ -42,20 +54,10 @@
         <p class="card-paragraph">
             @if (actor.HasDisplayConvention)
             {
-                var counter = 1;
-                var convention = actor.DisplayConvention;
-                <strong>מיקום: </strong> @convention.Location <br />
-                @foreach (var day in convention.Days)
-                {
-                    <span>יום כנס @counter -  @day.Date.DayOfWeek.InHebrew() ה-@day.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) מהשעה @day.StartTime.ToString("HH:mm", CultureInfo.InvariantCulture) ועד השעה @day.EndTime.ToString("HH:mm", CultureInfo.InvariantCulture)<br /></span>
-                    counter++;
-                }
-            }
-            else
-            {
-                <span>
-                    נתראה בכנס הבא!
-                </span>
+                @await Html.PartialAsync("_PartialLocation", false)
+                <br/>
+                <br/>
+                @await Html.PartialAsync("_PartialConvetionDays")
             }
         </p>
     </div>
@@ -68,11 +70,22 @@
             @await Html.PartialAsync("_PartialDragon")
             מה תמצאו בכנס ?
         </h3>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                בכנס תמצאו עשרות אירועים שונים להשתתף בהם. <br />
+            </li>
+
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                משחקי תפקידים שולחניים, משחקי תפקידים חיים, משחקי לוח, טורנירים, משחקי מיניאטרות ועוד. <br />
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                הכס מיועד לכל הגילאים, ולכל השחקנים - ותיקים או חדשים, מבוגרים או צעירים, וגם למשפחות! <br />
+            </li>
+        </ul>
         <p class="card-paragraph">
-            בכנס יתקיימו עשרות אירועים שונים - <br />
-            משחקי תפקידים שולחניים, משחקי תפקידים חיים, משחקי לוח, טורנירים, משחקי מיניאטרות ועוד. <br />
-            הכס מיועד לכל הגילאים, ולכל השחקנים - ותיקים או חדשים, מבוגרים או צעירים, וגם למשפחות! <br />
-            <br />
             <h3 class="text-center">
                 <strong class="dragon-organge-color">אז בואו לשחק בדרקוניקון!</strong>
             </h3>
