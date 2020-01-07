@@ -8,22 +8,12 @@
         <h3 class="card-title text-bold">
             <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
             &nbsp;
-            אודות דרקוניקון
+            חובבים עבור חובבים
         </h3>
         <p class="card-paragraph">
             דרקוניקון הוא כנס משחקי שולחן המתקיים כל שנה במהלך אוגוסט בתל-אביב, מ-2007 ועד היום. בכנס תמצאו את כל סוגי המשחקים: משחקי לוח, משחקי תפקידים, מבוכים ודרקונים, לארפים, משחקי קלפים ועוד.
         </p>
-    </div>
-</div>
 
-
-<div class="card card-gray-float">
-    <div class="card-body">
-        <h3 class="card-title text-bold">
-            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
-            &nbsp;
-            חובבים עבור חובבים
-        </h3>
         <p class="card-paragraph">
             דרקוניקון הוא כנס משחקים שבו אתם יכולים לשחק בכל משחק שבו אתם חפצים - משחקי תפקידים, מבוכים ודרקונים, משחקי לוח, קלפים ועוד.
             <br />
@@ -63,30 +53,62 @@
             <div class="text-center">
                 <a asp-area="Convention" asp-controller="Home" asp-action="Contact" class="btn dragon-btn">לחצו כאן ליצור איתנו קשר!</a>
             </div>
-
         </p>
         <br />
         <h4 class="text-bold">קישורים שימושיים</h4>
         <ul class="fa-ul card-list">
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <a href="https://www.pundak.co.il/library/roleplaying/581-playing-guide">מה זה משחקי תפקידים?</a>
+                <a target="_blank" href="https://www.pundak.co.il/library/roleplaying/581-playing-guide">מה זה משחקי תפקידים?</a>
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <a href="https://www.pundak.co.il/library/dnd"> על מבוכים ודרקונים</a>
+                <a target="_blank" href="https://www.pundak.co.il/library/dnd"> על מבוכים ודרקונים</a>
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <a href="http://www.mtgil.co.il/">עוד על מאג'יק</a>
-            </li>
-            <li>
-                @await Html.PartialAsync("_PartialBulletin")
-                <a href="https://www.pundak.co.il/">אתר הפונדק - עוד מלא תוכן</a>
+                <a target="_blank" href="http://www.mtgil.co.il/">עוד על מאג'יק</a>
             </li>
         </ul>
     </div>
 </div>
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            על הפונדק
+        </h3>
+        <p class="card-paragraph">
+            דרקוניקון החל בשנת 2007, ככנס מבוכים ודרקונים לרגל ההשקה שהייתה מתוכננת למגדיר המפלצות "מתוך האפלה" של הפונדק הוצאה לאור. מאז הוא עבר מספר גלגולים והפך לכנס משחקי הלוח והתפקידים המוביל של הקיץ בישראל.
+        </p>
+        <div class="text-center">
+            <a asp-area="Convention" asp-controller="Home" asp-action="AboutStorms" class="btn dragon-btn">מה זה איי הסערה? גלו כאן!</a>
+        </div>
+        <br />
+        <h4 class="text-bold">קישורים שימושיים</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.pundak.co.il/library/roleplaying/581-playing-guide">הפונדק הוצאה לאור</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.pundak.co.il/library/dnd"> אתר הפונדק</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="http://www.mtgil.co.il/">פורום הפונדק</a>
+            </li>
+        </ul>
+        <p>
+
+        </p>
+
+    </div>
+</div>
+
 
 
 <div class="card card-gray-float">

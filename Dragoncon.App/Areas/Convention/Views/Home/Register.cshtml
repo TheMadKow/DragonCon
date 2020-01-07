@@ -2,9 +2,133 @@
 @using DragonCon.Modeling.Helpers
 @using DragonCon.Modeling.Models.Identities
 @{
-    ViewData["Title"] = "הרשמה לכנס";
+    ViewData["Title"] = "האזור האישי";
     var actor = Actor;
 }
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            האזור האישי
+        </h3>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                על מנת להרשם מראש לאירועים בכנס יש לפתוח חשבון בדרקוניקון או להתחבר לחשבון קיים.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                לאחר רישום והתחברות תוכלו להרשם מראש לאירועים או להתנדב להנחות אירועים.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>רישום מוקדם לאירועים יבטיח לכם מקום באירועים !</strong>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.pundak.co.il/library/roleplaying/581-playing-guide">תנאי השימוש והצהרת פרטיות</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            הרשמה
+        </h3>
+        <form method="post" class="right-to-left" style="padding: 10px;">
+            <div class="col">
+                <div class="form-group">
+                    <label>שם מלא</label>
+                    <input name="FullName" class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>כתובת דואר אלקטרוני</label>
+                    <div class="input-group">
+                        <input name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" name="allowPromotions" aria-label="Checkbox for following text input">
+                                <span class="toggle-text">צירוף לרשימת דיוור</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>סיסמה</label>
+                    <input name="FullName" class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>טלפון</label>
+                    <input name="PhoneNumber" type="tel" class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>שנת לידה </label>
+                    <br />
+                    <input class="combo-date" Name="YearOfBirth"
+                           data-custom-class="form-control form-control-inline"
+                           data-first-item="empty"
+                           data-format="YYYY"
+                           data-template="YYYY">
+                </div>
+            </div>
+
+            <div class=" row">
+                <div class="form-group pull-left">
+                    <button type="submit" class="btn dragon-btn"> רישום והצטרפות </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            התחברות
+        </h3>
+        <form method="post" class="right-to-left" style="padding: 10px;">
+            <div class="col">
+                <div class="form-group">
+                    <label>כתובת דואר אלקטרוני</label>
+                    <input name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                    
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>סיסמה</label>
+                    <input name="FullName" class="form-control">
+                </div>
+            </div>
+            <div class=" row">
+                <div class="form-group pull-left">
+                    <button type="submit" class="btn dragon-btn"> התחברות </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
 
 
 @section scripts {

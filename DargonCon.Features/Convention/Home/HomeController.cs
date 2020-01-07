@@ -46,7 +46,15 @@ namespace DragonCon.Features.Convention.Home
         {
             return View();
         }
+        public IActionResult AboutStorms()
+        {
+            return View();
+        }
 
+        public IActionResult SiteMap()
+        {
+            return View();
+        }
 
         public IActionResult Contact()
         {

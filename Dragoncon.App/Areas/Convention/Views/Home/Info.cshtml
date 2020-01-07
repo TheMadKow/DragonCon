@@ -207,6 +207,11 @@
             </li>
         </ul>
     </div>
+    <br />
+    <div class="text-center">
+        <a asp-area="Convention" asp-controller="Home" asp-action="Register" class="btn dragon-btn">לחצו להרשמה</a>
+    </div>
+
     @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
     {
         {"מחירון", "tag_tickets"},
@@ -320,6 +325,11 @@
             </ul>
         }
     </div>
+    <br />
+    <div class="text-center">
+        <a asp-area="Convention" asp-controller="Home" asp-action="Register" class="btn dragon-btn">לחצו להרשמה</a>
+    </div>
+
     @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
     {
         {"הרישום לאירועים", "tag_register"},
