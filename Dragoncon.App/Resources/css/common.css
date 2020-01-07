@@ -29,6 +29,7 @@
     background: rgb(255,118,31);
     background: linear-gradient(13deg, rgba(255,118,31,1) 0%, rgba(255,192,0,1) 100%);
     color: #fff;
+    font-weight: bold;
     border-radius: 0;
 }
 

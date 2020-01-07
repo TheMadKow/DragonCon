@@ -59,13 +59,31 @@
             <br />
             <br />
             הצוות שלנו ישמח להדריך אותכם במהלך הכנס. אם יש לכם שאלות או קושיות, אתם מוזמנים ליצור עמנו קשר.
+            <br />
+            <div class="text-center">
+                <a asp-area="Convention" asp-controller="Home" asp-action="Contact" class="btn dragon-btn">לחצו כאן ליצור איתנו קשר!</a>
+            </div>
+
         </p>
-        <h6 class="card-subtitle mb-2 text-muted">קישורים שימושיים</h6>
-        <ul>
-            <li><a href="https://www.pundak.co.il/library/roleplaying/581-playing-guide">מה זה משחקי תפקידים?</a></li>
-            <li><a href="https://www.pundak.co.il/library/dnd"> על מבוכים ודרקונים</a></li>
-            <li><a href="http://www.mtgil.co.il/">עוד על מאג'יק</a></li>
-            <li><a href="https://www.pundak.co.il/">אתר הפונדק - עוד מלא תוכן</a></li>
+        <br />
+        <h4 class="text-bold">קישורים שימושיים</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.pundak.co.il/library/roleplaying/581-playing-guide">מה זה משחקי תפקידים?</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.pundak.co.il/library/dnd"> על מבוכים ודרקונים</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="http://www.mtgil.co.il/">עוד על מאג'יק</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.pundak.co.il/">אתר הפונדק - עוד מלא תוכן</a>
+            </li>
         </ul>
     </div>
 </div>
@@ -102,6 +120,73 @@
 </div>
 
 
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            שנים קודמות
+        </h3>
+        <p class="card-paragraph">
+            דרקוניקון החל בשנת 2007, ככנס מבוכים ודרקונים לרגל ההשקה שהייתה מתוכננת למגדיר המפלצות "מתוך האפלה" של הפונדק הוצאה לאור. <br />
+            מאז הוא עבר מספר גלגולים והפך לכנס משחקי הלוח והתפקידים המוביל של הקיץ בישראל. <br />
+        </p>
+        <h4 class="text-bold">דרקוני עבר:</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2019</strong> - כנס דו יומי, התקיים ב-23,24 באוגוסט במרכז הקבלה בתל אביב, כ-XXX משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2018</strong> - כנס דו יומי, התקיים ב-23,24 באוגוסט בהיכל אוהל שם ברמת-גן, כ-590 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2017</strong> - כנס דו יומי ראשון, התקיים ב-24-25 באוגוסט בהיכל אוהל שם ברמת גן, כ-570 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2016</strong> - כנס חד יומי, התקיים ב-18 באוגוסט בהיכל אוהל שם ברמת גן, כ-360 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2015</strong> - כנס חד יומי, התקיים ב-13 באוגוסט בבית הצנחן ברמת גן, כ-330 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2014</strong> - כנס חד יומי, התקיים ב-27 באוגוסט במרכז הקהילתי רמת אביב הירוקה בתל אביב, כ-280 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2013</strong> - כנס חד יומי, התקיים ב-8 באוגוסט במרכז הקהילתי רמת אביב הירוקה בתל אביב, כ-260 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2012</strong> - כנס חד יומי, התקיים ב-9 באוגוסט בבית הספר בר-אילן בתל אביב, כ-220 משתתפים
+            </li>
+
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2011</strong> - כנס חד יומי, התקיים ב-18 באוגוסט בבית הספר בר-אילן בתל אביב, כ-150 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2010</strong> - כנס חד יומי, התקיים ב-26 באוגוסט בפריק בתל אביב, כ-50 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2009</strong> - כנס חד יומי, התקיים ב-13 באוגוסט בפריק בתל אביב, כ-40 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2008</strong> - כנס חד יומי, התקיים ב-25 באוגוסט בפריק בתל אביב, כ-40 משתתפים
+            </li>
+
+
+        </ul>
+    </div>
+</div>
 
 <div class="card card-gray-float">
     <div class="card-body">
@@ -111,26 +196,53 @@
             על האתר
         </h3>
         <p class="card-paragraph">
-        <p>אתר זה נכתב כקוד פתוח, ותחת רשיון חופשי GPL-2.0 המאפשר שימוש בקוד תחת ההגבלות הרשומות ברשיון.</p>
-        <p>אתר זה נכתב עבור כנס דרקוניקון, על ידי מתנדבי דרקוניקון.</p>
-        <br />
-        <h6 class="card-subtitle mb-2 text-muted">קישורים</h6>
-        <ul>
-            <li><a href="https://github.com/TheMadKow/DragonCon">הקוד ב-GitHub</a></li>
-            <li><a href="https://github.com/TheMadKow/DragonCon/blob/master/LICENSE">פרטי הרשיון</a></li>
-        </ul>
+            אתר זה נכתב כקוד פתוח, ותחת רשיון חופשי GPL-2.0 המאפשר שימוש בקוד תחת ההגבלות הרשומות ברשיון.<br />
+            אתר זה נכתב עבור כנס דרקוניקון, על ידי מתנדבי דרקוניקון.
         </p>
-        <h6 class="card-subtitle mb-2 text-muted">כתיבת קוד ועיצוב אתר</h6>
-        <ul>
-            <li><a href="https://www.facebook.com/TheMadKow">אלירן טלר</a></li>
-            <li><a href="https://www.facebook.com/adi.unger">עדי אונגר</a></li>
+        <h4 class="text-bold">כתיבת קוד ועיצוב אתר</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.facebook.com/TheMadKow">אלירן טלר</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.facebook.com/adi.unger">עדי אונגר</a>
+            </li>
         </ul>
-        <h5 class="card-title">משאבים ותשתיות</h5>
-        <ul>
-            <li><a href="https://dotnet.microsoft.com/learn/aspnet/what-is-aspnet-core/">Server Infrastructure - ASP Core</a></li>
-            <li><a href="https://getbootstrap.com/">Web Infrastructure - Bootstrap 4.0</a></li>
-            <li><a href="https://fontawesome.com/">Fonts - Font Awesome</a></li>
-            <li><a href="https://cloud.ravendb.net/">Database - RavenDB Cloud</a></li>
+
+        <br />
+        <h4 class="text-bold">קוד ורשיון</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://github.com/SuperTeam-IL/DragonCon">הקוד ב-GitHub</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://github.com/SuperTeam-IL/DragonCon/blob/master/LICENSE">פרטי הרשיון</a>
+            </li>
+        </ul>
+
+        <br />
+        <h4 class="text-bold">משאבים ותשתיות</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://dotnet.microsoft.com/learn/aspnet/what-is-aspnet-core/">Server Infrastructure - ASP Core</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://getbootstrap.com/">Web Infrastructure - Bootstrap 4</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://fontawesome.com/">Fonts - Font Awesome</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://cloud.ravendb.net/">Database - RavenDB Cloud</a>
+            </li>
         </ul>
     </div>
 </div>
