@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DragonCon.Modeling.Models.News
+namespace DragonCon.Modeling.Models.UserDisplay
 {
-    public class NewsItem
+    public class NewsItem : UserDisplayItem
     {
         public Instant Timestamp { get; set; }
         public string Title { get; set; } = string.Empty;
