@@ -29,7 +29,7 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <a href="https://www.pundak.co.il/library/roleplaying/581-playing-guide">תנאי השימוש והצהרת פרטיות</a>
+                <a asp-area="Convention" asp-controller="Home" asp-action="Usage">תנאי השימוש והצהרת פרטיות</a>
             </li>
         </ul>
     </div>
@@ -43,7 +43,7 @@
             &nbsp;
             הרשמה
         </h3>
-        <form method="post" class="right-to-left" style="padding: 10px;">
+        <form method="post" class="card-form">
             <div class="col">
                 <div class="form-group">
                     <label>שם מלא</label>
@@ -106,7 +106,7 @@
             &nbsp;
             התחברות
         </h3>
-        <form method="post" class="right-to-left" style="padding: 10px;">
+        <form method="post" class="card-form">
             <div class="col">
                 <div class="form-group">
                     <label>כתובת דואר אלקטרוני</label>

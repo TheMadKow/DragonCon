@@ -13,7 +13,7 @@
     <div id="mySidenav" class="sidenav">
         <a href="#" id="side-news">חדשות כנס &nbsp;<i class="fa fa-fw fa-rss"></i></a>
         <a href="#" id="side-facebook">דף פייסבוק &nbsp;<i class="fab fa-fw fa-facebook"></i></a>
-        <a asp-area="Convention" asp-controller="Home" asp-action="Contact" id="side-contact">יצירת קשר &nbsp;<i class="fa fa-fw fa-envelope"></i></a>
+        <a asp-area="Convention" asp-controller="Home" asp-action="Index" asp-fragment="tag_contactus" id="side-contact">יצירת קשר &nbsp;<i class="fa fa-fw fa-envelope"></i></a>
         @if (Actor.HasAnySystemRole)
         {
             <a asp-area="Management" asp-controller="Dashboard" asp-action="Index" id="side-manage">אזור ניהול &nbsp;<i class="fa fa-fw fa-cog"></i></a>
@@ -46,9 +46,6 @@
                 </li>
                 <li id="nav-about" class="nav-item" style="padding-left: 15px">
                     <a class="nav-link" asp-area="Convention" asp-controller="Home" asp-action="About">על הכנס</a>
-                </li>
-                <li id="nav-contact" class="nav-item" style="padding-left: 15px">
-                    <a class="nav-link" asp-area="Convention" asp-controller="Home" asp-action="Contact">יצירת קשר</a>
                 </li>
 
                 <li id="nav-english" class="nav-item" style="padding-left: 15px">

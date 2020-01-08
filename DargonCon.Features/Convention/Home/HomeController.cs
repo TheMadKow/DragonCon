@@ -56,10 +56,6 @@ namespace DragonCon.Features.Convention.Home
             return View();
         }
 
-        public IActionResult Contact()
-        {
-            return View();
-        }
         public IActionResult Usage()
         {
             return View();

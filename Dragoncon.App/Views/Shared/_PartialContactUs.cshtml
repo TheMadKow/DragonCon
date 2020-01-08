@@ -1,14 +1,12 @@
-﻿@{
-    ViewData["Title"] = "דרכי יצירת קשר";
-}
-
-<br />
-
-<div class="card card-gray-float right-to-left">
+﻿<div class="card card-gray-float right-to-left" id="tag_contactus">
     <div class="card-body">
-        <h4 class="text-bold">שלחו לנו כל שאלה</h4>
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            שלחו לנו לשאלה
+        </h3>
         <hr />
-        <form>
+        <form class="card-form">
             <div class="row">
                 <div class="col">
                     <div class="form-group">
@@ -38,7 +36,7 @@
             <div class="row">
                 <div class="col">
                     <div class="form-group">
-                        <label>תוכן</label>
+                        <label>שאלה</label>
                         <textarea type="text" class="form-control" placeholder="מה אנחנו צריכים לדעת?"></textarea>
                     </div>
                 </div>
@@ -54,13 +52,3 @@
         </form>
     </div>
 </div>
-
-<br />
-
-
-
-@section scripts {
-    <script>
-        SetActiveMenu("nav-contact")
-    </script>
-}

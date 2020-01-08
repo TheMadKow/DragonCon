@@ -140,10 +140,18 @@
     padding-top: 10px;
 }
 
-
-.card-list > li {
+.card-form {
     font-size: 1.4em;
 }
+
+    .card-form .form-control {
+        font-size: 1em;
+    }
+
+
+    .card-list > li {
+        font-size: 1.4em;
+    }
 
     .card-list > li > span {
         right: -2em;

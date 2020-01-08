@@ -61,6 +61,8 @@
 </div>
 <br />
 
+<a class="btn dragon-register-btn" href="#">הרשמה לכנס @Actor.DisplayConvention?.ConventionName</a>
+
 <div class="card card-gray-float">
     <div class="card-body">
         <div class="row">
@@ -121,7 +123,7 @@
         <p class="card-paragraph">
             <span><i class="fa fa-fw fa-bullhorn fa-flip-horizontal"></i> 20/01/2020 - איש נשך כלב בדרום תל אביב</span>
             <span class="text-danger">//TODO Automate</span>
-            
+
         </p>
     </div>
 </div>
@@ -136,11 +138,11 @@
         <p class="card-paragraph">
             רוצים לקבל עדכונים לדואר האלקטרוני עם חדשות מדרקוניקון? הרשמו!  <br />
         </p>
-        <form>
+        <form class="card-form">
             <div class="form-group">
                 <div class="row">
                     <div class="col-8">
-                        <input class="form-control" style="text-align: left" type="text" placeholder="me@@gmail.com"/>
+                        <input class="form-control" style="text-align: left" type="text" placeholder="me@@gmail.com" />
                     </div>
                     <div class="col-4">
                         <input class="form-control dragon-black-background" style="color:white; font-size: 1.2em;" type="button" value="רשמו אותי" />
@@ -153,8 +155,7 @@
     </div>
 </div>
 
-
-
+@await Html.PartialAsync("_PartialContactUs")
 
 @section scripts {
     <script>
