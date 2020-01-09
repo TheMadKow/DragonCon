@@ -20,8 +20,8 @@
         }
     </div>
 
-    <nav class="navbar navbar-dragon navbar-expand-md">
-        <a class="navbar-brand" href="/"><img src="/images/logo.png" style="height: 75px;" /></a>
+    <nav class="navbar navbar-dragon navbar-expand-md" style="    padding-top: 0;padding-bottom: 0;">
+        <a class="navbar-brand" href="/"><img src="/images/logos/Logo_100.png" style="height: 80px;" /></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -75,10 +75,8 @@
         <div class="body-content no-background">
             @RenderBody()
         </div>
-</div>
-@await Html.PartialAsync("_PartialFooter")
-
-
+    </div>
+    @await Html.PartialAsync("_PartialFooter")
     @await Html.PartialAsync("_PartialSharedScripts")
     @RenderSection("Scripts", required: false)
 </body>

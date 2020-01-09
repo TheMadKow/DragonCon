@@ -1,0 +1,128 @@
+﻿@using DragonCon.Features.Management.Reception
+@using DragonCon.Modeling.Helpers
+@model ParticipantsReceptionViewModel
+@{
+    Layout = "";
+}
+
+<table class="table table-couple-striped text-right">
+    <tbody>
+
+        @foreach (var part in Model.Participants.OrderByDescending(x => x.Model.FullName))
+        {
+            var statusColor = "text-primary";
+            var statusText = "אין כרטיס";
+
+            if (part.EngagedConventionInvoice != null)
+            {
+                if (part.EngagedConventionInvoice.IsPaid)
+                {
+                    statusColor = "text-success";
+                    statusText = "שולם";
+                }
+                else
+                {
+                    statusColor = "text-danger";
+                    statusText = "לא שולם";
+                }
+            }
+
+            var shortTerm = part.Model as ShortTermParticipant;
+            var longTerm = part.Model as LongTermParticipant;
+            var participantId = shortTerm == null ? longTerm.Id : shortTerm.Id;
+            var isShortTerm = shortTerm != null;
+
+            <tr>
+                <td class="tw-7">
+                    <h5>
+                        <strong>@part.Model.FullName</strong>
+                    </h5>
+
+                    @if (isShortTerm)
+                    {
+                        <div>
+                            <i class="fa fa-fw fa-user-clock"></i> רשום לכנס הנוכחי
+                            <br />
+                        </div>
+                    }
+                    else
+                    {
+                        if (part.EngagedConventionId == Actor.ManagedConvention.ConventionId)
+                        {
+                            <div>
+                                <i class="fa fa-fw fa-user-clock"></i> רשום לכנס הנוכחי
+                                <br />
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <i class="fa fa-fw fa-user-clock"></i> נרשם בכנסי עבר
+                                <br />
+                            </div>
+                        }
+                        <div>
+                            <i class="fa fa-fw fa-envelope"></i> @longTerm.Email
+                            <br />
+                        </div>
+                    }
+
+
+                    @if (part.Model.PhoneNumber.IsNotEmptyString())
+                    {
+                        <div>
+                            <i class="fa fa-fw fa-phone"></i>
+                            @part.Model.PhoneNumber <br />
+                        </div>
+                    }
+
+                    @if (part.EngagedConventionRoles.Any())
+                    {
+                        <div title="תפקידי כנס">
+                            <i class="fa fa-fw fa-id-card-alt"></i>
+                            @foreach (var role in part.EngagedConventionRoles)
+                            {
+                                <span>@role.ToTextual(). &nbsp; </span>
+                            }
+                        </div>
+                    }
+                </td>
+                <td class="tw-3">
+                    <strong class="@statusColor">
+                        <i class="fa fa-fw fa-ticket-alt"></i> @statusText
+                    </strong>
+                    @{
+                        var age = DateTime.Today.Year - part.Model.YearOfBirth;
+                    }
+                    <div>
+                        <i class="fa fa-fw fa-birthday-cake"></i> @part.Model.YearOfBirth - גיל @age <br />
+                    </div>
+
+                </td>
+                <td>
+
+                    <a class="pull-left btn btn-reception" onclick=""
+                       title="עדכון משתתף">
+                        <i class="fa fa-fw fa-user-edit"></i>&nbsp; עדכון משתתף
+                    </a>
+                    <br />
+                    <a class="pull-left btn btn-reception" onclick=""
+                       title="עדכון אירועים">
+                        <i class="fa fa-fw fa-chair"></i>&nbsp; עדכון אירועים
+                    </a>
+                    <br />
+                    <a class="pull-left btn btn-reception" onclick=""
+                       title="עדכון כרטיס">
+                        <i class="fa fa-fw fa-ticket-alt"></i>&nbsp; עדכון כרטיס
+                    </a>
+                    <br />
+                    <a class="pull-left btn btn-reception" onclick=""
+                       title="הדפסת כרטיס">
+                        <i class="fa fa-fw fa-print"></i>&nbsp; הדפסת כרטיס
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

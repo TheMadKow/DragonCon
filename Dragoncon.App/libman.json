@@ -9,17 +9,14 @@
     },
     {
       "provider": "filesystem",
-      "library": "Resources/Images/sponsers",
-      "destination": "wwwroot/images/Sponsers"
+      "library": "Resources/Images/logos",
+      "destination": "wwwroot/images/logos"
     },
+
     {
       "provider": "filesystem",
-      "library": "Resources/Images/coursel",
-      "destination": "wwwroot/images/Coursel"
-    },
-    {
-      "library": "Resources/lib/combodate-1.0.7/",
-      "destination": "wwwroot/lib/combodate-1.0/"
+      "library": "Resources/Images/sponsers",
+      "destination": "wwwroot/images/Sponsers"
     }
   ]
 }

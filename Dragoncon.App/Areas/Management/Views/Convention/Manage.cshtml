@@ -5,128 +5,118 @@
     ViewBag.Title = "ניהול - כנסים";
 }
 
-<div class="right-to-left">
-    @*<nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link active" id="nav-cons-tab" data-toggle="tab" href="#nav-cons" role="tab" aria-controls="nav-cons" aria-selected="true">כנסים</a>
-            <a class="nav-item nav-link" id="nav-export-tab" data-toggle="tab" href="#nav-export" role="tab" aria-controls="nav-contact" aria-selected="false">יצוא מידע</a>
-        </div>
-    </nav>*@
+<div class="card card-gray-float right-to-left">
+    <div class="text-right" style="padding:15px;">
+        <a asp-area="Management" asp-controller="Convention" asp-action="CreateConvention">
+            <i class="fa fa-fw fa-plus-square"></i> הוספת כנס חדש
+        </a>
+    </div>
+    <table class="table table-hover table-stripped text-right">
+        <thead>
+            <tr class="text-bold">
+                <td class="tw-1">מצב</td>
+                <td class="tw-5">שם</td>
+                <td class="tw-3">תאריכים</td>
+                <td class="tw-3"></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var con in Model.Conventions.OrderByDescending(x => x.UpdateTimeStamp))
+            {
+                <tr>
+                    <td class="text-center">
+                        @if (Actor.System.DisplayConventionId == con.Id)
+                        {
+                            <span class="text-primary" title="כנס מוצג למשתתפים">
+                                <i style="font-size: 1.35em; padding-top: 10px;" class="fa fa-fw fa-users"></i><br /> <span>תצוגה</span>
+                            </span>
+                        }
+                        @if (Actor.System.DisplayConventionId == con.Id &&
+                           Actor.System.ManagersConventionId == con.Id)
+                        {
+                            <br />
+                        }
+                        @if (Actor.System.ManagersConventionId == con.Id)
+                        {
+                            <span class="text-danger" title="כנס פתוח לניהול">
+                                <i style="font-size: 1.35em; padding-top: 10px;" class="fa fa-fw fa-users-cog"></i><br /> <span>מנוהל</span>
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        <strong>@con.Name</strong>
+                        <br />
+                        <i>@con.TagLine</i>
+                        <br />
+                        <i>@con.Location</i>
+                        <br />
+                        <well>
+                            @if (con.Settings.AllowEventsSuggestions)
+                            {
+                                <span>אפשר הגשת אירועים</span>
+                            }
+                            @if (con.Settings.AllowEventsRegistration)
+                            {
+                                <span>אפשר רישום לאירועים</span>
+                            }
+                            @if (con.Settings.AllowEventsRegistrationChanges)
+                            {
+                                <span>אפשר שינוי רישום לאירועים</span>
+                            }
+                            @if (con.Settings.AllowPayments)
+                            {
+                                <span>אפשר רכישת כרטיס</span>
+                            }
+                            @if (con.Settings.AllowPaymentChanges)
+                            {
+                                <span>אפשר שינוי כרטיסים</span>
+                            }
+                        </well>
+                    </td>
+                    <td>
+                        @foreach (var day in con.Days)
+                        {
+                            <span>
+                                <strong>@day.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</strong>
+                                &nbsp;&nbsp; @day.StartTime.ToString("HH:mm", CultureInfo.InvariantCulture) - @day.EndTime.ToString("HH:mm", CultureInfo.CurrentCulture)
+                            </span>
+                            <br />
+                        }
+                    </td>
 
-    @*<div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-cons" role="tabpanel" aria-labelledby="nav-home-tab">*@
-            <div class="text-right" style="padding:15px;">
-                <a asp-area="Management" asp-controller="Convention" asp-action="CreateConvention">
-                    <i class="fa fa-fw fa-plus-square"></i> הוספת כנס חדש
-                </a>
-            </div>
-            <table class="table table-hover table-stripped text-right">
-                <thead>
-                    <tr class="text-bold">
-                        <td class="tw-1">מצב</td>
-                        <td class="tw-5">שם</td>
-                        <td class="tw-3">תאריכים</td>
-                        <td class="tw-3"></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var con in Model.Conventions.OrderByDescending(x => x.UpdateTimeStamp))
-                    {
-                        <tr>
-                            <td class="text-center">
-                                @if (Actor.System.DisplayConventionId == con.Id)
-                                {
-                                    <span class="text-primary" title="כנס מוצג למשתתפים">
-                                        <i style="font-size: 1.35em; padding-top: 10px;" class="fa fa-fw fa-users"></i><br /> <span>תצוגה</span>
-                                    </span>
-                                }
-                                @if (Actor.System.DisplayConventionId == con.Id &&
-                                    Actor.System.ManagersConventionId == con.Id)
-                                {
-                                    <br />
-                                }
-                                @if (Actor.System.ManagersConventionId == con.Id)
-                                {
-                                    <span class="text-danger" title="כנס פתוח לניהול">
-                                        <i style="font-size: 1.35em; padding-top: 10px;" class="fa fa-fw fa-users-cog"></i><br /> <span>מנוהל</span>
-                                    </span>
-                                }
-                            </td>
-                            <td>
-                                <strong>@con.Name</strong>
-                                <br />
-                                <i>@con.TagLine</i>
-                                <br />
-                                <i>@con.Location</i>
-                                <br/>
-                                <well>
-                                    @if (con.Settings.AllowEventsSuggestions)
-                                    {
-                                        <span>אפשר הגשת אירועים</span>
-                                    }
-                                    @if (con.Settings.AllowEventsRegistration)
-                                    {
-                                        <span>אפשר רישום לאירועים</span>
-                                    }
-                                    @if (con.Settings.AllowEventsRegistrationChanges)
-                                    {
-                                        <span>אפשר שינוי רישום לאירועים</span>
-                                    }
-                                    @if (con.Settings.AllowPayments)
-                                    {
-                                        <span>אפשר רכישת כרטיס</span>
-                                    }
-                                    @if (con.Settings.AllowPaymentChanges)
-                                    {
-                                        <span>אפשר שינוי כרטיסים</span>
-                                    }
-                                </well>
-                            </td>
-                            <td>
-                                @foreach (var day in con.Days)
-                                {
-                                    <span>
-                                        <strong>@day.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</strong>
-                                        &nbsp;&nbsp; @day.StartTime.ToString("HH:mm", CultureInfo.InvariantCulture) - @day.EndTime.ToString("HH:mm", CultureInfo.CurrentCulture)
-                                    </span>
-                                    <br />
-                                }
-                            </td>
-
-                            <td class="text-left">
-                                <ul class="list-inline">
-                                    <li class="list-inline-item">
-                                        <div class="dropdown">
-                                            <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm btn-warning">
-                                                <i class="fa fa-fw fa-cog"></i>
-                                            </a>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                <a class="dropdown-item" asp-area="Management" asp-controller="Convention"
-                                                   asp-action="UpdateConvention" asp-route-conId="@con.Id.GetNumberFromId()">
-                                                    <i class="fa fa-fw fa-edit"></i> עדכון כנס
-                                                </a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#" onclick="SetManagedConvention('@con.Id')"><i class="text-danger fa fa-fw fa-users-cog"></i> קבע ככנס מנוהל</a>
-                                                <a class="dropdown-item" href="#" onclick="SetDisplayConvention('@con.Id')"><i class="text-primary fa fa-fw fa-users"></i> קבע ככנס תצוגה</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#"><i class="fa fa-fw fa-clone"></i> שכפל כנס זה</a>
-                                            </div>
-                                        </div>
-
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="#" title="הצגת פרטים מלאים" onclick="ShowDetails('@con.Id')" class="btn btn-sm btn-info">
-                                            <i class="fa fa-fw fa-info-circle"></i>
+                    <td class="text-left">
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <div class="dropdown">
+                                    <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm btn-warning">
+                                        <i class="fa fa-fw fa-cog"></i>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" asp-area="Management" asp-controller="Convention"
+                                           asp-action="UpdateConvention" asp-route-conId="@con.Id.GetNumberFromId()">
+                                            <i class="fa fa-fw fa-edit"></i> עדכון כנס
                                         </a>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-@*</div>*@
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#" onclick="SetManagedConvention('@con.Id')"><i class="text-danger fa fa-fw fa-users-cog"></i> קבע ככנס מנוהל</a>
+                                        <a class="dropdown-item" href="#" onclick="SetDisplayConvention('@con.Id')"><i class="text-primary fa fa-fw fa-users"></i> קבע ככנס תצוגה</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#"><i class="fa fa-fw fa-clone"></i> שכפל כנס זה</a>
+                                    </div>
+                                </div>
+
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" title="הצגת פרטים מלאים" onclick="ShowDetails('@con.Id')" class="btn btn-sm btn-info">
+                                    <i class="fa fa-fw fa-info-circle"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <div class="modal fade" id="convention-details-ajax" tabindex="-1" role="dialog"></div>
 <div class="modal fade" id="convention-settings-ajax" tabindex="-1" role="dialog"></div>

@@ -1,0 +1,33 @@
+﻿@model DragonCon.App.Settings.SliderSettings
+
+<div class="card card-gray-float" style="">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            @await Html.PartialAsync("_PartialDragon")
+            @Model.Title
+        </h3>
+        <div class="splide" style="direction: ltr;">
+            <div class="splide__track">
+                <ul class="splide__list">
+                    @foreach (var item in Model.Slides)
+                    {
+                        <li class="splide__slide">
+                            <div class="splide__slide__container">
+                                <img src="@item.ImageUrl" />
+                            </div>
+                            <h4 class="dragon-slider-text">
+                                @item.Caption
+                            </h4>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="splide__progress">
+                <div class="splide__progress__bar">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

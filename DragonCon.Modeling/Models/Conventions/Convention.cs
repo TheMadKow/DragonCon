@@ -12,7 +12,8 @@ namespace DragonCon.Modeling.Models.Conventions
         string ConventionId { get; }
         string ParticipantId { get; }
         IPaymentInvoice Payment { get; }
-        bool IsLongTerm { get;}
+        string CreatorId { get;}
+        bool IsLongTerm { get; }
         List<string> EventIds { get; }
         List<ConventionRoles> Roles { get; }
         Instant CreatedOn { get; }
@@ -22,6 +23,7 @@ namespace DragonCon.Modeling.Models.Conventions
     {
         public string Id { get; set; }
         public string ConventionId { get; set; }
+        public string CreatorId { get; set; }
         public string ParticipantId { get; set; }
         public bool IsLongTerm { get; set; }
         public IPaymentInvoice Payment { get; set; } = new PaymentInvoice();

@@ -12,7 +12,9 @@ namespace DragonCon.Features.Convention.Home
 
         public IActionResult Index()
         {
-            return View();
+            var viewModel = new HomeViewModel();
+            viewModel.CarouselItems = Gateway.CreateMockSlides();
+            return View(viewModel);
         }
 
         public IActionResult Info()

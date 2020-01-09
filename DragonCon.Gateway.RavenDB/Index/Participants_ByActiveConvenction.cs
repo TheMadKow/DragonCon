@@ -14,6 +14,7 @@ namespace DragonCon.RavenDB.Index
     {
         public class Result
         {
+            public bool IsLongTerm { get; set; } = false;
             public string ConventionTerm { get; set; } = string.Empty;
             public string SearchText { get; set; } = string.Empty;
             public string FullName { get; set; } = string.Empty;
@@ -27,6 +28,7 @@ namespace DragonCon.RavenDB.Index
                       let shortTerm = LoadDocument<ShortTermParticipant>(s.ParticipantId)
                 select new
                 {
+                    IsLongTerm = false,
                     FullName = shortTerm.FullName,
                     ParticipantId = s.ParticipantId,
                     ConventionTerm = s.ConventionId,
@@ -37,6 +39,7 @@ namespace DragonCon.RavenDB.Index
                 let longTerm = LoadDocument<LongTermParticipant>(l.ParticipantId)
                 select new
                 {
+                    IsLongTerm = true,
                     FullName = longTerm.FullName,
                     ParticipantId = l.ParticipantId,
                     ConventionTerm = l.ConventionId,

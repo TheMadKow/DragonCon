@@ -1,8 +1,5 @@
 ﻿using System;
-using DragonCon.Features.Management.Dashboard;
 using DragonCon.Features.Shared;
-using DragonCon.Modeling.Helpers;
-using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Identities.Policy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +8,7 @@ namespace DragonCon.Features.Management.Reception
 {
     [Area("Management")]
     [Authorize(policy: Policies.Types.ReceptionManagement)]
-    public class ReceptionController : DragonController<IManagementStatisticsGateway>
+    public class ReceptionController : DragonController<IManagementReceptionGateway>
     {
         public ReceptionController(IServiceProvider service) : base(service)
         {
@@ -34,5 +31,18 @@ namespace DragonCon.Features.Management.Reception
         {
             return string.Empty;
         }
+
+        [HttpPost]
+        public IActionResult SearchParticipant(string searchWords, int page, int perPage = 100)
+        {
+            var viewModel = Gateway.BuildParticipantSearch(DisplayPagination.BuildForGateway(page, perPage), searchWords);
+            return View("_PartialAjaxUserDisplay", viewModel);
+        }
+    }
+
+
+    public interface IManagementReceptionGateway : IGateway
+    {
+        ParticipantsReceptionViewModel BuildParticipantSearch(IDisplayPagination buildForGateway, string searchWords);
     }
 }

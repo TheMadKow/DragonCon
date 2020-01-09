@@ -323,35 +323,6 @@ namespace DragonCon.RavenDB.Gateways.Management
             return result;
         }
 
-        private IParticipant GetLoadedParticipant(IConventionEngagement x)
-        {
-            if (x.IsLongTerm)
-                return Session.Load<LongTermParticipant>(x.ParticipantId);
-
-            return Session.Load<ShortTermParticipant>(x.ParticipantId);
-        }
-
-        private ParticipantWrapper ParticipantWrapperBuilder(IConventionEngagement engagement)
-        {
-            var participant = GetLoadedParticipant(engagement);
-            ParticipantWrapper wrapper = null;
-            if (engagement.IsLongTerm)
-            {
-                wrapper = new LongTermParticipantWrapper(participant);
-            }
-            else
-            {
-                wrapper = new ShortTermParticipantWrapper(participant);
-            }
-
-            var convention = Session.Load<Convention>(engagement.ConventionId);
-            wrapper.EngagedConventionId = engagement.ConventionId;
-            wrapper.EngagedConventionInvoice = engagement.Payment;
-            wrapper.EngagedConventionRoles = engagement.Roles;
-            wrapper.EngagedConventionName = convention.Name;
-            return wrapper;
-        }
-
 
         public ParticipantsManagementViewModel BuildSearchIndex(IDisplayPagination pagination, bool allowHistory = false, string searchWords = "")
         {

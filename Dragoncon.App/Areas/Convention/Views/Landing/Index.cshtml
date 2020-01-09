@@ -1,6 +1,8 @@
 ﻿@using System.Globalization
+@using DragonCon.App.Settings
 @using DragonCon.Modeling.Helpers
 @using DragonCon.Modeling.Models.Identities
+@model DragonCon.Features.Convention.Landing.LandingViewModel
 @{
     var actor = Actor;
     Layout = "_LandingLayout";
@@ -31,20 +33,21 @@
                 </li>
             </ul>
         </p>
+        <p class="text-center">
+            <img src="/images/logos/Logo_FullRes.png" style="max-width: 50%" />
+        </p>
+
     </div>
 </div>
 
-<div class="card card-gray-float">
-    <div class="card-body">
-        <h3 class="card-title text-bold">
-            @await Html.PartialAsync("_PartialDragon")
-            תמונות מכנס קודם
-        </h3>
-        <p class="card-paragraph">
-            // TODO
-        </p>
-    </div>
-</div>
+
+@await Html.PartialAsync("_PartialSharedSlider", new SliderSettings
+{
+    Title = "דרקוניקון בתמונות",
+    Slides = Model.CarouselItems
+})
+
+
 <div class="card card-gray-float">
     <div class="card-body">
         <h3 class="card-title text-bold">
@@ -55,8 +58,8 @@
             @if (actor.HasDisplayConvention)
             {
                 @await Html.PartialAsync("_PartialLocation", false)
-                <br/>
-                <br/>
+                <br />
+                <br />
                 @await Html.PartialAsync("_PartialConvetionDays")
             }
         </p>
@@ -102,7 +105,7 @@
             @await Html.PartialAsync("_PartialDragon")
             שאלות נוספות ?
         </h3>
-        <br/>
+        <br />
         @await Html.PartialAsync("PartailLearnMore")
     </div>
 </div>

@@ -8,16 +8,37 @@
 <script src="~/lib/pickadate/lib/picker.date.js" asp-append-version="true"></script>
 <script src="~/lib/pickadate/lib/picker.time.js" asp-append-version="true"></script>
 <script src="~/lib/chosen-js/chosen.jquery.min.js" asp-append-version="true"></script>
-<script src="~/lib/combodate-1.0/combodate.js" asp-append-version="true"></script>
+<script src="~/lib/jquery-form/dist/jquery.form.min.js" asp-append-version="true"></script>
+<script src="~/lib/@@splidejs/splide/dist/js/splide.min.js" asp-append-version="true"></script>
 <script src="~/js/site.min.js" asp-append-version="true"></script>
 <script>
     $(document).ready(function () {
         setupToggles();
         setupPickers();
         setupChosen();
-        setupCombodate();
         setupOpenTab();
+        setupSplide();
     });
+
+    function setupSplide() {
+        var $item = $(".splide");
+        if ($item === undefined || $item === null || $item.length === 0) {
+            return;
+        }
+
+        var element = new Splide('.splide',
+            {
+                rewind: true,
+                'cover': true,
+                'heightRatio': 0.5,
+                autoplay: true,
+                interval: 5000,
+                pagination: false,
+                lazyLoad: "nearby"
+            });
+
+        element.mount();
+    }
 
     function setupOpenTab() {
         var $tab = $("#helper-tab").val();
@@ -48,16 +69,6 @@
             width: "100%"
         });
         $('.chosen-select').removeClass('chosen-select');
-    }
-
-    function setupCombodate() {
-        var now = new Date().year;
-        $('.combo-date').combodate({
-            minYear: 1930,
-            maxYear: now,
-            minuteStep: 30,
-            smartDays: true
-        });   
     }
 
     function setupPickers() {

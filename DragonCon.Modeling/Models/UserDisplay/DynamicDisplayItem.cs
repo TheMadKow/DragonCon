@@ -4,9 +4,9 @@ using System.Text;
 
 namespace DragonCon.Modeling.Models.UserDisplay
 {
-    public abstract class UserDisplayItem
+    public abstract class DynamicDisplayItem
     {
         public string Id { get; set; }
-        public string ConventionId { get; set;} = String.Empty;
+        public string ConventionId { get; set;} = string.Empty;
     }
 }
