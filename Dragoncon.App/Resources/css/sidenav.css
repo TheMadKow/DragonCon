@@ -1,5 +1,6 @@
 ﻿/* Style the links inside the sidenav */
 #mySidenav a {
+    z-index: 100;
     text-align: left;
     position: fixed; /* Position them relative to the browser window */
     right: -105px; /* Position them outside of the screen */

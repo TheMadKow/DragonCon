@@ -21,22 +21,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var con in Model.Conventions.OrderByDescending(x => x.UpdateTimeStamp))
+            @foreach (var con in Model.Conventions.OrderByDescending(x => x.Inner.UpdateTimeStamp))
             {
                 <tr>
                     <td class="text-center">
-                        @if (Actor.System.DisplayConventionId == con.Id)
+                        @if (Actor.System.DisplayConventionId == con.Inner.Id)
                         {
                             <span class="text-primary" title="כנס מוצג למשתתפים">
                                 <i style="font-size: 1.35em; padding-top: 10px;" class="fa fa-fw fa-users"></i><br /> <span>תצוגה</span>
                             </span>
                         }
-                        @if (Actor.System.DisplayConventionId == con.Id &&
-                           Actor.System.ManagersConventionId == con.Id)
+                        @if (Actor.System.DisplayConventionId == con.Inner.Id &&
+                           Actor.System.ManagersConventionId == con.Inner.Id)
                         {
                             <br />
                         }
-                        @if (Actor.System.ManagersConventionId == con.Id)
+                        @if (Actor.System.ManagersConventionId == con.Inner.Id)
                         {
                             <span class="text-danger" title="כנס פתוח לניהול">
                                 <i style="font-size: 1.35em; padding-top: 10px;" class="fa fa-fw fa-users-cog"></i><br /> <span>מנוהל</span>
@@ -44,32 +44,28 @@
                         }
                     </td>
                     <td>
-                        <strong>@con.Name</strong>
+                        <strong>@con.Inner.Name</strong>
                         <br />
-                        <i>@con.TagLine</i>
+                        <i>@con.Inner.TagLine</i>
                         <br />
-                        <i>@con.Location</i>
+                        <i>@con.Inner.Location</i>
                         <br />
                         <well>
-                            @if (con.Settings.AllowEventsSuggestions)
+                            @if (con.Inner.Settings.AllowEventsSuggestions)
                             {
                                 <span>אפשר הגשת אירועים</span>
                             }
-                            @if (con.Settings.AllowEventsRegistration)
+                            @if (con.Inner.Settings.AllowEventsRegistration)
                             {
                                 <span>אפשר רישום לאירועים</span>
                             }
-                            @if (con.Settings.AllowEventsRegistrationChanges)
-                            {
-                                <span>אפשר שינוי רישום לאירועים</span>
-                            }
-                            @if (con.Settings.AllowPayments)
+                            @if (con.Inner.Settings.AllowPayments)
                             {
                                 <span>אפשר רכישת כרטיס</span>
                             }
-                            @if (con.Settings.AllowPaymentChanges)
+                            @if (con.Inner.Settings.AllowManagementTests)
                             {
-                                <span>אפשר שינוי כרטיסים</span>
+                                <span>אפשר בדיקות מנהלים</span>
                             }
                         </well>
                     </td>
@@ -93,12 +89,12 @@
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <a class="dropdown-item" asp-area="Management" asp-controller="Convention"
-                                           asp-action="UpdateConvention" asp-route-conId="@con.Id.GetNumberFromId()">
+                                           asp-action="UpdateConvention" asp-route-conId="@con.Inner.Id.GetNumberFromId()">
                                             <i class="fa fa-fw fa-edit"></i> עדכון כנס
                                         </a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#" onclick="SetManagedConvention('@con.Id')"><i class="text-danger fa fa-fw fa-users-cog"></i> קבע ככנס מנוהל</a>
-                                        <a class="dropdown-item" href="#" onclick="SetDisplayConvention('@con.Id')"><i class="text-primary fa fa-fw fa-users"></i> קבע ככנס תצוגה</a>
+                                        <a class="dropdown-item" href="#" onclick="SetManagedConvention('@con.Inner.Id')"><i class="text-danger fa fa-fw fa-users-cog"></i> קבע ככנס מנוהל</a>
+                                        <a class="dropdown-item" href="#" onclick="SetDisplayConvention('@con.Inner.Id')"><i class="text-primary fa fa-fw fa-users"></i> קבע ככנס תצוגה</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#"><i class="fa fa-fw fa-clone"></i> שכפל כנס זה</a>
                                     </div>
@@ -106,7 +102,7 @@
 
                             </li>
                             <li class="list-inline-item">
-                                <a href="#" title="הצגת פרטים מלאים" onclick="ShowDetails('@con.Id')" class="btn btn-sm btn-info">
+                                <a href="#" title="הצגת פרטים מלאים" onclick="ShowDetails('@con.Inner.Id')" class="btn btn-sm btn-info">
                                     <i class="fa fa-fw fa-info-circle"></i>
                                 </a>
                             </li>

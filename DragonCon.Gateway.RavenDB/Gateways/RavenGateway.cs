@@ -29,44 +29,6 @@ namespace DragonCon.RavenDB.Gateways
             Identities = provider.GetRequiredService<IIdentityFacade>();
         }
 
-        #region Helpers
-
-        private IParticipant GetLoadedParticipant(IConventionEngagement x)
-        {
-            if (x.IsLongTerm)
-                return Session.Load<LongTermParticipant>(x.ParticipantId);
-
-            return Session.Load<ShortTermParticipant>(x.ParticipantId);
-        }
-
-        protected ParticipantWrapper ParticipantWrapperBuilder(IConventionEngagement engagement)
-        {
-            var participant = GetLoadedParticipant(engagement);
-            ParticipantWrapper wrapper = null;
-            if (engagement.IsLongTerm)
-            {
-                wrapper = new LongTermParticipantWrapper(participant);
-            }
-            else
-            {
-                wrapper = new ShortTermParticipantWrapper(participant);
-            }
-
-            if (engagement.ConventionId.IsNotEmptyString())
-            {
-                var convention = Session.Load<Convention>(engagement.ConventionId);
-                wrapper.EngagedConventionId = engagement.ConventionId;
-                wrapper.EngagedConventionInvoice = engagement.Payment;
-                wrapper.EngagedConventionRoles = engagement.Roles;
-                wrapper.EngagedConventionName = convention.Name;
-            }
-
-            return wrapper;
-        }
-
-
-        #endregion
-
         private void ReleaseUnmanagedResources()
         {
             _session?.Dispose();

@@ -7,18 +7,6 @@ using NodaTime;
 
 namespace DragonCon.Modeling.Models.Conventions
 {
-    public interface IConventionEngagement
-    {
-        string ConventionId { get; }
-        string ParticipantId { get; }
-        IPaymentInvoice Payment { get; }
-        string CreatorId { get;}
-        bool IsLongTerm { get; }
-        List<string> EventIds { get; }
-        List<ConventionRoles> Roles { get; }
-        Instant CreatedOn { get; }
-    }
-
     public class ConventionEngagement : IConventionEngagement
     {
         public string Id { get; set; }
@@ -28,6 +16,7 @@ namespace DragonCon.Modeling.Models.Conventions
         public bool IsLongTerm { get; set; }
         public IPaymentInvoice Payment { get; set; } = new PaymentInvoice();
         public List<string> EventIds { get; set; } = new List<string>();
+        public List<string> SuggestedEventIds { get; } = new List<string>();
         public List<ConventionRoles> Roles { get; set; } = new List<ConventionRoles>();
         public Instant CreatedOn { get; set; } = SystemClock.Instance.GetCurrentInstant();
 
@@ -59,10 +48,6 @@ namespace DragonCon.Modeling.Models.Conventions
         public List<string> TicketIds { get; set; }= new List<string>();
         public List<string> HallIds { get; set; }= new List<string>();
         
-        public List<PhoneRecord> PhoneBook { get;set; } = new List<PhoneRecord>();
-        public Dictionary<string, string> Metadata { get;set; } = new Dictionary<string, string>();
-
-        
         public Instant CreateTimeStamp { get; set; }
         public Instant UpdateTimeStamp { get; set; }
         
@@ -73,11 +58,9 @@ namespace DragonCon.Modeling.Models.Conventions
 
     public class ConventionSettings
     {
+        public bool AllowManagementTests { get; set; } = false;
         public bool AllowEventsRegistration { get; set; } = false;
-        public bool AllowEventsRegistrationChanges { get; set; } = false;
         public bool AllowEventsSuggestions { get; set; } = false;
         public bool AllowPayments { get; set; } = false;
-        public bool AllowPaymentChanges { get; set; } = false;
-
     }
 }

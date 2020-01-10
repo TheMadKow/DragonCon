@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using DragonCon.Features.Management.Participants;
 using DragonCon.Features.Management.Reception;
 using DragonCon.Features.Shared;
 using DragonCon.Modeling.Helpers;
@@ -10,7 +7,7 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.RavenDB.Index;
 using Raven.Client.Documents;
 
-namespace DragonCon.RavenDB.Gateways.Management
+namespace DragonCon.RavenDB.Gateways.Managements
 {
     public class RavenManagementReceptionGateway : RavenGateway, IManagementReceptionGateway
     {
@@ -37,13 +34,14 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .As<IConventionEngagement>()
                 .ToList();
 
+            var wrapperFactory = new Factories.WrapperFactory(Session);
             var viewModel = new ParticipantsReceptionViewModel
             {
                 Pagination = DisplayPagination.BuildForView(
                     stats.TotalResults,
                     pagination.SkipCount,
                     pagination.ResultsPerPage),
-                Participants = query.Select(ParticipantWrapperBuilder).ToList(),
+                Participants = wrapperFactory.Wrap(query)
             };
             return viewModel;
         }

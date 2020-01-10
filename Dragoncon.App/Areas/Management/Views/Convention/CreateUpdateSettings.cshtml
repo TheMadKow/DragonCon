@@ -9,6 +9,25 @@
 
         <table class="table">
             <tr class="d-flex">
+                <td class="col-5"> אפשר הכל לבדיקת מנהלים</td>
+                <td class="col-3">
+                    <div class="checkbox toggle-padding text-right">
+                        <label class="label-control">
+                            <input asp-for="@Model.AllowManagementTests"
+                                   class="bootstrap-toggle"
+                                   data-toggle="toggle"
+                                   type="checkbox"
+                                   data-on="<i class='fa fa-fw fa-check'></i>"
+                                   data-off="<i class='fa fa-fw fa-times'></i>"
+                                   data-offstyle="danger"
+                                   data-onstyle="success"
+                                   data-width="75" ,
+                                   data-height="25">
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr class="d-flex">
                 <td class="col-5"> אפשר הגשת אירועים</td>
                 <td class="col-3">
                     <div class="checkbox toggle-padding text-right">
@@ -21,7 +40,7 @@
                                    data-off="<i class='fa fa-fw fa-times'></i>"
                                    data-offstyle="danger"
                                    data-onstyle="success"
-                                   data-width="75",
+                                   data-width="75" ,
                                    data-height="25">
                         </label>
                     </div>
@@ -46,25 +65,7 @@
                     </div>
                 </td>
             </tr>
-            <tr class="d-flex">
-                <td class="col-5"> אפשר שינוי רישום לאירועים</td>
-                <td class="col-3">
-                    <div class="checkbox toggle-padding text-right">
-                        <label class="label-control">
-                            <input asp-for="@Model.AllowEventsRegistrationChanges"
-                                   class="bootstrap-toggle"
-                                   data-toggle="toggle"
-                                   type="checkbox"
-                                   data-on="<i class='fa fa-fw fa-check'></i>"
-                                   data-off="<i class='fa fa-fw fa-times'></i>"
-                                   data-offstyle="danger"
-                                   data-onstyle="success"
-                                   data-width="75" ,
-                                   data-height="25">
-                        </label>
-                    </div>
-                </td>
-            </tr>
+
             <tr class="d-flex">
                 <td class="col-5"> אפשר רכישת כרטיס</td>
                 <td class="col-3">
@@ -84,25 +85,7 @@
                     </div>
                 </td>
             </tr>
-            <tr class="d-flex">
-                <td class="col-5"> אפשר שינוי כרטיסים</td>
-                <td class="col-3">
-                    <div class="checkbox toggle-padding text-right">
-                        <label class="label-control">
-                            <input asp-for="@Model.AllowPaymentChanges"
-                                   class="bootstrap-toggle"
-                                   data-toggle="toggle"
-                                   type="checkbox"
-                                   data-on="<i class='fa fa-fw fa-check'></i>"
-                                   data-off="<i class='fa fa-fw fa-times'></i>"
-                                   data-offstyle="danger"
-                                   data-onstyle="success"
-                                   data-width="75" ,
-                                   data-height="25">
-                        </label>
-                    </div>
-                </td>
-            </tr>
+
         </table>
 
         <br />

@@ -5,14 +5,14 @@
 @model DragonCon.Features.Management.Events.EventsManagementViewModel
 
 <div class="text-right" style="padding: 15px;">
-    <a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEvent">
+    <a asp-area="Management" asp-controller="Personal" asp-action="CreateUpdateEvent">
         <i class="fa fa-fw fa-plus-square"></i> הוספת אירוע
     </a>
 </div>
 
 <div class="filter-container">
     <strong>חיפוש חופשי</strong>
-    <form asp-area="Management" asp-controller="Events" asp-action="ManageSearch">
+    <form asp-area="Management" asp-controller="Personal" asp-action="ManageSearch">
         <div class="row">
             <div class="col-10">
                 <input name="searchWords" class="form-control" placeholder="חיפוש לפי שם אירוע או שם מנחה" />
@@ -25,7 +25,7 @@
 </div>
 
 <div class="filter-container">
-    <form asp-area="Management" asp-controller="Events" asp-action="Manage">
+    <form asp-area="Management" asp-controller="Personal" asp-action="Manage">
         <strong>סינון לפי</strong>
         <br />
 
@@ -97,7 +97,7 @@
 
             <div class="col-3">
                 <button class="btn btn-filter btn-info" type="submit"><i class="fa fa-fw fa-filter"></i> סינון </button>
-                <a class="btn btn-danger" asp-area="Management" asp-controller="Events" asp-action="Manage">
+                <a class="btn btn-danger" asp-area="Management" asp-controller="Personal" asp-action="Manage">
                     <i class="fa fa-fw fa-times"></i>
                     איפוס
 
@@ -108,10 +108,10 @@
 </div>
 <table id="accordion" class="table table-couple-striped text-right">
     <tbody>
-        @foreach (var evnt in Model.Events.OrderByDescending(x => x.Model.Name))
+        @foreach (var evnt in Model.Events.OrderByDescending(x => x.Inner.Name))
         {
             var statusColor = "";
-            switch (evnt.Model.Status)
+            switch (evnt.Inner.Status)
             {
                 case EventStatus.Approved:
                     statusColor = "text-success";
@@ -128,8 +128,8 @@
 
             <tr>
                 <td>
-                    <a class="text-black" data-toggle="collapse" href="#extra-data-@evnt.Model.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
-                        <strong>@evnt.Model.Name</strong><i class="fa fa-fw fa-caret-down"></i>
+                    <a class="text-black" data-toggle="collapse" href="#extra-data-@evnt.Inner.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
+                        <strong>@evnt.Inner.Name</strong><i class="fa fa-fw fa-caret-down"></i>
                     </a>
                     <br />
 
@@ -171,10 +171,10 @@
                         <span class="text-danger">חסרה הנחיה</span>
                     }
 
-                    @if (evnt.Model.SpecialRequests.IsNotEmptyString())
+                    @if (evnt.Inner.SpecialRequests.IsNotEmptyString())
                     {
                         <br />
-                        <span class="text-danger text-heavy-bold">בקשות מיוחדות: </span> @evnt.Model.SpecialRequests
+                        <span class="text-danger text-heavy-bold">בקשות מיוחדות: </span> @evnt.Inner.SpecialRequests
 
                     }
                 </td>
@@ -186,13 +186,13 @@
                     }
                     <br />
 
-                    @if (evnt.Model.TimeSlot == null)
+                    @if (evnt.Inner.TimeSlot == null)
                     {
                         <span class="text-danger">חסרים שעת התחלה ומשך</span>
                     }
                     else
                     {
-                        <span>@evnt.Model.TimeSlot?.GetDescription()</span>
+                        <span>@evnt.Inner.TimeSlot?.GetDescription()</span>
                     }
 
                 </td>
@@ -206,12 +206,12 @@
                     {
                         <span>
                             <br />
-                            שולחן @evnt.Model?.HallTable<br />
+                            שולחן @evnt.Inner?.HallTable<br />
                         </span>
                     }
                 </td>
                 <td>
-                    <strong class="@statusColor">@evnt.Model.Status.ToTextual()</strong>
+                    <strong class="@statusColor">@evnt.Inner.Status.ToTextual()</strong>
                 </td>
                 <td>
                     <div class="dropdown pull-left">
@@ -220,17 +220,17 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 
-                            <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Personal"
                                asp-action="CreateUpdateEvent"
-                               asp-route-eventId="@evnt.Model.Id.GetNumberFromId()">
+                               asp-route-eventId="@evnt.Inner.Id.GetNumberFromId()">
                                 <i class="fa fa-fw fa-edit"></i> עדכון
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" onclick="ViewEventHistory('@evnt.Model.Id')">
+                            <a class="dropdown-item" href="#" onclick="ViewEventHistory('@evnt.Inner.Id')">
                                 <i class="fa fa-fw fa-history"></i> היסטוריה
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" asp-area="Management" asp-controller="Events" aria-checkedasp-action="CloneEvent">
+                            <a class="dropdown-item" asp-area="Management" asp-controller="Personal" aria-checkedasp-action="CloneEvent">
                                 <i class="fa fa-fw fa-clone"></i> שכפול אירוע
                             </a>
                             @if (evnt.GameMasters.Any(x => x != null))
@@ -247,7 +247,7 @@
                                     continue;
                                 }
 
-                                <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                                <a class="dropdown-item" asp-area="Management" asp-controller="Personal"
                                    asp-action="UpdateEventAgeRestriction">
                                     <i class="fa fa-fw fa-user-edit"></i> @gm?.FirstName
                                 </a>
@@ -258,10 +258,10 @@
                     @{
                         var quickUpdate = new
                         {
-                            Id = evnt.Model.Id,
-                            Name = evnt.Model.Name,
-                            Status = evnt.Model.Status.ToString(),
-                            Location = $"{evnt.Model.HallId},{evnt.Model.HallTable}",
+                            Id = evnt.Inner.Id,
+                            Name = evnt.Inner.Name,
+                            Status = evnt.Inner.Status.ToString(),
+                            Location = $"{evnt.Inner.HallId},{evnt.Inner.HallTable}",
                         }.AsJson();
                     }
 
@@ -272,7 +272,7 @@
 
                 </td>
             </tr>
-            <tr id="extra-data-@evnt.Model.Id.GetNumberFromId()"
+            <tr id="extra-data-@evnt.Inner.Id.GetNumberFromId()"
                 class="collapse" data-parent="#accordion">
                 <td colspan="100%">
                     <table class="table table-no-border table-no-background">
@@ -281,13 +281,13 @@
                                 <strong>תיאור </strong>
                             </td>
                             <td class="tw-10">
-                                @if (evnt.Model.Description.IsEmptyString())
+                                @if (evnt.Inner.Description.IsEmptyString())
                                 {
                                     <span class="text-danger">חסר תיאור</span>
                                 }
                                 else
                                 {
-                                    @evnt.Model.Description
+                                    @evnt.Inner.Description
                                 }
                             </td>
                         </tr>
@@ -312,34 +312,34 @@
                             </td>
                             <td>
                                 <span>מ-</span>
-                                @if (evnt.Model.Size.Min == null || evnt.Model.Size.Min == 0)
+                                @if (evnt.Inner.Size.Min == null || evnt.Inner.Size.Min == 0)
                                 {
                                     <span class="text-info">ללא הגבלה</span>
                                 }
                                 else
                                 {
-                                    <span>@evnt.Model.Size.Min</span>
+                                    <span>@evnt.Inner.Size.Min</span>
                                 }
 
                                 <span>עד-</span>
-                                @if (evnt.Model.Size.Max == null || evnt.Model.Size.Max == 0)
+                                @if (evnt.Inner.Size.Max == null || evnt.Inner.Size.Max == 0)
                                 {
                                     <span class="text-info">ללא הגבלה</span>
                                 }
                                 else
                                 {
-                                    <span>@evnt.Model.Size.Max</span>
+                                    <span>@evnt.Inner.Size.Max</span>
                                 }
                             </td>
                         </tr>
-                        @if (evnt.Model.IsSpecialPrice)
+                        @if (evnt.Inner.IsSpecialPrice)
                         {
                             <tr>
                                 <td>
                                     <strong>מחיר מיוחד</strong>
                                 </td>
                                 <td>
-                                    <span>@evnt.Model.SpecialPrice @Html.Raw(DragonConstants.NIS_SYMBOL)</span>
+                                    <span>@evnt.Inner.SpecialPrice @Html.Raw(DragonConstants.NIS_SYMBOL)</span>
                                 </td>
                             </tr>
                         }
@@ -348,17 +348,17 @@
                                 <strong>נוצר בתאריך</strong>
                             </td>
                             <td>
-                                <span>@evnt.Model.CreatedOn.ToString(DragonConstants.DEFAULT_DATE, CultureInfo.CurrentCulture)</span>
+                                <span>@evnt.Inner.CreatedOn.ToString(DragonConstants.DEFAULT_DATE, CultureInfo.CurrentCulture)</span>
                             </td>
                         </tr>
-                        @if (evnt.Model.UpdatedOn != new Instant())
+                        @if (evnt.Inner.UpdatedOn != new Instant())
                         {
                             <tr>
                                 <td>
                                     <strong>עודכן לאחרונה</strong>
                                 </td>
                                 <td>
-                                    <span>@evnt.Model.UpdatedOn.ToString(DragonConstants.DEFAULT_DATE, CultureInfo.CurrentCulture)</span>
+                                    <span>@evnt.Inner.UpdatedOn.ToString(DragonConstants.DEFAULT_DATE, CultureInfo.CurrentCulture)</span>
                                 </td>
                             </tr>
                         }

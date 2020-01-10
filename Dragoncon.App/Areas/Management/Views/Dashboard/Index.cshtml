@@ -156,21 +156,15 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>מותר לשנות רישום</td>
-                    <td>
-                        @await Html.PartialAsync("_PartialParameter", manageConvention.Settings.AllowEventsRegistrationChanges)
-                    </td>
-                </tr>
-                <tr>
                     <td>מותר לקנות כרטיס</td>
                     <td>
                         @await Html.PartialAsync("_PartialParameter", manageConvention.Settings.AllowPayments)
                     </td>
                 </tr>
                 <tr>
-                    <td>מותר לשנות כרטיס</td>
+                    <td>מותרת בדיקת המנהלים</td>
                     <td>
-                        @await Html.PartialAsync("_PartialParameter", manageConvention.Settings.AllowPaymentChanges)
+                        @await Html.PartialAsync("_PartialParameter", manageConvention.Settings.AllowManagementTests)
                     </td>
                 </tr>
             }

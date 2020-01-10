@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using DragonCon.Features.Management.Dashboard;
 using DragonCon.Features.Management.Events;
 using DragonCon.Features.Shared;
 using DragonCon.Modeling.Helpers;
@@ -14,14 +11,14 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Identities;
+using DragonCon.RavenDB.Factories;
 using DragonCon.RavenDB.Index;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NodaTime;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Activity = DragonCon.Modeling.Models.Common.Activity;
 
-namespace DragonCon.RavenDB.Gateways.Management
+namespace DragonCon.RavenDB.Gateways.Managements
 {
     public class RavenManagementEventsGateway : RavenGateway, IManagementEventsGateway
     {
@@ -538,18 +535,8 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .As<Event>()
                 .ToList();
 
-            result.Events = results.Select(x => new EventWrapper(x)
-            {
-                Day = Session.Load<Day>(x.ConventionDayId),
-                Activity = Session.Load<Activity>(x.ActivityId),
-                SubActivity = x.SubActivityId.IsNotEmptyString()
-                    ? Session.Load<Activity>(x.SubActivityId)
-                    : Activity.General,
-                GameMasters =
-                    Session.Load<LongTermParticipant>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
-                Hall = Session.Load<Hall>(x.HallId),
-                AgeGroup = Session.Load<AgeGroup>(x.AgeId)
-            }).ToList();
+            var wrapperFactory = new WrapperFactory(Session);
+            result.Events = wrapperFactory.Wrap(results);
 
             result.Pagination = DisplayPagination.BuildForView(
                 stats.TotalResults,

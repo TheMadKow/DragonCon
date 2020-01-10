@@ -5,7 +5,14 @@
     ViewData["Title"] = "אירועי הכנס";
     var actor = Actor;
 }
-
+<div class="card card-gray-float" style="padding: 0;">
+    <div class="card-body text-center">
+        @if (Actor.DisplayConvention.Settings.AllowEventsRegistration)
+        {
+        <h2 class="text-bold text-success"><i class="fa fa-fw fa-ticket-alt"></i>&nbsp;&nbsp; הרישום המוקדם פתוח!</h2>
+        }
+    </div>
+</div>
 
 @section scripts {
     <script>

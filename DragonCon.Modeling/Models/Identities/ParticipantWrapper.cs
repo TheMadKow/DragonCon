@@ -30,7 +30,6 @@ namespace DragonCon.Modeling.Models.Identities
 
     public class ShortTermParticipantWrapper : ParticipantWrapper
     {
-        private IParticipant CreatedBy { get; set; }
         public ShortTermParticipantWrapper(IParticipant participant) : base(participant)
         {
         }

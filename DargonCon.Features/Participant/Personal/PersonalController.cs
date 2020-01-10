@@ -6,18 +6,27 @@ using DragonCon.Modeling.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragonCon.Features.Users
+namespace DragonCon.Features.Participant.Personal
 {
-    [Area("Users")]
-    public class EventsController  : DragonController<IEventsGateway>
+    [Area("Participant")]
+    public class PersonalController  : DragonController<IPersonalGateway>
     {
-        public EventsController(IServiceProvider service) : base(service) {}
+        public PersonalController(IServiceProvider service) : base(service) {}
 
         [HttpGet]
         public IActionResult Index()
         {
+            var personalViewModel = Gateway.BuildPersonalViewModel();
+
             return View();
         }
+
+
+        // TODO
+        // Suggest Event
+        // Register (Me)
+        // Register (Guest)
+
 
         [HttpGet]
         public IActionResult SuggestAnEvent()

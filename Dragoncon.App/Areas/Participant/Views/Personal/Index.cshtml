@@ -1,0 +1,119 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Identities
+@{
+    ViewData["Title"] = "התחברות או הרשמה לכנס";
+    var actor = Actor;
+}
+
+
+<h2>
+    שלום @Actor.Me.FullName
+</h2>
+<div class="card card card-gray-float">
+    <h3 class="card-title text-bold">
+        <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+        &nbsp;
+        איך עובד האיזור האישי?
+    </h3>
+    <ul class="fa-ul card-list">
+        <li>
+            @await Html.PartialAsync("_PartialBulletin")
+            <strong>כשנפתח הרישום</strong> - נרשמים לאירועים שרוצים ושומרים בהם כסא עבורכם.
+        </li>
+        <li>
+            @await Html.PartialAsync("_PartialBulletin")
+            <strong>כשמוכנים לרכישה</strong> - רוכשים על הכרטיס המתאים לאירועים שבחרנו, עד פקיעת המועד לרישום מראש.
+        </li>
+        <li>
+            @await Html.PartialAsync("_PartialBulletin")
+            <strong>מספר רכישות</strong> - אפשר גם להרשם לאירועים ולרכוש כרטיס עבור חברים, בני משפחה או ילדים.
+        </li>
+        <li>
+            @await Html.PartialAsync("_PartialBulletin")
+            <strong class="text-danger">חשוב:</strong> לפני פקיעת המועד תצא הודעה מסודרת. כל האירועים שלא שילמו עליהם עד אז, יתפנו לבאי הכנס.
+        </li>
+
+
+    </ul>
+    <div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
+
+        <div class="card-deck">
+            <div class="card clickable personal-option active-card" data-fragment="reception-search-participant">
+                <div class="card-body  text-center clickable">
+                    <i class="fa fa-2x fa-fw fa-dice-d20"></i><br /> <strong class="h4"> הכנס שלי</strong>
+                </div>
+            </div>
+            @if (Actor.DisplayConvention.Settings.AllowEventsRegistration ||
+                (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
+            {
+                <div class="card personal-option clickable" data-fragment="reception-add-participant">
+                    <div class="card-body text-center ">
+                        <i class="fa fa-2x fa-fw fa-ticket-alt"></i><br /><strong class="h4"> הרשמה לאירועים</strong>
+                    </div>
+                </div>
+            }
+
+            @if (Actor.DisplayConvention.Settings.AllowEventsRegistration ||
+                (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
+            {
+                <div class="card personal-option clickable" data-fragment="reception-add-participant">
+                    <div class="card-body text-center ">
+                        <i class="fa fa-2x fa-fw fa-ticket-alt"></i><br /><strong class="h4"> רכישת כרטיס</strong>
+                    </div>
+                </div>
+            }
+
+            @if (Actor.DisplayConvention.Settings.AllowEventsSuggestions ||
+                (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
+            {
+                <div class="card personal-option clickable" data-fragment="reception-add-participant">
+                    <div class="card-body text-center ">
+                        <i class="fa fa-2x fa-fw fa-scroll"></i><br /><strong class="h4"> הגשת אירוע</strong>
+                    </div>
+                </div>
+            }
+
+            <div class="card personal-option" data-fragment="reception-available-event">
+                <div class="card-body text-center clickable">
+                    <i class="fa fa-2x fa-fw fa-user-cog"></i><br /> <strong class="h4"> עדכון פרטים</strong>
+                </div>
+            </div>
+            @*@if (Actor.HasAnySystemRole)
+                {
+                    <div class="card dragon-management-btn" data-fragment="reception-available-event">
+                        <div class="card-body text-center clickable">
+                            <a asp-area="Management" asp-controller="Dashboard" asp-action="Index" style="color:white">
+                                <i class="fa fa-2x  fa-fw fa-tools"></i><br />  <strong class="h4"> מעבר לאיזור ניהול</strong>
+
+
+                            </a>
+                        </div>
+                    </div>
+                }*@
+
+        </div>
+    </div>
+</div>
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            הכנס שלי
+        </h3>
+
+        <br />
+        לצפייה בכל כנסי העבר
+    </div>
+</div>
+
+
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-personal")
+    </script>
+}

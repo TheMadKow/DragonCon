@@ -20,31 +20,34 @@
             </button>
         </div>
 
-        <ul class="right-to-left admin-navbar bg-dark d-none d-md-block"padding-top: 0;padding-bottom: 0;>
+        <ul class="right-to-left admin-navbar bg-dark d-none d-md-block" padding-top: 0;padding-bottom: 0;>
             <li class="d-none d-md-block">
                 <img src="/images/logos/Logo_100_BW.png" style="width: 135px;" />
             </li>
-            <li class="admin-navbar-brand text-center">
+            <li class="admin-navbar-brand text-center" style="margin-top: -25px;">
                 <span class="admin-navbar-brand-link" style="color: white;">אזור הניהול</span>
             </li>
             <li class="list-divider"></li>
             <li>
                 <a asp-area="Management" asp-controller="Dashboard" asp-action="Index">מידע כללי</a>
             </li>
+            <li>
+                <a asp-area="Management" asp-controller="Dashboard" asp-action="Overview">תמונת מצב</a>
+            </li>
             @if (Actor.HasSystemRole(SystemRoles.ConventionManager) ||
-               Actor.HasSystemRole(SystemRoles.ReceptionManager))
+              Actor.HasSystemRole(SystemRoles.ReceptionManager))
             {
                 <li>
                     <a asp-area="Management" asp-controller="Reception" asp-action="Manage">דלפק קבלה</a>
                 </li>
             }
             @if (Actor.HasSystemRole(SystemRoles.ContentManager) ||
-              Actor.HasSystemRole(SystemRoles.ConventionManager) ||
-              Actor.HasSystemRole(SystemRoles.UsersManager))
+             Actor.HasSystemRole(SystemRoles.ConventionManager) ||
+             Actor.HasSystemRole(SystemRoles.UsersManager))
             {
                 <li class="list-divider"></li>
                 @if (Actor.HasSystemRole(SystemRoles.ConventionManager) ||
-                  Actor.HasSystemRole(SystemRoles.ContentManager))
+                 Actor.HasSystemRole(SystemRoles.ContentManager))
                 {
                     <li>
                         <a asp-area="Management" asp-controller="Participants" asp-action="Manage">ניהול - משתתפים</a>
@@ -52,7 +55,7 @@
                 }
 
                 @if (Actor.HasSystemRole(SystemRoles.ConventionManager) ||
-                  Actor.HasSystemRole(SystemRoles.ContentManager))
+                 Actor.HasSystemRole(SystemRoles.ContentManager))
                 {
                     <li>
                         <a asp-area="Management" asp-controller="Events" asp-action="Manage">ניהול - אירועים</a>

@@ -2,9 +2,9 @@
 {
     public abstract class Wrapper<T>
     {
-        protected Wrapper(T model)
+        protected Wrapper(T inner)
         {
-            Model = model;
+            Inner = inner;
         }
 
         protected Wrapper()
@@ -12,6 +12,6 @@
 
         }
 
-        public T Model { get; protected set; }
+        public T Inner { get; protected set; }
     }
 }

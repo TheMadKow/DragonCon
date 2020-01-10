@@ -2,10 +2,11 @@
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.ViewModels;
 
-namespace DragonCon.Features.Users
+namespace DragonCon.Features.Participant.Personal
 {
-    public interface IEventsGateway : IGateway
+    public interface IPersonalGateway : IGateway
     {
         Answer AddSuggestedEvent(SuggestEventViewModel viewmodel);
+        PersonalViewModel BuildPersonalViewModel();
     }
 }

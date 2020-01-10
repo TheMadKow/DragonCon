@@ -40,7 +40,7 @@ namespace DragonCon.Logical
     {
         Task<IParticipant> GetUserByUsernameAsync(string username);
 
-        Task<IdentityResults.Password> AddNewParticipant(IParticipant user);
+        Task<IdentityResults.Password> AddNewParticipant(IParticipant user, string password = "");
         Task<IdentityResults.Password> GeneratePasswordResetTokenAsync(LongTermParticipant user);
         Task<IdentityResults.Password> ChangePasswordAsync(LongTermParticipant user, string currentPassword, string newPassword);
         Task<IdentityResults.Password> SetPasswordAsync(LongTermParticipant user, string newPassword);

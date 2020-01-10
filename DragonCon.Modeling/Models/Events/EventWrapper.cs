@@ -12,7 +12,7 @@ namespace DragonCon.Modeling.Models.Events
         {
         }
 
-        public EventWrapper(Event model) : base(model){}
+        public EventWrapper(Event inner) : base(inner){}
 
         public Day Day { get; set; }
         public Activity Activity { get;set; }

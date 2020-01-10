@@ -8,7 +8,7 @@
 <table class="table table-couple-striped text-right">
     <tbody>
 
-        @foreach (var part in Model.Participants.OrderByDescending(x => x.Model.FullName))
+        @foreach (var part in Model.Participants.OrderByDescending(x => x.Inner.FullName))
         {
             var statusColor = "text-primary";
             var statusText = "אין כרטיס";
@@ -27,15 +27,15 @@
                 }
             }
 
-            var shortTerm = part.Model as ShortTermParticipant;
-            var longTerm = part.Model as LongTermParticipant;
+            var shortTerm = part.Inner as ShortTermParticipant;
+            var longTerm = part.Inner as LongTermParticipant;
             var participantId = shortTerm == null ? longTerm.Id : shortTerm.Id;
             var isShortTerm = shortTerm != null;
 
             <tr>
                 <td class="tw-7">
                     <h5>
-                        <strong>@part.Model.FullName</strong>
+                        <strong>@part.Inner.FullName</strong>
                     </h5>
 
                     @if (isShortTerm)
@@ -68,11 +68,11 @@
                     }
 
 
-                    @if (part.Model.PhoneNumber.IsNotEmptyString())
+                    @if (part.Inner.PhoneNumber.IsNotEmptyString())
                     {
                         <div>
                             <i class="fa fa-fw fa-phone"></i>
-                            @part.Model.PhoneNumber <br />
+                            @part.Inner.PhoneNumber <br />
                         </div>
                     }
 
@@ -92,10 +92,10 @@
                         <i class="fa fa-fw fa-ticket-alt"></i> @statusText
                     </strong>
                     @{
-                        var age = DateTime.Today.Year - part.Model.YearOfBirth;
+                        var age = DateTime.Today.Year - part.Inner.YearOfBirth;
                     }
                     <div>
-                        <i class="fa fa-fw fa-birthday-cake"></i> @part.Model.YearOfBirth - גיל @age <br />
+                        <i class="fa fa-fw fa-birthday-cake"></i> @part.Inner.YearOfBirth - גיל @age <br />
                     </div>
 
                 </td>

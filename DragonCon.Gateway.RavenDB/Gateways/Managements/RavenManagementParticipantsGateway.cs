@@ -10,10 +10,11 @@ using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Payment;
+using DragonCon.RavenDB.Factories;
 using DragonCon.RavenDB.Index;
 using Raven.Client.Documents;
 
-namespace DragonCon.RavenDB.Gateways.Management
+namespace DragonCon.RavenDB.Gateways.Managements
 {
     public class RavenManagementParticipantsGateway : RavenGateway, IManagementParticipantsGateway
     {
@@ -127,47 +128,47 @@ namespace DragonCon.RavenDB.Gateways.Management
                     x.ConventionId == Actor.ManagedConvention.ConventionId &&
                     x.ParticipantId == participantId);
 
-                if (engagement == null)
+            if (engagement == null)
+            {
+                engagement = new ConventionEngagement()
                 {
-                    engagement = new ConventionEngagement()
-                    {
-                        ConventionId = Actor.ManagedConvention.ConventionId,
-                        ParticipantId = participantId,
-                        IsLongTerm = isLongTerm
-                    };
-                }
+                    ConventionId = Actor.ManagedConvention.ConventionId,
+                    ParticipantId = participantId,
+                    IsLongTerm = isLongTerm
+                };
+            }
 
-                foreach (ConventionRoles conRole in Enum.GetValues(typeof(ConventionRoles)))
+            foreach (ConventionRoles conRole in Enum.GetValues(typeof(ConventionRoles)))
+            {
+                if (conKeys.Contains(conRole.ToString()))
                 {
-                    if (conKeys.Contains(conRole.ToString()))
+                    engagement.AddRole(conRole);
+                }
+                else
+                {
+                    engagement.RemoveRole(conRole);
+                }
+            }
+
+            Session.Store(engagement);
+            if (isLongTerm)
+            {
+                foreach (SystemRoles system in Enum.GetValues(typeof(SystemRoles)))
+                {
+                    if (sysKeys.Contains(system.ToString()))
                     {
-                        engagement.AddRole(conRole);
+                        asLongTerm.AddRole(system);
                     }
                     else
                     {
-                        engagement.RemoveRole(conRole);
+                        asLongTerm.RemoveRole(system);
                     }
                 }
+            }
 
-                Session.Store(engagement);
-                if (isLongTerm)
-                {
-                    foreach (SystemRoles system in Enum.GetValues(typeof(SystemRoles)))
-                    {
-                        if (sysKeys.Contains(system.ToString()))
-                        {
-                            asLongTerm.AddRole(system);
-                        }
-                        else
-                        {
-                            asLongTerm.RemoveRole(system);
-                        }
-                    }
-                }
+            Session.SaveChanges();
+            return Answer.Success;
 
-                Session.SaveChanges();
-                return Answer.Success;
-         
         }
 
         public async Task<Answer> UpdateParticipant(ParticipantCreateUpdateViewModel viewmodel)
@@ -209,7 +210,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 return await Task.FromResult(Answer.Error("Can't find participant"));
             }
         }
-        
+
         public async Task<Answer> CreateParticipant(ParticipantCreateUpdateViewModel viewmodel)
         {
             var answer = ValidateParticipantFields(viewmodel);
@@ -279,7 +280,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 }
                 return Answer.Error("Can't change password");
             }
-            else 
+            else
                 return Answer.Error("Can't find participant");
         }
 
@@ -287,7 +288,7 @@ namespace DragonCon.RavenDB.Gateways.Management
         {
             if (viewmodel.FullName.IsEmptyString())
                 return Answer.Error("No Me Name");
-       
+
             if (viewmodel.YearOfBirth < (DateTime.Today.Year - 120) ||
                 viewmodel.YearOfBirth > DateTime.Today.Year)
                 return Answer.Error("Illegal Year of Birth");
@@ -311,15 +312,15 @@ namespace DragonCon.RavenDB.Gateways.Management
             }
 
             var engagements = query.ToList();
-            var participantsUpgraded = 
-                engagements.Select(ParticipantWrapperBuilder).ToList();
+            var wrapperFactory = new WrapperFactory(Session);
 
             var result = new ParticipantsManagementViewModel
             {
                 filters = filters,
-                Pagination = pagination, 
-                Participants = participantsUpgraded
+                Pagination = pagination,
+                Participants = wrapperFactory.Wrap(engagements)
             };
+
             return result;
         }
 
@@ -330,7 +331,7 @@ namespace DragonCon.RavenDB.Gateways.Management
                 return new ParticipantsManagementViewModel();
 
             var query = Session.Query<Participants_BySearchQuery.Result, Participants_BySearchQuery>()
-                .Include<Participants_BySearchQuery.Result>(x => x.ParticipantId)
+                .Include(x => x.ParticipantId)
                 .Statistics(out var stats)
                 .Search(x => x.SearchText, searchWords).AsQueryable();
 
@@ -345,14 +346,15 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .Take(pagination.ResultsPerPage)
                 .As<IConventionEngagement>()
                 .ToList();
-            
+
+            var wrapperFactory = new WrapperFactory(Session);
             var viewModel = new ParticipantsManagementViewModel
             {
                 Pagination = DisplayPagination.BuildForView(
                     stats.TotalResults,
                     pagination.SkipCount,
                     pagination.ResultsPerPage),
-                Participants = results.Select(ParticipantWrapperBuilder).ToList(),
+                Participants = wrapperFactory.Wrap(results),
                 filters = new ParticipantsManagementViewModel.Filters()
             };
             return viewModel;

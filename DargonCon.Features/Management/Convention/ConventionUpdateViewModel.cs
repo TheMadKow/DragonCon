@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 
@@ -11,7 +9,6 @@ namespace DragonCon.Features.Management.Convention
         public NameDatesCreateUpdateViewModel NameDate { get; set; }
         public TicketsUpdateViewModel Tickets { get; set; }
         public HallsUpdateViewModel Halls { get; set; }
-        public DetailsUpdateViewModel Details { get; set; }
         public SettingsUpdateViewModel Settings { get; set; }
         public string ErrorMessage { get; set; }
     }
@@ -23,9 +20,8 @@ namespace DragonCon.Features.Management.Convention
             ConventionId = conId;
             AllowEventsSuggestions = settings.AllowEventsSuggestions;
             AllowEventsRegistration = settings.AllowEventsRegistration;
-            AllowEventsRegistrationChanges = settings.AllowEventsRegistrationChanges;
-            AllowPaymentChanges = settings.AllowPaymentChanges;
             AllowPayments = settings.AllowPayments;
+            AllowManagementTests = settings.AllowManagementTests;
         }
 
         public string ConventionId { get; set; }
@@ -36,27 +32,18 @@ namespace DragonCon.Features.Management.Convention
             {
                 AllowEventsRegistration = AllowEventsRegistration,
                 AllowEventsSuggestions = AllowEventsSuggestions,
-                AllowPaymentChanges = AllowPaymentChanges,
-                AllowEventsRegistrationChanges = AllowEventsRegistrationChanges,
+                AllowManagementTests = AllowManagementTests,
                 AllowPayments = AllowPayments
             };
         }
     }
 
 
-    public class DetailsUpdateViewModel
-    {
-        public Dictionary<string, string> Metadata { get; set; }
-        public List<PhoneRecord> Phonebook { get; set; }
-        public string ConventionId { get; set; }
-    }
-
     public class HallsUpdateViewModel{
         public List<HallViewModel> Halls { get; set; }
         public string ConventionId { get; set; }
     }
-
-    
+   
     public class HallViewModel : Hall
     {
         public HallViewModel()

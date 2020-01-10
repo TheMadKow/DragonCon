@@ -3,10 +3,10 @@ using System.IO;
 using DragonCon.App.Helpers;
 using DragonCon.Features.Management;
 using DragonCon.Features.Management.Convention;
-using DragonCon.Features.Management.Dashboard;
 using DragonCon.Features.Management.Events;
 using DragonCon.Features.Management.Participants;
 using DragonCon.Features.Management.Reception;
+using DragonCon.Features.Participant.Personal;
 using DragonCon.Features.Shared;
 using DragonCon.Logical;
 using DragonCon.Logical.Communication;
@@ -17,14 +17,14 @@ using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Identities.Policy;
 using DragonCon.Modeling.TimeSlots;
 using DragonCon.RavenDB;
-using DragonCon.RavenDB.Gateways.Logic;
-using DragonCon.RavenDB.Gateways.Management;
+using DragonCon.RavenDB.Gateways.Logics;
+using DragonCon.RavenDB.Gateways.Managements;
+using DragonCon.RavenDB.Gateways.Participants;
 using DragonCon.RavenDB.Identities;
 using DragonCon.RavenDB.Index;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -119,37 +119,37 @@ namespace DragonCon.App
 
             IndexCreation.CreateIndexes(typeof(EventsIndex_ByTitleDescription).Assembly, holder.Store);
 
-            services.AddSingleton<StoreHolder>(holder);
+            services.AddSingleton(holder);
             services // Create a RavenDB IAsyncDocumentSession for each request.
                 .AddRavenDbAsyncSession(holder.Store)
-                .AddRavenDbIdentity<LongTermParticipant>();
+                .AddIdentity<LongTermParticipant, Raven.Identity.IdentityRole>(identityOptions => 
+                {
+                    // Password settings
+                    identityOptions.Password.RequireDigit = true;
+                    identityOptions.Password.RequiredLength = 6;
+                    identityOptions.Password.RequireNonAlphanumeric = false;
+                    identityOptions.Password.RequireUppercase = false;
+                    identityOptions.Password.RequireLowercase = false;
+                    identityOptions.Password.RequiredUniqueChars = 4;
 
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings
-                options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequiredUniqueChars = 4;
+                    // Lockout settings
+                    identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                    identityOptions.Lockout.MaxFailedAccessAttempts = 10;
+                    identityOptions.Lockout.AllowedForNewUsers = true;
 
-                // Lockout settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 10;
-                options.Lockout.AllowedForNewUsers = true;
+                    // User settings
+                    identityOptions.User.RequireUniqueEmail = true;
+                })
+                .AddRavenDbIdentityStores<LongTermParticipant>(); // Use RavenDB as the store for identity users and roles.
 
-                // User settings
-                options.User.RequireUniqueEmail = true;
-            });
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
                 //options.Cookie.Expiration = TimeSpan.FromDays(30);
                 options.ExpireTimeSpan = TimeSpan.FromDays(30);
-                options.LoginPath = "/Users/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
-                options.LogoutPath = "/Users/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
-                options.AccessDeniedPath = "/Users/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+                options.LoginPath = "/Participant/Account/LoginOrRegister"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+                options.LogoutPath = "/Participant/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
+                options.AccessDeniedPath = "/Participant/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
                 options.SlidingExpiration = true;
             });
 
@@ -160,11 +160,13 @@ namespace DragonCon.App
 
         private static void StartupDependencyInjection(IServiceCollection services)
         {
-            services.AddScoped<IActor, Actor>();
             services.AddSingleton<IStrategyFactory, StrategyFactory>();
+         
+            services.AddScoped<IActor, Actor>();
             services.AddScoped<NullGateway, NullGateway>();
             services.AddScoped<IIdentityFacade, RavenIdentityFacade>();
             services.AddScoped<ICommunicationHub, CommunicationHub>();
+            services.AddScoped<IPersonalGateway, RavenPersonalGateway>();
             services.AddScoped<IManagementReceptionGateway, RavenManagementReceptionGateway>();
             services.AddScoped<IManagementConventionGateway, RavenManagementConventionGateway>();
             services.AddScoped<IManagementStatisticsGateway, RavenManagementStatisticsGateway>();
@@ -224,8 +226,8 @@ namespace DragonCon.App
 
                 endpoints.MapAreaControllerRoute(
                         name: "Participants",
-                        areaName: "Users",
-                        pattern: "Users/{controller=Home}/{action=Index}/{id?}")
+                        areaName: "Participant",
+                        pattern: "Participant/{controller=Personal}/{action=Index}/{id?}")
                     .RequireAuthorization();
 
                 endpoints.MapAreaControllerRoute(

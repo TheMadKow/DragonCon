@@ -5,9 +5,11 @@ using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Tickets;
+using DragonCon.RavenDB.Factories;
+using NodaTime;
 using Raven.Client.Documents.Session;
 
-namespace DragonCon.RavenDB.Gateways.Logic
+namespace DragonCon.RavenDB.Gateways.Logics
 {
     public class RavenConventionBuilderGateway : IConventionBuilderGateway
     {
@@ -23,34 +25,29 @@ namespace DragonCon.RavenDB.Gateways.Logic
             if (id.StartsWith("conventions/") == false)
                 id = "conventions/" + id;
 
-            using (var session = _holder.Store.OpenSession())
-            {
-                Convention convention = session
-                    .Include<Convention>(x => x.DayIds)
-                    .Include<Convention>(x => x.HallIds)
-                    .Include<Convention>(x => x.TicketIds)
-                    .Load<Convention>(id);
 
-                return new ConventionWrapper
-                {
-                    Name = convention.Name,
-                    TagLine = convention.TagLine,
-                    Location = convention.Location,
-                    TimeStrategy = convention.TimeStrategy,
-                    Id = convention.Id,
-                    Days = session.Load<Day>(convention.DayIds).Select(x => x.Value).ToList(),
-                    Halls = session.Load<Hall>(convention.HallIds).Select(x => x.Value).ToList(),
-                    Tickets = session.Load<Ticket>(convention.TicketIds).Select(x => x.Value).ToList(),
-                };
-            }
+            using var session = _holder.Store.OpenSession();
+            var convention = session
+                .Include<Convention>(x => x.DayIds)
+                .Include<Convention>(x => x.HallIds)
+                .Include<Convention>(x => x.TicketIds)
+                .Load<Convention>(id);
+
+            var wrapperFactory = new WrapperFactory(session);
+            return wrapperFactory.Wrap(convention);
         }
 
         public virtual void StoreConvention(ConventionWrapper convention, IList<string> deletedIds)
         {
             using (var session = _holder.Store.OpenSession())
             {
-                var conventionData = convention.Id.IsNotEmptyString() ? 
-                    session.Load<Convention>(convention.Id) : 
+                var model = convention.Inner;
+                if (model.CreateTimeStamp == Instant.MinValue)
+                    model.CreateTimeStamp = SystemClock.Instance.GetCurrentInstant();
+
+                model.UpdateTimeStamp = SystemClock.Instance.GetCurrentInstant();
+                var conventionData = model.Id.IsNotEmptyString() ? 
+                    session.Load<Convention>(model.Id) : 
                     new Convention();
 
                 StoreGeneralInformation(convention, conventionData);
@@ -73,12 +70,12 @@ namespace DragonCon.RavenDB.Gateways.Logic
 
         private void StoreGeneralInformation(ConventionWrapper wrapperData, Convention conventionData)
         {
-            conventionData.Name = wrapperData.Name;
-            conventionData.CreateTimeStamp = wrapperData.CreateTimeStamp;
-            conventionData.UpdateTimeStamp = wrapperData.UpdateTimeStamp;
-            conventionData.TimeStrategy = wrapperData.TimeStrategy;
-            conventionData.Location = wrapperData.Location;
-            conventionData.TagLine = wrapperData.TagLine;
+            conventionData.Name = wrapperData.Inner.Name;
+            conventionData.CreateTimeStamp = wrapperData.Inner.CreateTimeStamp;
+            conventionData.UpdateTimeStamp = wrapperData.Inner.UpdateTimeStamp;
+            conventionData.TimeStrategy = wrapperData.Inner.TimeStrategy;
+            conventionData.Location = wrapperData.Inner.Location;
+            conventionData.TagLine = wrapperData.Inner.TagLine;
         }
 
 

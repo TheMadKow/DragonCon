@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DragonCon.Features.Management.Convention;
 using DragonCon.Features.Shared;
@@ -8,9 +7,10 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.System;
 using DragonCon.Modeling.Models.Tickets;
+using DragonCon.RavenDB.Factories;
 using Raven.Client.Documents;
 
-namespace DragonCon.RavenDB.Gateways.Management
+namespace DragonCon.RavenDB.Gateways.Managements
 {
     public class RavenManagementConventionGateway : RavenGateway, IManagementConventionGateway
     {
@@ -32,21 +32,8 @@ namespace DragonCon.RavenDB.Gateways.Management
                 .Take(pagination.ResultsPerPage)
                 .ToList();
 
-            result.Conventions = conventions.Select(y => new ConventionWrapper(y)
-            {
-                Name = y.Name,
-                Id = y.Id,
-                Halls = y.HallIds == null
-                    ? new List<Hall>()
-                    : Session.Load<Hall>(y.HallIds)?.Select(x => x.Value).ToList(),
-                Tickets = y.TicketIds == null
-                    ? new List<Ticket>()
-                    : Session.Load<Ticket>(y.TicketIds)?.Select(x => x.Value).ToList(),
-                Days = y.DayIds == null
-                    ? new List<Day>()
-                    : Session.Load<Day>(y.DayIds)?.Select(x => x.Value).ToList()
-            }).ToList();
-
+            var wrapperFactory = new WrapperFactory(Session);
+            result.Conventions = wrapperFactory.Wrap(conventions);
             result.Pagination = DisplayPagination.BuildForView(stats.TotalResults, pagination.SkipCount, pagination.ResultsPerPage);
             return result;
         }
@@ -103,13 +90,6 @@ namespace DragonCon.RavenDB.Gateways.Management
                 result.Tickets.Tickets.Add(new TicketViewModel());
             }
 
-            result.Details = new DetailsUpdateViewModel
-            {
-                ConventionId = convention.Id,
-                Metadata = convention.Metadata,
-                Phonebook = convention.PhoneBook
-            };
-            
             return result;
         }
 

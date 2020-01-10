@@ -7,7 +7,7 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using Raven.Client.Documents;
 
-namespace DragonCon.RavenDB.Gateways.Management
+namespace DragonCon.RavenDB.Gateways.Managements
 {
     public class RavenManagementStatisticsGateway : RavenGateway, IManagementStatisticsGateway
     {

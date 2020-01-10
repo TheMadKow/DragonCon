@@ -27,7 +27,7 @@ namespace DragonCon.Logical.Convention
         public DaysBuilder Days { get; private set; }
         public TicketsBuilder Tickets { get; set; }
         public HallsBuilder Halls { get; set; }
-        public string ConventionName => _convention.Name;
+        public string ConventionName => _convention.Inner.Name;
 
         public ConventionBuilder(IConventionBuilderGateway gateway)
         {
@@ -38,32 +38,32 @@ namespace DragonCon.Logical.Convention
         {
             _convention = new ConventionWrapper
             {
-                Name = name,
                 Halls = new List<Hall>(),
                 Tickets = new List<Ticket>(),
                 Days = new List<Day>()
             };
+            _convention.Inner.Name = name;
             CreateSubBuilders();
             return this;
         }
 
         public ConventionBuilder SetTimeSlotStrategy(TimeSlotStrategy strategy)
         {
-            _convention.TimeStrategy = strategy;
+            _convention.Inner.TimeStrategy = strategy;
             return this;
         }
 
         public ConventionBuilder ChangeName(string name)
         {
             ThrowIfStringIsEmpty(name);
-            _convention.Name = name;
+            _convention.Inner.Name = name;
             return this;
         }
 
         public ConventionBuilder AddExtraDetails(string location, string tagLine)
         {
-            _convention.Location = location;
-            _convention.TagLine = tagLine;
+            _convention.Inner.Location = location;
+            _convention.Inner.TagLine = tagLine;
             return this;
         }
 
@@ -145,11 +145,6 @@ namespace DragonCon.Logical.Convention
 
         public ConventionBuilder Save()
         {
-            if (_convention.CreateTimeStamp == Instant.MinValue)
-                _convention.CreateTimeStamp = SystemClock.Instance.GetCurrentInstant();
-
-            _convention.UpdateTimeStamp = SystemClock.Instance.GetCurrentInstant();
-
             _gateway.StoreConvention(_convention, DeletedEntityIds);
             return this;
         }

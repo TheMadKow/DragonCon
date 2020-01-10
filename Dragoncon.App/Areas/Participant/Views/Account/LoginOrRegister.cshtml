@@ -2,7 +2,7 @@
 @using DragonCon.Modeling.Helpers
 @using DragonCon.Modeling.Models.Identities
 @{
-    ViewData["Title"] = "האזור האישי";
+    ViewData["Title"] = "התחברות או הרשמה לכנס";
     var actor = Actor;
 }
 
@@ -29,6 +29,11 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
+                <a asp-area="Convention" asp-controller="Home" asp-action="Usage" asp-fragment="tag_cookies">בשימוש באתר אתם מסכימים לשימוש בעוגיות</a>
+            </li>
+
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
                 <a asp-area="Convention" asp-controller="Home" asp-action="Usage">תנאי השימוש והצהרת פרטיות</a>
             </li>
         </ul>
@@ -43,57 +48,57 @@
             &nbsp;
             הרשמה
         </h3>
-        <form method="post" class="card-form">
+
+        <form asp-area="Participant" asp-controller="Account" asp-action="Register" method="post">
             <div class="col">
-                <div class="form-group">
-                    <label>שם מלא</label>
-                    <input name="FullName" class="form-control">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>כתובת דואר אלקטרוני</label>
-                    <div class="input-group">
-                        <input name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox" name="allowPromotions" aria-label="Checkbox for following text input">
-                                <span class="toggle-text">צירוף לרשימת דיוור</span>
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="form-group col-8">
+                        <label>שם מלא</label>
+                        <input name="FullName" class="form-control" placeholder="שם מלא ">
+                    </div>
+                    <div class="form-group col-4">
+                        <label>שנת לידה </label>
+                        <br />
+                        <input name="YearOfBirth" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" />
                     </div>
                 </div>
             </div>
             <div class="col">
-                <div class="form-group">
-                    <label>סיסמה</label>
-                    <input name="FullName" class="form-control">
+                <div class="row">
+                    <div class="form-group col-4">
+                        <label>טלפון</label>
+                        <input name="PhoneNumber" type="tel" class="form-control" placeholder="טלפון ">
+                    </div>
+                    <div class="form-group col-8">
+                        <label>דואר אלקטרוני</label>
+                        <div class="input-group ">
+                            <input name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <input type="checkbox" name="IsAllowingPromotions" aria-label="Checkbox for following text input">
+                                    <span class="toggle-text">צירוף לרשימת דיוור</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>טלפון</label>
-                    <input name="PhoneNumber" type="tel" class="form-control">
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label>סיסמה</label>
+                        <input name="Password" type="password" class="form-control" placeholder="סיסמה ">
+                    </div>
+                    <div class="form-group col-6">
+                        <label>אימות סיסמה</label>
+                        <input name="ConfirmPassword" type="password" class="form-control" placeholder="אימות סיסמה ">
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>שנת לידה </label>
-                    <br />
-                    <input class="combo-date" Name="YearOfBirth"
-                           data-custom-class="form-control form-control-inline"
-                           data-first-item="empty"
-                           data-format="YYYY"
-                           data-template="YYYY">
+                <div class=" row">
+                    <div class="form-group pull-left">
+                        <button type="submit" class="btn dragon-btn"> הרשמה </button>
+                    </div>
                 </div>
-            </div>
 
-            <div class=" row">
-                <div class="form-group pull-left">
-                    <button type="submit" class="btn dragon-btn"> רישום והצטרפות </button>
-                </div>
             </div>
-
         </form>
     </div>
 </div>
@@ -106,7 +111,7 @@
             &nbsp;
             התחברות
         </h3>
-        <form method="post" class="card-form">
+        <form method="post" asp-area="Participant" asp-controller="Account" asp-action="Login" class="card-form">
             <div class="col">
                 <div class="form-group">
                     <label>כתובת דואר אלקטרוני</label>
@@ -117,7 +122,7 @@
             <div class="col">
                 <div class="form-group">
                     <label>סיסמה</label>
-                    <input name="FullName" class="form-control">
+                    <input name="Password" type="password" class="form-control">
                 </div>
             </div>
             <div class=" row">

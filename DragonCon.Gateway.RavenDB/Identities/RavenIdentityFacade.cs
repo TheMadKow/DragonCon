@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DragonCon.Logical;
 using DragonCon.Logical.Identities;
+using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Identities;
 using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
@@ -28,7 +29,7 @@ namespace DragonCon.RavenDB.Identities
         }
 
         #region User
-        public async Task<IdentityResults.Password> AddNewParticipant(IParticipant user)
+        public async Task<IdentityResults.Password> AddNewParticipant(IParticipant user, string password = "")
         {
             if (user is ShortTermParticipant shortP)
             {
@@ -37,27 +38,39 @@ namespace DragonCon.RavenDB.Identities
 
             if (user is LongTermParticipant longP)
             {
-                return await AddLongTermParticipant(longP);
+                return await AddLongTermParticipant(longP, password);
             }
 
             throw new Exception("Unknown Me Type");
         }
 
-        private async Task<IdentityResults.Password> AddLongTermParticipant(LongTermParticipant user)
+        private async Task<IdentityResults.Password> AddLongTermParticipant(LongTermParticipant user, string password = "")
         {
             if ((await HasUserWithEmail(user.Email)).IsSuccess)
                 return new IdentityResults.Password()
                 {
                     IsSuccess = false,
-                    Errors = new[] {"User already exists"}
+                    Errors = new[] { "User already exists" }
                 };
 
-            await _session.StoreAsync(user);
-            await _session.SaveChangesAsync();
 
-            var newPass = new RandomPasswordGenerator(minimumLengthPassword: 12).Generate();
-            var res = await SetPasswordAsync(user, newPass);
-            return res;
+            if (password.IsEmptyString())
+            {
+                password = new RandomPasswordGenerator(minimumLengthPassword: 12).Generate();
+            }
+
+            var createUserResult = await _userManager.CreateAsync(user, password);
+            if (createUserResult.Succeeded == false)
+            {
+                return new IdentityResults.Password
+                {
+                    IsSuccess = false,
+                    Errors = createUserResult.Errors.Select(x => $"{x.Code}: {x.Description}").ToArray()
+                };
+            };
+
+            await _session.SaveChangesAsync();
+            return await SetPasswordAsync(user, password);
         }
 
         private async Task<IdentityResults.Password> AddShortTermParticipant(ShortTermParticipant user)
@@ -118,7 +131,7 @@ namespace DragonCon.RavenDB.Identities
         {
             var storeUser = await GetStoreUser(user);
             if (storeUser is null)
-                return new IdentityResults.Password {IsSuccess = false};
+                return new IdentityResults.Password { IsSuccess = false };
 
             var result = await _userManager.GeneratePasswordResetTokenAsync(storeUser);
             await _session.SaveChangesAsync();
