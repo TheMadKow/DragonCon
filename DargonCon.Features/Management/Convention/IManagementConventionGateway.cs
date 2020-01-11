@@ -7,8 +7,9 @@ namespace DragonCon.Features.Management.Convention
     public interface IManagementConventionGateway : IGateway
     {
         ConventionManagementViewModel BuildConventionList(IDisplayPagination pagination);
-        void SaveSystemConfiguration(SystemConfiguration config);
         ConventionUpdateViewModel BuildConventionUpdate(string conId);
-        SystemConfiguration LoadSystemConfiguration();
+        void SetAsManaged(string id);
+        void SetAsDisplay(string id);
+        void UpdateSettings(string conventionId, ConventionSettings settings);
     }
 }

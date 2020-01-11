@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using DragonCon.Modeling.Helpers;
@@ -7,7 +6,6 @@ using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.HallsTables;
-using DragonCon.Modeling.Models.System;
 using DragonCon.Modeling.Models.Tickets;
 using DragonCon.Modeling.TimeSlots;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,42 +15,65 @@ namespace DragonCon.Modeling.Models.Identities
 
     public interface IActor
     {
-        Actor.ActorParticipant Participant { get; set; }
-        Actor.ActorSystemState SystemState { get; set; }
-        Actor.ActorDropDowns DropDowns { get; set; }
-        
+        Actor.ActorParticipant Me { get; set; }
+        Actor.ActorSystemState System { get; set; }
+
+        bool HasDisplayConvention { get; }
+        bool HasManagedConvention { get; }
+
+        Actor.ActorConventionState? ManagedConvention { get; set; }
+        Actor.ActorDropDowns? ManagedDropDowns { get; set; }
+
+        Actor.ActorConventionState? DisplayConvention { get; set; }
+        Actor.ActorDropDowns? DisplayDropDowns { get; set; }
+        bool HasAnySystemRole { get;  }
         bool HasSystemRole(SystemRoles role);
-        bool HasConventionRole(ConventionRoles role);
     }
 
     public class Actor : IActor
     {
-        public ActorParticipant Participant { get; set; }
-        public ActorSystemState SystemState { get; set; }
-        public Actor.ActorDropDowns DropDowns { get; set; }
+        public Actor()
+        {
+            Me = new ActorParticipant();
+            System = new ActorSystemState();
+        }
 
-        public bool HasSystemRole(SystemRoles role) => Participant.SystemRoles.Contains(role);
-        public bool HasConventionRole(ConventionRoles role) => Participant.ConventionRoles.Contains(role);
+        public ActorParticipant Me { get; set; }
+        public ActorSystemState System { get; set; }
 
+        public bool HasDisplayConvention => DisplayConvention != null;
+        public bool HasManagedConvention => ManagedConvention != null;
 
+        public ActorConventionState? DisplayConvention { get; set; } = null;
+        public ActorConventionState? ManagedConvention { get; set; } = null;
+
+        public ActorDropDowns? DisplayDropDowns { get; set; } = null;
+        public ActorDropDowns? ManagedDropDowns { get; set; } = null;
+
+        public bool HasAnySystemRole => Me.SystemRoles.Any();
+        public bool HasSystemRole(SystemRoles role) => Me.SystemRoles.Contains(role);
+
+        #region Subclasses
         public class ActorDropDowns
         {
-            private readonly ActorSystemState _state;
+            private readonly ActorConventionState _convention;
+            private readonly ActorSystemState _system;
             private readonly IStrategyFactory _factory;
 
-            public ActorDropDowns(IStrategyFactory factory, ActorSystemState state)
+            public ActorDropDowns(IStrategyFactory factory, ActorConventionState convention, ActorSystemState system)
             {
-                _state = state;
+                _convention = convention;
+                _system = system;
                 _factory = factory;
             }
 
             public List<SelectListItem> BuildHalls()
             {
-                if (_state.Halls is null)
+                if (_convention.Halls is null)
                     return new List<SelectListItem>();
 
                 var items = new List<SelectListItem>();
-                foreach (var halls in _state.Halls.OrderBy(x => x.FirstTable))
+                foreach (var halls in _convention.Halls.OrderBy(x => x.FirstTable))
                 {
                     var group = new SelectListGroup {Name = halls.Name};
                     foreach (var table in halls.Tables.OrderBy(x => x))
@@ -72,10 +93,10 @@ namespace DragonCon.Modeling.Models.Identities
 
             public List<SelectListItem> BuildAgeGroups()
             {
-                if (_state.AgeGroups == null)
+                if (_system.AgeGroups == null)
                     return new List<SelectListItem>();
 
-                return _state.AgeGroups
+                return _system.AgeGroups
                     .OrderBy(x => x.Name)
                     .Select(x => new SelectListItem(x.GetDescription(), x.Id)).ToList();
             }
@@ -83,10 +104,10 @@ namespace DragonCon.Modeling.Models.Identities
             public List<SelectListItem> Activities(bool addGeneralSelect = true)
             {
                 var items = new List<SelectListItem>();
-                if (_state.Activities == null)
+                if (_system.Activities == null)
                     return new List<SelectListItem>();
 
-                foreach (var eventActivity in _state.Activities.OrderBy(x => x.Name))
+                foreach (var eventActivity in _system.Activities.OrderBy(x => x.Name))
                 {
                     var group = new SelectListGroup
                     {
@@ -124,11 +145,11 @@ namespace DragonCon.Modeling.Models.Identities
 
             public List<SelectListItem> BuildDaysTimes()
             {
-                if (_state.Days is null)
+                if (_convention.Days is null)
                     return new List<SelectListItem>();
 
                 var items = new List<SelectListItem>();
-                foreach (var day in _state.Days.OrderBy(x => x.Date))
+                foreach (var day in _convention.Days.OrderBy(x => x.Date))
                 {
                     var group = new SelectListGroup
                     {
@@ -153,11 +174,11 @@ namespace DragonCon.Modeling.Models.Identities
 
             public Dictionary<string, List<SelectListItem>> BuildDateTimeDuration()
             {
-                if (_state.Days is null)
+                if (_convention.Days is null)
                     return new Dictionary<string, List<SelectListItem>>();
 
                 var items = new Dictionary<string, List<SelectListItem>>();
-                foreach (var day in _state.Days.OrderBy(x => x.Date))
+                foreach (var day in _convention.Days.OrderBy(x => x.Date))
                 {
                     var timeSlots = _factory.GenerateTimeSlots(day.StartTime, day.EndTime, day.TimeSlotStrategy);
                     foreach (var option in timeSlots.StartTimeAndDurations)
@@ -176,12 +197,12 @@ namespace DragonCon.Modeling.Models.Identities
 
             public List<SelectListItem> BuildDurations()
             {
-                if (_state.Days is null)
+                if (_convention.Days is null)
                     return new List<SelectListItem>();
 
                 var items = new List<SelectListItem>();
                 var durations = new List<double>();
-                foreach (var day in _state.Days.OrderBy(x => x.Date))
+                foreach (var day in _convention.Days.OrderBy(x => x.Date))
                 {
                     var timeSlots = _factory.GenerateTimeSlots(day.StartTime, day.EndTime, day.TimeSlotStrategy);
                     foreach (var duration in timeSlots.StartTimeAndDurations.Values)
@@ -199,30 +220,17 @@ namespace DragonCon.Modeling.Models.Identities
                 return items;
             }
         }
-        public class ActorParticipant
-        {
-            public string Id { get; set; }
-            public string FullName { get; set; }
-            public IList<SystemRoles> SystemRoles { get; } = new List<SystemRoles>();
-            public IList<ConventionRoles> ConventionRoles { get;set; } = new List<ConventionRoles>();
-        }
+
         public class ActorSystemState
         {
-            public long BuildMilliseconds { get; set; }
-            public string ConventionId { get; set; }
-            public string ConventionName { get; set; }
-            public string Location { get; set; }
-            public string TagLine { get; set; }
-            public List<Hall> Halls { get; set; } = new List<Hall>();
-            public List<Ticket> Tickets { get; set; } = new List<Ticket>();
-            public List<Day> Days { get; set; } = new List<Day>();
+
+            public string DisplayConventionId { get; set; } = "";
+            public string ManagersConventionId { get; set; } = "";
             public List<Activity> Activities { get; set; } = new List<Activity>();
             public List<AgeGroup> AgeGroups { get; set; } = new List<AgeGroup>();
-            public SystemConfiguration Configurations { get; set; }
-            public bool HasActiveConvention => ConventionId.IsNotEmptyString();
 
 
-            public Dictionary<string,string> ObjectIdAndValue = new Dictionary<string, string>();
+            public Dictionary<string, string> ObjectIdAndValue = new Dictionary<string, string>();
 
             public string GetValue(string id)
             {
@@ -237,10 +245,32 @@ namespace DragonCon.Modeling.Models.Identities
                 return id;
             }
 
+        }
+
+        public class ActorParticipant
+        {
+            public string Id { get; set; }
+            public string FullName { get; set; }
+            public IList<SystemRoles> SystemRoles { get; set; } = new List<SystemRoles>();
+        }
+
+        public class ActorConventionState
+        {
+            public long BuildMilliseconds { get; set; }
+            public TimeSlotStrategy TimeStrategy { get; set; }
+            public string ConventionId { get; set; }
+            public string ConventionName { get; set; }
+            public string Location { get; set; }
+            public string TagLine { get; set; }
+            public ConventionSettings Settings { get; set; } = new ConventionSettings();
+            public List<Hall> Halls { get; set; } = new List<Hall>();
+            public List<Ticket> Tickets { get; set; } = new List<Ticket>();
+            public List<Day> Days { get; set; } = new List<Day>();
             public Day GetDayById(string dayId)
             {
                 return Days.SingleOrDefault(x => x.Id == dayId);
             }
         }
+        #endregion
     }
 }

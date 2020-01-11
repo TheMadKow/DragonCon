@@ -17,9 +17,9 @@
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-item-days" data-toggle="tab" href="#tab-pan-days" role="tab" aria-controls="tab-pan-days" aria-selected="true">מידע בסיסי</a>
+            <a class="nav-item nav-link" id="nav-item-settings" data-toggle="tab" href="#tab-pan-settings" role="tab" aria-controls="tab-pan-settings" aria-selected="true">הגדרות</a>
             <a class="nav-item nav-link" id="nav-item-halls" data-toggle="tab" href="#tab-pan-halls" role="tab" aria-controls="tab-pan-halls" aria-selected="false">אולמות</a>
             <a class="nav-item nav-link" id="nav-item-tickets" data-toggle="tab" href="#tab-pan-tickets" role="tab" aria-controls="tab-pan-tickets" aria-selected="false">כרטיסים</a>
-            <a class="nav-item nav-link" id="nav-item-details" data-toggle="tab" href="#tab-pan-details" role="tab" aria-controls="tab-pan-details" aria-selected="false">פרטים נוספים</a>
         </div>
     </nav>
     <div class="tab-content">
@@ -27,17 +27,17 @@
         <div class="tab-pane fade show active" id="tab-pan-days" role="tabpanel" aria-labelledby="nav-days-tab">
             @await Html.PartialAsync("CreateUpdateNameDates", Model.NameDate)
         </div>
-    
+
+        <div class="tab-pane fade show" id="tab-pan-settings" role="tabpanel" aria-labelledby="nav-days-settings">
+            @await Html.PartialAsync("CreateUpdateSettings", Model.Settings)
+        </div>
+
         <div class="tab-pane fade" id="tab-pan-tickets" role="tabpanel" aria-labelledby="nav-tickets-tab">
             @await Html.PartialAsync("CreateUpdateTickets", Model.Tickets)
         </div>
 
         <div class="tab-pane fade" id="tab-pan-halls" role="tabpanel" aria-labelledby="nav-halls-tab">
             @await Html.PartialAsync("CreateUpdateHalls", Model.Halls)
-        </div>
-
-        <div class="tab-pane fade" id="tab-pan-details" role="tabpanel" aria-labelledby="nav-details-tab">
-            עוד לא פעיל
         </div>
     </div>
 </div>

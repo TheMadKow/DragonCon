@@ -27,7 +27,7 @@ namespace DragonCon.Logical.Convention
         public ConventionBuilder AddTicket(
             string name, 
             List<string> dayIds,
-            string code, int? numOfActivities,
+            int? numOfActivities,
             double price,
             TicketType type)
         {
@@ -45,7 +45,6 @@ namespace DragonCon.Logical.Convention
                 Name = name,
                 DayIds =  dayIds, 
                 TicketType = type,
-                TransactionCode = code,
                 Price = price,
                 ActivitiesAllowed = numOfActivities
             };
@@ -77,7 +76,7 @@ namespace DragonCon.Logical.Convention
         public ConventionBuilder UpdateTicket(string ticketId,
             string name, 
             List<string> dayIds,
-            string code, int? numOfActivities,
+            int? numOfActivities,
             double price, TicketType type)
         {
             ThrowIfTicketNotExists(ticketId);
@@ -85,7 +84,6 @@ namespace DragonCon.Logical.Convention
 
             var ticket = this[ticketId];
             ticket.Name = name;
-            ticket.TransactionCode = code;
             ticket.Price = price;
             ticket.ActivitiesAllowed = numOfActivities;
             ticket.TicketType = type;

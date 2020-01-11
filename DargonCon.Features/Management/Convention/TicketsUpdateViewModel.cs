@@ -19,7 +19,6 @@ namespace DragonCon.Features.Management.Convention
             Id = ticket.Id;
             Name = ticket.Name;
             Price = ticket.Price;
-            TransactionCode = ticket.TransactionCode;
             TicketType = ticket.TicketType;
             Days = ticket.DayIds;
             IsDeleted = false;
@@ -31,7 +30,6 @@ namespace DragonCon.Features.Management.Convention
         public string Id { get; set; }
         public string Name { get;set; }
         public double Price { get; set; }
-        public string TransactionCode { get; set; }
         public int? NumOfActivities { get; set; }
         public List<string> Days { get; set; }
         public bool IsLimited { get; set; }

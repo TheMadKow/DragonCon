@@ -10,7 +10,6 @@ namespace DragonCon.Features.Management.Convention
     public class ConventionManagementViewModel : IDisplayPaginationViewModel
     {
         public IDisplayPagination Pagination { get; set; }
-        public SystemConfiguration Configuration { get;set; } = new SystemConfiguration();
         public List<ConventionWrapper> Conventions { get; set; } = new List<ConventionWrapper>();
     }
 }

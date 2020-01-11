@@ -1,31 +1,46 @@
-﻿<hr />
-<footer>
-    <ul class="nav nav-pills nav-justified">
+﻿<footer style="font-size: 1.1em;">
+
+    <div class=" right-to-left">
+        <div class="text-center">
+            <h4 class="text-bold">נותני החסות לכנס</h4>
+        </div>
+        <div class="text-center">
+            <img style="height: 100px;" src="~/images/sponsers/Amutalogo.jpg" />
+            <img style="height: 100px;" src="~/images/sponsers/green-ronin.jpg" />
+            <img style="height: 100px;" src="~/images/sponsers/paizo.png" />
+            <img style="height: 100px;" src="~/images/sponsers/modiphius.jpg" />
+            <img style="height: 100px;" src="~/images/sponsers/Ultra-ProLogo.jpg" />
+        </div>
+    </div>
+    <br />
+
+
+    <ul class="nav nav-pills nav-justified dragon-black-background" style="color: whitesmoke;">
         <li class="nav-item">
             <a class="nav-link">
-                &copy; אתר דרקוניקון @DateTime.Today.Year
+                &copy; אתר דרקוניקון - @DateTime.Today.Year
             </a>
         </li>
-
         <li class="nav-item">
-            <a class="nav-link"
-               asp-area="Home"
-               asp-controller="Convention"
-               asp-action="Contact">התנדבות ויצירת קשר</a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link"
-               asp-area="Home"
-               asp-controller="Convention"
+            <a class="nav-link dragon-organge-link"
+               asp-area="Convention"
+               asp-controller="Home"
                asp-action="Usage">תנאי שימוש ופרטיות</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link"
-               asp-area="Home"
-               asp-controller="Convention"
-               asp-action="About">על הכנס והאתר</a>
+            <a class="nav-link dragon-organge-link"
+               asp-area="Convention"
+               asp-controller="Home"
+               asp-action="SiteMap">מפת האתר</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link dragon-organge-link"
+               asp-area="Convention"
+               asp-controller="Home"
+               asp-action="Index"
+               asp-fragment="tag_contactus">יצירת קשר</a>
         </li>
     </ul>
 </footer>

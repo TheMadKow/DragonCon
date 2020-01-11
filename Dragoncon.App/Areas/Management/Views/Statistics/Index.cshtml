@@ -1,0 +1,174 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model DragonCon.Features.Management.Dashboard.ConventionStatisticsViewModel
+@{
+    ViewBag.Title = "סטטיסטיקות";
+}
+
+<br />
+
+<div class="card card-margined card-gray-float">
+    <div class="card-body">
+        <h4 class="card-title">מציג מידע על  <span class="text-primary">@Model.SelectedConvention.Name</span> </h4>
+    </div>
+</div>
+
+<div class="card card-margined card-gray-float">
+    <div class="card-body">
+        <h5 class="card-title"><i class="fa fa-fw fa-mouse-pointer"></i> פעולות נפוצות</h5>
+        <div class="card-deck">
+
+
+            <div class="card">
+                <div class="card-body text-center clickable">
+                    <i class="fa fa-2x fa-fw fa-list-ul"></i>
+                    <br />
+                    <br />
+                    בחירת כנס אחר
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body text-center clickable">
+                    <i class="fa fa-2x fa-fw fa-users"></i>
+                    <br />
+                    <br />
+                    יצוא מידע לניתוח
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card card-margined card-gray-float">
+    <div class="card-body">
+        <h5 class="card-title"><i class="fa fa-fw fa-users"></i> משתתפים </h5>
+        <table class="table table-hover text-right">
+            <tr class="text-bold">
+                <td class="tw-4">סוג</td>
+                <td class="tw-8">כמות</td>
+            </tr>
+            <tr class="text-primary">
+                <td>סך הכל</td>
+                <td>
+                    @Model.TotalParticipants
+                </td>
+            </tr>
+            <tr>
+                <td>קבועים</td>
+                <td>@Model.TotalLongTermParticipants</td>
+            </tr>
+            <tr>
+                <td>זמניים</td>
+                <td>@Model.TotalShortTermParticipants</td>
+
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+
+<div class="card card-margined card-gray-float">
+    <div class="card-body">
+        <h5 class="card-title"><i class="fa fa-fw fa-ticket-alt"></i>  כרטיסים </h5>
+        <table class="table table-hover text-right">
+            <tr class="text-bold">
+                <td class="tw-4">סוג כרטיס</td>
+                <td class="tw-4">כמות</td>
+            </tr>
+            <tr class="text-primary">
+                <td>סך הכל נרכשו</td>
+                <td>
+                    @Model.PaymentCompletedCount
+                </td>
+            </tr>
+
+            @foreach (var paid in Model.PaymentCompleted)
+            {
+                <tr>
+                    <td>@paid.Key</td>
+                    <td>
+                        @paid.Value
+                    </td>
+                </tr>
+            }
+
+            <tr>
+                <td>ללא כרטיס</td>
+                <td>
+                    @Model.PaymentPendingCount
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+
+<div class="card card-margined card-gray-float">
+    <div class="card-body">
+        <h5 class="card-title"><i class="fa fa-fw fa-calendar-alt"></i>  אירועים </h5>
+        <h6 class="card-title">לפי פעילות </h6>
+        <table class="table table-hover text-right">
+            <tr class="text-bold">
+                <td class="tw-3 text-center">זמן</td>
+                <td class="tw-3 text-center">מושבים</td>
+                <td class="tw-3 text-center">תפוס</td>
+                <td class="tw-3 text-center">פנוי</td>
+            </tr>
+            @{
+                var eventsGroup = Model
+                    .EventSeats.GroupBy(x => x.Major)
+                    .OrderBy(x => x.Key);
+
+                foreach (var group in eventsGroup)
+                {
+                    var timeTable = group
+                        .GroupBy(x => x.EventTime)
+                        .OrderBy(x => x.Key);
+                    <tr class="text-bold text-center" style="color: white; background: #4a4e53;">
+                        <td colspan="4">@group.Key</td>
+                    </tr>
+                    foreach (var line in timeTable)
+                    {
+                        <tr>
+                            <td class="tw-3 text-center">@line.Key.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture)</td>
+                            <td class="tw-3 text-center">@line.Sum(y => y.TotalSeats)</td>
+                            <td class="tw-3 text-center">@line.Sum(y => y.TakenSeats)</td>
+                            <td class="tw-3 text-center">@line.Sum(y => y.FreeSeats)</td>
+                        </tr>
+                    }
+
+                }
+            }
+        </table>
+        <h6 class="card-title">סיכומים </h6>
+        <table class="table table-hover text-right">
+            <tr class="text-bold">
+                <td class="tw-4">סוג</td>
+                <td class="tw-8">כמות</td>
+            </tr>
+            <tr class="text-primary">
+                <td>סך כל האירועים</td>
+                <td>
+                    @Model.EventSeats.Count
+                </td>
+            </tr>
+            <tr class="text-primary">
+                <td>סך כל המקומות</td>
+                <td>
+                    @Model.TotalEventSeats
+                </td>
+            </tr>
+            <tr class="text-primary">
+                <td>סך כל התפוסה</td>
+                <td>
+                    @Model.TotalEventTakenSeats
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>

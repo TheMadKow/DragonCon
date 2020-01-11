@@ -1,0 +1,46 @@
+﻿@using DragonCon.Modeling.Helpers
+@model DragonCon.Features.Management.Participants.UpdateRolesViewModel
+
+@{
+        ViewBag.Title = "ניהול תפקידים";
+}
+
+<form asp-area="Management" asp-controller="Participants" asp-action="UpdateRoles" method="post" class="right-to-left" style="padding: 10px;">
+    <input asp-for="ParticipantId" hidden />
+    <h4>@Model.ParticipantName</h4>
+    
+    <hr />
+    @if (Model.IsLongTerm)
+    {
+        <h5>תפקידי אתר</h5>
+        <div class="form-group">
+            @foreach (SystemRoles system in Enum.GetValues(typeof(SystemRoles)))
+            {
+                var isChecked = Model.SystemRoles.Contains(system) ? "checked" : "";
+                <label class="container">
+                    <input name="sys_@system" type="checkbox" @isChecked>
+                    &nbsp;&nbsp;@system.ToTextual()
+                </label>
+            }
+        </div>
+        <hr />
+    }
+    
+    <h5>תפקידי כנס נוכחי</h5>
+    <div class="form-group">
+        @foreach (ConventionRoles convention in Enum.GetValues(typeof(ConventionRoles)))
+        {
+            var isChecked = Model.ConventionRoles.Contains(convention) ? "checked" : "";
+            <label class="container">
+                <input name="con_@convention" type="checkbox" @isChecked>
+                &nbsp;&nbsp;@convention.ToTextual()
+            </label>
+        }
+
+    </div>
+    
+    <br />
+    <div class="btn-save-container">
+        <button type="submit" class="btn btn-primary btn-save">שמירת שינויים </button>
+    </div>
+</form>

@@ -1,4 +1,17 @@
-﻿.toggle-button {
+﻿.btn-reception {
+    background-color: #ff8691;
+    margin-top: 5px;
+    width: 165px;
+    text-align: right;
+}
+
+.active-card {
+    color: white;
+    background: #007efd;
+    border: 1px solid #00254a;
+}
+
+.toggle-button {
     width: auto;
     background: #343a40 !important;
     color: white;

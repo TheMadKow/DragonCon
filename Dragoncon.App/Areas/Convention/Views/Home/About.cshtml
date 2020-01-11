@@ -1,0 +1,278 @@
+﻿@using System.Globalization
+@{
+    ViewData["Title"] = "אודות הכנס והאתר";
+}
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            חובבים עבור חובבים
+        </h3>
+        <p class="card-paragraph">
+            דרקוניקון הוא כנס משחקי שולחן המתקיים כל שנה במהלך אוגוסט בתל-אביב, מ-2007 ועד היום. בכנס תמצאו את כל סוגי המשחקים: משחקי לוח, משחקי תפקידים, מבוכים ודרקונים, לארפים, משחקי קלפים ועוד.
+        </p>
+
+        <p class="card-paragraph">
+            דרקוניקון הוא כנס משחקים שבו אתם יכולים לשחק בכל משחק שבו אתם חפצים - משחקי תפקידים, מבוכים ודרקונים, משחקי לוח, קלפים ועוד.
+            <br />
+            הכנס מאורגן בהתנדבות על-ידי קהילות חובבים מכל הארץ, עבור חובבים. רבים מאנשי הסגל, המנחים והמתנדבים בכנס, התחילו כמשתתפים.
+        </p>
+    </div>
+</div>
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            פעם ראשונה בכנס?
+        </h3>
+        <p class="card-paragraph">
+            ברוכים הבאים - אנחנו תמיד שמחים לפגוש משתתפים חדשים בכנס.
+            <br />
+            כנס דרקוניקון מתמקד במשחקי תחביב, כשמדובר במשחקים חברתיים המבוססים על דמיון בהם השחקנים משתפים פעולה או מתחרים אחד בשני.
+            <br />
+            <br />
+            סוג אחד של משחקים הם משחקי-תפקידים, שבהם כל שחקן מגלם דמות דמיונית. המשחק הידוע ביותר הוא מבוכים ודרקונים שמתרחש בעולם פנטזיה בהשראת שר הטבעות וספרים אחרים. דרקוניקון זו הזדמנות מצוינת לשחק בפעם הראשונה במשחק תפקידים - לבד, עם חברים או עם המשפחה.
+            <br />
+            <br />
+            משחקי תחביב כוללים גם משחקי-לוח שבשנים האחרונות משגשגים - לא רק משחקי קופסה כגון מונופול או סיכון אלא משחקי לוח בדמות המתיישבים של קטאן, מנצ'קין, שם-קוד וכך הלאה. בכנס תוכלו לשחק בעשרות משחקים שונים ועשירים, המיועדים לגילאים שונים, ובעלי רמות מורכבות הנעות ממשחקים בני חצי שעה ועד שלוש או ארבע שעות. סגל הכנס ישמח ללמד אותכם לשחק בהם.
+            <br />
+            <br />
+            משחקי מיניאטורות, אותם ניתן ללמוד בכנס וגם להשתתף בסדנת צביעה, או להביא מהבית צבא של "חיילים" ולהשתתף בטורניר.
+            <br />
+            <br />
+            משחקי קלפים אסיפים, שהידוע מתוכם הוא מג'יק, כל שחקן מרכיב לעצמו חבילת קלפים, עמם הוא מתמודד בטורניר. בכנס יש גם טורנירים מסוג דראפט, בהם רוכשים ופותחים במקום חבילות של קלפים מהם מרכיבים את החפיסה למשחק.
+            <br />
+            <br />
+            הצוות שלנו ישמח להדריך אותכם במהלך הכנס. אם יש לכם שאלות או קושיות, אתם מוזמנים ליצור עמנו קשר.
+            <br />
+            <div class="text-center">
+                <a asp-area="Convention" asp-controller="Home" asp-action="Contact" class="btn dragon-btn">לחצו כאן ליצור איתנו קשר!</a>
+            </div>
+        </p>
+        <br />
+        <h4 class="text-bold">קישורים שימושיים</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a target="_blank" href="https://www.pundak.co.il/library/roleplaying/581-playing-guide">מה זה משחקי תפקידים?</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a target="_blank" href="https://www.pundak.co.il/library/dnd"> על מבוכים ודרקונים</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a target="_blank" href="http://www.mtgil.co.il/">עוד על מאג'יק</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            על הפונדק
+        </h3>
+        <p class="card-paragraph">
+            דרקוניקון החל בשנת 2007, ככנס מבוכים ודרקונים לרגל ההשקה שהייתה מתוכננת למגדיר המפלצות "מתוך האפלה" של הפונדק הוצאה לאור. מאז הוא עבר מספר גלגולים והפך לכנס משחקי הלוח והתפקידים המוביל של הקיץ בישראל.
+        </p>
+        <div class="text-center">
+            <a asp-area="Convention" asp-controller="Home" asp-action="AboutStorms" class="btn dragon-btn">מה זה איי הסערה? גלו כאן!</a>
+        </div>
+        <br />
+        <h4 class="text-bold">קישורים שימושיים</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.pundak.co.il/library/roleplaying/581-playing-guide">הפונדק הוצאה לאור</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.pundak.co.il/library/dnd"> אתר הפונדק</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="http://www.mtgil.co.il/">פורום הפונדק</a>
+            </li>
+        </ul>
+        <p>
+
+        </p>
+
+    </div>
+</div>
+
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            סגל הכנס
+        </h3>
+        <p class="card-paragraph">
+            אדוה פפו - משחקי-תפקידים |
+            אוריין אינטרטור - מארגן הכנס |
+            אלירן טלר - משחקי לוח |
+            אלכס בודגורנוב - שיווק |
+            אלעד אור - תוכנייה ועיצוב |
+            אסף הדרי - לוגיסטיקה |
+            בר קדוש - שיווק ומשחקי לוח |
+            גלעד גרינברג - משחקי-תפקידים |
+            דניאל רוזנברג - מארגן הכנס |
+            חגי גומפרט - משחקי-תפקידים |
+            יבגני רזניקוב - כח-אדם וקשרי-חוץ |
+            יובל בוזגלו - תוכנייה ועיצוב |
+            יובל זיווני - לוגיסטיקה |
+            לירן שובל - לוגיסטיקה |
+            עדי סינגל - ספריית משחקי לוח |
+            עומר רביב - משחקי-תפקידים |
+            עידן קוקורייב - שיווק ומרצ'נדייז |
+            תומר מלינרסקי - מיחשוב
+        </p>
+    </div>
+</div>
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            שנים קודמות
+        </h3>
+        <p class="card-paragraph">
+            דרקוניקון החל בשנת 2007, ככנס מבוכים ודרקונים לרגל ההשקה שהייתה מתוכננת למגדיר המפלצות "מתוך האפלה" של הפונדק הוצאה לאור. <br />
+            מאז הוא עבר מספר גלגולים והפך לכנס משחקי הלוח והתפקידים המוביל של הקיץ בישראל. <br />
+        </p>
+        <h4 class="text-bold">דרקוני עבר:</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2019</strong> - כנס דו יומי, התקיים ב-23,24 באוגוסט במרכז הקבלה בתל אביב, כ-XXX משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2018</strong> - כנס דו יומי, התקיים ב-23,24 באוגוסט בהיכל אוהל שם ברמת-גן, כ-590 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2017</strong> - כנס דו יומי ראשון, התקיים ב-24-25 באוגוסט בהיכל אוהל שם ברמת גן, כ-570 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2016</strong> - כנס חד יומי, התקיים ב-18 באוגוסט בהיכל אוהל שם ברמת גן, כ-360 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2015</strong> - כנס חד יומי, התקיים ב-13 באוגוסט בבית הצנחן ברמת גן, כ-330 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2014</strong> - כנס חד יומי, התקיים ב-27 באוגוסט במרכז הקהילתי רמת אביב הירוקה בתל אביב, כ-280 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2013</strong> - כנס חד יומי, התקיים ב-8 באוגוסט במרכז הקהילתי רמת אביב הירוקה בתל אביב, כ-260 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2012</strong> - כנס חד יומי, התקיים ב-9 באוגוסט בבית הספר בר-אילן בתל אביב, כ-220 משתתפים
+            </li>
+
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2011</strong> - כנס חד יומי, התקיים ב-18 באוגוסט בבית הספר בר-אילן בתל אביב, כ-150 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2010</strong> - כנס חד יומי, התקיים ב-26 באוגוסט בפריק בתל אביב, כ-50 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2009</strong> - כנס חד יומי, התקיים ב-13 באוגוסט בפריק בתל אביב, כ-40 משתתפים
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>דרקוניקון 2008</strong> - כנס חד יומי, התקיים ב-25 באוגוסט בפריק בתל אביב, כ-40 משתתפים
+            </li>
+
+
+        </ul>
+    </div>
+</div>
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            על האתר
+        </h3>
+        <p class="card-paragraph">
+            אתר זה נכתב כקוד פתוח, ותחת רשיון חופשי GPL-2.0 המאפשר שימוש בקוד תחת ההגבלות הרשומות ברשיון.<br />
+            אתר זה נכתב עבור כנס דרקוניקון, על ידי מתנדבי דרקוניקון.
+        </p>
+        <h4 class="text-bold">כתיבת קוד ועיצוב אתר</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.facebook.com/TheMadKow">אלירן טלר</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://www.facebook.com/adi.unger">עדי אונגר</a>
+            </li>
+        </ul>
+
+        <br />
+        <h4 class="text-bold">קוד ורשיון</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://github.com/SuperTeam-IL/DragonCon">הקוד ב-GitHub</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://github.com/SuperTeam-IL/DragonCon/blob/master/LICENSE">פרטי הרשיון</a>
+            </li>
+        </ul>
+
+        <br />
+        <h4 class="text-bold">משאבים ותשתיות</h4>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://dotnet.microsoft.com/learn/aspnet/what-is-aspnet-core/">Server Infrastructure - ASP Core</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://getbootstrap.com/">Web Infrastructure - Bootstrap 4</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://fontawesome.com/">Fonts - Font Awesome</a>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a href="https://cloud.ravendb.net/">Database - RavenDB Cloud</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-about")
+    </script>
+}

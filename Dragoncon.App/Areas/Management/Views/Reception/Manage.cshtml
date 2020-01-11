@@ -1,0 +1,120 @@
+﻿@using System.Globalization
+@using DragonCon.Features.Management.Participants
+@using DragonCon.Modeling.Helpers
+@using NodaTime
+@using NodaTime.Extensions
+@model DragonCon.Features.Management.Participants.ParticipantsManagementViewModel
+
+@{
+    ViewBag.Title = "דלפק קבלה";
+}
+<div class="card card card-gray-float">
+    <h2 class="text-bold text-center text-primary" style="margin: 0; padding: 0;">
+        תפריט פעולות
+    </h2>
+    <div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
+        <div class="card-deck">
+            <div class="card reception-option active-card" data-fragment="reception-add-participant">
+                <div class="card-body text-center clickable">
+                    <i class="fa fa-2x fa-fw fa-user-plus"></i><br /><strong> הוספת משתתף</strong>
+                </div>
+            </div>
+            <div class="card  reception-option" data-fragment="reception-search-participant">
+                <div class="card-body  text-center clickable">
+                    <i class="fa fa-2x fa-fw fa-users"></i><br /> <strong> חיפוש משתתפים</strong>
+                </div>
+            </div>
+            <div class="card  reception-option" data-fragment="reception-available-event">
+                <div class="card-body text-center clickable">
+                    <i class="fa fa-2x fa-fw fa-chair"></i><br /> <strong> אירועים פנויים</strong>
+                </div>
+            </div>
+            <div class="card  reception-option" data-fragment="reception-search-event">
+                <div class="card-body text-center clickable">
+                    <i class="fa fa-2x fa-fw fa-book-reader"></i><br /> <strong>חיפוש אירועים</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card card-gray-float right-to-left">
+    <div class="card-body">
+        <div id="reception-add-participant" class="reception-fragment">
+            @await Html.PartialAsync("_PartialAddParticipant", new ParticipantCreateUpdateViewModel())
+        </div>
+        <div id="reception-search-participant" class="reception-fragment" hidden>
+            @await Html.PartialAsync("_PartialSearchParticipant")
+        </div>
+        <div id="reception-available-event" class="reception-fragment" hidden>
+            @await Html.PartialAsync("_PartialAvailableEvents")
+        </div>
+        <div id="reception-search-event" class="reception-fragment" hidden>
+            @await Html.PartialAsync("_PartialSearchEvents")
+        </div>
+    </div>
+</div>
+
+<div id="search-results" class="card card-gray-float right-to-left">
+    <h5>תוצאות</h5>
+    <div id="search-result-spinner" class="text-center" style="font-size: 2em;" hidden>
+        <i class="fa fa-fw fa-spinner fa-spin"></i>
+        &nbsp;&nbsp;טוען ...
+    </div>
+
+    <div class="card-body" id="search-results-html">
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(".reception-option").click(function () {
+            $(".reception-option").removeClass("active-card");
+            $(this).addClass("active-card");
+
+            $(".reception-fragment").attr("hidden", true);
+            var fragment = $(this).data("fragment");
+            $("#" + fragment).removeAttr("hidden");
+        });
+
+        $(document).ready(function () {
+            $('.search-results').on('submit', function (e) {
+                e.preventDefault(); // prevent native submit
+                $(this).ajaxSubmit({
+                    beforeSubmit: function () {
+                        $("#search-results").show();
+                        $("#search-result-spinner").removeAttr("hidden");
+                        window.onbeforeunload = function () {
+                            return "האם לבטל חיפוש?";
+                        };
+                    },
+                    success: function (response, status, request) {
+                        window.onbeforeunload = null;
+                        $("#search-result-spinner").attr("hidden", true);
+                        if (response === undefined || response === null || response.length === 0) {
+                            Swal.fire({
+                                type: 'error',
+                                title: 'תקלה',
+                                text: 'לא ניתן לטעון פרטים - נא לנסות שוב',
+                                confirmButtonText: 'אישור'
+                            });
+                            // something went wrong
+                        } else {
+                            $("#search-results-html").html(response);
+                        }
+                    },
+                    error: function () {
+                        window.onbeforeunload = null;
+                        $("#search-result-spinner").attr("hidden", true);
+                        Swal.fire({
+                            type: 'error',
+                            title: 'תקלה',
+                            text: 'לא ניתן לטעון פרטים - נא לנסות שוב',
+                            confirmButtonText: 'אישור'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

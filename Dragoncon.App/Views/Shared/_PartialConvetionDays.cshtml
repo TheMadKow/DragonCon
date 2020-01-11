@@ -1,0 +1,19 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@if (Actor.HasDisplayConvention)
+{
+    var convention = Actor.DisplayConvention;
+    var counter = 1;
+
+    @foreach (var day in convention.Days)
+    {
+        <strong>יום כנס @counter:</strong>
+        <br />
+        <span>
+            @day.Date.DayOfWeek.InHebrew() ה-@day.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+            <br /> מהשעה @day.StartTime.ToString("HH:mm", CultureInfo.InvariantCulture) ועד השעה @day.EndTime.ToString("HH:mm", CultureInfo.InvariantCulture)<br />
+        </span>
+        <br />
+        counter++;
+    }
+}

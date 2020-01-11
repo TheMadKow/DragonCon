@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 
@@ -11,23 +9,41 @@ namespace DragonCon.Features.Management.Convention
         public NameDatesCreateUpdateViewModel NameDate { get; set; }
         public TicketsUpdateViewModel Tickets { get; set; }
         public HallsUpdateViewModel Halls { get; set; }
-        public DetailsUpdateViewModel Details { get; set; }
+        public SettingsUpdateViewModel Settings { get; set; }
         public string ErrorMessage { get; set; }
     }
-
-    public class DetailsUpdateViewModel
+    public class SettingsUpdateViewModel : ConventionSettings
     {
-        public Dictionary<string, string> Metadata { get; set; }
-        public List<PhoneRecord> Phonebook { get; set; }
+        public SettingsUpdateViewModel() { }
+        public SettingsUpdateViewModel(string conId, ConventionSettings settings)
+        {
+            ConventionId = conId;
+            AllowEventsSuggestions = settings.AllowEventsSuggestions;
+            AllowEventsRegistration = settings.AllowEventsRegistration;
+            AllowPayments = settings.AllowPayments;
+            AllowManagementTests = settings.AllowManagementTests;
+        }
+
         public string ConventionId { get; set; }
+
+        public ConventionSettings CreateSettings()
+        {
+            return new ConventionSettings()
+            {
+                AllowEventsRegistration = AllowEventsRegistration,
+                AllowEventsSuggestions = AllowEventsSuggestions,
+                AllowManagementTests = AllowManagementTests,
+                AllowPayments = AllowPayments
+            };
+        }
     }
+
 
     public class HallsUpdateViewModel{
         public List<HallViewModel> Halls { get; set; }
         public string ConventionId { get; set; }
     }
-
-    
+   
     public class HallViewModel : Hall
     {
         public HallViewModel()

@@ -4,56 +4,56 @@
 
 <br />
 <h3>גילאים</h3>
-<a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventAgeRestriction">
+<a asp-area="Management" asp-controller="Personal" asp-action="CreateUpdateEventAgeRestriction">
     <i class="fa fa-fw fa-plus-square"></i> הוספת קבוצת גיל
 </a>
 
-            @foreach (AgeGroup ageRestriction in Actor.SystemState.AgeGroups.OrderBy(x => x.Name))
-            {
-                <div class="card card-body card-margined">
-                    <div class="row">
-                        <div class="col-2">@ageRestriction.Name</div>
-                        <div class="col">
-                            @if (ageRestriction.MinAge.HasValue)
-                            {
-                                <span>מגיל @ageRestriction.MinAge</span>
-                            }
-                            @if (ageRestriction.MaxAge.HasValue)
-                            {
-                                <span>עד גיל @ageRestriction.MaxAge</span>
-                            }
-                            @if (ageRestriction.MaxAge.HasValue == false &&
-                                 ageRestriction.MinAge.HasValue == false)
-                            {
-                                <span class="text-info">ללא הגבלת גיל</span>
-                            }
-                        </div>
-                        <div class="col-1">
-                            <div class="dropdown pull-left">
-                                <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm">
-                                    <i class="fa fa-fw fa-ellipsis-h"></i>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" asp-area="Management" asp-controller="Events"
-                                       asp-action="UpdateEventAgeRestriction" asp-route-restrictionId="@ageRestriction.Id.GetNumberFromId()">
-                                        <i class="fa fa-fw fa-edit"></i> עדכון קבוצת גיל
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" onclick="DeleteAgeRestriction('@ageRestriction.Id')" href="#"><i class="fa fa-fw fa-trash"></i> מחיקת קבוצת גיל </a>
-                                </div>
-                            </div>
-
-                        </div>
+@foreach (AgeGroup ageRestriction in Actor.System.AgeGroups.OrderBy(x => x.Name))
+{
+    <div class="card card-body card-margined">
+        <div class="row">
+            <div class="col-2">@ageRestriction.Name</div>
+            <div class="col">
+                @if (ageRestriction.MinAge.HasValue)
+                {
+                    <span>מגיל @ageRestriction.MinAge</span>
+                }
+                @if (ageRestriction.MaxAge.HasValue)
+                {
+                    <span>עד גיל @ageRestriction.MaxAge</span>
+                }
+                @if (ageRestriction.MaxAge.HasValue == false &&
+                    ageRestriction.MinAge.HasValue == false)
+                {
+                    <span class="text-info">ללא הגבלת גיל</span>
+                }
+            </div>
+            <div class="col-1">
+                <div class="dropdown pull-left">
+                    <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm">
+                        <i class="fa fa-fw fa-ellipsis-h"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" asp-area="Management" asp-controller="Personal"
+                           asp-action="UpdateEventAgeRestriction" asp-route-restrictionId="@ageRestriction.Id.GetNumberFromId()">
+                            <i class="fa fa-fw fa-edit"></i> עדכון קבוצת גיל
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" onclick="DeleteAgeRestriction('@ageRestriction.Id')" href="#"><i class="fa fa-fw fa-trash"></i> מחיקת קבוצת גיל </a>
                     </div>
                 </div>
-            }
+
+            </div>
+        </div>
+    </div>
+}
 
 <br />
 <h3>פעילויות</h3>
-<a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventActivity">
+<a asp-area="Management" asp-controller="Personal" asp-action="CreateUpdateEventActivity">
     <i class="fa fa-fw fa-plus-square"></i> הוספת פעילות ושיטות
 </a>
-@foreach (var activity in Actor.SystemState.Activities.OrderBy(x => x.Name))
+@foreach (var activity in Actor.System.Activities.OrderBy(x => x.Name))
 {
     <div class="card card-body card-margined">
         <h5>
@@ -64,7 +64,7 @@
                     <i class="fa fa-fw fa-ellipsis-h"></i>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" asp-area="Management" asp-controller="Events"
+                    <a class="dropdown-item" asp-area="Management" asp-controller="Personal"
                        asp-action="UpdateEventActivity" asp-route-activityId="@activity.Id.GetNumberFromId()">
                         <i class="fa fa-fw fa-edit"></i> עדכון פעילות
                     </a>
@@ -74,17 +74,17 @@
             </div>
 
         </h5>
-        
+
         @if (activity.SubActivities.Any())
         {
             <table class="table table-hover table-stripped text-right">
                 <tbody>
-                @foreach (var system in activity.SubActivities.OrderBy(x => x.Name))
-                {
-                    <tr class="d-flex">
-                        <td class="col">@system.Name</td>
-                    </tr>
-                }
+                    @foreach (var system in activity.SubActivities.OrderBy(x => x.Name))
+                    {
+                        <tr class="d-flex">
+                            <td class="col">@system.Name</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         }

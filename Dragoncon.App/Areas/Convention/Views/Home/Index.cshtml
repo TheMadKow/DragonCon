@@ -1,0 +1,107 @@
+﻿@model DragonCon.Features.Convention.Home.HomeViewModel
+@using System.Globalization
+@using DragonCon.App.Settings
+@using DragonCon.Modeling.Helpers
+@{
+    ViewData["Title"] = "דף הבית";
+    var actor = Actor;
+}
+
+@await Html.PartialAsync("_PartialSharedSlider", new SliderSettings
+{
+    Title = "דרקוניקון בתמונות",
+    Slides = Model.CarouselItems
+})
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            @await Html.PartialAsync("_PartialDragon")
+            דרקוניקון - כנס משחקי לוח, תפקידים ומבוכים ודרקונים
+        </h3>
+        <p class="card-paragraph">
+            דרקוניקון הוא כנס המשחקים השולחניים הגדול בישראל.  <br />
+            הכנס מאורגן בהתנדבות ומתקיים כל שנה במהלך אוגוסט מ-2007 ועד היום. <br />
+            בכנס תמצאו את כל סוגי המשחקים: משחקי-תפקידים שולחניים וחיים, משחקי לוח, משחקי מיניאטורות, טורנירים ועוד.<br />
+            הכנס מיועד לכל הגילאים, שחקנים וותיקים וחדשים, מבוגרים ומשפחות. <br />
+            <span class="dragon-organge-color text-bold">אז בואו לשחק בדרקוניקון - פיגשו חברים, צאו להרפתקאות וגלו עולמות חדשים!</span>
+        </p>
+    </div>
+</div>
+
+<a class="btn dragon-register-btn" href="#">הרשמה לכנס @Actor.DisplayConvention?.ConventionName</a>
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <p class="card-paragraph">
+                    @await Html.PartialAsync("_PartialLocation")
+                </p>
+                <p class="card-paragraph">
+                    @await Html.PartialAsync("_PartialConvetionDays")
+                </p>
+            </div>
+            <div class="col-12  col-md-6">
+                <h3 class="card-title text-bold">
+                    <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+                    &nbsp;
+                    שאלות נוספות?
+                </h3>
+                @await Html.PartialAsync("PartailLearnMore")
+            </div>
+        </div>
+    </div>
+</div>
+
+<a class="btn dragon-register-btn" href="#">הרשמה לכנס @Actor.DisplayConvention?.ConventionName</a>
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            חדשות אחרונות
+        </h3>
+        <p class="card-paragraph">
+            <span><i class="fa fa-fw fa-bullhorn fa-flip-horizontal"></i> 20/01/2020 - איש נשך כלב בדרום תל אביב</span>
+            <span class="text-danger">//TODO Automate</span>
+
+        </p>
+    </div>
+</div>
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            רשימת הדיוור שלנו
+        </h3>
+        <p class="card-paragraph">
+            רוצים לקבל עדכונים לדואר האלקטרוני עם חדשות מדרקוניקון? הרשמו!  <br />
+        </p>
+        <form class="card-form">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-8">
+                        <input class="form-control" style="text-align: left" type="text" placeholder="me@@gmail.com" />
+                    </div>
+                    <div class="col-4">
+                        <input class="form-control dragon-black-background" style="color:white; font-size: 1.2em;" type="button" value="רשמו אותי" />
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@await Html.PartialAsync("_PartialContactUs")
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-home")
+    </script>
+}

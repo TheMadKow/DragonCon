@@ -15,7 +15,6 @@ namespace DragonCon.Modeling.Models.Events
         public string SubActivityId { get;set; }
 
         public List<string> GameMasterIds { get; set; }
-        public List<string> ParticipantIds { get;set; }
 
         public string AgeId { get; set; }
         public EventStatus Status { get; set; }

@@ -6,14 +6,17 @@
     <SccLocalPath>SAK</SccLocalPath>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="FakeItEasy" Version="5.1.1" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-	  <PackageReference Include="NodaTime" Version="2.4.6" />
+	  <PackageReference Include="FakeItEasy" Version="5.5.0" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+	  <PackageReference Include="NodaTime" Version="2.4.7" />
 	  <PackageReference Include="NUnit" Version="3.12.0" />
-	  <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+	  <PackageReference Include="NUnit3TestAdapter" Version="3.16.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\DragonCon.Logical\DragonCon.Logical.csproj" />

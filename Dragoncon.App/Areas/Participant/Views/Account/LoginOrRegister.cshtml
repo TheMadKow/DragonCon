@@ -1,0 +1,144 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Identities
+@model  DragonCon.Features.Participant.Account.AccountViewModel
+@{
+    ViewData["Title"] = "התחברות או הרשמה לכנס";
+    var actor = Actor;
+}
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            האזור האישי
+        </h3>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                על מנת להרשם מראש לאירועים בכנס יש לפתוח חשבון בדרקוניקון או להתחבר לחשבון קיים.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                לאחר רישום והתחברות תוכלו להרשם מראש לאירועים או להתנדב להנחות אירועים.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <strong>רישום מוקדם לאירועים יבטיח לכם מקום באירועים !</strong>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a asp-area="Convention" asp-controller="Home" asp-action="Usage" asp-fragment="tag_cookies">בשימוש באתר אתם מסכימים לשימוש בעוגיות</a>
+            </li>
+
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                <a asp-area="Convention" asp-controller="Home" asp-action="Usage">תנאי השימוש והצהרת פרטיות</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            הרשמה
+        </h3>
+
+        <form asp-area="Participant" asp-controller="Account" asp-action="Register" method="post">
+            <div class="col">
+                <div class="row">
+                    <div class="form-group col-8">
+                        <label>שם מלא</label>
+                        <input value="@Model.Register.FullName" name="FullName" class="form-control" placeholder="שם מלא ">
+                    </div>
+                    <div class="form-group col-4">
+                        <label>שנת לידה </label>
+                        <br />
+                        <input value="@Model.Register.YearOfBirth" name="YearOfBirth" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" />
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="form-group col-4">
+                        <label>טלפון</label>
+                        <input value="@Model.Register.PhoneNumber" name="PhoneNumber" type="tel" class="form-control" placeholder="טלפון ">
+                    </div>
+                    <div class="form-group col-8">
+                        <label>דואר אלקטרוני</label>
+                        <div class="input-group ">
+                            <input value="@Model.Register.Email" name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <input type="checkbox" name="IsAllowingPromotions" aria-label="Checkbox for following text input">
+                                    <span class="toggle-text">צירוף לרשימת דיוור</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label>סיסמה</label>
+                        <input value="@Model.Register.Password" name="Password" type="password" class="form-control" placeholder="סיסמה ">
+                    </div>
+                    <div class="form-group col-6">
+                        <label>אימות סיסמה</label>
+                        <input value="@Model.Register.ConfirmPassword" name="ConfirmPassword" type="password" class="form-control" placeholder="אימות סיסמה ">
+                    </div>
+                </div>
+                <div class=" row">
+                    <div class="form-group pull-left">
+                        <button type="submit" class="btn dragon-btn"> הרשמה </button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            התחברות
+        </h3>
+        <form method="post" asp-area="Participant" asp-controller="Account" asp-action="Login" class="card-form">
+            <div class="col">
+                <div class="form-group">
+                    <label>כתובת דואר אלקטרוני</label>
+                    <input value="@Model.Login.Email" name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                    
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>סיסמה</label>
+                    <input value="@Model.Login.Password" name="Password" type="password" class="form-control">
+                </div>
+            </div>
+            <div class=" row">
+                <div class="form-group pull-left">
+                    <button type="submit" class="btn dragon-btn"> התחברות </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-register")
+    </script>
+}

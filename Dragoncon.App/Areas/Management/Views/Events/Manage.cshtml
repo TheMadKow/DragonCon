@@ -9,7 +9,7 @@
     ViewBag.Title = "ניהול - אירועים";
 }
 
-<div class="right-to-left">
+<div class="card card-gray-float right-to-left">
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-item-events" data-toggle="tab" href="#tab-pan-events" role="tab" aria-controls="nav-cons" aria-selected="true">רשימת אירועים</a>
@@ -29,6 +29,50 @@
 </div>
 
 <div class="modal fade" id="event-history-ajax" tabindex="-1" role="dialog"></div>
+
+<div class="modal fade" id="quick-event-update-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="right-to-left">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="סגור חלון">
+                        <span aria-hidden="true" class="text-danger"><i class="fa fa-fw fa-window-close"></i></span>
+                    </button>
+                    <h4>עדכון מהיר</h4>
+                    <h5 id="quick-event-update-name"></h5>
+                </div>
+            </div>
+
+            <div class="modal-body right-to-left">
+                <form asp-area="Management" asp-controller="Personal" asp-action="QuickUpdate">
+                    <input type="text" name="Id" id="quick-event-update-id" hidden/>
+                    <div class="form-group">
+                        <label>סטטוס</label>
+                        <select id="quick-event-update-status"
+                                class="form-control chosen-select" name="status" data-placeholder="סטטוס אירוע">
+                            @foreach (var type in Enums.AsSelectListItem<EventStatus>())
+                            {
+                                <option value="@type.Value">@type.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>אולם ושולחן</label>
+                        <select id="quick-event-update-location"
+                                class="form-control chosen-select" name="hall"
+                                asp-items="Actor.ManagedDropDowns.BuildHalls()">
+                            <option value="" disabled selected>בחירת אולם שולחן</option>
+                        </select>
+                    </div>
+                    <br />
+                    <div class="btn-save-container">
+                        <button type="submit" class="btn btn-primary btn-save">שמירת אירוע </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts
 {
@@ -71,7 +115,7 @@
                 if (result.value) {
                     $.ajax({
                         type: "POST",
-                        url: "/Management/Events/DeleteAgeRestriction?restrictionConventionId=" + ageId,
+                        url: "/Management/Events/DeleteAgeRestriction?restrictionId=" + ageId,
                         data: CreateDefaultPostData(),
                         success: function () {
                             location.reload();

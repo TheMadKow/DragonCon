@@ -1,0 +1,127 @@
+﻿@using DragonCon.Features.Management.Reception
+@using DragonCon.Modeling.Helpers
+@model ParticipantsReceptionViewModel
+@{
+    Layout = "";
+}
+
+<table class="table table-couple-striped text-right">
+    <tbody>
+
+        @foreach (var engage in Model.Participants.OrderByDescending(x => x.Participant.FullName))
+        {
+            var statusColor = "text-primary";
+            var statusText = "אין כרטיס";
+
+            if (engage.Inner.Payment != null)
+            {
+                if (engage.Inner.Payment.IsPaid)
+                {
+                    statusColor = "text-success";
+                    statusText = "שולם";
+                }
+                else
+                {
+                    statusColor = "text-danger";
+                    statusText = "לא שולם";
+                }
+            }
+
+            var longTerm = engage.Participant as LongTermParticipant;
+            var participantId = engage.Participant.Id;
+            var isShortTerm = engage.Inner.IsShortTerm;
+
+            <tr>
+                <td class="tw-7">
+                    <h5>
+                        <strong>@engage.Participant.FullName</strong>
+                    </h5>
+
+                    @if (isShortTerm)
+                    {
+                        <div>
+                            <i class="fa fa-fw fa-user-clock"></i> רשום לכנס הנוכחי
+                            <br />
+                        </div>
+                    }
+                    else
+                    {
+                        if (engage.Inner.ConventionId == Actor.ManagedConvention.ConventionId)
+                        {
+                            <div>
+                                <i class="fa fa-fw fa-user-clock"></i> רשום לכנס הנוכחי
+                                <br />
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <i class="fa fa-fw fa-user-clock"></i> כנס אחרון: @engage.Convention.Name
+                                <br />
+                            </div>
+                        }
+                        <div>
+                            <i class="fa fa-fw fa-envelope"></i> @longTerm.Email
+                            <br />
+                        </div>
+                    }
+
+
+                    @if (engage.Participant.PhoneNumber.IsNotEmptyString())
+                    {
+                        <div>
+                            <i class="fa fa-fw fa-phone"></i>
+                            @engage.Participant.PhoneNumber <br />
+                        </div>
+                    }
+
+                    @if (engage.Inner.Roles.Any())
+                    {
+                        <div title="תפקידי כנס">
+                            <i class="fa fa-fw fa-id-card-alt"></i>
+                            @foreach (var role in engage.Inner.Roles)
+                            {
+                                <span>@role.ToTextual(). &nbsp; </span>
+                            }
+                        </div>
+                    }
+                </td>
+                <td class="tw-3">
+                    <strong class="@statusColor">
+                        <i class="fa fa-fw fa-ticket-alt"></i> @statusText
+                    </strong>
+                    @{
+                        var age = DateTime.Today.Year - engage.Participant.YearOfBirth;
+                    }
+                    <div>
+                        <i class="fa fa-fw fa-birthday-cake"></i> @engage.Participant.YearOfBirth - גיל @age <br />
+                    </div>
+
+                </td>
+                <td>
+
+                    <a class="pull-left btn btn-reception" onclick=""
+                       title="עדכון משתתף">
+                        <i class="fa fa-fw fa-user-edit"></i>&nbsp; עדכון משתתף
+                    </a>
+                    <br />
+                    <a class="pull-left btn btn-reception" onclick=""
+                       title="עדכון אירועים">
+                        <i class="fa fa-fw fa-chair"></i>&nbsp; עדכון אירועים
+                    </a>
+                    <br />
+                    <a class="pull-left btn btn-reception" onclick=""
+                       title="עדכון כרטיס">
+                        <i class="fa fa-fw fa-ticket-alt"></i>&nbsp; עדכון כרטיס
+                    </a>
+                    <br />
+                    <a class="pull-left btn btn-reception" onclick=""
+                       title="הדפסת כרטיס">
+                        <i class="fa fa-fw fa-print"></i>&nbsp; הדפסת כרטיס
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

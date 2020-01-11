@@ -1,4 +1,111 @@
-﻿.nice-pickers {
+﻿body {
+    font-family: "Open Sans Hebrew", "cursive"
+}
+
+.card.disabled {
+    background: darkgray;
+    cursor: no-drop;
+    color: white;
+}
+
+.dragon-management-btn {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    background: #dc143c;
+    color: #fff;
+}
+
+.dragon-register-btn {
+    margin-bottom: 20px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    background: rgb(255,118,31);
+    background: linear-gradient(13deg, rgba(255,118,31,1) 0%, rgba(255,192,0,1) 100%);
+    width: 100%;
+    height: 60px;
+    color: #fff;
+    line-height: 1.2;
+    font-weight: bold;
+    font-size: 2.4em;
+    font-weight: bold;
+    overflow: hidden;
+    border-radius: 0;
+}
+
+    .dragon-register-btn:hover {
+        color: #fff !important;
+        text-decoration: underline white !important;
+    }
+
+
+.dragon-btn {
+    font-size: 1.2em;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    background: rgb(255,118,31);
+    background: linear-gradient(13deg, rgba(255,118,31,1) 0%, rgba(255,192,0,1) 100%);
+    color: black;
+    font-weight: bold;
+    border-radius: 0;
+}
+
+    .dragon-btn:hover {
+        color: black !important;
+        text-decoration: underline white !important;
+    }
+
+
+
+.dragon-organge-color {
+    color: #ff7600;
+}
+
+.dragon-black-background {
+    background-color: #000000;
+}
+
+a.dragon-organge-link {
+    color: #ff7600;
+}
+
+    a.dragon-organge-link :hover {
+        color: #ff7600;
+        text-decoration: underline #ff7600 !important;
+    }
+
+.dragon-light-orange-background {
+    background-color: #ff953a;
+}
+
+.dragon-orange-background {
+    background-color: #ff7600;
+}
+
+.splide__arrow {
+    top: 45%;
+    background: #ff7600;
+    width: 3em;
+    height: 3em;
+    -ms-opacity: 0.8;
+    opacity: 0.8;
+}
+
+.dragon-slider-text {
+    text-align: center;
+    background: #ff761f;
+    background: linear-gradient(13deg, rgba(255, 118, 31, 1) 0%, rgba(255, 192, 0, 1) 100%);
+    font-size: 2.2em;
+    color: white;
+    padding: 6px;
+    padding-bottom: 12px;
+    font-weight: bold;
+    line-height: 0.9;
+}
+
+.form-control-inline {
+    display: inline-block;
+    margin-left: 15px;
+    margin-right: 5px;
+}
+
+.nice-pickers {
     color: #060064;
     background: #f7fffe;
     background-color: #f7fffe !important;
@@ -11,6 +118,13 @@
 
 .btn-save {
     width: 250px;
+    margin: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-save-just-margin {
+    width: 100%;
     margin: 5px;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -52,4 +166,15 @@
 
 .text-heavy-bold {
     font-weight: 700;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.storms-image {
+    height: 200px;
+    width: 150px;
+    margin-left: 20px;
+    margin-top: 10px;
 }

@@ -1,23 +1,32 @@
 ﻿using System;
+using DragonCon.Logical;
+using DragonCon.Logical.Communication;
+using DragonCon.Modeling.Helpers;
+using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Identities;
+using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents.Session;
 
 namespace DragonCon.RavenDB.Gateways
 {
     public abstract class RavenGateway : IDisposable
     {
-        private readonly StoreHolder _holder;
-        protected IActor Actor { get; private set; }
-
-        private readonly IDocumentSession _session;
         public IDocumentSession Session => _session;
+        protected IIdentityFacade Identities { get; private set; }
+        protected IActor Actor { get; private set; }
+        protected ICommunicationHub Hub { get; private set; }
+        private readonly StoreHolder _holder;
+        private readonly IDocumentSession _session;
 
 
-        protected RavenGateway(StoreHolder holder, IActor actor)
+        protected RavenGateway(IServiceProvider provider)
         {
-            _holder = holder;
-            Actor = actor;
+            _holder = provider.GetRequiredService<StoreHolder>();
             _session = _holder.Store.OpenSession();
+
+            Actor = provider.GetRequiredService<IActor>();
+            Hub = provider.GetRequiredService<ICommunicationHub>();
+            Identities = provider.GetRequiredService<IIdentityFacade>();
         }
 
         private void ReleaseUnmanagedResources()

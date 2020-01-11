@@ -11,10 +11,10 @@ namespace DragonCon.Modeling.Models.Tickets
     {
         [Description("רגיל")]
         NotLimited,
+        [Description("צוות")]
+        Staff,
         [Description("הנחיה")]
         GameMaster,
-        [Description("סיוע הנחיה")]
-        GameHelper,
         [Description("התנדבות")]
         Volunteer
     }

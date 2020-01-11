@@ -1,8 +1,8 @@
-﻿using System.IO;
-using Microsoft.AspNetCore;
+﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog.Web;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace DragonCon.App
 {
@@ -10,21 +10,45 @@ namespace DragonCon.App
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            var dir = Environment.CurrentDirectory;
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.File($"{dir}\\Logs\\DragonCon_.txt", 
+                    Serilog.Events.LogEventLevel.Warning,
+                    rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            try
+            {
+                Log.Warning("Starting up");
+                BuildWebHost(args).Build().Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Application start-up failed");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .ConfigureLogging(logging =>
+        public static IHostBuilder BuildWebHost(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(LogLevel.Warning);
-                })
-                .UseNLog()
-                .UseStartup<Startup>()
-                .Build();
+                    webBuilder
+                        //.UseKestrel()
+                        //.ConfigureKestrel(serverOptions =>
+                        //{
+                        //    // Set properties and call methods on options
+                        //})
+                        .UseContentRoot(Directory.GetCurrentDirectory())
+                        .UseIIS()
+                        .UseIISIntegration()
+                        .UseSerilog()
+                        .UseStartup<Startup>();
+                });
     }
 }

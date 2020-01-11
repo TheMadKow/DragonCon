@@ -1,0 +1,127 @@
+﻿@{
+    ViewData["Title"] = "התנדבות בכנס";
+}
+
+<br />
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            קריאה פתוחה להתנדבות
+        </h3>
+        <p class="card-paragraph">
+            אנו יוצאים בקריאה למנחים המובחרים להריץ בכנס דרקוניקון - אתם יכולים להנחות בכל שיטה ועולם מערכה שתרצו! אנו מזמינים גם מנחים שזו הפעם הראשונה שלהם להנחות בכנס להירשם לדרקוניקון - נשמח לעזור לכם.
+        </p>
+
+    </div>
+</div>
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            מדוע להנחות משחקי תפקידים בדרקוניקון?
+        </h3>
+        <ul class="fa-ul card-list">
+
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                זכו בתהילת עולם מהשחקנים שלכם.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                הזדמנות להריץ שיטות חדשות ולהתנסות בעולמות מערכה אחרים.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                מנחה בסבב בודד, מקבל משחק נוסף חינם. מנחה ב-2 סבבים או יותר מקבל כרטיס מלא לכל הכנס, סנדוויץ', וגם צ'ופר מיוחד!
+            </li>
+        </ul>
+        <div class="text-center">
+            <a asp-area="Convention" asp-controller="Home" asp-action="Register" class="btn dragon-btn">לחצו כאן להנחות משחק!</a>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            מדוע לארגן משחק לוח בדרקוניקון?
+        </h3>
+        <ul class="fa-ul card-list">
+
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                ארגנו והשתתפו בהדגמות, סדנאות, טורנירים ופעילויות נוספות של משחקים.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                פגשו מאות שחקנים כמוכם.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                יצרת משחק ואתם רוצים להדגים אותו לקהל הרחב
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                מארגן אירוע בודד, מקבל אירוע נוסף חינם. מארגן 2 אירועים או יותר מקבל כרטיס מלא לכל הכנס, סנדוויץ', וגם צ'ופר מיוחד!
+            </li>
+        </ul>
+        <div class="text-center">
+            <a asp-area="Convention" asp-controller="Home" asp-action="Register" class="btn dragon-btn">לחצו כאן לארגן משחק!</a>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            מדוע להתנדב לסגל הכנס?
+        </h3>
+        <p class="card-paragraph">
+            כנס דרקוניקון צועד על קיבתו, או ליתר דיוק על הקיבה של המתנדבים שלנו. התנדבו לכנס וסייעו לנו להפוך את דרקוניקון לחגיגת משחקים וכיף.
+            המתנדבים שלנו אחראים על תפעול הכנס, ארגון המשחקים, רישום השחקנים ועל חוויית כנס מגניבה לכולם. השיבוץ למשמרות יבוצע כך שתוכלו גם להתנדב וגם לשחק במשחק שאתם רוצים.
+        </p>
+        <h4>חיל הדרקונים קורא לכם!</h4>
+        <ul class="fa-ul card-list">
+
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                קדמו את התחביב וגלו את סודות דרקוניקון.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                קחו חלק בארגון כנס צעיר ורענן וקדמו את קהילת השחקנים בישראל.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                מתנדב מקבל כרטיס לפעילות בודדת על כל משמרת התנדבות. מתנדבת לשתי משמרות מקבלת כרטיס מלא לכל הכנס.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                מתנדבים מקבלים סנדוויץ' ושתיה ביום שבו הם מתנדבים.
+            </li>
+        </ul>
+        <div class="text-center">
+            <a asp-area="Convention" asp-controller="Home" asp-action="VolunteeringForm" class="btn dragon-btn">לחצו כאן לטופס ההתנדבות בכנס!</a>
+        </div>
+        <br />
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-volunteer")
+    </script>
+}

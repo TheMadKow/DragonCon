@@ -13,7 +13,6 @@ namespace DragonCon.Modeling.Models.Events
         List<string> GameMasterIds { get; set; }
         string Id { get; set; }
         string Name { get; set; }
-        List<string> ParticipantIds { get; set; }
         SizeRestriction Size { get; set; }
         EventStatus Status { get; set; }
         string SubActivityId { get; set; }
