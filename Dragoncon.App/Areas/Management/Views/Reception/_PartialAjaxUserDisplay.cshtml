@@ -8,14 +8,14 @@
 <table class="table table-couple-striped text-right">
     <tbody>
 
-        @foreach (var part in Model.Participants.OrderByDescending(x => x.Inner.FullName))
+        @foreach (var engage in Model.Participants.OrderByDescending(x => x.Participant.FullName))
         {
             var statusColor = "text-primary";
             var statusText = "אין כרטיס";
 
-            if (part.EngagedConventionInvoice != null)
+            if (engage.Inner.Payment != null)
             {
-                if (part.EngagedConventionInvoice.IsPaid)
+                if (engage.Inner.Payment.IsPaid)
                 {
                     statusColor = "text-success";
                     statusText = "שולם";
@@ -27,15 +27,14 @@
                 }
             }
 
-            var shortTerm = part.Inner as ShortTermParticipant;
-            var longTerm = part.Inner as LongTermParticipant;
-            var participantId = shortTerm == null ? longTerm.Id : shortTerm.Id;
-            var isShortTerm = shortTerm != null;
+            var longTerm = engage.Participant as LongTermParticipant;
+            var participantId = engage.Participant.Id;
+            var isShortTerm = engage.Inner.IsShortTerm;
 
             <tr>
                 <td class="tw-7">
                     <h5>
-                        <strong>@part.Inner.FullName</strong>
+                        <strong>@engage.Participant.FullName</strong>
                     </h5>
 
                     @if (isShortTerm)
@@ -47,7 +46,7 @@
                     }
                     else
                     {
-                        if (part.EngagedConventionId == Actor.ManagedConvention.ConventionId)
+                        if (engage.Inner.ConventionId == Actor.ManagedConvention.ConventionId)
                         {
                             <div>
                                 <i class="fa fa-fw fa-user-clock"></i> רשום לכנס הנוכחי
@@ -57,7 +56,7 @@
                         else
                         {
                             <div>
-                                <i class="fa fa-fw fa-user-clock"></i> נרשם בכנסי עבר
+                                <i class="fa fa-fw fa-user-clock"></i> כנס אחרון: @engage.Convention.Name
                                 <br />
                             </div>
                         }
@@ -68,19 +67,19 @@
                     }
 
 
-                    @if (part.Inner.PhoneNumber.IsNotEmptyString())
+                    @if (engage.Participant.PhoneNumber.IsNotEmptyString())
                     {
                         <div>
                             <i class="fa fa-fw fa-phone"></i>
-                            @part.Inner.PhoneNumber <br />
+                            @engage.Participant.PhoneNumber <br />
                         </div>
                     }
 
-                    @if (part.EngagedConventionRoles.Any())
+                    @if (engage.Inner.Roles.Any())
                     {
                         <div title="תפקידי כנס">
                             <i class="fa fa-fw fa-id-card-alt"></i>
-                            @foreach (var role in part.EngagedConventionRoles)
+                            @foreach (var role in engage.Inner.Roles)
                             {
                                 <span>@role.ToTextual(). &nbsp; </span>
                             }
@@ -92,10 +91,10 @@
                         <i class="fa fa-fw fa-ticket-alt"></i> @statusText
                     </strong>
                     @{
-                        var age = DateTime.Today.Year - part.Inner.YearOfBirth;
+                        var age = DateTime.Today.Year - engage.Participant.YearOfBirth;
                     }
                     <div>
-                        <i class="fa fa-fw fa-birthday-cake"></i> @part.Inner.YearOfBirth - גיל @age <br />
+                        <i class="fa fa-fw fa-birthday-cake"></i> @engage.Participant.YearOfBirth - גיל @age <br />
                     </div>
 
                 </td>

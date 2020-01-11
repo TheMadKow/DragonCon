@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using DragonCon.Features.Convention.Home;
 using DragonCon.Features.Participant.Personal;
@@ -8,6 +9,7 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.ViewModels;
+using DragonCon.RavenDB.Factories;
 using Raven.Client.Documents;
 
 namespace DragonCon.RavenDB.Gateways.Participants
@@ -81,11 +83,15 @@ namespace DragonCon.RavenDB.Gateways.Participants
 
             if (myEngagement == null)
             {
-                myEngagement = new ConventionEngagement()
+                myEngagement = new ConventionEngagement
                 {
                     CreatorId = currentUser,
                     ParticipantId = currentUser,
                     ConventionId = currentConvention,
+                    ConventionStartDate = Actor.DisplayConvention.Days
+                        .Min(x => x.Date)
+                        .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+
                     IsLongTerm = true,
                 };
                 Session.Store(myEngagement);
@@ -104,17 +110,11 @@ namespace DragonCon.RavenDB.Gateways.Participants
 
             allEvents = allEvents.Distinct().ToList();
             allParticipants = allParticipants.Distinct().ToList();
-          
-            var events = Session.Load<Event>(allEvents);
-            var participants = Session.Load<ShortTermParticipant>(allParticipants);
-
-
+            
             var result = new PersonalViewModel();
-            result.MyEngagement = new EngagementWrapper(myEngagement);
-            foreach (var related in myRelatedEngagements)
-            {
-                result.RelatedEngagements.Add(new EngagementWrapper(related));
-            }
+            var wrapperFactory = new WrapperFactory(Session);
+            result.MyEngagement = wrapperFactory.Wrap(myEngagement);
+            result.RelatedEngagements = wrapperFactory.Wrap(myRelatedEngagements);
             return result;
         }
     }

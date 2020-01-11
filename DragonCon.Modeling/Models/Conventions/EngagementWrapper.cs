@@ -16,7 +16,9 @@ namespace DragonCon.Modeling.Models.Conventions
 
         }
 
+        public IParticipant Participant { get; set; }
+        public Convention Convention { get; set; }
         public List<EventWrapper> Events { get; set; } = new List<EventWrapper>();
-        public List<EventWrapper> MySuggestedEvents { get; set; } = new List<EventWrapper>();
+        public List<EventWrapper> SuggestedEvents { get; set; } = new List<EventWrapper>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using DragonCon.Features.Management.Participants;
@@ -133,6 +134,9 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 engagement = new ConventionEngagement()
                 {
                     ConventionId = Actor.ManagedConvention.ConventionId,
+                    ConventionStartDate = Actor.ManagedConvention.Days
+                        .Min(x => x.Date)
+                        .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                     ParticipantId = participantId,
                     IsLongTerm = isLongTerm
                 };
@@ -221,6 +225,9 @@ namespace DragonCon.RavenDB.Gateways.Managements
             ConventionEngagement engagement = new ConventionEngagement
             {
                 ConventionId = Actor.ManagedConvention.ConventionId,
+                ConventionStartDate = Actor.ManagedConvention.Days
+                    .Min(x => x.Date)
+                    .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 Payment = new PaymentInvoice()
             };
 
@@ -318,7 +325,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
             {
                 filters = filters,
                 Pagination = pagination,
-                Participants = wrapperFactory.Wrap(engagements)
+                Engagements = wrapperFactory.Wrap(engagements)
             };
 
             return result;
@@ -332,12 +339,13 @@ namespace DragonCon.RavenDB.Gateways.Managements
 
             var query = Session.Query<Participants_BySearchQuery.Result, Participants_BySearchQuery>()
                 .Include(x => x.ParticipantId)
+                .Include(x => x.ConventionId)
                 .Statistics(out var stats)
                 .Search(x => x.SearchText, searchWords).AsQueryable();
 
             if (allowHistory == false)
             {
-                query = query.Where(x => x.ConventionTerm == Actor.ManagedConvention.ConventionId);
+                query = query.Where(x => x.ConventionId == Actor.ManagedConvention.ConventionId);
             }
 
             var results = query
@@ -354,7 +362,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                     stats.TotalResults,
                     pagination.SkipCount,
                     pagination.ResultsPerPage),
-                Participants = wrapperFactory.Wrap(results),
+                Engagements = wrapperFactory.Wrap(results, false),
                 filters = new ParticipantsManagementViewModel.Filters()
             };
             return viewModel;

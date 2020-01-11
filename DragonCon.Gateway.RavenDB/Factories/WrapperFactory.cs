@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
@@ -53,7 +52,7 @@ namespace DragonCon.RavenDB.Factories
             ThrowIfNotLoaded(item.GameMasterIds);
             ThrowIfNotLoaded(item.HallId);
             ThrowIfNotLoaded(item.AgeId);
-            
+
             return new EventWrapper(item)
             {
                 Day = _session.Load<Day>(item.ConventionDayId),
@@ -70,13 +69,7 @@ namespace DragonCon.RavenDB.Factories
         }
         #endregion
 
-        #region ConventionWrapper
-
-
-
-        #endregion
-
-        #region EngagementWrapper
+        # region ConventionWrapper
         public List<ConventionWrapper> Wrap(IEnumerable<Convention> conventions)
         {
             return conventions.Select(Wrap).ToList();
@@ -97,7 +90,7 @@ namespace DragonCon.RavenDB.Factories
         }
         #endregion
 
-        #region ParticipantWrapper
+        #region EngagementWrapper
         private IParticipant GetLoadedParticipant(IConventionEngagement x)
         {
             if (x.IsLongTerm)
@@ -106,38 +99,48 @@ namespace DragonCon.RavenDB.Factories
             return _session.Load<ShortTermParticipant>(x.ParticipantId);
         }
 
-        public List<ParticipantWrapper> Wrap(IEnumerable<IConventionEngagement> engagement)
+        public List<EngagementWrapper> Wrap(IEnumerable<IConventionEngagement> engagement, bool loadEvents = true)
         {
-            return engagement.Select(Wrap).ToList();
+            return engagement.Select(x => Wrap(x, loadEvents)).ToList();
         }
-
-        public ParticipantWrapper Wrap(IConventionEngagement engagement)
+        public EngagementWrapper Wrap(IConventionEngagement engagement, bool loadEvents = true)
         {
             ThrowIfNotLoaded(engagement.ParticipantId);
             ThrowIfNotLoaded(engagement.ConventionId);
 
-            var participant = GetLoadedParticipant(engagement);
-            ParticipantWrapper wrapper;
-            if (engagement.IsLongTerm)
+            if (loadEvents)
             {
-                wrapper = new LongTermParticipantWrapper(participant);
-            }
-            else
-            {
-                wrapper = new ShortTermParticipantWrapper(participant);
+                ThrowIfNotLoaded(engagement.EventIds);
+                ThrowIfNotLoaded(engagement.SuggestedEventIds);
             }
 
-            if (engagement.ConventionId.IsNotEmptyString())
+            var events = new Dictionary<string, Event>();
+            if (loadEvents)
             {
-                var convention = _session.Load<Convention>(engagement.ConventionId);
-                wrapper.EngagedConventionId = engagement.ConventionId;
-                wrapper.EngagedConventionInvoice = engagement.Payment;
-                wrapper.EngagedConventionRoles = engagement.Roles;
-                wrapper.EngagedConventionName = convention.Name;
+                var combinedEvents = new List<string>();
+                combinedEvents.AddRange(engagement.EventIds);
+                combinedEvents.AddRange(engagement.SuggestedEventIds);
+                events = _session.Load<Event>(combinedEvents);
             }
+
+            var wrapper = new EngagementWrapper(engagement)
+            {
+                Participant = GetLoadedParticipant(engagement),
+                Convention = _session.Load<Convention>(engagement.ConventionId),
+                Events = events
+                    .Where(x => engagement.EventIds.Contains(x.Key))
+                    .Select(x => Wrap(x.Value))
+                    .ToList(),
+                SuggestedEvents = events
+                    .Where(x => engagement.SuggestedEventIds.Contains(x.Key))
+                    .Select(x => Wrap(x.Value))
+                    .ToList(),
+            };
 
             return wrapper;
         }
+
+
         #endregion
 
 

@@ -15,10 +15,12 @@ namespace DragonCon.RavenDB.Index
         public class Result
         {
             public bool IsLongTerm { get; set; } = false;
-            public string ConventionTerm { get; set; } = string.Empty;
+            public string ConventionStartDate { get; set; } = string.Empty;
+            public string ConventionId { get; set; } = string.Empty;
             public string SearchText { get; set; } = string.Empty;
             public string FullName { get; set; } = string.Empty;
             public string ParticipantId { get; set; } = string.Empty;
+            public string[] EventIds { get; set; } = new string[0];
         }
 
         public Participants_BySearchQuery()
@@ -29,9 +31,12 @@ namespace DragonCon.RavenDB.Index
                 select new
                 {
                     IsLongTerm = false,
+
+                    EventIds = s.EventIds.Concat(s.SuggestedEventIds).ToList(),
                     FullName = shortTerm.FullName,
                     ParticipantId = s.ParticipantId,
-                    ConventionTerm = s.ConventionId,
+                    ConventionId = s.ConventionId,
+                    ConventionStartDate = s.ConventionStartDate,
                     SearchText = $"{shortTerm.Id} {shortTerm.FullName} {shortTerm.PhoneNumber}",
                 });
             AddMap<ConventionEngagement>(longs => from l in longs
@@ -41,10 +46,19 @@ namespace DragonCon.RavenDB.Index
                 {
                     IsLongTerm = true,
                     FullName = longTerm.FullName,
+                    EventIds = l.EventIds.Concat(l.SuggestedEventIds).ToList(),
                     ParticipantId = l.ParticipantId,
-                    ConventionTerm = l.ConventionId,
+                    ConventionId = l.ConventionId,
+                    ConventionStartDate = l.ConventionStartDate,
                     SearchText = $"{longTerm.Id} {longTerm.FullName} {longTerm.PhoneNumber}",
                 });
+
+            Reduce = results => from result in results
+                group result by result.ParticipantId
+                into g
+                let ordered = g.OrderByDescending(x => x.ConventionStartDate)
+                let last = g.LastOrDefault()
+                select last;
 
             Index("SearchText", FieldIndexing.Search);
             Analyze("SearchText", "StandardAnalyzer");

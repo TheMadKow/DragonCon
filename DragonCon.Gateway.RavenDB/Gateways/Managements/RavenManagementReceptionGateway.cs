@@ -24,15 +24,18 @@ namespace DragonCon.RavenDB.Gateways.Managements
             var query = Session
                 .Query<Participants_BySearchQuery.Result, Participants_BySearchQuery>()
                 .Include(x => x.ParticipantId)
+                .Include(x => x.ConventionId)
+                .Include(x => x.EventIds)
                 .Statistics(out var stats)
                 .Search(x => x.SearchText, searchWords)
-                .Where(x => x.IsLongTerm || x.ConventionTerm == conventionId)
-                .Distinct()
+                .Where(x => x.IsLongTerm || x.ConventionId == conventionId)
                 .OrderBy(x => x.FullName)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)
                 .As<IConventionEngagement>()
                 .ToList();
+
+            //TODO take latest of group.
 
             var wrapperFactory = new Factories.WrapperFactory(Session);
             var viewModel = new ParticipantsReceptionViewModel

@@ -606,18 +606,8 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 .Take(pagination.ResultsPerPage)
                 .ToList();
 
-            result.Events = results.Select(x => new EventWrapper(x)
-            {
-                Day = Session.Load<Day>(x.ConventionDayId),
-                Activity = Session.Load<Activity>(x.ActivityId),
-                SubActivity = x.SubActivityId.IsNotEmptyString() 
-                    ? Session.Load<Activity>(x.SubActivityId) 
-                    : Activity.General,
-                GameMasters =
-                    Session.Load<LongTermParticipant>(x.GameMasterIds).Select(y => y.Value).ToList<IParticipant>(),
-                Hall = Session.Load<Hall>(x.HallId),
-                AgeGroup = Session.Load<AgeGroup>(x.AgeId)
-            }).ToList();
+            var wrapperFactory = new WrapperFactory(Session);
+            result.Events = wrapperFactory.Wrap(results);
 
             result.Pagination = DisplayPagination.BuildForView(
                 stats.TotalResults,

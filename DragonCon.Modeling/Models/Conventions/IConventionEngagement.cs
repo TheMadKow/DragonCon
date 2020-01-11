@@ -12,6 +12,7 @@ namespace DragonCon.Modeling.Models.Conventions
         IPaymentInvoice Payment { get; }
         string CreatorId { get;}
         bool IsLongTerm { get; }
+        bool IsShortTerm { get; }
         List<string> EventIds { get; }
         List<string> SuggestedEventIds { get; }
         List<ConventionRoles> Roles { get; }

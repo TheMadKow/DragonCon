@@ -21,7 +21,7 @@ namespace DragonCon.Features.Management.Participants
 
         public IDisplayPagination Pagination { get; set; }
         public Filters filters { get; set; }
-        public List<ParticipantWrapper> Participants { get; set; } = new List<ParticipantWrapper>();
+        public List<EngagementWrapper> Engagements { get; set; } = new List<EngagementWrapper>();
 
         public bool AllowHistoryParticipants { get; set; } = false;
     }
