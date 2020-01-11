@@ -251,7 +251,7 @@ namespace DragonCon.Modeling.Models.Identities
         {
             public string Id { get; set; }
             public string FullName { get; set; }
-            public IList<SystemRoles> SystemRoles { get; } = new List<SystemRoles>();
+            public IList<SystemRoles> SystemRoles { get; set; } = new List<SystemRoles>();
         }
 
         public class ActorConventionState

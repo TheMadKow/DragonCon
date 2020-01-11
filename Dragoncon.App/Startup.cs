@@ -122,7 +122,7 @@ namespace DragonCon.App
             services.AddSingleton(holder);
             services // Create a RavenDB IAsyncDocumentSession for each request.
                 .AddRavenDbAsyncSession(holder.Store)
-                .AddIdentity<LongTermParticipant, Raven.Identity.IdentityRole>(identityOptions => 
+                .AddIdentity<LongTermParticipant, IdentityRole>(identityOptions => 
                 {
                     // Password settings
                     identityOptions.Password.RequireDigit = true;
@@ -133,7 +133,7 @@ namespace DragonCon.App
                     identityOptions.Password.RequiredUniqueChars = 4;
 
                     // Lockout settings
-                    identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                    identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                     identityOptions.Lockout.MaxFailedAccessAttempts = 10;
                     identityOptions.Lockout.AllowedForNewUsers = true;
 

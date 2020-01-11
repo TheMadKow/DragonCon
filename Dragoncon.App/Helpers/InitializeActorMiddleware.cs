@@ -36,7 +36,7 @@ namespace DragonCon.App.Helpers
             using (var session = holder.Store.OpenSession())
             {
                 actor.System = LoadSystem(session);
-                actor.Me = LoadMe(session);
+                actor.Me = LoadMe(httpContext, session);
 
                 if (actor.HasSystemRole(SystemRoles.ContentManager) ||
                     actor.HasSystemRole(SystemRoles.ConventionManager) ||
@@ -98,20 +98,25 @@ namespace DragonCon.App.Helpers
             return new Actor.ActorDropDowns(factory, convention, system);
         }
 
-        private Actor.ActorParticipant LoadMe(IDocumentSession session)
+        private Actor.ActorParticipant LoadMe(HttpContext httpContext, IDocumentSession session)
         {
-            return new Actor.ActorParticipant
+            if (httpContext.User.Identity.IsAuthenticated)
             {
-                Id = "test@dragoncon.com",
-                FullName = "משתמש מערכת",
-                SystemRoles =
+                var user = session.Query<LongTermParticipant>()
+                    .FirstOrDefault(x => x.Email == httpContext.User.Identity.Name);
+                if (user != null)
                 {
-                    SystemRoles.ContentManager,
-                    SystemRoles.ConventionManager,
-                    SystemRoles.ReceptionManager,
-                    SystemRoles.UsersManager
+                    return new Actor.ActorParticipant
+                    {
+                        Id = user.Id,
+                        FullName = user.FullName,
+                        SystemRoles = user.SystemRoles
+                    };
                 }
-            };
+            }
+
+            return new Actor.ActorParticipant();
+
         }
 
         private Actor.ActorConventionState? LoadConvention(string conventionId, IDocumentSession _session)

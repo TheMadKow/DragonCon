@@ -8,6 +8,11 @@
     @RenderSection("Styles", required: false)
 </head>
 <body class="right-to-left" style="text-align: right;">
+    <div>
+        <input id="system_error_title" value="@ViewBag.ErrorTitle"/>
+        <input id="system_error_description" value="@ViewBag.ErrorDescription"/>
+    </div>
+
 
     <div class="d-none d-md-block">
         <div id="mySidenav" class="sidenav">
@@ -24,8 +29,8 @@
     <nav class="navbar navbar-dragon navbar-expand-md" style="padding-top: 0;padding-bottom: 0;">
         <a class="navbar-brand" href="/"><img src="/images/logos/Logo_100.png" style="height: 80px;" /></a>
         <h2 class="text-bold dragon-organge-color d-block d-md-none">דרקוניקון</h2>
-        <button class="navbar-toggler" type="button" 
-                data-toggle="collapse" data-target="#navbarSupportedContent" 
+        <button class="navbar-toggler" type="button"
+                data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             תפריט
             <span class="navbar-toggler-icon"></span>

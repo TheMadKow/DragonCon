@@ -13,12 +13,27 @@
 <script src="~/js/site.min.js" asp-append-version="true"></script>
 <script>
     $(document).ready(function () {
+        showSystemError();
         setupToggles();
         setupPickers();
         setupChosen();
         setupOpenTab();
         setupSplide();
     });
+
+    function showSystemError() {
+        var errorTitle = $("#system_error_title").val();
+        if (errorTitle !== null && errorTitle !== undefined && errorTitle !== "") {
+            var errorDesc = $("#system_error_description").val();
+            Swal.fire({
+                type: 'error',
+                title: errorTitle,
+                text: errorDesc,
+                footer: '<a href="/convention/home#tag_contactus" class="dragon-organge-color">הבעיה ממשיכה? פנו אלינו!</a>'
+            });
+
+        }
+    }
 
     function setupSplide() {
         var $item = $(".splide");

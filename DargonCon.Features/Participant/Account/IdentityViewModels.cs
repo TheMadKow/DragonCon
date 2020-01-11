@@ -1,27 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DragonCon.Features.Participant.Account
 {
+    public class AccountViewModel
+    {
+        public AccountRegisterViewModel Register { get; set; } = new AccountRegisterViewModel();
+        public AccountLoginViewModel Login { get; set; } = new AccountLoginViewModel();
+
+    }
+
     public class AccountLoginViewModel
     {
         [Required(AllowEmptyStrings = false)]
         [EmailAddress(ErrorMessage = "נא להזין כתובת חוקית")]
         public string Email { get; set; }
        
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "יש להקליד סיסמה")]
         public string Password { get; set; }
 
     }
 
     public class AccountRegisterViewModel
     {
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "יש להזין שם מלא")]
         public string FullName { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "יש להקליד סיסמה")]
         public string Password { get; set; }
 
         [Compare("Password", ErrorMessage = "הסיסמאות לא תואמות")]

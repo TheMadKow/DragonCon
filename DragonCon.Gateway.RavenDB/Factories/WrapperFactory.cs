@@ -32,7 +32,7 @@ namespace DragonCon.RavenDB.Factories
         {
             if (_session.Advanced.IsLoaded(entity) == false)
             {
-                throw new Exception($"Please include '{entity}' in your query or load before accessing {GetType().FullName}.");
+                throw new Exception($"Please include '{entity}' in your session query or load before accessing {GetType().FullName}.");
             }
         }
 

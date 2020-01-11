@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using DragonCon.Modeling.Models.Conventions;
-using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.Identities;
-using DragonCon.Modeling.Models.System;
 using Raven.Client.Documents.Indexes;
 
 namespace DragonCon.RavenDB.Index
@@ -31,7 +26,6 @@ namespace DragonCon.RavenDB.Index
                 select new
                 {
                     IsLongTerm = false,
-
                     EventIds = s.EventIds.Concat(s.SuggestedEventIds).ToList(),
                     FullName = shortTerm.FullName,
                     ParticipantId = s.ParticipantId,
@@ -50,7 +44,7 @@ namespace DragonCon.RavenDB.Index
                     ParticipantId = l.ParticipantId,
                     ConventionId = l.ConventionId,
                     ConventionStartDate = l.ConventionStartDate,
-                    SearchText = $"{longTerm.Id} {longTerm.FullName} {longTerm.PhoneNumber}",
+                    SearchText = $"{longTerm.Id} {longTerm.FullName} {longTerm.Email} {longTerm.PhoneNumber}",
                 });
 
             Reduce = results => from result in results
@@ -58,7 +52,16 @@ namespace DragonCon.RavenDB.Index
                 into g
                 let ordered = g.OrderByDescending(x => x.ConventionStartDate)
                 let last = g.LastOrDefault()
-                select last;
+                select new
+                {
+                    IsLongTerm = last.IsLongTerm,
+                    FullName = last.FullName,
+                    EventIds = last.EventIds,
+                    ParticipantId = last.ParticipantId,
+                    ConventionId = last.ConventionId,
+                    ConventionStartDate = last.ConventionStartDate,
+                    SearchText = last.SearchText
+                };
 
             Index("SearchText", FieldIndexing.Search);
             Analyze("SearchText", "StandardAnalyzer");

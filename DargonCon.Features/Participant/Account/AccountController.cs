@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DragonCon.Features.Shared;
 using DragonCon.Logical;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragonCon.Features.Participant.Account
@@ -30,20 +32,25 @@ namespace DragonCon.Features.Participant.Account
 
         public IActionResult LoginOrRegister()
         {
-            return View();
+            return View(new AccountViewModel());
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(AccountRegisterViewModel model)
         {
+            var returnModel = new AccountViewModel()
+            {
+                Register = model
+            };
+            
             if (ModelState.IsValid)
             {
-                var participant = new LongTermParticipant()
+                var participant = new LongTermParticipant
                 {
                     YearOfBirth = model.YearOfBirth,
+                    UserName = model.Email,
                     FullName = model.FullName,
                     Email = model.Email,
-                    UserName = model.Email,
                     IsAllowingPromotions = model.IsAllowingPromotions,
                     PhoneNumber = model.PhoneNumber,
                 };
@@ -54,26 +61,33 @@ namespace DragonCon.Features.Participant.Account
                     var signInResult = await Identities.LoginAsync(model.Email, model.Password, true);
                     if (signInResult.IsSuccess)
                     {
-                        
+
                         var cookieConsent = HttpContext.Features.Get<ITrackingConsentFeature>();
                         cookieConsent.GrantConsent();
                         return RedirectToAction("Index", "Personal", new { area = "Participant" });
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "כשלון בהתחברות.");
-                        return View("LoginOrRegister", model);
+                        SetUserError("כשלון בהתחברות לאחר רישום", signInResult.Details);
+                        return View("LoginOrRegister", returnModel);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "כשלון בהתחברות.");
-                    return View("LoginOrRegister", model);
+                    SetUserError("תקלה ביצירת משתתף", addResult.Errors.FirstOrDefault());
+                    return View("LoginOrRegister", returnModel);
                 }
+            }
+            else
+            {
+                var invalidProperty = ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
+                SetUserError("תקלה במידע שהתקבל", invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב");
+                return View("LoginOrRegister", returnModel);
+
             }
 
             // If we got this far, something failed, redisplay form
-            return View("LoginOrRegister", model);
+            return View("LoginOrRegister", returnModel);
         }
 
         [HttpPost]
@@ -86,7 +100,7 @@ namespace DragonCon.Features.Participant.Account
                 {
                     var cookieConsent = HttpContext.Features.Get<ITrackingConsentFeature>();
                     cookieConsent.GrantConsent();
-                    return RedirectToAction("Index", "Personal", new { area="Participant"});
+                    return RedirectToAction("Index", "Personal", new { area = "Participant" });
                 }
                 else
                 {

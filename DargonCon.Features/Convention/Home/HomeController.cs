@@ -39,11 +39,6 @@ namespace DragonCon.Features.Convention.Home
             return View();
         }
 
-        public IActionResult Register()
-        {
-            return View();
-        }
-
         public IActionResult About()
         {
             return View();

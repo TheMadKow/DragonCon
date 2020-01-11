@@ -16,13 +16,18 @@ namespace DragonCon.Features.Shared
         protected IServiceProvider Service {get;set;}
 
 
+        protected void SetUserError(string title, string description)
+        {
+            ViewBag.ErrorTitle = title;
+            ViewBag.ErrorDescription = description;
+        }
+
         public DragonController(IServiceProvider service)
         {
             Gateway = service.GetRequiredService<T>();
             Service = service;
         }
-
-
+        
         public override void OnActionExecuting(ActionExecutingContext context)
         {
                 Actor = Service.GetRequiredService<IActor>();

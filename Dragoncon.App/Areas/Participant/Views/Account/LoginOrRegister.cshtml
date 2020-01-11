@@ -1,6 +1,7 @@
 ﻿@using System.Globalization
 @using DragonCon.Modeling.Helpers
 @using DragonCon.Modeling.Models.Identities
+@model  DragonCon.Features.Participant.Account.AccountViewModel
 @{
     ViewData["Title"] = "התחברות או הרשמה לכנס";
     var actor = Actor;
@@ -54,12 +55,12 @@
                 <div class="row">
                     <div class="form-group col-8">
                         <label>שם מלא</label>
-                        <input name="FullName" class="form-control" placeholder="שם מלא ">
+                        <input value="@Model.Register.FullName" name="FullName" class="form-control" placeholder="שם מלא ">
                     </div>
                     <div class="form-group col-4">
                         <label>שנת לידה </label>
                         <br />
-                        <input name="YearOfBirth" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" />
+                        <input value="@Model.Register.YearOfBirth" name="YearOfBirth" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" />
                     </div>
                 </div>
             </div>
@@ -67,12 +68,12 @@
                 <div class="row">
                     <div class="form-group col-4">
                         <label>טלפון</label>
-                        <input name="PhoneNumber" type="tel" class="form-control" placeholder="טלפון ">
+                        <input value="@Model.Register.PhoneNumber" name="PhoneNumber" type="tel" class="form-control" placeholder="טלפון ">
                     </div>
                     <div class="form-group col-8">
                         <label>דואר אלקטרוני</label>
                         <div class="input-group ">
-                            <input name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                            <input value="@Model.Register.Email" name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     <input type="checkbox" name="IsAllowingPromotions" aria-label="Checkbox for following text input">
@@ -85,11 +86,11 @@
                 <div class="row">
                     <div class="form-group col-6">
                         <label>סיסמה</label>
-                        <input name="Password" type="password" class="form-control" placeholder="סיסמה ">
+                        <input value="@Model.Register.Password" name="Password" type="password" class="form-control" placeholder="סיסמה ">
                     </div>
                     <div class="form-group col-6">
                         <label>אימות סיסמה</label>
-                        <input name="ConfirmPassword" type="password" class="form-control" placeholder="אימות סיסמה ">
+                        <input value="@Model.Register.ConfirmPassword" name="ConfirmPassword" type="password" class="form-control" placeholder="אימות סיסמה ">
                     </div>
                 </div>
                 <div class=" row">
@@ -115,14 +116,14 @@
             <div class="col">
                 <div class="form-group">
                     <label>כתובת דואר אלקטרוני</label>
-                    <input name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                    <input value="@Model.Login.Email" name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
                     
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
                     <label>סיסמה</label>
-                    <input name="Password" type="password" class="form-control">
+                    <input value="@Model.Login.Password" name="Password" type="password" class="form-control">
                 </div>
             </div>
             <div class=" row">

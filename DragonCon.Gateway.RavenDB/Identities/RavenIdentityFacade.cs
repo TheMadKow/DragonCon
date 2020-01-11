@@ -50,7 +50,7 @@ namespace DragonCon.RavenDB.Identities
                 return new IdentityResults.Password()
                 {
                     IsSuccess = false,
-                    Errors = new[] { "User already exists" }
+                    Errors = new[] { "קיים משתמש עם כתובת הדואר הזו" }
                 };
 
 
@@ -69,6 +69,7 @@ namespace DragonCon.RavenDB.Identities
                 };
             };
 
+            user.Id = null; // Don't use the email as identity.
             await _session.SaveChangesAsync();
             return await SetPasswordAsync(user, password);
         }
