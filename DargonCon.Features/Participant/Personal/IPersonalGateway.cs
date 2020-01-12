@@ -1,5 +1,8 @@
-﻿using DragonCon.Features.Shared;
+﻿using System.Threading.Tasks;
+using DragonCon.Features.Participant.Account;
+using DragonCon.Features.Shared;
 using DragonCon.Modeling.Models.Common;
+using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.ViewModels;
 
 namespace DragonCon.Features.Participant.Personal
@@ -8,5 +11,10 @@ namespace DragonCon.Features.Participant.Personal
     {
         Answer AddSuggestedEvent(SuggestEventViewModel viewmodel);
         PersonalViewModel BuildPersonalViewModel();
+        LongTermParticipant GetParticipant(string id);
+
+        // Account
+        Task<Answer> ChangePassword(PasswordChangeViewModel viewmodel);
+        Task<Answer> UpdateDetails(DetailsUpdateViewModel viewModel);
     }
 }

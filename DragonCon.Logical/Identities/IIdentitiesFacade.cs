@@ -38,7 +38,10 @@ namespace DragonCon.Logical
 
     public interface IIdentityFacade
     {
-        Task<IParticipant> GetUserByUsernameAsync(string username);
+        Task<LongTermParticipant> GetUserByUsernameAsync(string username);
+        Task<LongTermParticipant> GetUserByUserIdAsync(string id);
+
+        Task<IdentityResults.Password> UpdateParticipant(LongTermParticipant user);
 
         Task<IdentityResults.Password> AddNewParticipant(IParticipant user, string password = "");
         Task<IdentityResults.Password> GeneratePasswordResetTokenAsync(LongTermParticipant user);

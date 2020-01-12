@@ -2,22 +2,31 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using DragonCon.Features.Convention.Home;
+using DragonCon.Features.Participant.Account;
 using DragonCon.Features.Participant.Personal;
+using DragonCon.Logical;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.ViewModels;
 using DragonCon.RavenDB.Factories;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 
 namespace DragonCon.RavenDB.Gateways.Participants
 {
     public class RavenPersonalGateway : RavenGateway, IPersonalGateway
     {
+        private IIdentityFacade _facade;
+
         public RavenPersonalGateway(IServiceProvider provider) : base(provider)
         {
+            _facade = provider.GetRequiredService<IIdentityFacade>();
         }
 
         public Answer AddSuggestedEvent(SuggestEventViewModel viewmodel)
@@ -80,8 +89,8 @@ namespace DragonCon.RavenDB.Gateways.Participants
             var myRelatedEngagements = Session.Query<ConventionEngagement>()
                 .Include(x => x.ParticipantId)
                 .Include(x => x.EventIds)
-                .Where(x => x.CreatorId == currentUser 
-                            && x.ParticipantId != currentUser 
+                .Where(x => x.CreatorId == currentUser
+                            && x.ParticipantId != currentUser
                             && x.ConventionId == currentConvention)
                 .ToList();
 
@@ -122,6 +131,43 @@ namespace DragonCon.RavenDB.Gateways.Participants
             result.MyEngagement = wrapperFactory.Wrap(myEngagement);
             result.RelatedEngagements = wrapperFactory.Wrap(myRelatedEngagements);
             return result;
+        }
+
+        public LongTermParticipant GetParticipant(string id)
+        {
+            return Session.Load<LongTermParticipant>(id);
+        }
+
+        public async Task<Answer> ChangePassword(PasswordChangeViewModel viewmodel)
+        {
+            var user = await _facade.GetUserByUserIdAsync(Actor.Me.Id);
+            var result = await _facade.ChangePasswordAsync(user, viewmodel.OldPassword, viewmodel.newPassword);
+            return result.IsSuccess ? Answer.Success : Answer.Error(result.Errors.FirstOrDefault());
+        }
+
+        public async Task<Answer> UpdateDetails(DetailsUpdateViewModel viewModel)
+        {
+            var user = await _facade.GetUserByUserIdAsync(Actor.Me.Id);
+            user.YearOfBirth = viewModel.YearOfBirth;
+            user.FullName = viewModel.FullName;
+            user.IsAllowingPromotions = viewModel.IsAllowingPromotions;
+            bool emailReplace = user.Email.ToLower() != viewModel.Email.ToLower();
+            user.Email = viewModel.Email;
+
+            var result = await _facade.UpdateParticipant(user);
+            var message = "";
+            if (result.IsSuccess && emailReplace)
+            {
+                await _facade.LogoutAsync(user.UserName);
+                message = "Logout";
+            }
+
+            return result.IsSuccess ?
+                new Answer(AnswerType.Success)
+                {
+                    Message = message
+                }
+                : Answer.Error(result.Errors.FirstOrDefault());
         }
     }
 }

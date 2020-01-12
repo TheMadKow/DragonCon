@@ -5,10 +5,8 @@ using DragonCon.Features.Shared;
 using DragonCon.Logical;
 using DragonCon.Logical.Communication;
 using DragonCon.Modeling.Models.Identities;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +26,6 @@ namespace DragonCon.Features.Participant.Account
             Identities = service.GetRequiredService<IIdentityFacade>();
             Communication = service.GetRequiredService<ICommunicationHub>();
         }
-
 
         public IActionResult LoginOrRegister()
         {
@@ -133,32 +130,42 @@ namespace DragonCon.Features.Participant.Account
             return RedirectToAction("Login");
         }
 
-        //[HttpGet]
-        //public IActionResult ForgotPassword()
-        //{
-        //    return View();
-        //}
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = await _identity.GetUserByUsernameAsync(model.Email);
-        //        if (user == null)
-        //            return View("ForgotPasswordConfirmation");
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await Identities.GetUserByUsernameAsync(email);
+                if (user == null)
+                    return RedirectToAction("ForgotPasswordConfirm");
 
-        //        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-        //        // Send an email with this link
-        //        var result = await _identity.GeneratePasswordResetTokenAsync(user);
-        //        var callbackUrl = Url.Action("ForgotPasswordCallback", "Account", new { userId = user.Id, code = result.Token }, HttpContext.Request.Scheme);
-        //        await SendForgotPasswordEMail(user, callbackUrl);
-        //        return View("ForgotPasswordConfirmation");
-        //    }
+                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
+                // Send an email with this link
+                var result = await Identities.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action("ForgotPasswordCallback", "Account", new { userId = user.Id, code = result.Token }, HttpContext.Request.Scheme);
+                await Communication.SendForgotPassword(user, callbackUrl);
+                return RedirectToAction("ForgotPasswordConfirm");
+            }
+            else
+            {
+                var invalidProperty = ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
+                SetUserError("תקלה במידע שהתקבל", invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב");
+                return View();
+            }
+        }
 
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
+        [HttpGet]
+        public IActionResult ForgotPasswordConfirm()
+        {
+            return View();
+        }
+
 
         //private async Task SendForgotPasswordEMail(ISystemUser user, string callbackUrl)
         //{

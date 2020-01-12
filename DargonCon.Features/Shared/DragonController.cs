@@ -21,6 +21,11 @@ namespace DragonCon.Features.Shared
             ViewBag.ErrorTitle = title;
             ViewBag.ErrorDescription = description;
         }
+        protected void SetUserSuccess(string title, string description)
+        {
+            ViewBag.SuccessTitle = title;
+            ViewBag.SuccessDescription = description;
+        }
 
         public DragonController(IServiceProvider service)
         {

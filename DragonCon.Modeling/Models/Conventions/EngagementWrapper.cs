@@ -11,7 +11,8 @@ namespace DragonCon.Modeling.Models.Conventions
         {
 
         }
-        public EngagementWrapper(IConventionEngagement engagement)
+        public EngagementWrapper(ConventionEngagement engagement) 
+            : base(engagement)
         {
 
         }

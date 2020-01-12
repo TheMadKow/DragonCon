@@ -1,0 +1,43 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Identities
+@model DragonCon.Features.Participant.Account.UpdateAccountViewModel
+@{
+    ViewData["Title"] = "האזור האישי";
+    var actor = Actor;
+}
+
+@await Html.PartialAsync("_PartialBack")
+
+    <div class="card card card-gray-float">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            עדכון פרטים
+        </h3>
+        <div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
+            @await Html.PartialAsync("_PartialUpdateDetails", Model.Details)
+        </div>
+        <p class="card-paragraph">
+            <span class="text-danger">הערה: </span>
+            מטעמי אבטחה, בעדכון כתובת דואר אלקטרוני - תדרשו להתחבר למערכת מחדש.
+        </p>
+    </div>
+
+
+<div class="card card card-gray-float">
+    <h3 class="card-title text-bold">
+        <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+        &nbsp;
+        החלפת סיסמה
+    </h3>
+    <div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
+        @await Html.PartialAsync("_PartialChangePassword", Model.Password)
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-personal")
+    </script>
+}

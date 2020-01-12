@@ -25,6 +25,7 @@ using DragonCon.RavenDB.Index;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -141,7 +142,8 @@ namespace DragonCon.App
                     // User settings
                     identityOptions.User.RequireUniqueEmail = true;
                 })// Adds an identity system to ASP.NET Core
-                .AddRavenDbIdentityStores<LongTermParticipant>(); ;
+                .AddRavenDbIdentityStores<LongTermParticipant>()
+                .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>
             {

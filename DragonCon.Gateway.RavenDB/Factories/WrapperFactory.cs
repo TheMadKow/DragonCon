@@ -9,6 +9,7 @@ using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Tickets;
 using Raven.Client.Documents.Session;
+using Serilog;
 
 namespace DragonCon.RavenDB.Factories
 {
@@ -20,19 +21,19 @@ namespace DragonCon.RavenDB.Factories
             _session = session;
         }
 
-        private void ThrowIfNotLoaded(IEnumerable<string> entities)
+        private void WarnIfNotLoaded(IEnumerable<string> entities)
         {
             foreach (var entity in entities)
             {
-                ThrowIfNotLoaded(entity);
+                WarnIfNotLoaded(entity);
             }
         }
 
-        private void ThrowIfNotLoaded(string entity)
+        private void WarnIfNotLoaded(string entity)
         {
-            if (_session.Advanced.IsLoaded(entity) == false)
+            if (entity != null && _session.Advanced.IsLoaded(entity) == false)
             {
-                throw new Exception($"Please include '{entity}' in your session query or load before accessing {GetType().FullName}.");
+                Log.Logger.Warning($"Please include '{entity}' in your session query or load before accessing {GetType().FullName}.");
             }
         }
 
@@ -45,13 +46,13 @@ namespace DragonCon.RavenDB.Factories
 
         public EventWrapper Wrap(Event item)
         {
-            ThrowIfNotLoaded(item.ConventionDayId);
-            ThrowIfNotLoaded(item.ActivityId);
+            WarnIfNotLoaded(item.ConventionDayId);
+            WarnIfNotLoaded(item.ActivityId);
             if (item.SubActivityId.IsNotEmptyString())
-                ThrowIfNotLoaded(item.SubActivityId);
-            ThrowIfNotLoaded(item.GameMasterIds);
-            ThrowIfNotLoaded(item.HallId);
-            ThrowIfNotLoaded(item.AgeId);
+                WarnIfNotLoaded(item.SubActivityId);
+            WarnIfNotLoaded(item.GameMasterIds);
+            WarnIfNotLoaded(item.HallId);
+            WarnIfNotLoaded(item.AgeId);
 
             return new EventWrapper(item)
             {
@@ -77,9 +78,9 @@ namespace DragonCon.RavenDB.Factories
 
         public ConventionWrapper Wrap(Convention convention)
         {
-            ThrowIfNotLoaded(convention.HallIds);
-            ThrowIfNotLoaded(convention.TicketIds);
-            ThrowIfNotLoaded(convention.DayIds);
+            WarnIfNotLoaded(convention.HallIds);
+            WarnIfNotLoaded(convention.TicketIds);
+            WarnIfNotLoaded(convention.DayIds);
             var wrapper = new ConventionWrapper(convention)
             {
                 Halls = _session.Load<Hall>(convention.HallIds).Select(x => x.Value).ToList(),
@@ -105,13 +106,13 @@ namespace DragonCon.RavenDB.Factories
         }
         public EngagementWrapper Wrap(IConventionEngagement engagement, bool loadEvents = true)
         {
-            ThrowIfNotLoaded(engagement.ParticipantId);
-            ThrowIfNotLoaded(engagement.ConventionId);
+            WarnIfNotLoaded(engagement.ParticipantId);
+            WarnIfNotLoaded(engagement.ConventionId);
 
             if (loadEvents)
             {
-                ThrowIfNotLoaded(engagement.EventIds);
-                ThrowIfNotLoaded(engagement.SuggestedEventIds);
+                WarnIfNotLoaded(engagement.EventIds);
+                WarnIfNotLoaded(engagement.SuggestedEventIds);
             }
 
             var events = new Dictionary<string, Event>();
@@ -123,7 +124,7 @@ namespace DragonCon.RavenDB.Factories
                 events = _session.Load<Event>(combinedEvents);
             }
 
-            var wrapper = new EngagementWrapper(engagement)
+            var wrapper = new EngagementWrapper(engagement as ConventionEngagement)
             {
                 Participant = GetLoadedParticipant(engagement),
                 Convention = _session.Load<Convention>(engagement.ConventionId),
@@ -142,7 +143,7 @@ namespace DragonCon.RavenDB.Factories
 
         private EngagedEvent WrapJustDate(Event item)
         {
-            ThrowIfNotLoaded(item.ConventionDayId);
+            WarnIfNotLoaded(item.ConventionDayId);
             
             return new EngagedEvent(item)
             {

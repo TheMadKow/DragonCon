@@ -32,10 +32,8 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 .OrderBy(x => x.FullName)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)
-                .As<IConventionEngagement>()
+                .As<ConventionEngagement>()
                 .ToList();
-
-            //TODO take latest of group.
 
             var wrapperFactory = new Factories.WrapperFactory(Session);
             var viewModel = new ParticipantsReceptionViewModel

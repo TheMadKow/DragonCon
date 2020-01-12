@@ -18,7 +18,7 @@
             @if (Actor.DisplayConvention.Settings.AllowEventsRegistration ||
             (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
             {
-                <div class="card  col-3 clickable ">
+                <div class="card  col-3 clickable " onclick="">
                     <div class="card-body text-center ">
                         <i class="fa fa-2x fa-fw fa-dice-d20" style="padding-bottom: 10px;"></i><br /><strong class="h4"> הרשמה<br />לאירועים</strong>
                     </div>
@@ -46,7 +46,7 @@
             }
 
             <div class="card col-3">
-                <div class="card-body text-center clickable">
+                <div class="card-body text-center clickable" onclick="UpdateAccount()">
                     <i class="fa fa-2x fa-fw fa-user-cog"  style="padding-bottom: 10px;"></i><br /> <strong class="h4"> עדכון<br />פרטים</strong>
                 </div>
             </div>
@@ -54,7 +54,7 @@
             @if (Actor.HasAnySystemRole)
             {
                 <div class="card col-3 dragon-management-btn">
-                    <div class="card-body text-center clickable ">
+                    <div class="card-body text-center clickable" onclick="ViewManagement()">
                         <a asp-area="Management" asp-controller="Dashboard" asp-action="Index" style="color:white">
                             <i class="fa fa-2x  fa-fw fa-tools"  style="padding-bottom: 10px;"></i><br />  <strong class="h4"> איזור <br />הניהול</strong>
                         </a>
@@ -103,10 +103,17 @@
     </ul>
 </div>
 
-
-
 @section scripts {
     <script>
-        SetActiveMenu("nav-personal")
+        function UpdateAccount() {
+            window.location.href = "/Participant/Personal/UpdateAccount";
+        }
+
+        function ViewManagement() {
+            window.location.href = "/Management";
+        }
+
+
+        SetActiveMenu("nav-personal");
     </script>
 }
