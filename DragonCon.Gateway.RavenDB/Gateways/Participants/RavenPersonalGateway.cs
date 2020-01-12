@@ -24,36 +24,36 @@ namespace DragonCon.RavenDB.Gateways.Participants
         {
             try
             {
-                    var lazyAge = Session.Advanced.Lazily.Load<AgeGroup>(viewmodel.AgeRestrictionId);
-                    var conEvent = new Event()
+                var lazyAge = Session.Advanced.Lazily.Load<AgeGroup>(viewmodel.AgeRestrictionId);
+                var conEvent = new Event()
+                {
+                    Name = viewmodel.Name,
+                    ConventionDayId = viewmodel.DayId,
+                    Description = viewmodel.Description,
+                    SpecialRequests = viewmodel.Requests,
+                    ActivityId = viewmodel.ActivityId,
+                    SubActivityId = viewmodel.SystemId,
+                    TimeSlot = new TimeSlot
                     {
-                        Name = viewmodel.Name,
-                        ConventionDayId = viewmodel.DayId,
-                        Description = viewmodel.Description,
-                        SpecialRequests = viewmodel.Requests,
-                        ActivityId = viewmodel.ActivityId,
-                        SubActivityId = viewmodel.SystemId,
-                        TimeSlot = new TimeSlot
-                        {
-                            From = viewmodel.StartTime,
-                            To = viewmodel.StartTime.Plus(viewmodel.Period)
-                        },
-                        Size = viewmodel.SizeRestrictions,
-                        GameMasterIds = new List<string> {viewmodel.CreatorId},
-                        Status = EventStatus.Pending,
-                        Tags = viewmodel.Tags,
-                        HallId = string.Empty,
-                        HallTable = null,
-                    };
+                        From = viewmodel.StartTime,
+                        To = viewmodel.StartTime.Plus(viewmodel.Period)
+                    },
+                    Size = viewmodel.SizeRestrictions,
+                    GameMasterIds = new List<string> { viewmodel.CreatorId },
+                    Status = EventStatus.Pending,
+                    Tags = viewmodel.Tags,
+                    HallId = string.Empty,
+                    HallTable = null,
+                };
 
-                    Session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
-                    conEvent.AgeId = lazyAge.Value.Id;
+                Session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
+                conEvent.AgeId = lazyAge.Value.Id;
 
-                    Session.Store(conEvent);
-                    Session.SaveChanges();
+                Session.Store(conEvent);
+                Session.SaveChanges();
 
-                    return new Answer(AnswerType.Success);
-                
+                return new Answer(AnswerType.Success);
+
             }
             catch (Exception e)
             {
@@ -71,14 +71,18 @@ namespace DragonCon.RavenDB.Gateways.Participants
             var currentUser = Actor.Me.Id;
 
             var myEngagement = Session.Query<ConventionEngagement>()
+                .Include(x => x.ConventionId)
+                .Include(x => x.ParticipantId)
                 .Include(x => x.EventIds)
                 .Include(x => x.SuggestedEventIds)
                 .FirstOrDefault(x => x.ConventionId == currentConvention && x.ParticipantId == currentUser);
-        
+
             var myRelatedEngagements = Session.Query<ConventionEngagement>()
                 .Include(x => x.ParticipantId)
                 .Include(x => x.EventIds)
-                .Where(x => x.CreatorId == currentUser)
+                .Where(x => x.CreatorId == currentUser 
+                            && x.ParticipantId != currentUser 
+                            && x.ConventionId == currentConvention)
                 .ToList();
 
             if (myEngagement == null)
@@ -108,9 +112,11 @@ namespace DragonCon.RavenDB.Gateways.Participants
                 allEvents.AddRange(myRelatedEngagement.EventIds);
             }
 
-            allEvents = allEvents.Distinct().ToList();
-            allParticipants = allParticipants.Distinct().ToList();
-            
+            // Preload Events
+            Session
+                .Include<Event>(x => x.ConventionDayId)
+                .Load<Event>(allEvents);
+
             var result = new PersonalViewModel();
             var wrapperFactory = new WrapperFactory(Session);
             result.MyEngagement = wrapperFactory.Wrap(myEngagement);

@@ -68,10 +68,15 @@ namespace DragonCon.RavenDB.Identities
                     IsSuccess = false,
                     Errors = createUserResult.Errors.Select(x => $"{x.Code}: {x.Description}").ToArray()
                 };
-            };
+            }
 
             await _session.SaveChangesAsync();
-            return new IdentityResults.Password();
+            return new IdentityResults.Password()
+            {
+                IsLongTerm = true,
+                IsSuccess = true,
+                Token = password
+            };
         }
 
         private async Task<IdentityResults.Password> AddShortTermParticipant(ShortTermParticipant user)

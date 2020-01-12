@@ -129,18 +129,26 @@ namespace DragonCon.RavenDB.Factories
                 Convention = _session.Load<Convention>(engagement.ConventionId),
                 Events = events
                     .Where(x => engagement.EventIds.Contains(x.Key))
-                    .Select(x => Wrap(x.Value))
+                    .Select(x => WrapJustDate(x.Value))
                     .ToList(),
                 SuggestedEvents = events
                     .Where(x => engagement.SuggestedEventIds.Contains(x.Key))
-                    .Select(x => Wrap(x.Value))
+                    .Select(x => WrapJustDate(x.Value))
                     .ToList(),
             };
 
             return wrapper;
         }
 
-
+        private EngagedEvent WrapJustDate(Event item)
+        {
+            ThrowIfNotLoaded(item.ConventionDayId);
+            
+            return new EngagedEvent(item)
+            {
+                Day = _session.Load<Day>(item.ConventionDayId),
+            };
+        }
         #endregion
 
 

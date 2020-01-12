@@ -8,11 +8,8 @@
     @RenderSection("Styles", required: false)
 </head>
 <body class="right-to-left" style="text-align: right;">
-    <div>
-        <input id="system_error_title" value="@ViewBag.ErrorTitle"/>
-        <input id="system_error_description" value="@ViewBag.ErrorDescription"/>
-    </div>
-
+    @await Html.PartialAsync("_PartialErrorResult")
+    @await Html.PartialAsync("_PartialAntiForgery")
 
     <div class="d-none d-md-block">
         <div id="mySidenav" class="sidenav">

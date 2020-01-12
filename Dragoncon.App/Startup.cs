@@ -36,6 +36,7 @@ using Raven.Client.ServerWide.Operations;
 using Raven.DependencyInjection;
 using Raven.Identity;
 using Serilog;
+using IdentityRole = Raven.Identity.IdentityRole;
 
 namespace DragonCon.App
 {
@@ -120,14 +121,9 @@ namespace DragonCon.App
             IndexCreation.CreateIndexes(typeof(EventsIndex_ByTitleDescription).Assembly, holder.Store);
 
             services.AddSingleton(holder);
-            services.AddRavenDbDocStore(options =>
-            {
-                options.Settings.CertFilePath = certificatePath;
-                options.Settings.DatabaseName = database;
-                options.Settings.Urls = new[] {StoreConsts.ConnectionString};
-            }).AddRavenDbAsyncSession();
-            services // Create a RavenDB IAsyncDocumentSession for each request.
-                .AddRavenDbIdentity<LongTermParticipant>(identityOptions =>
+            services
+                .AddRavenDbAsyncSession(holder.Store) 
+                .AddIdentity<LongTermParticipant, IdentityRole>(identityOptions =>
                 {
                     // Password settings
                     identityOptions.Password.RequireDigit = true;
@@ -144,7 +140,8 @@ namespace DragonCon.App
 
                     // User settings
                     identityOptions.User.RequireUniqueEmail = true;
-                });
+                })// Adds an identity system to ASP.NET Core
+                .AddRavenDbIdentityStores<LongTermParticipant>(); ;
 
             services.ConfigureApplicationCookie(options =>
             {

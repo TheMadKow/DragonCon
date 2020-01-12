@@ -9,21 +9,24 @@
     @RenderSection("Styles", required: false)
 </head>
 <body class="right-to-left image-background" style="text-align: right;">
+    @await Html.PartialAsync("_PartialErrorResult")
+    @await Html.PartialAsync("_PartialAntiForgery")
 
-<div class="container">
-    <h1 class="Title-Text text-center dragon-organge-color text-bold">
-        @if (Actor.HasDisplayConvention)
-        {
-            <span>כנס @Actor.DisplayConvention.ConventionName<br/>
-                <small>@Actor.DisplayConvention.TagLine</small>
-            </span>
-        }
-    </h1>
+    <div class="container">
+        <h1 class="Title-Text text-center dragon-organge-color text-bold">
+            @if (Actor.HasDisplayConvention)
+            {
+                <span>
+                    כנס @Actor.DisplayConvention.ConventionName<br />
+                    <small>@Actor.DisplayConvention.TagLine</small>
+                </span>
+            }
+        </h1>
 
-    <div class="body-content no-background">
-        @RenderBody()
+        <div class="body-content no-background">
+            @RenderBody()
+        </div>
     </div>
-</div>
 
 
     @await Html.PartialAsync("_PartialSharedScripts")

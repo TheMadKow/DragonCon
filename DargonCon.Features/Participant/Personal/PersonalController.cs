@@ -17,8 +17,7 @@ namespace DragonCon.Features.Participant.Personal
         public IActionResult Index()
         {
             var personalViewModel = Gateway.BuildPersonalViewModel();
-
-            return View();
+            return View(personalViewModel);
         }
 
 

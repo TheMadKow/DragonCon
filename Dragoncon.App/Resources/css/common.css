@@ -9,10 +9,13 @@
 }
 
 .dragon-management-btn {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    background: #dc143c;
-    color: #fff;
+    border: #dc143c 1px solid;
+    color: #dc143c;
 }
+
+    .dragon-management-btn a {
+        color: #dc143c !important;
+    }
 
 .dragon-register-btn {
     margin-bottom: 20px;
@@ -180,7 +183,7 @@ a.dragon-organge-link {
     margin-top: 10px;
 }
 
-.required:after{
+.required:after {
     content: " *";
     color: red;
 }
