@@ -26,7 +26,7 @@
     <PackageReference Include="NodaTime" Version="2.4.7" />
     <PackageReference Include="RavenDB.Client" Version="4.2.6" />
     <PackageReference Include="RavenDB.Client.NodaTime" Version="4.2.0" />
-    <PackageReference Include="RavenDB.Identity" Version="7.0.1" />
+    <PackageReference Include="RavenDB.Identity" Version="6.1.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
   </ItemGroup>

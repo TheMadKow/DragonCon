@@ -42,7 +42,7 @@ namespace DragonCon.Features.Participant.Account
             {
                 Register = model
             };
-            
+
             if (ModelState.IsValid)
             {
                 var participant = new LongTermParticipant
@@ -85,14 +85,16 @@ namespace DragonCon.Features.Participant.Account
                 return View("LoginOrRegister", returnModel);
 
             }
-
-            // If we got this far, something failed, redisplay form
-            return View("LoginOrRegister", returnModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(AccountLoginViewModel model)
         {
+            var returnModel = new AccountViewModel()
+            {
+                Login = model
+            };
+            
             if (ModelState.IsValid)
             {
                 var result = await Identities.LoginAsync(model.Email, model.Password, true);
@@ -104,9 +106,16 @@ namespace DragonCon.Features.Participant.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View("LoginOrRegister", model);
+                    SetUserError("כשלון בהתחברות ", result.Details);
+                    return View("LoginOrRegister", returnModel);
                 }
+            }
+            else
+            {
+                var invalidProperty = ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
+                SetUserError("תקלה במידע שהתקבל", invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב");
+                return View("LoginOrRegister", returnModel);
+
             }
 
             // If we got this far, something failed, redisplay form

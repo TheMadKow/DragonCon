@@ -53,13 +53,14 @@ namespace DragonCon.RavenDB.Identities
                     Errors = new[] { "קיים משתמש עם כתובת הדואר הזו" }
                 };
 
-
             if (password.IsEmptyString())
             {
-                password = new RandomPasswordGenerator(minimumLengthPassword: 12).Generate();
+                password = new RandomPasswordGenerator(12).Generate();
             }
 
+            //await _session.StoreAsync(user);
             var createUserResult = await _userManager.CreateAsync(user, password);
+
             if (createUserResult.Succeeded == false)
             {
                 return new IdentityResults.Password
@@ -69,9 +70,8 @@ namespace DragonCon.RavenDB.Identities
                 };
             };
 
-            user.Id = null; // Don't use the email as identity.
             await _session.SaveChangesAsync();
-            return await SetPasswordAsync(user, password);
+            return new IdentityResults.Password();
         }
 
         private async Task<IdentityResults.Password> AddShortTermParticipant(ShortTermParticipant user)

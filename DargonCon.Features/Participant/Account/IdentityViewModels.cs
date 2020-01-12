@@ -11,7 +11,7 @@ namespace DragonCon.Features.Participant.Account
 
     public class AccountLoginViewModel
     {
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "נא להזין כתובת חוקית")]
         [EmailAddress(ErrorMessage = "נא להזין כתובת חוקית")]
         public string Email { get; set; }
        
@@ -31,10 +31,10 @@ namespace DragonCon.Features.Participant.Account
         [Compare("Password", ErrorMessage = "הסיסמאות לא תואמות")]
         public string ConfirmPassword { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "נא להזין כתובת חוקית")]
         [EmailAddress(ErrorMessage = "נא להזין כתובת חוקית")]
         public string Email { get; set; }
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "נא להזין מספר חוקי")]
         [Phone(ErrorMessage = "נא להזין מספר חוקי")]
         public string PhoneNumber { get; set; }
       

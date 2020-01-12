@@ -120,9 +120,14 @@ namespace DragonCon.App
             IndexCreation.CreateIndexes(typeof(EventsIndex_ByTitleDescription).Assembly, holder.Store);
 
             services.AddSingleton(holder);
+            services.AddRavenDbDocStore(options =>
+            {
+                options.Settings.CertFilePath = certificatePath;
+                options.Settings.DatabaseName = database;
+                options.Settings.Urls = new[] {StoreConsts.ConnectionString};
+            }).AddRavenDbAsyncSession();
             services // Create a RavenDB IAsyncDocumentSession for each request.
-                .AddRavenDbAsyncSession(holder.Store)
-                .AddIdentity<LongTermParticipant, IdentityRole>(identityOptions => 
+                .AddRavenDbIdentity<LongTermParticipant>(identityOptions =>
                 {
                     // Password settings
                     identityOptions.Password.RequireDigit = true;
@@ -139,8 +144,7 @@ namespace DragonCon.App
 
                     // User settings
                     identityOptions.User.RequireUniqueEmail = true;
-                })
-                .AddRavenDbIdentityStores<LongTermParticipant>(); // Use RavenDB as the store for identity users and roles.
+                });
 
             services.ConfigureApplicationCookie(options =>
             {

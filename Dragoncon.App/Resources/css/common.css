@@ -37,6 +37,7 @@
 
 
 .dragon-btn {
+    min-width: 200px;
     font-size: 1.2em;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     background: rgb(255,118,31);
@@ -177,4 +178,9 @@ a.dragon-organge-link {
     width: 150px;
     margin-left: 20px;
     margin-top: 10px;
+}
+
+.required:after{
+    content: " *";
+    color: red;
 }
