@@ -30,9 +30,6 @@
             <li>
                 <a asp-area="Management" asp-controller="Dashboard" asp-action="Index">מידע כללי</a>
             </li>
-            <li>
-                <a asp-area="Management" asp-controller="Dashboard" asp-action="Overview">מצב אירועים</a>
-            </li>
             @if (Actor.HasSystemRole(SystemRoles.ConventionManager) ||
             Actor.HasSystemRole(SystemRoles.ReceptionManager))
             {
@@ -65,7 +62,7 @@
                 {
                     <li class="list-divider"></li>
                     <li>
-                        <a asp-area="Management" asp-controller="Convention" asp-action="Display">ניהול - תצוגות</a>
+                        <a asp-area="Management" asp-controller="Displays" asp-action="Manage">ניהול - תצוגות</a>
                     </li>
                     <li>
                         <a asp-area="Management" asp-controller="Convention" asp-action="Manage">ניהול - כנסים</a>

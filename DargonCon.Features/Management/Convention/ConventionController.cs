@@ -136,7 +136,7 @@ namespace DragonCon.Features.Management.Convention
         [HttpGet]
         public IActionResult UpdateConvention(string conId, string activeTab = null, string errorMessage = null)
         {
-            ViewBag.HelperTab = activeTab;
+            SetActiveTab(activeTab);
             var conUpdateViewModel = Gateway.BuildConventionUpdate(conId);
             conUpdateViewModel.ErrorMessage = errorMessage;
             return View("UpdateConvention", conUpdateViewModel);

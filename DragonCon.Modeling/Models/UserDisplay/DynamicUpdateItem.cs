@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DragonCon.Modeling.Models.UserDisplay
 {
-    public class DynamicNewsItem : DynamicDisplayItem
+    public class DynamicUpdateItem : DynamicDisplayItem
     {
         public Instant Timestamp { get; set; }
         public string Title { get; set; } = string.Empty;

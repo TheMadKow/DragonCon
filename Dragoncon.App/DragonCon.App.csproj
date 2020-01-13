@@ -50,6 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Controllers\" />
     <Folder Include="Areas\Convention\Views\Events\" />
   </ItemGroup>
 </Project>

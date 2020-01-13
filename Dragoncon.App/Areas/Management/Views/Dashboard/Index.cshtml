@@ -19,10 +19,6 @@
                 <td class="tw-8">@actorMe.FullName</td>
             </tr>
             <tr>
-                <td>דוא"ל</td>
-                <td>@actorMe.Id</td>
-            </tr>
-            <tr>
                 <td>הרשאות אתר</td>
                 <td>
                     @foreach (var role in actorMe.SystemRoles.Select(x => x.ToTextual()).OrderBy(x => x))
@@ -32,8 +28,6 @@
                 </td>
             </tr>
         </table>
-        <div class="row">
-        </div>
     </div>
 </div>
 
@@ -47,6 +41,13 @@
         <table class="table table-hover text-right">
             @if (Actor.HasManagedConvention)
             {
+                <tr class="text-center h5">
+                    <td colspan="2" class="tw-12">
+                        <a asp-area="Management" asp-controller="Dashboard" asp-action="Overview">
+                            <i class="fa fa-fw fa-eye"></i> מבט על - מצב כנס
+                        </a>
+                    </td>
+                </tr>
                 <tr>
                     <td class="tw-4">כנס</td>
                     <td class="tw-8">@manageConvention?.ConventionName</td>
@@ -196,7 +197,9 @@
                 </tr>
             }
             <tr>
-                <td class="tw-12"><a asp-area="Convention" asp-controller="Landing" asp-action="Index">מעבר לדף הנחיתה</a></td>
+                <td class="tw-12"><a asp-area="Convention" asp-controller="Landing" asp-action="Index">
+                    <i class="fa fa-fw fa-plane-arrival"></i> מעבר לדף הנחיתה
+                </a></td>
             </tr>
         </table>
     </div>

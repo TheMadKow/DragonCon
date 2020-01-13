@@ -15,6 +15,10 @@ namespace DragonCon.Features.Shared
         protected IActor Actor { get; set; }
         protected IServiceProvider Service {get;set;}
 
+        protected void SetActiveTab(string tab)
+        {
+            ViewBag.HelperTab = tab;
+        }
 
         protected void SetUserError(string title, string description)
         {

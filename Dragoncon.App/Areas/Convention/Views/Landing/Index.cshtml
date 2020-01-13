@@ -40,13 +40,11 @@
     </div>
 </div>
 
-
 @await Html.PartialAsync("_PartialSharedSlider", new SliderSettings
 {
     Title = "דרקוניקון בתמונות",
-    Slides = Model.CarouselItems
+    Slides = Model.Slides
 })
-
 
 <div class="card card-gray-float">
     <div class="card-body">

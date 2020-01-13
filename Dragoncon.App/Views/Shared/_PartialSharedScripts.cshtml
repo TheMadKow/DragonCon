@@ -75,13 +75,14 @@
         var $tab = $("#helper-tab").val();
         if ($tab != null && $tab !== "") {
             $(".nav-item").removeClass("active");
+            $(".nav-link").removeClass("active");
             $("#nav-item-" + $tab).addClass("active");
 
             $(".tab-pane").removeClass("active");
             $(".tab-pane").removeClass("show");
 
-            $("#tab-pan-" + $tab).addClass("active");
-            $("#tab-pan-" + $tab).addClass("show");
+            $("#tab-pane-" + $tab).addClass("active");
+            $("#tab-pane-" + $tab).addClass("show");
 
             $("#nav-item-" + $tab).tab("show");
         }

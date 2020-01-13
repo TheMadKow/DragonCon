@@ -1,0 +1,120 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model DragonCon.Features.Management.Displays.DisplaysViewModel
+@{
+    ViewBag.Title = "ניהול תצוגות";
+}
+
+<br />
+<!-- Nav tabs -->
+
+<ul class="nav nav-tabs nav-fill">
+    <li class="nav-item">
+        <a id="nav-item-updates" class="nav-link active" data-toggle="tab" href="#tab-pane-updates">עדכונים</a>
+    </li>
+    <li class="nav-item">
+        <a id="nav-item-slides"  class="nav-link" data-toggle="tab" href="#tab-pane-slides">תמונות</a>
+    </li>
+    <li class="nav-item">
+        <a id="nav-item-english"  class="nav-link" data-toggle="tab" href="#tab-pane-english">אנגלית</a>
+    </li>
+    <li class="nav-item">
+        <a id="nav-item-location"  class="nav-link" data-toggle="tab" href="#tab-pane-location">מיקום</a>
+    </li>
+    <li class="nav-item">
+        <a id="nav-item-days"  class="nav-link" data-toggle="tab" href="#tab-pane-days">ימים</a>
+    </li>
+</ul>
+
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane container active" id="tab-pane-updates">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>תאריך</td>
+                    <td>כותרת</td>
+                    <td>תוכן</td>
+                    <td>קישור</td>
+                    <td></td>
+                </tr>
+            </thead>
+            @foreach (var slide in Model.Updates)
+            {
+                <tr>
+                    <td>
+                        @slide.Timestamp
+                    </td>
+                    <td>
+                        @slide.Title
+                    </td>
+                    <td>
+                        @slide.Description
+                    </td>
+                    <td>
+                        @slide.Link
+                    </td>
+                    <td>
+                        <form asp-area="Management" asp-controller="Displays" asp-action="RemoveSlide">
+                            <input name="slideId" value="@slide.Id"/>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="tab-pane container fade" id="tab-pane-slides">
+
+        <form asp-area="Management" asp-controller="Displays" asp-action="AddSlide" method="post" class="right-to-left" style="padding: 10px;">
+            <div class="col">
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label>תמונה</label>
+                        <input name="imageLink" class="form-control" placeholder="https://mypicture.path ">
+                    </div>
+                    <div class="form-group col-4">
+                        <label>כיתוב</label>
+                        <input name="imageTitle" class="form-control" placeholder="משחקים מלא ">
+                    </div>
+                    <div class="form-group col-2">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="form-control btn btn-success"> הוספה </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>תמונה</td>
+                    <td>כיתוב</td>
+                    <td></td>
+
+                </tr>
+            </thead>
+            @foreach (var slide in Model.Slides.OrderBy(x => x.Id))
+            {
+                <tr>
+                    <td>
+                        
+                        <img alt="@slide.ImageUrl" src="@slide.ImageUrl" style="max-height: 150px;" />
+                    </td>
+                    <td>@slide.Caption</td>
+                    <td>
+                        <form asp-area="Management" asp-controller="Displays" asp-action="RemoveSlide">
+                            <input name="slideId" value="@slide.Id" hidden/>
+                            <button type="submit" class="btn text-danger"><i class="fa fa-fw fa-trash"></i></button>
+                        </form>
+
+                    </td>
+
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="tab-pane container fade" id="tab-pane-english">...</div>
+    <div class="tab-pane container fade" id="tab-pane-location">...</div>
+    <div class="tab-pane container fade" id="tab-pane-days">...</div>
+</div>
