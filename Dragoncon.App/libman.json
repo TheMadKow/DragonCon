@@ -11,12 +11,6 @@
       "provider": "filesystem",
       "library": "Resources/Images/logos",
       "destination": "wwwroot/images/logos"
-    },
-
-    {
-      "provider": "filesystem",
-      "library": "Resources/Images/sponsers",
-      "destination": "wwwroot/images/Sponsers"
     }
   ]
 }

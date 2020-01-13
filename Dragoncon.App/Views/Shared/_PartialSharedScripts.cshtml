@@ -37,7 +37,7 @@
         }
     }
 
-    
+
     function showSystemSuccess() {
         var successTitle = $("#system_success_title").val();
         if (successTitle !== null && successTitle !== undefined && successTitle !== "") {
@@ -52,6 +52,16 @@
     }
 
     function setupSplide() {
+        setupRegularSplide();
+    }
+
+    function openInNewTab(url) {
+        var win = window.open(url, '_blank');
+        win.focus();
+    }
+    
+
+    function setupRegularSplide() {
         var $item = $(".splide");
         if ($item === undefined || $item === null || $item.length === 0) {
             return;
@@ -60,8 +70,8 @@
         var element = new Splide('.splide',
             {
                 rewind: true,
-                'cover': true,
-                'heightRatio': 0.5,
+                cover: true,
+                heightRatio: 0.5,
                 autoplay: true,
                 interval: 5000,
                 pagination: false,

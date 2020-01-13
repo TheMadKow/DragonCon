@@ -1,46 +1,85 @@
-﻿<footer style="font-size: 1.1em;">
+﻿@using DragonCon.Modeling.Models.UserDisplay
+@{
+    var sponsors = new List<DynamicSponsorItem>
+{
+        new DynamicSponsorItem
+        {
+            ImageUrl = "https://res.cloudinary.com/draconicon/image/upload/t_mini_sponsor/v1578944913/2020/Sponsors/sponsor_paizo_ola78u.png",
+            SponsorUrl = "https://paizo.com/",
+            Caption = "Paizo"
+        },
 
-    <div class=" right-to-left">
+    new DynamicSponsorItem
+        {
+            ImageUrl = "https://res.cloudinary.com/draconicon/image/upload/t_mini_sponsor/v1578944913/2020/Sponsors/sponsor_greenronin_zv1nzx.jpg",
+            SponsorUrl = "http://www.greenronin.com/",
+            Caption = "Green Ronin"
+        },
+
+        new DynamicSponsorItem
+        {
+            ImageUrl = "https://res.cloudinary.com/draconicon/image/upload/t_mini_sponsor/v1578944913/2020/Sponsors/sponsor_amuta_xdnxdp.jpg",
+            SponsorUrl = "http://www.roleplay.org.il/",
+            Caption = "העמותה למשחקי תפקידים בישראל"
+        },
+        new DynamicSponsorItem
+        {
+            ImageUrl = "https://res.cloudinary.com/draconicon/image/upload/t_mini_sponsor/v1578944913/2020/Sponsors/sponsor_modiphius_saweu4.jpg",
+            SponsorUrl = "http://www.modiphius.com/",
+            Caption = "Modiphius"
+        },
+        new DynamicSponsorItem
+        {
+            ImageUrl = "https://res.cloudinary.com/draconicon/image/upload/t_mini_sponsor/v1578951535/2020/Sponsors/sponsor_ultrapro_box_q2wzgo.jpg",
+            SponsorUrl = "https://www.ultrapro.com/",
+            Caption = "UltraPRO"
+        }
+    };
+}
+
+<footer style="font-size: 1.1em;">
+    <div class="right-to-left">
         <div class="text-center">
-            <h4 class="text-bold">נותני החסות לכנס</h4>
+            <h4 style="margin-bottom: 15px;" class="text-bold">הכנס בחסות</h4>
         </div>
         <div class="text-center">
-            <img style="height: 100px;" src="~/images/sponsers/Amutalogo.jpg" />
-            <img style="height: 100px;" src="~/images/sponsers/green-ronin.jpg" />
-            <img style="height: 100px;" src="~/images/sponsers/paizo.png" />
-            <img style="height: 100px;" src="~/images/sponsers/modiphius.jpg" />
-            <img style="height: 100px;" src="~/images/sponsers/Ultra-ProLogo.jpg" />
+            @foreach (var sponsor in sponsors)
+            {
+                <img title="@sponsor.Caption" src="@sponsor.ImageUrl" class="sponsor-image" onclick="openInNewTab('@sponsor.SponsorUrl')" />
+            }
         </div>
     </div>
     <br />
 
 
-    <ul class="nav nav-pills nav-justified dragon-black-background" style="color: whitesmoke;">
-        <li class="nav-item">
-            <a class="nav-link">
-                &copy; אתר דרקוניקון - @DateTime.Today.Year
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link dragon-organge-link"
-               asp-area="Convention"
-               asp-controller="Home"
-               asp-action="Usage">תנאי שימוש ופרטיות</a>
-        </li>
+    <div class="dragon-black-background">
+        <ul class="nav nav-pills nav-justified container" style="color: whitesmoke;">
+            <li class="nav-item">
+                <a class="nav-link">
+                    &copy; אתר דרקוניקון - @DateTime.Today.Year
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link dragon-organge-link"
+                   asp-area="Convention"
+                   asp-controller="Home"
+                   asp-action="Usage">תנאי שימוש ופרטיות</a>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link dragon-organge-link"
-               asp-area="Convention"
-               asp-controller="Home"
-               asp-action="SiteMap">מפת האתר</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link dragon-organge-link"
+                   asp-area="Convention"
+                   asp-controller="Home"
+                   asp-action="SiteMap">מפת האתר</a>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link dragon-organge-link"
-               asp-area="Convention"
-               asp-controller="Home"
-               asp-action="Index"
-               asp-fragment="tag_contactus">יצירת קשר</a>
-        </li>
-    </ul>
+            <li class="nav-item">
+                <a class="nav-link dragon-organge-link"
+                   asp-area="Convention"
+                   asp-controller="Home"
+                   asp-action="Index"
+                   asp-fragment="tag_contactus">יצירת קשר</a>
+            </li>
+        </ul>
+    </div>
 </footer>
