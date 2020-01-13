@@ -7,7 +7,7 @@ namespace DragonCon.Modeling.Models.UserDisplay
 {
     public class DynamicUpdateItem : DynamicDisplayItem
     {
-        public Instant Timestamp { get; set; }
+        public LocalDate Date { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Link { get; set; } = string.Empty;

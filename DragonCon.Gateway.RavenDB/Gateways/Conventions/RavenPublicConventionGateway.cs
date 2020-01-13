@@ -16,7 +16,7 @@ namespace DragonCon.RavenDB.Gateways.Conventions
                 .Where(x => x.ConventionId == Actor.DisplayConvention.ConventionId)
                 .Lazily();
             var lazyUpdates = LinqExtensions.OrderByDescending(Session.Query<DynamicUpdateItem>()
-                    .Where(x => x.ConventionId == Actor.DisplayConvention.ConventionId), x => x.Timestamp)
+                    .Where(x => x.ConventionId == Actor.DisplayConvention.ConventionId), x => x.Date)
                 .Take(3)
                 .Lazily();
 

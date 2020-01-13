@@ -14,7 +14,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
         {
         }
 
-        public Answer AddSlide(DynamicSlideItem slide)
+        public Answer AddDisplayItem(DynamicDisplayItem slide)
         {
             try
             {
@@ -28,11 +28,11 @@ namespace DragonCon.RavenDB.Gateways.Managements
             }
         }
 
-        public Answer RemoveSlide(string slideId)
+        public Answer RemoveDisplayItem(string id)
         {
             try
             {
-                Session.Delete(slideId);
+                Session.Delete(id);
                 Session.SaveChanges();
                 return Answer.Success;
             }
@@ -47,7 +47,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
             var managedCon = Actor.ManagedConvention.ConventionId;
             var lazyUpdates = Session.Query<DynamicUpdateItem>()
                 .Where(x => x.ConventionId == managedCon)
-                .OrderByDescending(x => x.Timestamp).Lazily();
+                .OrderByDescending(x => x.Date).Lazily();
             var lazySliders = Session.Query<DynamicSlideItem>()
                 .Where(x => x.ConventionId == managedCon).Lazily();
             var lazyEnglish = Session.Query<DynamicEnglish>()

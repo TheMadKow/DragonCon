@@ -45,7 +45,7 @@ namespace DragonCon.Features.Management.Displays
         public IActionResult RemoveSlide(string slideId)
         {
             var message = string.Empty;
-            var answer = Gateway.RemoveSlide(slideId);
+            var answer = Gateway.RemoveDisplayItem(slideId);
             if (answer.AnswerType != AnswerType.Success)
                 message = answer.Message;
 
@@ -67,7 +67,7 @@ namespace DragonCon.Features.Management.Displays
             };
 
             var message = string.Empty;
-            var answer = Gateway.AddSlide(slide);
+            var answer = Gateway.AddDisplayItem(slide);
             if (answer.AnswerType != AnswerType.Success)
                 message = answer.Message;
             return RedirectToAction("Manage", new
@@ -77,13 +77,68 @@ namespace DragonCon.Features.Management.Displays
             });
 
         }
+
+        [HttpPost]
+        public IActionResult RemoveUpdate(string updateId)
+        {
+            var message = string.Empty;
+            var answer = Gateway.RemoveDisplayItem(updateId);
+            if (answer.AnswerType != AnswerType.Success)
+                message = answer.Message;
+
+            return RedirectToAction("Manage", new
+            {
+                tab = "updates",
+                message
+            });
+        }
+
+        [HttpPost]
+        public IActionResult AddUpdate(string updateDate, string updateTitle, string updateLink, string updateDesc)
+        {
+            var now = DateTime.Now.Date;
+            var asLocal = new LocalDate(now.Year, now.Month, now.Day);
+            if (updateDate.IsNotEmptyString())
+            {
+                try
+                {
+                    var splits = updateDate.Split("-").Select(x => int.Parse(x)).ToArray();
+                    asLocal = new LocalDate(splits[0], splits[1], splits[2]);
+                }
+                catch
+                {
+                    // Do Nothing
+                }
+            } 
+
+            var slide = new DynamicUpdateItem
+            {
+                Date = asLocal,
+                Title = updateTitle ?? string.Empty,
+                Description = updateDesc ?? string.Empty,
+                Link = updateLink ?? string.Empty,
+                ConventionId = Actor.ManagedConvention.ConventionId
+            };
+
+            var message = string.Empty;
+            var answer = Gateway.AddDisplayItem(slide);
+            if (answer.AnswerType != AnswerType.Success)
+                message = answer.Message;
+            return RedirectToAction("Manage", new
+            {
+                tab = "updates",
+                message
+            });
+        }
     }
 
     public interface IManagementDisplaysGateway : IGateway
     {
-        Answer AddSlide(DynamicSlideItem slide);
-        Answer RemoveSlide(string slideId);
-
         DisplaysViewModel BuildDisplays();
+
+
+        Answer AddDisplayItem(DynamicDisplayItem slide);
+        Answer RemoveDisplayItem(string id);
+
     }
 }

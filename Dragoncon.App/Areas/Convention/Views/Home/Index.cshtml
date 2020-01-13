@@ -63,19 +63,32 @@
             &nbsp;
             חדשות אחרונות
         </h3>
-        <p class="card-paragraph">
-            @foreach (var update in Model.Updates)
+        @foreach (var update in Model.Updates)
+        {
+            if (update.Title.IsEmptyString())
             {
-                <span>
-                    <i class="fa fa-fw fa-bullhorn fa-flip-horizontal"></i>
-                    <strong>@update.Timestamp.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) - </strong>
-                    @update.Title <br>
-                    @update.Description<br/>
-                    <a href="@update.Link">למידע נוסף</a>
-                </span>
+                continue;
             }
 
-        </p>
+            <hr />
+            <p class="card-paragraph">
+                <i class="fa fa-fw fa-bullhorn fa-flip-horizontal"></i>
+                <strong>@update.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) - </strong>
+                @update.Title <br>
+                @if (update.Description.IsNotEmptyString())
+                {
+                    @update.Description<br />
+                }
+                @if (update.Link.IsNotEmptyString())
+                {
+                    <a href="@update.Link" target="_blank"> למידע נוסף <i class="fa fa-fw fa-external-link-alt fa-flip-horizontal"></i></a>
+                }
+            </p>
+        }
+        <hr />
+        <div class="text-center">
+            <a href="" class="btn dragon-btn">לצפיה בכל החדשות</a>
+        </div>
     </div>
 </div>
 
