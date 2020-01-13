@@ -5,15 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Convention.Home
 {
     [Area("Convention")]
-    public class HomeController : DragonController<NullGateway>
+    public class HomeController : DragonController<IConventionPublicGateway>
     {
         public HomeController(IServiceProvider service) : 
             base(service)  { }
 
         public IActionResult Index()
         {
-            var viewModel = new HomeViewModel();
-            viewModel.CarouselItems = Gateway.CreateMockSlides();
+            var viewModel = Gateway.BuildHome();
             return View(viewModel);
         }
 

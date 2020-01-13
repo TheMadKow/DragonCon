@@ -1,0 +1,48 @@
+﻿@model DragonCon.Features.Participant.Account.DetailsUpdateViewModel
+
+<form asp-area="Participant" asp-controller="Personal" asp-action="UpdateDetails" method="post" class="card-form">
+    <div class="col">
+        <div class="row">
+            <div class="form-group col-8">
+                <label class="required">שם מלא</label>
+                <input value="@Model.FullName" name="FullName" class="form-control" placeholder="שם מלא " required>
+            </div>
+            <div class="form-group col-4">
+                <label class="required">שנת לידה </label>
+                <br />
+                <input value="@Model.YearOfBirth" name="YearOfBirth" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" required />
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="row">
+            <div class="form-group col-8">
+                <label class="required">דואר אלקטרוני</label>
+                <div class="input-group ">
+                    <input value="@Model.Email" name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני " required>
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" name="IsAllowingPromotions" aria-label="Checkbox for following text input">
+                            <span class="toggle-text">צירוף לרשימת דיוור</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-4">
+                <label class="required">טלפון</label>
+                <input value="@Model.PhoneNumber" name="PhoneNumber" type="tel" class="form-control" placeholder="טלפון ">
+            </div>
+
+        </div>
+
+        <label class="required"></label>
+        <label>שדות חובה</label>
+
+        <div class="row">
+            <div class="form-group col-12 text-center">
+                <button type="submit" class="btn dragon-btn"> עדכון פרטים </button>
+            </div>
+        </div>
+
+    </div>
+</form>

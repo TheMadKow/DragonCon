@@ -27,8 +27,8 @@
 .Title-Text {
     direction: rtl;
     text-align: right;
-    padding-top: 25px;
-    padding-bottom: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .navbar-dragon {
@@ -142,13 +142,16 @@
 }
 
 .card-form {
-    font-size: 1.4em;
+    font-size: 1.2em;
 }
 
     .card-form .form-control {
-        font-size: 1em;
+        font-size: 0.9em;
     }
 
+    .card-form .chosen-container {
+        font-size: 13px;
+    }
 
     .card-list > li {
         font-size: 1.4em;

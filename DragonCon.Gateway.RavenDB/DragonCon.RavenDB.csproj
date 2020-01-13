@@ -21,17 +21,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="RavenDB.Client" Version="4.2.6" />
-    <PackageReference Include="RavenDB.Identity" Version="7.0.1" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DargonCon.Features\DragonCon.Features.csproj" />
     <ProjectReference Include="..\DragonCon.Logical\DragonCon.Logical.csproj" />
     <ProjectReference Include="..\DragonCon.Modeling\DragonCon.Modeling.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Gateways\Conventions\" />
   </ItemGroup>
 
 </Project>

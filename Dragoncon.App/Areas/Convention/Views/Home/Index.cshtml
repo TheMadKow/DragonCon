@@ -10,7 +10,7 @@
 @await Html.PartialAsync("_PartialSharedSlider", new SliderSettings
 {
     Title = "דרקוניקון בתמונות",
-    Slides = Model.CarouselItems
+    Slides = Model.Slides
 })
 
 <div class="card card-gray-float">
@@ -29,7 +29,7 @@
     </div>
 </div>
 
-<a class="btn dragon-register-btn" href="#">הרשמה לכנס @Actor.DisplayConvention?.ConventionName</a>
+<a class="btn dragon-register-btn" asp-area="Participant" asp-controller="Personal" asp-action="Index">הרשמה לכנס @Actor.DisplayConvention?.ConventionName</a>
 
 <div class="card card-gray-float">
     <div class="card-body">
@@ -54,7 +54,7 @@
     </div>
 </div>
 
-<a class="btn dragon-register-btn" href="#">הרשמה לכנס @Actor.DisplayConvention?.ConventionName</a>
+<a class="btn dragon-register-btn" asp-area="Participant" asp-controller="Personal" asp-action="Index">הרשמה לכנס @Actor.DisplayConvention?.ConventionName</a>
 
 <div class="card card-gray-float">
     <div class="card-body">
@@ -64,8 +64,16 @@
             חדשות אחרונות
         </h3>
         <p class="card-paragraph">
-            <span><i class="fa fa-fw fa-bullhorn fa-flip-horizontal"></i> 20/01/2020 - איש נשך כלב בדרום תל אביב</span>
-            <span class="text-danger">//TODO Automate</span>
+            @foreach (var update in Model.Updates)
+            {
+                <span>
+                    <i class="fa fa-fw fa-bullhorn fa-flip-horizontal"></i>
+                    <strong>@update.Timestamp.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) - </strong>
+                    @update.Title <br>
+                    @update.Description<br/>
+                    <a href="@update.Link">למידע נוסף</a>
+                </span>
+            }
 
         </p>
     </div>

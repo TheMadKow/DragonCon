@@ -1,0 +1,4 @@
+[submodule "submodules/RavenDB.Identity"]
+	path = submodules/RavenDB.Identity
+	url = git@github.com:TheMadKow/RavenDB.Identity.git
+	branch = master

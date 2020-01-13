@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @using DragonCon.Modeling.Helpers
 @using DragonCon.Modeling.Models.Identities
-@model  DragonCon.Features.Participant.Account.AccountViewModel
+@model DragonCon.Features.Participant.Account.AccountViewModel
 @{
     ViewData["Title"] = "התחברות או הרשמה לכנס";
     var actor = Actor;
@@ -50,30 +50,26 @@
             הרשמה
         </h3>
 
-        <form asp-area="Participant" asp-controller="Account" asp-action="Register" method="post">
+        <form asp-area="Participant" asp-controller="Account" asp-action="Register" method="post"  class="card-form">
             <div class="col">
                 <div class="row">
                     <div class="form-group col-8">
-                        <label>שם מלא</label>
-                        <input value="@Model.Register.FullName" name="FullName" class="form-control" placeholder="שם מלא ">
+                        <label class="required">שם מלא</label>
+                        <input value="@Model.Register.FullName" name="FullName" class="form-control" placeholder="שם מלא " required>
                     </div>
                     <div class="form-group col-4">
                         <label>שנת לידה </label>
                         <br />
-                        <input value="@Model.Register.YearOfBirth" name="YearOfBirth" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" />
+                        <input value="@Model.Register.YearOfBirth" name="YearOfBirth" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" required/>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="row">
-                    <div class="form-group col-4">
-                        <label>טלפון</label>
-                        <input value="@Model.Register.PhoneNumber" name="PhoneNumber" type="tel" class="form-control" placeholder="טלפון ">
-                    </div>
                     <div class="form-group col-8">
-                        <label>דואר אלקטרוני</label>
+                        <label class="required">דואר אלקטרוני</label>
                         <div class="input-group ">
-                            <input value="@Model.Register.Email" name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                            <input value="@Model.Register.Email" name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני " required>
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     <input type="checkbox" name="IsAllowingPromotions" aria-label="Checkbox for following text input">
@@ -82,19 +78,27 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group col-4">
+                        <label class="required">טלפון</label>
+                        <input value="@Model.Register.PhoneNumber" name="PhoneNumber" type="tel" class="form-control" placeholder="טלפון ">
+                    </div>
+
                 </div>
                 <div class="row">
                     <div class="form-group col-6">
-                        <label>סיסמה</label>
-                        <input value="@Model.Register.Password" name="Password" type="password" class="form-control" placeholder="סיסמה ">
+                        <label class="required">סיסמה</label>
+                        <input value="@Model.Register.Password" name="Password" type="password" class="form-control" placeholder="סיסמה " required>
                     </div>
                     <div class="form-group col-6">
-                        <label>אימות סיסמה</label>
-                        <input value="@Model.Register.ConfirmPassword" name="ConfirmPassword" type="password" class="form-control" placeholder="אימות סיסמה ">
+                        <label class="required">אימות סיסמה</label>
+                        <input value="@Model.Register.ConfirmPassword" name="ConfirmPassword" type="password" class="form-control" placeholder="אימות סיסמה " required>
                     </div>
                 </div>
-                <div class=" row">
-                    <div class="form-group pull-left">
+                <label class="required"></label>
+                <label>שדות חובה</label>
+
+                <div class="row">
+                    <div class="form-group col-12 text-center">
                         <button type="submit" class="btn dragon-btn"> הרשמה </button>
                     </div>
                 </div>
@@ -115,23 +119,32 @@
         <form method="post" asp-area="Participant" asp-controller="Account" asp-action="Login" class="card-form">
             <div class="col">
                 <div class="form-group">
-                    <label>כתובת דואר אלקטרוני</label>
-                    <input value="@Model.Login.Email" name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
-                    
+                    <label class="required">כתובת דואר אלקטרוני</label>
+                    <input value="@Model.Login.Email" name="Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני " required>
+
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label>סיסמה</label>
-                    <input value="@Model.Login.Password" name="Password" type="password" class="form-control">
+                    <label class="required">סיסמה</label>
+                    <input value="@Model.Login.Password" name="Password" type="password" class="form-control" required>
                 </div>
             </div>
-            <div class=" row">
-                <div class="form-group pull-left">
+            <label class="required"></label>
+            <label>שדות חובה</label>
+
+            <div class="row">
+                <div class="form-group col-12 text-center">
                     <button type="submit" class="btn dragon-btn"> התחברות </button>
                 </div>
             </div>
 
+            <div class="row">
+                <div class="form-group col-12 text-center text-bold">
+                    <br/>
+                    <a asp-area="Participant" asp-controller="Account" asp-action="ForgotPassword" class="dragon-organge-link"> שכחתי את הסיסמה שלי! </a>
+                </div>
+            </div>
         </form>
     </div>
 </div>

@@ -29,6 +29,22 @@ namespace DragonCon.RavenDB.Identities
         }
 
         #region User
+
+        public async Task<IdentityResults.Password> UpdateParticipant(LongTermParticipant user)
+        {
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded
+                ? new IdentityResults.Password()
+                {
+                    IsSuccess = true
+                }
+                : new IdentityResults.Password()
+                {
+                    IsSuccess = false,
+                    Errors = result.Errors.Select(x => x.Description).ToArray()
+                };
+        }
+
         public async Task<IdentityResults.Password> AddNewParticipant(IParticipant user, string password = "")
         {
             if (user is ShortTermParticipant shortP)
@@ -53,13 +69,14 @@ namespace DragonCon.RavenDB.Identities
                     Errors = new[] { "קיים משתמש עם כתובת הדואר הזו" }
                 };
 
-
             if (password.IsEmptyString())
             {
-                password = new RandomPasswordGenerator(minimumLengthPassword: 12).Generate();
+                password = new RandomPasswordGenerator(12).Generate();
             }
 
+            //await _session.StoreAsync(user);
             var createUserResult = await _userManager.CreateAsync(user, password);
+
             if (createUserResult.Succeeded == false)
             {
                 return new IdentityResults.Password
@@ -67,11 +84,15 @@ namespace DragonCon.RavenDB.Identities
                     IsSuccess = false,
                     Errors = createUserResult.Errors.Select(x => $"{x.Code}: {x.Description}").ToArray()
                 };
-            };
+            }
 
-            user.Id = null; // Don't use the email as identity.
             await _session.SaveChangesAsync();
-            return await SetPasswordAsync(user, password);
+            return new IdentityResults.Password()
+            {
+                IsLongTerm = true,
+                IsSuccess = true,
+                Token = password
+            };
         }
 
         private async Task<IdentityResults.Password> AddShortTermParticipant(ShortTermParticipant user)
@@ -98,11 +119,19 @@ namespace DragonCon.RavenDB.Identities
             return null;
         }
 
-        public async Task<IParticipant> GetUserByUsernameAsync(string username)
+        public async Task<LongTermParticipant> GetUserByUsernameAsync(string username)
         {
             return await _session.Query<LongTermParticipant>()
                 .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(60)))
                 .FirstOrDefaultAsync(x => x.UserName == username);
+        }
+
+
+        public async Task<LongTermParticipant> GetUserByUserIdAsync(string id)
+        {
+            return await _session.Query<LongTermParticipant>()
+                .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(60)))
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
         #endregion
 

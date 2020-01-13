@@ -1,0 +1,114 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@model DragonCon.Modeling.Models.Conventions.EngagementWrapper
+
+
+@if (Model != null)
+{
+
+    <div class="card card-gray-float">
+        <div class="card-body">
+            <h2 class="text-bold text-center">
+                <i class="fa fa-fw fa-id-card-alt fa-flip-horizontal"></i>
+                &nbsp;
+                @Model.Participant.FullName
+            </h2>
+            <br />
+            <h3 class="text-bold dragon-organge-color">
+                <i class="fa fa-fw fa-dice-d20 fa-flip-horizontal"></i>
+                &nbsp;
+                האירועים שלי
+            </h3>
+            @if (Model.Events.Any())
+            {
+
+                <ul class="fa-ul card-list">
+                    @foreach (var eventWrapper in Model.Events
+                               .OrderBy(x => x.Day.Date)
+                               .ThenBy(x => x.Event.TimeSlot.From))
+                    {
+                        <li>
+                            @await Html.PartialAsync("_PartialBulletin")
+                            &nbsp;
+                            <strong>
+                                @eventWrapper.Day.Date.DayOfWeek.InHebrew(), ה-@eventWrapper.Day.Date.ToString("dd/MM", CultureInfo.InvariantCulture):
+                            </strong>
+                            @eventWrapper.Event.Name
+                            <a target="_blank" asp-area="Convention" asp-controller="Events" asp-action="Index" asp-route-id="@eventWrapper.Event.Id.GetNumberFromId()">
+                                (למידע נוסף)
+                            </a>
+
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <ul class="fa-ul card-list">
+                    <li>
+                        @await Html.PartialAsync("_PartialBulletin")
+                        לא נשמרו אירועים
+                    </li>
+                </ul>
+            }
+            <hr />
+            @if (Model.SuggestedEvents.Any())
+            {
+
+                <h3 class="text-bold dragon-organge-color">
+                    <i class="fa fa-fw fa-shield-alt fa-flip-horizontal"></i>
+                    &nbsp;
+                    ההנחיה שלי
+                </h3>
+                <ul class="fa-ul card-list">
+                    @foreach (var eventWrapper in Model.SuggestedEvents
+          .OrderBy(x => x.Day.Date)
+          .ThenBy(x => x.Event.TimeSlot.From))
+                    {
+                        <li>
+                            @await Html.PartialAsync("_PartialBulletin")
+                            &nbsp;
+                            <strong>
+                                @eventWrapper.Day.Date.DayOfWeek.InHebrew(), ה-@eventWrapper.Day.Date.ToString("dd/MM", CultureInfo.InvariantCulture):
+                            </strong>
+                            @eventWrapper.Event.Name
+                            <a target="_blank" asp-area="Convention" asp-controller="Events" asp-action="Index" asp-route-id="@eventWrapper.Event.Id.GetNumberFromId()">
+                                (למידע נוסף)
+                            </a>
+
+                        </li>
+                    }
+                </ul>
+                <hr />
+            }
+            <h3 class="text-bold dragon-organge-color">
+                <i class="fa fa-fw fa-ticket-alt fa-flip-horizontal"></i>
+                &nbsp;
+                הרכישות שלי
+            </h3>
+
+            @if (Model.Inner != null && Model.Inner.Payment != null && Model.Inner.Payment.IsPaid)
+            {
+                <ul class="fa-ul card-list">
+                    <li>
+                        @await Html.PartialAsync("_PartialBulletin")
+                        &nbsp;@Model.Inner.Payment.TicketCopy.Name - שולם
+                    </li>
+                    <li>
+                        @await Html.PartialAsync("_PartialBulletin")
+                        &nbsp;אישור תשלום : @Model.Inner.Payment.Confirmation
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <ul class="fa-ul card-list">
+                    <li>
+                        @await Html.PartialAsync("_PartialBulletin")
+                        &nbsp;לא נרכש כרטיס
+                    </li>
+                </ul>
+            }
+        </div>
+    </div>
+}

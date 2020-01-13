@@ -8,11 +8,8 @@
     @RenderSection("Styles", required: false)
 </head>
 <body class="right-to-left" style="text-align: right;">
-    <div>
-        <input id="system_error_title" value="@ViewBag.ErrorTitle"/>
-        <input id="system_error_description" value="@ViewBag.ErrorDescription"/>
-    </div>
-
+    @await Html.PartialAsync("_PartialErrorResult")
+    @await Html.PartialAsync("_PartialAntiForgery")
 
     <div class="d-none d-md-block">
         <div id="mySidenav" class="sidenav">
@@ -80,14 +77,14 @@
         <h1 class="Title-Text dragon-organge-color text-bold text-center">
             @if (Actor.HasDisplayConvention)
             {
-                <div class="row">
-                    <div class="col-12 col-md-6">@Actor.DisplayConvention.ConventionName</div>
-                    <div class="col-12 col-md-6">
-                        <small>
-                            @Actor.DisplayConvention.TagLine
-                        </small>
-                    </div>
+            <div class="row">
+                <div class="col-12 col-md-6">@Actor.DisplayConvention.ConventionName</div>
+                <div class="col-12 col-md-6">
+                    <small>
+                        @Actor.DisplayConvention.TagLine
+                    </small>
                 </div>
+            </div>
             }
         </h1>
 
@@ -100,6 +97,11 @@
         <div class="body-content no-background">
             @RenderBody()
         </div>
+        <div id="helpers" hidden>
+            <input id="helper-tab" value="@ViewBag.HelperTab" />
+        </div>
+
+
     </div>
     @await Html.PartialAsync("_PartialFooter")
     @await Html.PartialAsync("_PartialSharedScripts")

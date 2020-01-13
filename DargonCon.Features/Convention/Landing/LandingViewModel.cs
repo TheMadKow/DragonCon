@@ -7,6 +7,6 @@ namespace DragonCon.Features.Convention.Landing
 {
     public class LandingViewModel
     {
-        public IList<DynamicSlideItem> CarouselItems = new List<DynamicSlideItem>();
+        public IList<DynamicSlideItem>  Slides { get; set; } = new List<DynamicSlideItem>();
     }
 }

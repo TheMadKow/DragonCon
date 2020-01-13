@@ -556,6 +556,8 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 .Include(x => x.ConventionDayId)
                 .Include(x => x.GameMasterIds)
                 .Include(x => x.HallId)
+                .Include(x => x.ActivityId)
+                .Include(x => x.SubActivityId)
                 .Include(x => x.AgeId)
                 .Where(x => x.ConventionId == Actor.ManagedConvention.ConventionId);
 

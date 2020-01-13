@@ -264,7 +264,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
 
             if (result.IsSuccess && result.IsLongTerm)
             {
-                await Hub.SendCreationPasswordAsync(model, result.Token);
+                await Hub.SendCreationPasswordAsync(model as LongTermParticipant, result.Token);
             }
 
             if (result.IsSuccess == false)
@@ -352,7 +352,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 .OrderBy(x => x.FullName)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)
-                .As<IConventionEngagement>()
+                .As<ConventionEngagement>()
                 .ToList();
 
             var wrapperFactory = new WrapperFactory(Session);

@@ -7,6 +7,7 @@ namespace DragonCon.Features.Convention.Home
 {
     public class HomeViewModel
     {
-        public IList<DynamicSlideItem> CarouselItems = new List<DynamicSlideItem>();
+        public IList<DynamicSlideItem> Slides { get; set; } = new List<DynamicSlideItem>();
+        public IList<DynamicUpdateItem> Updates { get; set; } = new List<DynamicUpdateItem>();
     }
 }

@@ -5,9 +5,6 @@ using Raven.Identity;
 
 namespace DragonCon.Modeling.Models.Identities
 {
-
-
-
     public class LongTermParticipant : IdentityUser, IParticipant
     {
         public bool IsAllowingPromotions { get; set; }

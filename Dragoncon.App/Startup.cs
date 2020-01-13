@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using DragonCon.App.Helpers;
+using DragonCon.Features.Convention;
 using DragonCon.Features.Management;
 using DragonCon.Features.Management.Convention;
+using DragonCon.Features.Management.Displays;
 using DragonCon.Features.Management.Events;
 using DragonCon.Features.Management.Participants;
 using DragonCon.Features.Management.Reception;
@@ -17,6 +19,7 @@ using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Identities.Policy;
 using DragonCon.Modeling.TimeSlots;
 using DragonCon.RavenDB;
+using DragonCon.RavenDB.Gateways.Conventions;
 using DragonCon.RavenDB.Gateways.Logics;
 using DragonCon.RavenDB.Gateways.Managements;
 using DragonCon.RavenDB.Gateways.Participants;
@@ -25,6 +28,7 @@ using DragonCon.RavenDB.Index;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +40,7 @@ using Raven.Client.ServerWide.Operations;
 using Raven.DependencyInjection;
 using Raven.Identity;
 using Serilog;
+using IdentityRole = Raven.Identity.IdentityRole;
 
 namespace DragonCon.App
 {
@@ -120,9 +125,9 @@ namespace DragonCon.App
             IndexCreation.CreateIndexes(typeof(EventsIndex_ByTitleDescription).Assembly, holder.Store);
 
             services.AddSingleton(holder);
-            services // Create a RavenDB IAsyncDocumentSession for each request.
-                .AddRavenDbAsyncSession(holder.Store)
-                .AddIdentity<LongTermParticipant, IdentityRole>(identityOptions => 
+            services
+                .AddRavenDbAsyncSession(holder.Store) 
+                .AddIdentity<LongTermParticipant, IdentityRole>(identityOptions =>
                 {
                     // Password settings
                     identityOptions.Password.RequireDigit = true;
@@ -139,8 +144,9 @@ namespace DragonCon.App
 
                     // User settings
                     identityOptions.User.RequireUniqueEmail = true;
-                })
-                .AddRavenDbIdentityStores<LongTermParticipant>(); // Use RavenDB as the store for identity users and roles.
+                })// Adds an identity system to ASP.NET Core
+                .AddRavenDbIdentityStores<LongTermParticipant>()
+                .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -167,8 +173,10 @@ namespace DragonCon.App
             services.AddScoped<IIdentityFacade, RavenIdentityFacade>();
             services.AddScoped<ICommunicationHub, CommunicationHub>();
             services.AddScoped<IPersonalGateway, RavenPersonalGateway>();
+            services.AddScoped<IConventionPublicGateway, RavenPublicConventionGateway>();
             services.AddScoped<IManagementReceptionGateway, RavenManagementReceptionGateway>();
             services.AddScoped<IManagementConventionGateway, RavenManagementConventionGateway>();
+            services.AddScoped<IManagementDisplaysGateway, RavenManagementDisplaysGateway>();
             services.AddScoped<IManagementStatisticsGateway, RavenManagementStatisticsGateway>();
             services.AddScoped<IManagementEventsGateway, RavenManagementEventsGateway>();
             services.AddScoped<IManagementParticipantsGateway, RavenManagementParticipantsGateway>();

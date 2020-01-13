@@ -13,7 +13,9 @@
 <script src="~/js/site.min.js" asp-append-version="true"></script>
 <script>
     $(document).ready(function () {
+        showSystemSuccess();
         showSystemError();
+
         setupToggles();
         setupPickers();
         setupChosen();
@@ -30,6 +32,20 @@
                 title: errorTitle,
                 text: errorDesc,
                 footer: '<a href="/convention/home#tag_contactus" class="dragon-organge-color">הבעיה ממשיכה? פנו אלינו!</a>'
+            });
+
+        }
+    }
+
+    
+    function showSystemSuccess() {
+        var successTitle = $("#system_success_title").val();
+        if (successTitle !== null && successTitle !== undefined && successTitle !== "") {
+            var successDesc = $("#system_success_description").val();
+            Swal.fire({
+                type: 'success',
+                title: successTitle,
+                text: successDesc
             });
 
         }
@@ -59,13 +75,14 @@
         var $tab = $("#helper-tab").val();
         if ($tab != null && $tab !== "") {
             $(".nav-item").removeClass("active");
+            $(".nav-link").removeClass("active");
             $("#nav-item-" + $tab).addClass("active");
 
             $(".tab-pane").removeClass("active");
             $(".tab-pane").removeClass("show");
 
-            $("#tab-pan-" + $tab).addClass("active");
-            $("#tab-pan-" + $tab).addClass("show");
+            $("#tab-pane-" + $tab).addClass("active");
+            $("#tab-pane-" + $tab).addClass("show");
 
             $("#nav-item-" + $tab).tab("show");
         }

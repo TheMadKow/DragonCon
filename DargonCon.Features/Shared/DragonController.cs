@@ -15,11 +15,20 @@ namespace DragonCon.Features.Shared
         protected IActor Actor { get; set; }
         protected IServiceProvider Service {get;set;}
 
+        protected void SetActiveTab(string tab)
+        {
+            ViewBag.HelperTab = tab;
+        }
 
         protected void SetUserError(string title, string description)
         {
             ViewBag.ErrorTitle = title;
             ViewBag.ErrorDescription = description;
+        }
+        protected void SetUserSuccess(string title, string description)
+        {
+            ViewBag.SuccessTitle = title;
+            ViewBag.SuccessDescription = description;
         }
 
         public DragonController(IServiceProvider service)
