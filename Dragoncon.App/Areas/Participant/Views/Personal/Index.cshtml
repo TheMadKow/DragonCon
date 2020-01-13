@@ -38,7 +38,7 @@
             @if (Actor.DisplayConvention.Settings.AllowEventsSuggestions ||
             (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
             {
-                <div class="card clickable  col-3">
+                <div class="card clickable  col-3" onclick="SuggestEvent()">
                     <div class="card-body text-center ">
                         <i class="fa fa-2x fa-fw fa-shield-alt"  style="padding-bottom: 10px;"></i><br /><strong class="h4"> הגשת<br />אירוע</strong>
                     </div>
@@ -109,10 +109,15 @@
             window.location.href = "/Participant/Personal/UpdateAccount";
         }
 
+        function SuggestEvent() {
+            window.location.href = "/Participant/Personal/SuggestEvent";
+        }
+
         function ViewManagement() {
             window.location.href = "/Management";
         }
 
+       
 
         SetActiveMenu("nav-personal");
     </script>

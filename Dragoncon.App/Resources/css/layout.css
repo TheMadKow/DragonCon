@@ -149,6 +149,9 @@
         font-size: 0.9em;
     }
 
+    .card-form .chosen-container {
+        font-size: 13px;
+    }
 
     .card-list > li {
         font-size: 1.4em;

@@ -1,0 +1,125 @@
+﻿@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Events
+@model DragonCon.Features.Participant.Personal.SuggestEventViewModel
+@{
+    ViewBag.Title = "הגשת אירוע";
+}
+
+@await Html.PartialAsync("_PartialBack")
+
+<div class="card card-gray-float">
+    <div class="card-form">
+        <form asp-area="Participant" asp-controller="Personal" asp-action="SuggestEvent" method="post" class="right-to-left" style="padding: 10px;">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>שם האירוע</label>
+                        <input asp-for="Name" class="form-control" placeholder="שם האירוע ">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>תיאור האירוע</label>
+                        <textarea class="form-control" rows="5"
+                                  asp-for="Description" placeholder="תיאור האירוע"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>פעילות</label>
+                        <select class="form-control chosen-select" asp-for="ActivityId"
+                                asp-items="Actor.DisplayDropDowns.Activities()">
+                            <option value="" disabled selected>בחירת אפשרות</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>קבוצת גיל</label>
+                        <select class="form-control chosen-select" asp-for="AgeRestrictionId"
+                                asp-items="Actor.DisplayDropDowns.BuildAgeGroups()">
+                            <option value="" disabled selected>בחירת אפשרות</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>מספר שחקנים מינימלי</label>
+                        <input type="number" min="1" max="99" asp-for="Min" placeholder="ריק - ללא הגבלה" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>מספר שחקנים מקסימלי</label>
+                        <input type="number" min="1" max="99" asp-for="Max" placeholder="ריק - ללא הגבלה" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-5">
+                    <div class="form-group">
+                        <label>שעת התחלה</label>
+                        <select id="event-start-time" class="form-control chosen-select" asp-for="StartTime"
+                                asp-items="Actor.DisplayDropDowns.BuildDaysTimes()" onchange="ChangedEventDay(this)">
+                            <option value="" disabled selected>בחירת שעת התחלה</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>משך</label>
+                        <div id="event-duration">
+                            <select class="form-control chosen-select" asp-for="Duration">
+                                <option value="" disabled selected>יש לבחור שעת התחלה</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>בקשות מיוחדות</label>
+                        <textarea class="form-control" asp-for="Requests" placeholder="בקשות מיוחד מהכנס - ציוד, מיקום וכיוצא בזאת"></textarea>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="form-group col-12 text-center">
+                    <button type="submit" class="btn dragon-btn"> הגשת אירוע </button>
+                </div>
+            </div>
+        </form>
+
+
+        <div hidden>
+            @foreach (var day in Actor.DisplayDropDowns.BuildDateTimeDuration())
+            {
+                <select id="template-duration-@day.Key" class="form-control"
+                        asp-for="Duration"
+                        asp-items="day.Value">
+                    <option value="" disabled selected>בחירת משך אירוע</option>
+                </select>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-personal")
+    </script>
+}

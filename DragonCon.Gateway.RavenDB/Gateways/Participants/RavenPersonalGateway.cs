@@ -11,7 +11,6 @@ using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.Identities;
-using DragonCon.Modeling.ViewModels;
 using DragonCon.RavenDB.Factories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor.Internal;
@@ -31,47 +30,46 @@ namespace DragonCon.RavenDB.Gateways.Participants
 
         public Answer AddSuggestedEvent(SuggestEventViewModel viewmodel)
         {
-            try
-            {
-                var lazyAge = Session.Advanced.Lazily.Load<AgeGroup>(viewmodel.AgeRestrictionId);
-                var conEvent = new Event()
-                {
-                    Name = viewmodel.Name,
-                    ConventionDayId = viewmodel.DayId,
-                    Description = viewmodel.Description,
-                    SpecialRequests = viewmodel.Requests,
-                    ActivityId = viewmodel.ActivityId,
-                    SubActivityId = viewmodel.SystemId,
-                    TimeSlot = new TimeSlot
-                    {
-                        From = viewmodel.StartTime,
-                        To = viewmodel.StartTime.Plus(viewmodel.Period)
-                    },
-                    Size = viewmodel.SizeRestrictions,
-                    GameMasterIds = new List<string> { viewmodel.CreatorId },
-                    Status = EventStatus.Pending,
-                    Tags = viewmodel.Tags,
-                    HallId = string.Empty,
-                    HallTable = null,
-                };
+            throw new NotImplementedException();
+            //try
+            //{
+            //    var lazyAge = Session.Advanced.Lazily.Load<AgeGroup>(viewmodel.AgeRestrictionId);
+            //    var conEvent = new Event()
+            //    {
 
-                Session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
-                conEvent.AgeId = lazyAge.Value.Id;
+            //        Name = viewmodel.Name,
+            //        Description = viewmodel.Description,
+            //        SpecialRequests = viewmodel.Requests,
+            //        ActivityId = viewmodel.ActivityId,
+            //        //TimeSlot = new TimeSlot
+            //        //{
+            //        //    From = viewmodel.StartTime,
+            //        //    To = viewmodel.StartTime.Plus(viewmodel.Period)
+            //        //},
+            //        //Size = viewmodel.SizeRestrictions,
+            //        GameMasterIds = new List<string> { Actor.Me.Id },
+            //        Status = EventStatus.Pending,
+            //        HallId = string.Empty,
+            //        HallTable = null,
+            //    };
 
-                Session.Store(conEvent);
-                Session.SaveChanges();
+            //    Session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
+            //    conEvent.AgeId = lazyAge.Value.Id;
 
-                return new Answer(AnswerType.Success);
+            //    Session.Store(conEvent);
+            //    Session.SaveChanges();
 
-            }
-            catch (Exception e)
-            {
-                return new Answer(AnswerType.Error)
-                {
-                    InternalException = e
-                };
-                // TODO maybe log
-            }
+            //    return new Answer(AnswerType.Success);
+
+            //}
+            //catch (Exception e)
+            //{
+            //    return new Answer(AnswerType.Error)
+            //    {
+            //        InternalException = e
+            //    };
+            //    // TODO maybe log
+            //}
         }
 
         public PersonalViewModel BuildPersonalViewModel()

@@ -5,7 +5,6 @@ using DragonCon.Features.Participant.Account;
 using DragonCon.Features.Shared;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Identities;
-using DragonCon.Modeling.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -24,6 +23,7 @@ namespace DragonCon.Features.Participant.Personal
             return View(personalViewModel);
         }
 
+        #region Account Handling
 
         [HttpGet]
         public IActionResult UpdateAccount()
@@ -136,23 +136,18 @@ namespace DragonCon.Features.Participant.Personal
             }
         }
 
-        // TODO
-        // Suggest Event
-        // Register (Me)
-        // Register (Guest)
+        #endregion
 
+        #region Suggest Event
 
         [HttpGet]
-        public IActionResult SuggestAnEvent()
+        public IActionResult SuggestEvent()
         {
-            return View(new SuggestEventViewModel()
-            {
-                // TODO add selections
-            });
+            return View(new SuggestEventViewModel());
         }
 
         [HttpPost]
-        public IActionResult SuggestAnEvent(SuggestEventViewModel viewmodel)
+        public IActionResult SuggestEvent(SuggestEventViewModel viewmodel)
         {
             if (ModelState.IsValid)
             {
@@ -166,9 +161,15 @@ namespace DragonCon.Features.Participant.Personal
             }
             else
             {
+                var invalidProperty = ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
+                SetUserError("תקלה במידע שהתקבל", invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב");
                 return View(viewmodel);
             }
         }
+        #endregion
 
+        // TODO
+        // Register (Me)
+        // Register (Guest)
     }
 }
