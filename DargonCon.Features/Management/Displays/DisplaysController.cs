@@ -200,7 +200,7 @@ namespace DragonCon.Features.Management.Displays
             string dayImages,
             string dayLink)
         {
-            var days = new DynamicDays
+            var days = new DynamicProgram
             {
                 Id = dayId,
                 ProgramImages = dayImages,

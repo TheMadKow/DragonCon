@@ -73,14 +73,14 @@ namespace DragonCon.RavenDB.Gateways.Managements
             var lazyLocation = Session.Query<DynamicLocation>()
                 .Where(x => x.ConventionId == managedCon)
                 .Lazily();
-            var lazyDay = Session.Query<DynamicDays>()
+            var lazyDay = Session.Query<DynamicProgram>()
                 .Where(x => x.ConventionId == managedCon)
                 .Lazily();
 
             Session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
 
             var english = lazyEnglish.Value.FirstOrDefault() ?? new DynamicEnglish();
-            var days = lazyDay.Value.FirstOrDefault() ?? new DynamicDays();
+            var days = lazyDay.Value.FirstOrDefault() ?? new DynamicProgram();
             var location = lazyLocation.Value.FirstOrDefault() ?? new DynamicLocation();
             
             return new DisplaysViewModel
@@ -89,7 +89,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 Slides = lazySliders.Value.ToList(),
                 Sponsors = lazySponsors.Value.ToList(),
                 English = english,
-                Days = days,
+                Program = days,
                 Location = location
             };
         }

@@ -303,7 +303,7 @@ namespace DragonCon.Modeling.Models.Identities
             public IList<DynamicUpdateItem> UpdatesLimited { get; set; } = new List<DynamicUpdateItem>();
             
             
-            public DynamicDays Days { get; set; } = new DynamicDays();
+            public DynamicProgram Program { get; set; } = new DynamicProgram();
             public DynamicLocation Location { get; set; } = new DynamicLocation();
             public DynamicEnglish English { get; set; } = new DynamicEnglish();
         }

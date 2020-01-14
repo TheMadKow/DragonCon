@@ -107,7 +107,7 @@ namespace DragonCon.App.Helpers
                 return new Actor.ActorDynamicContent()
                 {
                     English = session.Load<DynamicEnglish>(dynamicContent.English).Select(x => x.Value).FirstOrDefault(),
-                    Days = session.Load<DynamicDays>(dynamicContent.Day).Select(x => x.Value).FirstOrDefault(),
+                    Program = session.Load<DynamicProgram>(dynamicContent.Day).Select(x => x.Value).FirstOrDefault(),
                     Location = session.Load<DynamicLocation>(dynamicContent.Location).Select(x => x.Value).FirstOrDefault(),
 
                     Slides = session.Load<DynamicSlideItem>(dynamicContent.Slides).Select(x => x.Value).ToList(),

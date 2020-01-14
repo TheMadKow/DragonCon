@@ -75,9 +75,9 @@
         <h3 class="card-title text-bold">
             <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
             &nbsp;
-            חדשות אחרונות
+            עדכונים אחרונים
         </h3>
-        @foreach (var update in Actor.DisplayDynamics.UpdatesLimited)
+        @foreach (var update in Actor.DisplayDynamics.UpdatesLimited.Take(3))
         {
             if (update.Title.IsEmptyString())
             {
@@ -101,7 +101,7 @@
         }
         <hr />
         <div class="text-center">
-            <a href="" class="btn dragon-btn">לצפיה בכל החדשות</a>
+            <a href="" class="btn dragon-btn">לצפיה בכל העדכונים</a>
         </div>
     </div>
 </div>

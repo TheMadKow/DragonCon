@@ -73,7 +73,7 @@ namespace DragonCon.RavenDB.Index
                     Updates = new string[0],
                 });
 
-            AddMap<DynamicDays>(slides =>
+            AddMap<DynamicProgram>(slides =>
                 from day in slides
                 select new
                 {

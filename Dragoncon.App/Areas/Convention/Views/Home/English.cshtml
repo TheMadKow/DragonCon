@@ -2,7 +2,7 @@
 @using DragonCon.Modeling.Helpers
 @using DragonCon.Modeling.Models.Identities
 @{
-    ViewData["Title"] = "דף הבית";
+    ViewData["Title"] = "English";
     var actor = Actor;
 }
 
@@ -107,7 +107,13 @@
                         }
                     }
 
-                    <span class="text-danger">//TODO ADD MAP</span>
+                    @if (Actor.DisplayDynamics.English.LocationMap.IsNotEmptyString())
+                    {
+                        <iframe width="100%"
+                                height="350px"
+                                src="@Actor.DisplayDynamics.English.LocationMap"></iframe>
+
+                    }
                 </p>
             </div>
         </div>

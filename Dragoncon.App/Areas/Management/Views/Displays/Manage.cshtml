@@ -17,21 +17,24 @@
         <a id="nav-item-slides" class="nav-link" data-toggle="tab" href="#tab-pane-slides">תמונות</a>
     </li>
     <li class="nav-item">
+        <a id="nav-item-sponsors" class="nav-link" data-toggle="tab" href="#tab-pane-sponsors">חסויות</a>
+    </li>
+    <li class="nav-item">
+        <a id="nav-item-links" class="nav-link" data-toggle="tab" href="#tab-pane-location">קישורים</a>
+    </li>
+    <li class="nav-item">
         <a id="nav-item-english" class="nav-link" data-toggle="tab" href="#tab-pane-english">אנגלית</a>
     </li>
     <li class="nav-item">
         <a id="nav-item-location" class="nav-link" data-toggle="tab" href="#tab-pane-location">מיקום</a>
     </li>
     <li class="nav-item">
-        <a id="nav-item-days" class="nav-link" data-toggle="tab" href="#tab-pane-days">ימים</a>
-    </li>
-    <li class="nav-item">
-        <a id="nav-item-sponsors" class="nav-link" data-toggle="tab" href="#tab-pane-sponsors">חסויות</a>
+        <a id="nav-item-days" class="nav-link" data-toggle="tab" href="#tab-pane-days">תוכניה</a>
     </li>
 </ul>
 
 
-<!-- Tab panes -->
+    <!-- Tab panes -->
 <div class="tab-content">
     <div class="tab-pane container active" id="tab-pane-updates">
         <form asp-area="Management" asp-controller="Displays" asp-action="AddUpdate" method="post" class="right-to-left" style="padding: 10px;">
@@ -178,11 +181,47 @@
         </form>
 
     </div>
+
     <div class="tab-pane container fade" id="tab-pane-location">
         <form asp-area="Management" asp-controller="Displays" asp-action="SetLocation" method="post" class="right-to-left" style="padding: 10px;">
             <div class="col">
                 <div class="row">
                     <input name="locId" value="@Model.Location.Id" class="form-control" placeholder="" hidden>
+                    <div class="form-group col-12">
+                        <label>כתובת</label>
+                        <input name="locAddress" class="form-control" value="@Model.Location.LocationName" placeholder="" />
+                    </div>
+                    <div class="form-group col-12">
+                        <label>תיאור</label>
+                        <textarea name="locDesc" class="form-control" placeholder="">@Model.Location.LocationDescription?.Trim()</textarea>
+                    </div>
+                    <div class="form-group col-12">
+                        <label>דרכי הגעה</label>
+                        <textarea name="locWays" class="form-control" placeholder="">@Model.Location.LocationWaysOfArrival?.Trim()</textarea>
+                    </div>
+                    <div class="form-group col-12">
+                        <label>קישור למפה</label>
+                        <input name="locMap" value="@Model.Location.LocationMap" class="form-control" placeholder="">
+                    </div>
+                    <div class="form-group col-2">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="form-control btn btn-success"> עדכון </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="tab-pane container fade" id="tab-pane-linkage">
+        <form asp-area="Management" asp-controller="Displays" asp-action="SetLinkage" method="post" class="right-to-left" style="padding: 10px;">
+            <div class="col">
+                <div class="row">
+                    <input name="locId" value="@Model.Linkage.SuggestGuidelinesLink" class="form-control" placeholder="" hidden>
+                    <div class="form-group col-12">
+                        <label>כתובת</label>
+                        <input name="locAddress" class="form-control" value="@Model.Location.LocationName" placeholder="" />
+                    </div>
                     <div class="form-group col-12">
                         <label>תיאור</label>
                         <textarea name="locDesc" class="form-control" placeholder="">@Model.Location.LocationDescription?.Trim()</textarea>
@@ -207,14 +246,14 @@
         <form asp-area="Management" asp-controller="Displays" asp-action="SetDays" method="post" class="right-to-left" style="padding: 10px;">
             <div class="col">
                 <div class="row">
-                    <input name="dayId" value="@Model.Days.Id" class="form-control" placeholder="" hidden>
+                    <input name="dayId" value="@Model.Program.Id" class="form-control" placeholder="" hidden>
                     <div class="form-group col-12">
                         <label>קישור לתוכניה</label>
-                        <input name="dayLink" value="@Model.Days.ProgramLink" class="form-control" placeholder="">
+                        <input name="dayLink" value="@Model.Program.ProgramLink" class="form-control" placeholder="">
                     </div>
                     <div class="form-group col-12">
                         <label>תמונות תוכניה - מופרדות ב-;</label>
-                        <input name="dayImages" value="@Model.Days.ProgramImages" class="form-control" placeholder="">
+                        <input name="dayImages" value="@Model.Program.ProgramImages" class="form-control" placeholder="">
                     </div>
                     <div class="form-group col-2">
                         <label>&nbsp;</label>
@@ -279,4 +318,4 @@
         </table>
     </div>
 
-    </div>
+</div>
