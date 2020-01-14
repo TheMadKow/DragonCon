@@ -1,10 +1,62 @@
-﻿@if (Actor.HasDisplayConvention)
+﻿@using DragonCon.Modeling.Helpers
+@model DragonCon.App.Settings.LocationSettings
+@if (Actor.HasDisplayConvention)
 {
-    var convention = Actor.DisplayConvention;
-    @convention.Location
-    <br />
+    var locationExtra = Actor.DisplayDynamics.Location;
+    <span class="text-bold">כתובת:</span> @Actor.DisplayConvention.Location
 
-    <span>להוסיף דרכי הגעה</span><br />
-    <span>להוסיף נוסף מיקום</span><br />
-    <span>להוסיף מפה</span>
+    if (locationExtra.LocationDescription.IsNotEmptyString() ||
+        locationExtra.LocationWaysOfArrival.IsNotEmptyString() ||
+        locationExtra.LocationMap.IsNotEmptyString())
+    {
+        <br />
+    }
+
+    if (Model.ShowDetails && locationExtra.LocationDescription.IsNotEmptyString())
+    {
+        <br />
+        <strong>פרטים:</strong>
+        <br />
+
+        @locationExtra.LocationDescription
+        <br />
+    }
+    if (Model.ShowWays && locationExtra.LocationWaysOfArrival.IsNotEmptyString())
+    {
+        <br />
+        <strong>דרכי הגעה:</strong>
+        <br />
+        <span>
+            @locationExtra.LocationWaysOfArrival
+        </span>
+        <br />
+    }
+    if (Model.ShowMap && locationExtra.LocationMap.IsNotEmptyString())
+    {
+        var height = Model.ShowTallMap ? "450px" : "200px";
+
+        <br />
+        <strong>מיקום במפה:</strong>
+        <br />
+
+        <iframe width="100%"
+                height="@height"
+                src="@locationExtra.LocationMap"></iframe>
+        @if (Model.ShowMapExternal)
+        {
+            <br />
+            <div class="text-center">
+                <a target="_blank" href="@locationExtra.LocationMap" class="btn dragon-btn">לצפיה בגוגל מפות</a>
+            </div>
+        }
+        <br />
+    }
+    if (Model.ShowLearnMore)
+    {
+        <br />
+        <div class="text-center">
+            <a asp-area="Convention" asp-controller="Home" asp-action="Info" asp-fragment="tag_location" class="btn dragon-btn">לפרטים נוספים</a>
+        </div>
+
+    }
 }

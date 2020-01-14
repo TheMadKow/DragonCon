@@ -109,7 +109,7 @@ namespace DragonCon.Features.Management.Displays
                 {
                     // Do Nothing
                 }
-            } 
+            }
 
             var slide = new DynamicUpdateItem
             {
@@ -134,7 +134,7 @@ namespace DragonCon.Features.Management.Displays
         [HttpPost]
         public IActionResult AddSponsor(string sponsorName, string sponsorImage, string sponsorUrl)
         {
-            var slide = new DynamicSponsorItem()
+            var slide = new DynamicSponsorItem
             {
                 ImageUrl = sponsorImage,
                 SponsorUrl = sponsorUrl,
@@ -167,13 +167,91 @@ namespace DragonCon.Features.Management.Displays
                 message
             });
         }
+
+        [HttpPost]
+        public IActionResult SetEnglish(
+            string englishId,
+            string engLocName,
+            string engLocDesc,
+            string engLocLink)
+        {
+            var slide = new DynamicEnglish
+            {
+                Id = englishId,
+                Location = engLocName,
+                LocationDescription = engLocDesc,
+                LocationMap = engLocLink,
+                ConventionId = Actor.ManagedConvention.ConventionId
+            };
+
+            var message = string.Empty;
+            var answer = Gateway.SetDisplayItem(slide);
+            if (answer.AnswerType != AnswerType.Success)
+                message = answer.Message;
+            return RedirectToAction("Manage", new
+            {
+                tab = "english",
+                message
+            });
+        }
+
+        [HttpPost]
+        public IActionResult SetDays(string dayId,
+            string dayImages,
+            string dayLink)
+        {
+            var days = new DynamicDays
+            {
+                Id = dayId,
+                ProgramImages = dayImages,
+                ProgramLink = dayLink,
+                ConventionId = Actor.ManagedConvention.ConventionId
+            };
+
+            var message = string.Empty;
+            var answer = Gateway.SetDisplayItem(days);
+            if (answer.AnswerType != AnswerType.Success)
+                message = answer.Message;
+            return RedirectToAction("Manage", new
+            {
+                tab = "days",
+                message
+            });
+        }
+
+        public IActionResult SetLocation(
+        string locId,
+        string locDesc,
+        string locWays,
+        string locMap)
+        {
+            var location = new DynamicLocation()
+            {
+                Id = locId,
+                LocationDescription = locDesc,
+                LocationWaysOfArrival = locWays,
+                LocationMap = locMap,
+                ConventionId = Actor.ManagedConvention.ConventionId
+            };
+
+            var message = string.Empty;
+            var answer = Gateway.SetDisplayItem(location);
+            if (answer.AnswerType != AnswerType.Success)
+                message = answer.Message;
+            return RedirectToAction("Manage", new
+            {
+                tab = "location",
+                message
+            });
+        }
     }
 
     public interface IManagementDisplaysGateway : IGateway
     {
         DisplaysViewModel BuildDisplays();
 
-
+        Answer SetDisplayItem<T>(T item)
+            where T : DynamicDisplayItem;
         Answer AddDisplayItem(DynamicDisplayItem slide);
         Answer RemoveDisplayItem(string id);
 

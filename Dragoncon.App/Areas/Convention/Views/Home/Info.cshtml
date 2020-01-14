@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using DragonCon.App.Settings
 @using DragonCon.Modeling.Helpers
 @using DragonCon.Modeling.Models.Identities
 @{
@@ -138,7 +139,14 @@
             מיקום והגעה
         </h3>
         <p class="card-paragraph">
-            @await Html.PartialAsync("_PartialLocation")
+            @await Html.PartialAsync("_PartialLocation", new LocationSettings()
+            {
+                ShowDetails = true,
+                ShowMap = true,
+                ShowTallMap = true,
+                ShowWays = true,
+                ShowMapExternal = true,
+            })
         </p>
     </div>
     @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
@@ -209,7 +217,7 @@
     </div>
     <br />
     <div class="text-center">
-        <a asp-area="Convention" asp-controller="Home" asp-action="Register" class="btn dragon-btn">לחצו להרשמה</a>
+        <a asp-area="Participant" asp-controller="Personal" asp-action="Index" class="btn dragon-btn">לחצו להרשמה</a>
     </div>
 
     @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()

@@ -14,8 +14,9 @@ namespace DragonCon.RavenDB.Index
             public string[] Updates { get; set; } = new string[0];
             public string[] Sponsors { get; set; } = new string[0];
             public string[] Slides { get; set; } = new string[0];
-            public string Location { get; set; } = string.Empty;
-            public string English { get; set; } = string.Empty;
+            public string[] Day { get; set; } = new string[0];
+            public string[] Location { get; set; } = new string[0];
+            public string[] English { get; set; } = new string[0];
         }
 
         public DynamicContent_ByConventionId()
@@ -25,6 +26,9 @@ namespace DragonCon.RavenDB.Index
                             select new
                             {
                                 ConventionId = u.ConventionId,
+                                English = new string[0],
+                                Location = new string[0],
+                                Day = new string[0],
                                 Sponsors = new string[0],
                                 Slides = new string[0],
                                 Updates = new[] { u.Id },
@@ -35,6 +39,9 @@ namespace DragonCon.RavenDB.Index
                 {
                     ConventionId = s.ConventionId,
                     Sponsors = new[] { s.Id },
+                    English = new string[0],
+                    Location = new string[0],
+                    Day = new string[0],
                     Slides = new string[0],
                     Updates = new string[0],
                 });
@@ -45,9 +52,54 @@ namespace DragonCon.RavenDB.Index
                 {
                     ConventionId = s.ConventionId,
                     Sponsors = new string[0],
-                    Slides = new[] { s.Id },
+                    Location = new string[0],
+                    Day = new string[0],
+                    Slides = new string[] {s.Id},
+                    English = new string[0],
                     Updates = new string[0],
                 });
+
+
+            AddMap<DynamicEnglish>(slides =>
+                from eng in slides
+                select new
+                {
+                    ConventionId = eng.ConventionId,
+                    Sponsors = new string[0],
+                    Slides = new string[0],
+                    Location = new string[0],
+                    Day = new string[0],
+                    English = new[] { eng.Id },
+                    Updates = new string[0],
+                });
+
+            AddMap<DynamicDays>(slides =>
+                from day in slides
+                select new
+                {
+                    ConventionId = day.ConventionId,
+                    Sponsors = new string[0],
+                    Slides = new string[0],
+                    Location = new string[0],
+                    English = new string[0],
+                    Day = new[] { day.Id },
+                    Updates = new string[0],
+                });
+
+
+            AddMap<DynamicLocation>(slides =>
+                from loc in slides
+                select new
+                {
+                    ConventionId = loc.ConventionId,
+                    Sponsors = new string[0],
+                    Slides = new string[0],
+                    Day = new string[0],
+                    English = new string[0],
+                    Location = new[] { loc.Id },
+                    Updates = new string[0],
+                });
+
 
 
 
@@ -61,6 +113,9 @@ namespace DragonCon.RavenDB.Index
                                     Updates = g.SelectMany(x => x.Updates),
                                     Slides = g.SelectMany(x => x.Slides),
                                     Sponsors = g.SelectMany(x => x.Sponsors),
+                                    English = g.SelectMany(x => x.English),
+                                    Location = g.SelectMany(x => x.Location),
+                                    Day = g.SelectMany(x => x.Day),
                                 };
 
         }

@@ -94,6 +94,9 @@ namespace DragonCon.App.Helpers
                 .Include(x => x.Updates)
                 .Include(x => x.Slides)
                 .Include(x => x.Sponsors)
+                .Include(x => x.English)
+                .Include(x => x.Location)
+                .Include(x => x.Day)
                 .SingleOrDefault(x => x.ConventionId == conventioId);
 
             if (dynamicContent == null)
@@ -103,6 +106,10 @@ namespace DragonCon.App.Helpers
 
                 return new Actor.ActorDynamicContent()
                 {
+                    English = session.Load<DynamicEnglish>(dynamicContent.English).Select(x => x.Value).FirstOrDefault(),
+                    Days = session.Load<DynamicDays>(dynamicContent.Day).Select(x => x.Value).FirstOrDefault(),
+                    Location = session.Load<DynamicLocation>(dynamicContent.Location).Select(x => x.Value).FirstOrDefault(),
+
                     Slides = session.Load<DynamicSlideItem>(dynamicContent.Slides).Select(x => x.Value).ToList(),
                     Sponsors = session.Load<DynamicSponsorItem>(dynamicContent.Sponsors).Select(x => x.Value).ToList(),
                     UpdatesLimited = session.Load<DynamicUpdateItem>(dynamicContent.Updates).Select(x => x.Value).ToList(),

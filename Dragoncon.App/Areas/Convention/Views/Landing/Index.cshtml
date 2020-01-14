@@ -48,15 +48,23 @@
             @await Html.PartialAsync("_PartialDragon")
             איפה ומתי הכנס ?
         </h3>
-        <p class="card-paragraph">
-            @if (actor.HasDisplayConvention)
-            {
-                @await Html.PartialAsync("_PartialLocation", false)
-                <br />
-                <br />
-                @await Html.PartialAsync("_PartialConvetionDays")
-            }
-        </p>
+        <div class="row">
+            <div class="col-6">
+                <p class="card-paragraph">
+                    @await Html.PartialAsync("_PartialLocation", new LocationSettings()
+                    {
+                        ShowMap = true,
+                    })
+                </p>
+            </div>
+            <div class="col-6">
+                <p class="card-paragraph">
+                    @await Html.PartialAsync("_PartialConvetionDays")
+                </p>
+
+            </div>
+        </div>
+     
     </div>
 </div>
 

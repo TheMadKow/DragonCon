@@ -2,7 +2,7 @@
 {
     public class DynamicDays : DynamicDisplayItem
     {
-        public string ProgrammeLink { get; set; } = string.Empty;
-        public string ProgrammeImages { get; set; } = string.Empty;
+        public string ProgramLink { get; set; } = string.Empty;
+        public string ProgramImages { get; set; } = string.Empty;
     }
 }

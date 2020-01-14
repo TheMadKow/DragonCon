@@ -301,6 +301,9 @@ namespace DragonCon.Modeling.Models.Identities
             public IList<DynamicSponsorItem> Sponsors { get; set; } = new List<DynamicSponsorItem>();
             public IList<DynamicSlideItem> Slides { get; set; } = new List<DynamicSlideItem>();
             public IList<DynamicUpdateItem> UpdatesLimited { get; set; } = new List<DynamicUpdateItem>();
+            
+            
+            public DynamicDays Days { get; set; } = new DynamicDays();
             public DynamicLocation Location { get; set; } = new DynamicLocation();
             public DynamicEnglish English { get; set; } = new DynamicEnglish();
         }

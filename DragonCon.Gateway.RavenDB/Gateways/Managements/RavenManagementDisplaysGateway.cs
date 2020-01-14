@@ -14,6 +14,21 @@ namespace DragonCon.RavenDB.Gateways.Managements
         {
         }
 
+        public Answer SetDisplayItem<T>(T item)
+            where T : DynamicDisplayItem
+        {
+            try
+            {
+                Session.Store(item);
+                Session.SaveChanges();
+                return Answer.Success;
+            }
+            catch (Exception e)
+            {
+                return Answer.Error(e.Message);
+            }
+        }
+
         public Answer AddDisplayItem(DynamicDisplayItem slide)
         {
             try
@@ -64,14 +79,18 @@ namespace DragonCon.RavenDB.Gateways.Managements
 
             Session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
 
+            var english = lazyEnglish.Value.FirstOrDefault() ?? new DynamicEnglish();
+            var days = lazyDay.Value.FirstOrDefault() ?? new DynamicDays();
+            var location = lazyLocation.Value.FirstOrDefault() ?? new DynamicLocation();
+            
             return new DisplaysViewModel
             {
                 Updates = lazyUpdates.Value.ToList(),
                 Slides = lazySliders.Value.ToList(),
                 Sponsors = lazySponsors.Value.ToList(),
-                English = lazyEnglish.Value.FirstOrDefault(),
-                Days = lazyDay.Value.FirstOrDefault(),
-                Location = lazyLocation.Value.FirstOrDefault()
+                English = english,
+                Days = days,
+                Location = location
             };
         }
     }
