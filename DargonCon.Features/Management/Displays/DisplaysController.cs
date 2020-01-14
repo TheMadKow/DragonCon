@@ -130,6 +130,43 @@ namespace DragonCon.Features.Management.Displays
                 message
             });
         }
+
+        [HttpPost]
+        public IActionResult AddSponsor(string sponsorName, string sponsorImage, string sponsorUrl)
+        {
+            var slide = new DynamicSponsorItem()
+            {
+                ImageUrl = sponsorImage,
+                SponsorUrl = sponsorUrl,
+                Caption = sponsorName,
+                ConventionId = Actor.ManagedConvention.ConventionId
+            };
+
+            var message = string.Empty;
+            var answer = Gateway.AddDisplayItem(slide);
+            if (answer.AnswerType != AnswerType.Success)
+                message = answer.Message;
+            return RedirectToAction("Manage", new
+            {
+                tab = "sponsors",
+                message
+            });
+        }
+
+        [HttpPost]
+        public IActionResult RemoveSponsor(string sponsorId)
+        {
+            var message = string.Empty;
+            var answer = Gateway.RemoveDisplayItem(sponsorId);
+            if (answer.AnswerType != AnswerType.Success)
+                message = answer.Message;
+
+            return RedirectToAction("Manage", new
+            {
+                tab = "sponsors",
+                message
+            });
+        }
     }
 
     public interface IManagementDisplaysGateway : IGateway

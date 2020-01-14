@@ -25,6 +25,9 @@
     <li class="nav-item">
         <a id="nav-item-days" class="nav-link" data-toggle="tab" href="#tab-pane-days">ימים</a>
     </li>
+    <li class="nav-item">
+        <a id="nav-item-sponsors" class="nav-link" data-toggle="tab" href="#tab-pane-sponsors">חסויות</a>
+    </li>
 </ul>
 
 
@@ -151,4 +154,59 @@
     <div class="tab-pane container fade" id="tab-pane-english">...</div>
     <div class="tab-pane container fade" id="tab-pane-location">...</div>
     <div class="tab-pane container fade" id="tab-pane-days">...</div>
+    <div class="tab-pane container fade" id="tab-pane-sponsors">
+
+        <form asp-area="Management" asp-controller="Displays" asp-action="AddSponsor" method="post" class="right-to-left" style="padding: 10px;">
+            <div class="col">
+                <div class="row">
+                    <div class="form-group col-4">
+                        <label>שם</label>
+                        <input name="sponsorName" class="form-control" placeholder="אשפי החוף">
+                    </div>
+                    <div class="form-group col-4">
+                        <label>תמונה</label>
+                        <input name="sponsorImage" class="form-control" placeholder="https://mypicture.path">
+                    </div>
+                    <div class="form-group col-4">
+                        <label>אתר</label>
+                        <input name="sponsorUrl" class="form-control" placeholder="https://mysite.path ">
+                    </div>
+                    <div class="form-group col-2">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="form-control btn btn-success"> הוספה </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <td>שם / תמונה</td>
+                <td>אתר בית</td>
+                <td></td>
+            </tr>
+            </thead>
+            @foreach (var sponsor in Model.Sponsors.OrderBy(x => x.Id))
+            {
+                <tr>
+                    <td>
+                        <strong>@sponsor.Caption</strong>
+                        <br />
+                        <img alt="@sponsor.ImageUrl" src="@sponsor.ImageUrl" style="max-height: 150px;" />
+                    </td>
+                    <td>@sponsor.SponsorUrl</td>
+                    <td>
+                        <form asp-area="Management" asp-controller="Displays" asp-action="RemoveSponsor">
+                            <input name="sponsorId" value="@sponsor.Id" hidden />
+                            <button type="submit" class="btn text-danger"><i class="fa fa-fw fa-trash"></i></button>
+                        </form>
+
+                    </td>
+
+                </tr>
+            }
+        </table>
+    </div>
+
 </div>

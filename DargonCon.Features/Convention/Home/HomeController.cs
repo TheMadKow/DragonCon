@@ -12,8 +12,7 @@ namespace DragonCon.Features.Convention.Home
 
         public IActionResult Index()
         {
-            var viewModel = Gateway.BuildHome();
-            return View(viewModel);
+            return View();
         }
 
         public IActionResult Info()
@@ -56,8 +55,6 @@ namespace DragonCon.Features.Convention.Home
         {
             return View();
         }
-
-
 
         public IActionResult Error(string err)
         {

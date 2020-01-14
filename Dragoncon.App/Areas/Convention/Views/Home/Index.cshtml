@@ -1,5 +1,4 @@
-﻿@model DragonCon.Features.Convention.Home.HomeViewModel
-@using System.Globalization
+﻿@using System.Globalization
 @using DragonCon.App.Settings
 @using DragonCon.Modeling.Helpers
 @{
@@ -10,7 +9,7 @@
 @await Html.PartialAsync("_PartialSharedSlider", new SliderSettings
 {
     Title = "דרקוניקון בתמונות",
-    Slides = Model.Slides
+    Slides = Actor.DisplayDynamics.Slides
 })
 
 <div class="card card-gray-float">
@@ -63,7 +62,7 @@
             &nbsp;
             חדשות אחרונות
         </h3>
-        @foreach (var update in Model.Updates)
+        @foreach (var update in Actor.DisplayDynamics.UpdatesLimited)
         {
             if (update.Title.IsEmptyString())
             {

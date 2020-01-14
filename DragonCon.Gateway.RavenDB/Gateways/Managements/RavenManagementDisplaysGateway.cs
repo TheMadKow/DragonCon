@@ -48,6 +48,8 @@ namespace DragonCon.RavenDB.Gateways.Managements
             var lazyUpdates = Session.Query<DynamicUpdateItem>()
                 .Where(x => x.ConventionId == managedCon)
                 .OrderByDescending(x => x.Date).Lazily();
+            var lazySponsors = Session.Query<DynamicSponsorItem>()
+                .Where(x => x.ConventionId == managedCon).Lazily();
             var lazySliders = Session.Query<DynamicSlideItem>()
                 .Where(x => x.ConventionId == managedCon).Lazily();
             var lazyEnglish = Session.Query<DynamicEnglish>()
@@ -66,6 +68,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
             {
                 Updates = lazyUpdates.Value.ToList(),
                 Slides = lazySliders.Value.ToList(),
+                Sponsors = lazySponsors.Value.ToList(),
                 English = lazyEnglish.Value.FirstOrDefault(),
                 Days = lazyDay.Value.FirstOrDefault(),
                 Location = lazyLocation.Value.FirstOrDefault()

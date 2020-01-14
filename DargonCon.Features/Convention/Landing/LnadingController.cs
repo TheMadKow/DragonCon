@@ -16,8 +16,7 @@ namespace DragonCon.Features.Convention.Landing
         [HttpGet("/Convention/Landing/Index")]
         public IActionResult Index()
         {
-            var viewModel = Gateway.BuildLanding();
-            return View(viewModel);
+            return View();
         }
     }
 }

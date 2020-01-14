@@ -1,41 +1,4 @@
 ﻿@using DragonCon.Modeling.Models.UserDisplay
-@{
-    var sponsors = new List<DynamicSponsorItem>
-{
-        new DynamicSponsorItem
-        {
-            ImageUrl = "https://res.cloudinary.com/draconicon/image/upload/t_mini_sponsor/v1578944913/2020/Sponsors/sponsor_paizo_ola78u.png",
-            SponsorUrl = "https://paizo.com/",
-            Caption = "Paizo"
-        },
-
-    new DynamicSponsorItem
-        {
-            ImageUrl = "https://res.cloudinary.com/draconicon/image/upload/t_mini_sponsor/v1578944913/2020/Sponsors/sponsor_greenronin_zv1nzx.jpg",
-            SponsorUrl = "http://www.greenronin.com/",
-            Caption = "Green Ronin"
-        },
-
-        new DynamicSponsorItem
-        {
-            ImageUrl = "https://res.cloudinary.com/draconicon/image/upload/t_mini_sponsor/v1578944913/2020/Sponsors/sponsor_amuta_xdnxdp.jpg",
-            SponsorUrl = "http://www.roleplay.org.il/",
-            Caption = "העמותה למשחקי תפקידים בישראל"
-        },
-        new DynamicSponsorItem
-        {
-            ImageUrl = "https://res.cloudinary.com/draconicon/image/upload/t_mini_sponsor/v1578944913/2020/Sponsors/sponsor_modiphius_saweu4.jpg",
-            SponsorUrl = "http://www.modiphius.com/",
-            Caption = "Modiphius"
-        },
-        new DynamicSponsorItem
-        {
-            ImageUrl = "https://res.cloudinary.com/draconicon/image/upload/t_mini_sponsor/v1578951535/2020/Sponsors/sponsor_ultrapro_box_q2wzgo.jpg",
-            SponsorUrl = "https://www.ultrapro.com/",
-            Caption = "UltraPRO"
-        }
-    };
-}
 
 <footer style="font-size: 1.1em;">
     <div class="right-to-left">
@@ -43,7 +6,7 @@
             <h4 style="margin-bottom: 15px;" class="text-bold">הכנס בחסות</h4>
         </div>
         <div class="text-center">
-            @foreach (var sponsor in sponsors)
+            @foreach (var sponsor in Actor.DisplayDynamics.Sponsors)
             {
                 <img title="@sponsor.Caption" src="@sponsor.ImageUrl" class="sponsor-image" onclick="openInNewTab('@sponsor.SponsorUrl')" />
             }
@@ -80,6 +43,14 @@
                    asp-action="Index"
                    asp-fragment="tag_contactus">יצירת קשר</a>
             </li>
+            @if (Actor.HasAnySystemRole)
+            {
+                <li class="nav-item">
+                    <a href="#" class="nav-link dragon-organge-link">זמן @Actor.LoadTimeInMs מ"ש</a>
+                </li>
+
+            }
+
         </ul>
     </div>
 </footer>

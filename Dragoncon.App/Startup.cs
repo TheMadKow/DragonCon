@@ -123,6 +123,8 @@ namespace DragonCon.App
             };
 
             IndexCreation.CreateIndexes(typeof(EventsIndex_ByTitleDescription).Assembly, holder.Store);
+            IndexCreation.CreateIndexes(typeof(Participants_BySearchQuery).Assembly, holder.Store);
+            IndexCreation.CreateIndexes(typeof(DynamicContent_ByConventionId).Assembly, holder.Store);
 
             services.AddSingleton(holder);
             services

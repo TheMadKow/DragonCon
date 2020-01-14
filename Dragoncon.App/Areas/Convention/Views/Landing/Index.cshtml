@@ -1,8 +1,4 @@
-﻿@using System.Globalization
-@using DragonCon.App.Settings
-@using DragonCon.Modeling.Helpers
-@using DragonCon.Modeling.Models.Identities
-@model DragonCon.Features.Convention.Landing.LandingViewModel
+﻿@using DragonCon.App.Settings
 @{
     var actor = Actor;
     Layout = "_LandingLayout";
@@ -43,7 +39,7 @@
 @await Html.PartialAsync("_PartialSharedSlider", new SliderSettings
 {
     Title = "דרקוניקון בתמונות",
-    Slides = Model.Slides
+    Slides = Actor.DisplayDynamics.Slides
 })
 
 <div class="card card-gray-float">

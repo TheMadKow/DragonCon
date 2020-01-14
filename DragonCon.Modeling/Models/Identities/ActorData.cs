@@ -7,6 +7,7 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Tickets;
+using DragonCon.Modeling.Models.UserDisplay;
 using DragonCon.Modeling.TimeSlots;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -18,16 +19,24 @@ namespace DragonCon.Modeling.Models.Identities
         Actor.ActorParticipant Me { get; set; }
         Actor.ActorSystemState System { get; set; }
 
-        bool HasDisplayConvention { get; }
-        bool HasManagedConvention { get; }
+        bool HasDisplayConvention { get; set; }
+        bool HasManagedConvention { get; set; }
 
-        Actor.ActorConventionState? ManagedConvention { get; set; }
-        Actor.ActorDropDowns? ManagedDropDowns { get; set; }
+        // Only Manager Loaded
+        Actor.ActorConventionState ManagedConvention { get; set; }
+        Actor.ActorDropDowns ManagedDropDowns { get; set; }
 
-        Actor.ActorConventionState? DisplayConvention { get; set; }
-        Actor.ActorDropDowns? DisplayDropDowns { get; set; }
+        // Public Load
+        Actor.ActorConventionState DisplayConvention { get; set; }
+        Actor.ActorDropDowns DisplayDropDowns { get; set; }
+        Actor.ActorDynamicContent DisplayDynamics { get; set; }
+
+        // Roles
         bool HasAnySystemRole { get;  }
         bool HasSystemRole(SystemRoles role);
+
+        // Meta
+        long LoadTimeInMs { get; set; }
     }
 
     public class Actor : IActor
@@ -36,22 +45,32 @@ namespace DragonCon.Modeling.Models.Identities
         {
             Me = new ActorParticipant();
             System = new ActorSystemState();
+
+            ManagedConvention = new ActorConventionState();
+            DisplayConvention = new ActorConventionState();
+
+            DisplayDropDowns = new ActorDropDowns();
+            ManagedDropDowns = new ActorDropDowns();
+
+            DisplayDynamics = new ActorDynamicContent();
         }
 
         public ActorParticipant Me { get; set; }
         public ActorSystemState System { get; set; }
 
-        public bool HasDisplayConvention => DisplayConvention != null;
-        public bool HasManagedConvention => ManagedConvention != null;
+        public bool HasDisplayConvention { get; set; }
+        public bool HasManagedConvention { get; set; }
 
-        public ActorConventionState? DisplayConvention { get; set; } = null;
-        public ActorConventionState? ManagedConvention { get; set; } = null;
+        public ActorConventionState DisplayConvention { get; set; } = null;
+        public ActorConventionState ManagedConvention { get; set; } = null;
 
-        public ActorDropDowns? DisplayDropDowns { get; set; } = null;
-        public ActorDropDowns? ManagedDropDowns { get; set; } = null;
+        public ActorDropDowns DisplayDropDowns { get; set; } = null;
+        public ActorDynamicContent DisplayDynamics { get; set; } = null;
+        public ActorDropDowns ManagedDropDowns { get; set; } = null;
 
         public bool HasAnySystemRole => Me.SystemRoles.Any();
         public bool HasSystemRole(SystemRoles role) => Me.SystemRoles.Contains(role);
+        public long LoadTimeInMs { get; set; }
 
         #region Subclasses
         public class ActorDropDowns
@@ -59,6 +78,11 @@ namespace DragonCon.Modeling.Models.Identities
             private readonly ActorConventionState _convention;
             private readonly ActorSystemState _system;
             private readonly IStrategyFactory _factory;
+
+            public ActorDropDowns()
+            {
+
+            }
 
             public ActorDropDowns(IStrategyFactory factory, ActorConventionState convention, ActorSystemState system)
             {
@@ -224,8 +248,8 @@ namespace DragonCon.Modeling.Models.Identities
         public class ActorSystemState
         {
 
-            public string DisplayConventionId { get; set; } = "";
-            public string ManagersConventionId { get; set; } = "";
+            public string DisplayConventionId { get; set; } = string.Empty;
+            public string ManagersConventionId { get; set; } = string.Empty;
             public List<Activity> Activities { get; set; } = new List<Activity>();
             public List<AgeGroup> AgeGroups { get; set; } = new List<AgeGroup>();
 
@@ -249,19 +273,18 @@ namespace DragonCon.Modeling.Models.Identities
 
         public class ActorParticipant
         {
-            public string Id { get; set; }
-            public string FullName { get; set; }
+            public string Id { get; set; } = string.Empty;
+            public string FullName { get; set; } = string.Empty;
             public IList<SystemRoles> SystemRoles { get; set; } = new List<SystemRoles>();
         }
 
         public class ActorConventionState
         {
-            public long BuildMilliseconds { get; set; }
             public TimeSlotStrategy TimeStrategy { get; set; }
-            public string ConventionId { get; set; }
-            public string ConventionName { get; set; }
-            public string Location { get; set; }
-            public string TagLine { get; set; }
+            public string ConventionId { get; set; } = string.Empty;
+            public string ConventionName { get; set; } = string.Empty;
+            public string Location { get; set; } = string.Empty;
+            public string TagLine { get; set; } = string.Empty;
             public ConventionSettings Settings { get; set; } = new ConventionSettings();
             public List<Hall> Halls { get; set; } = new List<Hall>();
             public List<Ticket> Tickets { get; set; } = new List<Ticket>();
@@ -272,5 +295,14 @@ namespace DragonCon.Modeling.Models.Identities
             }
         }
         #endregion
+
+        public class ActorDynamicContent
+        {
+            public IList<DynamicSponsorItem> Sponsors { get; set; } = new List<DynamicSponsorItem>();
+            public IList<DynamicSlideItem> Slides { get; set; } = new List<DynamicSlideItem>();
+            public IList<DynamicUpdateItem> UpdatesLimited { get; set; } = new List<DynamicUpdateItem>();
+            public DynamicLocation Location { get; set; } = new DynamicLocation();
+            public DynamicEnglish English { get; set; } = new DynamicEnglish();
+        }
     }
 }
