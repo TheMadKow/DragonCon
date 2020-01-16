@@ -22,7 +22,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 .Include<Convention>(x => x.DayIds)
                 .Load<Convention>(conventionId);
 
-            var engagements = Session.Query<ConventionEngagement>()
+            var engagements = Session.Query<UserEngagement>()
                 .Include(x => x.ParticipantId)
                 .Where(x => x.ConventionId == conventionId)
                 .ToList();

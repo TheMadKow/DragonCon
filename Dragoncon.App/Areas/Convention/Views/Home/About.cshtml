@@ -1,4 +1,5 @@
-﻿@using System.Globalization
+﻿@model DragonCon.Features.Convention.Home.AboutViewModel;
+@using System.Globalization
 @{
     ViewData["Title"] = "על הכנס והאתר";
 }
@@ -126,24 +127,23 @@
             סגל הכנס
         </h3>
         <p class="card-paragraph">
-            אדוה פפו - משחקי-תפקידים |
-            אוריין אינטרטור - מארגן הכנס |
-            אלירן טלר - משחקי לוח |
-            אלכס בודגורנוב - שיווק |
-            אלעד אור - תוכנייה ועיצוב |
-            אסף הדרי - לוגיסטיקה |
-            בר קדוש - שיווק ומשחקי לוח |
-            גלעד גרינברג - משחקי-תפקידים |
-            דניאל רוזנברג - מארגן הכנס |
-            חגי גומפרט - משחקי-תפקידים |
-            יבגני רזניקוב - כח-אדם וקשרי-חוץ |
-            יובל בוזגלו - תוכנייה ועיצוב |
-            יובל זיווני - לוגיסטיקה |
-            לירן שובל - לוגיסטיקה |
-            עדי סינגל - ספריית משחקי לוח |
-            עומר רביב - משחקי-תפקידים |
-            עידן קוקורייב - שיווק ומרצ'נדייז |
-            תומר מלינרסקי - מיחשוב
+            @{
+                var orderedOfficers = Model
+                    .OfficerLines.OrderBy(x => x.Name).ToArray();
+
+            }
+
+            @for (int i = 0; i < orderedOfficers.Length; i++)
+            {
+                <span>
+                    <strong>@orderedOfficers[i].Name</strong> - @orderedOfficers[i].Description
+                    @if (i+1 < orderedOfficers.Length)
+                    {
+                        <span>&nbsp;|&nbsp;</span>
+                    }
+                </span>
+
+            }
         </p>
     </div>
 </div>
@@ -157,8 +157,9 @@
             דרקוני עבר
         </h3>
         <p class="card-paragraph">
-            רשימה של הכנסים הקודמים:
+            רשימה של הכנסים הקודמים
         </p>
+        <h4 class="text-bold">דרקוני עבר:</h4>
         <ul class="fa-ul card-list">
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
@@ -207,7 +208,7 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <strong>דרקוניקון 2007</strong> - כנס חד יומי, התקיים ב-25 באוגוסט בפריק בתל אביב, כ-40 משתתפים
+                <strong>דרקוניקון 2008</strong> - כנס חד יומי, התקיים ב-25 באוגוסט בפריק בתל אביב, כ-40 משתתפים
             </li>
 
 

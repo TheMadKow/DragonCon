@@ -5,7 +5,7 @@ using NodaTime;
 
 namespace DragonCon.Modeling.Models.Conventions
 {
-    public interface IConventionEngagement
+    public interface IUserEngagement
     {
         string ConventionId { get; }
         string ParticipantId { get; }
@@ -16,7 +16,7 @@ namespace DragonCon.Modeling.Models.Conventions
         List<string> EventIds { get; }
         List<string> SuggestedEventIds { get; }
         List<ConventionRoles> Roles { get; }
-        string PersonalDescription { get; }
+        string RoleDescription { get; }
         Instant CreatedOn { get; }
     }
 }

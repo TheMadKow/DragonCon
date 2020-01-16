@@ -5,9 +5,15 @@ using DragonCon.Modeling.Models.UserDisplay;
 
 namespace DragonCon.Features.Convention.Home
 {
-    public class HomeViewModel
+    public class AboutViewModel
     {
-        public IList<DynamicSlideItem> Slides { get; set; } = new List<DynamicSlideItem>();
-        public IList<DynamicUpdateItem> Updates { get; set; } = new List<DynamicUpdateItem>();
+        public List<OfficerLine> OfficerLines = new List<OfficerLine>();
+    }
+
+
+    public class OfficerLine
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
     }
 }

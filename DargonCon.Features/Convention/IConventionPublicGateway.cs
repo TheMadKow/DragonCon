@@ -6,5 +6,6 @@ namespace DragonCon.Features.Convention
 {
     public interface IConventionPublicGateway : IGateway
     {
+        AboutViewModel BuildAbout();
     }
 }

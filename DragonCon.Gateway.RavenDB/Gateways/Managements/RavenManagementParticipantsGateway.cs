@@ -78,7 +78,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 ParticipantId = participantId
             };
 
-            var engagement = Session.Query<ConventionEngagement>()
+            var engagement = Session.Query<UserEngagement>()
                 .SingleOrDefault(x => x.ParticipantId == participantId &&
                                                      x.ConventionId == Actor.ManagedConvention.ConventionId);
             var roles = engagement != null ? engagement.Roles : new List<ConventionRoles>();
@@ -124,14 +124,14 @@ namespace DragonCon.RavenDB.Gateways.Managements
             var isLongTerm = asLongTerm != null;
 
             var engagement = Session
-                .Query<ConventionEngagement>()
+                .Query<UserEngagement>()
                 .FirstOrDefault(x =>
                     x.ConventionId == Actor.ManagedConvention.ConventionId &&
                     x.ParticipantId == participantId);
 
             if (engagement == null)
             {
-                engagement = new ConventionEngagement()
+                engagement = new UserEngagement()
                 {
                     ConventionId = Actor.ManagedConvention.ConventionId,
                     ConventionStartDate = Actor.ManagedConvention.Days
@@ -156,11 +156,11 @@ namespace DragonCon.RavenDB.Gateways.Managements
 
             if (description.IsEmptyString())
             {
-                engagement.PersonalDescription = "סגל כנס";
+                engagement.RoleDescription = "סגל כנס";
             }
             else
             {
-                engagement.PersonalDescription = description;
+                engagement.RoleDescription = description;
             }
 
             Session.Store(engagement);
@@ -231,7 +231,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 return answer;
 
             IParticipant model;
-            ConventionEngagement engagement = new ConventionEngagement
+            UserEngagement engagement = new UserEngagement
             {
                 ConventionId = Actor.ManagedConvention.ConventionId,
                 ConventionStartDate = Actor.ManagedConvention.Days
@@ -318,7 +318,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
             ParticipantsManagementViewModel.Filters? filters = null)
         {
             var currentConvention = Actor.ManagedConvention.ConventionId;
-            var query = Session.Query<ConventionEngagement>()
+            var query = Session.Query<UserEngagement>()
                 .Include(x => x.ParticipantId)
                 .Include(x => x.EventIds)
                 .AsQueryable();
@@ -361,7 +361,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 .OrderBy(x => x.FullName)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)
-                .As<ConventionEngagement>()
+                .As<UserEngagement>()
                 .ToList();
 
             var wrapperFactory = new WrapperFactory(Session);

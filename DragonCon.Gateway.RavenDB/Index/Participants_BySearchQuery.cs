@@ -20,7 +20,7 @@ namespace DragonCon.RavenDB.Index
 
         public Participants_BySearchQuery()
         {
-            AddMap<ConventionEngagement>(shorts => from s in shorts
+            AddMap<UserEngagement>(shorts => from s in shorts
                 where s.IsLongTerm == false
                       let shortTerm = LoadDocument<ShortTermParticipant>(s.ParticipantId)
                 select new
@@ -33,7 +33,7 @@ namespace DragonCon.RavenDB.Index
                     ConventionStartDate = s.ConventionStartDate,
                     SearchText = $"{shortTerm.Id} {shortTerm.FullName} {shortTerm.PhoneNumber}",
                 });
-            AddMap<ConventionEngagement>(longs => from l in longs
+            AddMap<UserEngagement>(longs => from l in longs
                 where l.IsLongTerm
                 let longTerm = LoadDocument<LongTermParticipant>(l.ParticipantId)
                 select new

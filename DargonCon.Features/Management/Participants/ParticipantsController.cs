@@ -62,11 +62,11 @@ namespace DragonCon.Features.Management.Participants
 
         [Authorize(Policies.Types.EventsManagement)]
         [HttpPost]
-        public IActionResult UpdateRoles(UpdateRolesViewModel viewmodel)
+        public IActionResult UpdateRoles(UpdateRolesViewModel viewmodel, string officerDesc)
         {
             var conKeys = Request.Form.Keys.Where(x => x.StartsWith("con_")).Select(x => x.Replace("con_", "")).ToArray();
             var sysKeys = Request.Form.Keys.Where(x => x.StartsWith("sys_")).Select(x => x.Replace("sys_", "")).ToArray();
-            var personalDesc = Request.Form.Keys.FirstOrDefault(x => x == "personal_description");
+            var personalDesc = officerDesc;
             var answer = Gateway.UpdateRoles(viewmodel.ParticipantId, personalDesc, sysKeys, conKeys);
             if (answer.AnswerType != AnswerType.Success)
             {

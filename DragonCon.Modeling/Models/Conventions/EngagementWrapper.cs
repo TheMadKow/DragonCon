@@ -5,13 +5,13 @@ using DragonCon.Modeling.Models.Identities;
 
 namespace DragonCon.Modeling.Models.Conventions
 {
-    public class EngagementWrapper : Wrapper<ConventionEngagement>
+    public class EngagementWrapper : Wrapper<UserEngagement>
     {
         public EngagementWrapper()
         {
 
         }
-        public EngagementWrapper(ConventionEngagement engagement) 
+        public EngagementWrapper(UserEngagement engagement) 
             : base(engagement)
         {
 

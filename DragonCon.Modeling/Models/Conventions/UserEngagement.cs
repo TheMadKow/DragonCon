@@ -6,7 +6,7 @@ using NodaTime;
 
 namespace DragonCon.Modeling.Models.Conventions
 {
-    public class ConventionEngagement : IConventionEngagement
+    public class UserEngagement : IUserEngagement
     {
         public string Id { get; set; }
         public string ConventionId { get; set; }
@@ -19,7 +19,7 @@ namespace DragonCon.Modeling.Models.Conventions
         public List<string> EventIds { get; set; } = new List<string>();
         public List<string> SuggestedEventIds { get; } = new List<string>();
         public List<ConventionRoles> Roles { get; set; } = new List<ConventionRoles>();
-        public string PersonalDescription { get; set; } = string.Empty;
+        public string RoleDescription { get; set; } = string.Empty;
         public Instant CreatedOn { get; set; } = SystemClock.Instance.GetCurrentInstant();
 
         public void AddRole(ConventionRoles role)

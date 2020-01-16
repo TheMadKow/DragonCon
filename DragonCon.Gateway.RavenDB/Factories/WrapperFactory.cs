@@ -92,7 +92,7 @@ namespace DragonCon.RavenDB.Factories
         #endregion
 
         #region EngagementWrapper
-        private IParticipant GetLoadedParticipant(IConventionEngagement x)
+        private IParticipant GetLoadedParticipant(IUserEngagement x)
         {
             if (x.IsLongTerm)
                 return _session.Load<LongTermParticipant>(x.ParticipantId);
@@ -100,11 +100,11 @@ namespace DragonCon.RavenDB.Factories
             return _session.Load<ShortTermParticipant>(x.ParticipantId);
         }
 
-        public List<EngagementWrapper> Wrap(IEnumerable<IConventionEngagement> engagement, bool loadEvents = true)
+        public List<EngagementWrapper> Wrap(IEnumerable<IUserEngagement> engagement, bool loadEvents = true)
         {
             return engagement.Select(x => Wrap(x, loadEvents)).ToList();
         }
-        public EngagementWrapper Wrap(IConventionEngagement engagement, bool loadEvents = true)
+        public EngagementWrapper Wrap(IUserEngagement engagement, bool loadEvents = true)
         {
             WarnIfNotLoaded(engagement.ParticipantId);
             WarnIfNotLoaded(engagement.ConventionId);
@@ -124,7 +124,7 @@ namespace DragonCon.RavenDB.Factories
                 events = _session.Load<Event>(combinedEvents);
             }
 
-            var wrapper = new EngagementWrapper(engagement as ConventionEngagement)
+            var wrapper = new EngagementWrapper(engagement as UserEngagement)
             {
                 Participant = GetLoadedParticipant(engagement),
                 Convention = _session.Load<Convention>(engagement.ConventionId),

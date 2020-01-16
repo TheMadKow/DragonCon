@@ -36,9 +36,9 @@
                     <input name="con_@convention" type="checkbox" @isChecked>
                     &nbsp;&nbsp;@convention.ToTextual()
                     &nbsp;&nbsp; &nbsp;&nbsp;
-                    @if (convention == ConventionRoles.Personal)
+                    @if (convention == ConventionRoles.Officer)
                     {
-                        <input name="personal_description" placeholder="תיאור תפקיד" style="width: 250px;" type="text" />
+                        <input name="officerDesc" placeholder="תיאור תפקיד" style="width: 250px;" type="text" />
                     }
                 </label>
             </div>

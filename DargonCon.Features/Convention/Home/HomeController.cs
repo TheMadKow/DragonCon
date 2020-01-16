@@ -39,7 +39,8 @@ namespace DragonCon.Features.Convention.Home
 
         public IActionResult About()
         {
-            return View();
+            var viewModel = Gateway.BuildAbout();
+            return View(viewModel);
         }
         public IActionResult AboutStorms()
         {

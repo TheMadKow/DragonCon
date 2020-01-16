@@ -77,14 +77,14 @@ namespace DragonCon.RavenDB.Gateways.Participants
             var currentConvention = Actor.DisplayConvention.ConventionId;
             var currentUser = Actor.Me.Id;
 
-            var myEngagement = Session.Query<ConventionEngagement>()
+            var myEngagement = Session.Query<UserEngagement>()
                 .Include(x => x.ConventionId)
                 .Include(x => x.ParticipantId)
                 .Include(x => x.EventIds)
                 .Include(x => x.SuggestedEventIds)
                 .FirstOrDefault(x => x.ConventionId == currentConvention && x.ParticipantId == currentUser);
 
-            var myRelatedEngagements = Session.Query<ConventionEngagement>()
+            var myRelatedEngagements = Session.Query<UserEngagement>()
                 .Include(x => x.ParticipantId)
                 .Include(x => x.EventIds)
                 .Where(x => x.CreatorId == currentUser
@@ -94,7 +94,7 @@ namespace DragonCon.RavenDB.Gateways.Participants
 
             if (myEngagement == null)
             {
-                myEngagement = new ConventionEngagement
+                myEngagement = new UserEngagement
                 {
                     CreatorId = currentUser,
                     ParticipantId = currentUser,

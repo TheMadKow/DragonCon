@@ -43,7 +43,7 @@ namespace DragonCon.RavenDB.Index
                     SeatsTaken = 0
                 });
 
-            AddMap<ConventionEngagement>(engagements
+            AddMap<UserEngagement>(engagements
                 => from conEngagement in engagements
                    from conEvent in conEngagement.EventIds
                    select new

@@ -40,7 +40,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 return answer;
 
             IParticipant model;
-            ConventionEngagement engagement = new ConventionEngagement
+            UserEngagement engagement = new UserEngagement
             {
                 ConventionId = Actor.ManagedConvention.ConventionId,
                 ConventionStartDate = Actor.ManagedConvention.Days
@@ -111,7 +111,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 .OrderBy(x => x.FullName)
                 .Skip(pagination.SkipCount)
                 .Take(pagination.ResultsPerPage)
-                .As<ConventionEngagement>()
+                .As<UserEngagement>()
                 .ToList();
 
             var wrapperFactory = new Factories.WrapperFactory(Session);

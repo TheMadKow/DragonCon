@@ -19,9 +19,9 @@ namespace DragonCon.Modeling.Models.Identities
     public enum ConventionRoles
     {
         [Description("סגל כנס")]
-        Personal,
+        Officer,
         [Description("צוות הנחיה")]
-        GameMaster,
+        GameHost,
         [Description("צוות מתנדבים")]
         Volunteer
     }
