@@ -60,7 +60,10 @@
             </div>
             <div class="col-6">
                 <p class="card-paragraph">
-                    @await Html.PartialAsync("_PartialConvetionDays")
+                    @await Html.PartialAsync("_PartialConvetionDays", new DaysSettings()
+                    {
+                        ShowProgramLink = true
+                    })
                 </p>
 
             </div>

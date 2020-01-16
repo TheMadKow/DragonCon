@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using DragonCon.Modeling.Models.Identities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragonCon.Features.Shared
@@ -25,6 +27,14 @@ namespace DragonCon.Features.Shared
             ViewBag.ErrorTitle = title;
             ViewBag.ErrorDescription = description;
         }
+
+        protected string ParseModelErrors()
+        {
+            var invalidProperty = 
+                ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
+            return invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב";
+        }
+
         protected void SetUserSuccess(string title, string description)
         {
             ViewBag.SuccessTitle = title;

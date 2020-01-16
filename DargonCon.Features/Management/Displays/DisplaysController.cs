@@ -196,15 +196,22 @@ namespace DragonCon.Features.Management.Displays
         }
 
         [HttpPost]
-        public IActionResult SetDays(string dayId,
-            string dayImages,
-            string dayLink)
+        public IActionResult SetLinkage(
+            string linkId,
+            string linkProgram,
+            string linkProgramImage,
+            string linkYad2,
+            string linkVolunteer,
+            string linkSuggestGuide)
         {
-            var days = new DynamicProgram
+            var days = new DynamicLinkage
             {
-                Id = dayId,
-                ProgramImages = dayImages,
-                ProgramLink = dayLink,
+                Id = linkId,
+                ProgramImage = linkProgramImage,
+                ProgramLink = linkProgram,
+                SuggestGuidelinesLink = linkSuggestGuide,
+                VolunteerLink = linkVolunteer,
+                Yad2FormLink = linkYad2,
                 ConventionId = Actor.ManagedConvention.ConventionId
             };
 
@@ -214,23 +221,27 @@ namespace DragonCon.Features.Management.Displays
                 message = answer.Message;
             return RedirectToAction("Manage", new
             {
-                tab = "days",
+                tab = "linkage",
                 message
             });
         }
 
         public IActionResult SetLocation(
         string locId,
+        string locName,
         string locDesc,
+        string locImage,
         string locWays,
         string locMap)
         {
             var location = new DynamicLocation()
             {
                 Id = locId,
+                LocationName = locName,
                 LocationDescription = locDesc,
                 LocationWaysOfArrival = locWays,
                 LocationMap = locMap,
+                LocationImage = locImage,
                 ConventionId = Actor.ManagedConvention.ConventionId
             };
 

@@ -66,7 +66,8 @@ namespace DragonCon.Features.Management.Participants
         {
             var conKeys = Request.Form.Keys.Where(x => x.StartsWith("con_")).Select(x => x.Replace("con_", "")).ToArray();
             var sysKeys = Request.Form.Keys.Where(x => x.StartsWith("sys_")).Select(x => x.Replace("sys_", "")).ToArray();
-            var answer = Gateway.UpdateRoles(viewmodel.ParticipantId, sysKeys, conKeys);
+            var personalDesc = Request.Form.Keys.FirstOrDefault(x => x == "personal_description");
+            var answer = Gateway.UpdateRoles(viewmodel.ParticipantId, personalDesc, sysKeys, conKeys);
             if (answer.AnswerType != AnswerType.Success)
             {
                 // TODO Add Error Message
@@ -122,7 +123,7 @@ namespace DragonCon.Features.Management.Participants
         ParticipantsManagementViewModel BuildSearchIndex(IDisplayPagination pagination, bool allowHistory = false, string searchWords = null);
         ParticipantCreateUpdateViewModel GetParticipantViewModel(string participantId);
         UpdateRolesViewModel GetRolesViewModel(string participantId);
-        Answer UpdateRoles(string viewmodelParticipantId, string[] sysKeys, string[] conKeys);
+        Answer UpdateRoles(string viewmodelParticipantId, string description, string[] sysKeys, string[] conKeys);
         Task<Answer> UpdateParticipant(ParticipantCreateUpdateViewModel viewmodel);
         Task<Answer> CreateParticipant(ParticipantCreateUpdateViewModel viewmodel);
         Task<Answer> ResetPassword(string id);

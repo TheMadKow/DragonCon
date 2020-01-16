@@ -26,7 +26,6 @@ namespace DragonCon.App.Helpers
         private readonly RequestDelegate _next;
 
         private const int CacheMinutes = 15;
-        private const int LatestUpdates = 3;
 
         public InitializeActorMiddleware(RequestDelegate next)
         {
@@ -96,7 +95,7 @@ namespace DragonCon.App.Helpers
                 .Include(x => x.Sponsors)
                 .Include(x => x.English)
                 .Include(x => x.Location)
-                .Include(x => x.Day)
+                .Include(x => x.Linkage)
                 .SingleOrDefault(x => x.ConventionId == conventioId);
 
             if (dynamicContent == null)
@@ -107,12 +106,12 @@ namespace DragonCon.App.Helpers
                 return new Actor.ActorDynamicContent()
                 {
                     English = session.Load<DynamicEnglish>(dynamicContent.English).Select(x => x.Value).FirstOrDefault(),
-                    Program = session.Load<DynamicProgram>(dynamicContent.Day).Select(x => x.Value).FirstOrDefault(),
+                    Linkage = session.Load<DynamicLinkage>(dynamicContent.Linkage).Select(x => x.Value).FirstOrDefault(),
                     Location = session.Load<DynamicLocation>(dynamicContent.Location).Select(x => x.Value).FirstOrDefault(),
 
                     Slides = session.Load<DynamicSlideItem>(dynamicContent.Slides).Select(x => x.Value).ToList(),
                     Sponsors = session.Load<DynamicSponsorItem>(dynamicContent.Sponsors).Select(x => x.Value).ToList(),
-                    UpdatesLimited = session.Load<DynamicUpdateItem>(dynamicContent.Updates).Select(x => x.Value).ToList(),
+                    Updates = session.Load<DynamicUpdateItem>(dynamicContent.Updates).Select(x => x.Value).ToList(),
                 };
             }
 
@@ -195,7 +194,6 @@ namespace DragonCon.App.Helpers
                 {
                     ConventionId = convention.Id,
                     ConventionName = convention.Name,
-                    Location = convention.Location,
                     TagLine = convention.TagLine,
                     TimeStrategy = convention.TimeStrategy,
                     Settings = convention.Settings,

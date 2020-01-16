@@ -1,4 +1,5 @@
-﻿@{
+﻿@using DragonCon.Modeling.Helpers
+@{
     ViewData["Title"] = "מידע למתנדבים";
 }
 
@@ -11,8 +12,30 @@
             &nbsp;
             קריאה פתוחה להתנדבות
         </h3>
+        <ul class="fa-ul card-list">
+
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                אנו יוצאים בקריאה למנחים המובחרים להריץ בכנס דרקוניקון - אתם יכולים להנחות בכל שיטה ועולם מערכה שתרצו!
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                אנו מזמינים גם מנחים שזו הפעם הראשונה שלהם להנחות בכנס להירשם לדרקוניקון - נשמח לעזור לכם.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                מומלץ להגיש אירועים מוקדם ככל הניתן - מספר השולחנות בכנס מוגבל.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                בין אם זו הרפתקה שלכם או הרפתקה מוכנה, אתם צריכים להיות מוכנים למשחק שלכם: להכיר את ההרפתקה, להכין דמויות מוכנות מראש וכל ציוד אחר שהשחקנים יצטרכו, ולפנות חצי שעה לפני תחילת המשחק לאחראי משחקי תפקידים בכנס.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                הרישום להנחיה נפתח בתחילת <strong>מאי</strong> ונמשך עד <strong>יולי</strong>.
+            </li>
+        </ul>
         <p class="card-paragraph">
-            אנו יוצאים בקריאה למנחים המובחרים להריץ בכנס דרקוניקון - אתם יכולים להנחות בכל שיטה ועולם מערכה שתרצו! אנו מזמינים גם מנחים שזו הפעם הראשונה שלהם להנחות בכנס להירשם לדרקוניקון - נשמח לעזור לכם.
         </p>
 
     </div>
@@ -37,11 +60,17 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
+                רוצים להנחות משחקי תפקידים מבלי לכתוב משחק משלם עצמכם? מוזמנים להריץ משחק מוכן שיסופק לכם!
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
                 מנחה בסבב בודד, מקבל משחק נוסף חינם. מנחה ב-2 סבבים או יותר מקבל כרטיס מלא לכל הכנס, סנדוויץ', וגם צ'ופר מיוחד!
             </li>
         </ul>
         <div class="text-center">
             <a asp-area="Participant" asp-controller="Personal" asp-action="Index" class="btn dragon-btn">לחצו כאן להנחות משחק!</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a asp-area="Participant" asp-controller="Personal" asp-action="Index" class="btn dragon-btn">לחצו כאן לחפש משחק מוכן!</a>
         </div>
 
     </div>
@@ -63,11 +92,11 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                פגשו מאות שחקנים כמוכם.
+                יש משחק שאתם ממש אוהבים? ארגנו הדגמה ופגשו שחקנים כמוכם!
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                יצרת משחק ואתם רוצים להדגים אותו לקהל הרחב
+                יצרתם משחק ואתם רוצים להדגים אותו לקהל הרחב.
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
@@ -106,16 +135,19 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                מתנדב מקבל כרטיס לפעילות בודדת על כל משמרת התנדבות. מתנדבת לשתי משמרות מקבלת כרטיס מלא לכל הכנס.
+                התנדבות למשמרת אחת מזכה בכרטיס לפעילות בודדת. התנדבות לשתי משמרות מזכה בכרטיס מלא לכל הכנס.
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
                 מתנדבים מקבלים סנדוויץ' ושתיה ביום שבו הם מתנדבים.
             </li>
         </ul>
-        <div class="text-center">
-            <a asp-area="Convention" asp-controller="Home" asp-action="VolunteeringForm" class="btn dragon-btn">לחצו כאן לטופס ההתנדבות בכנס!</a>
-        </div>
+        @if (Actor.DisplayDynamics.Linkage.VolunteerLink.IsNotEmptyString())
+        {
+            <div class="text-center">
+                <a asp-area="Convention" asp-controller="Home" asp-action="VolunteeringForm" class="btn dragon-btn">לחצו כאן לטופס ההתנדבות בכנס!</a>
+            </div>
+        }
         <br />
     </div>
 </div>

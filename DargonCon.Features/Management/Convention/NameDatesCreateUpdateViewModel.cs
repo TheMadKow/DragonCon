@@ -14,7 +14,6 @@ namespace DragonCon.Features.Management.Convention
         [Required(AllowEmptyStrings = false, ErrorMessage = "חובה להזין שם לכנס")]
         public string Name { get; set; }
         public string TagLine { get; set; }
-        public string Location { get; set; }
 
         public TimeSlotStrategy TimeStrategy { get; set; }
 

@@ -61,5 +61,9 @@ namespace DragonCon.Features.Convention.Home
             return View();
         }
 
+        public IActionResult Updates()
+        {
+            return View();
+        }
     }
 }

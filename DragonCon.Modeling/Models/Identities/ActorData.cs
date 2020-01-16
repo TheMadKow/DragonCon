@@ -283,7 +283,6 @@ namespace DragonCon.Modeling.Models.Identities
             public TimeSlotStrategy TimeStrategy { get; set; }
             public string ConventionId { get; set; } = string.Empty;
             public string ConventionName { get; set; } = string.Empty;
-            public string Location { get; set; } = string.Empty;
             public string TagLine { get; set; } = string.Empty;
             public ConventionSettings Settings { get; set; } = new ConventionSettings();
             public List<Hall> Halls { get; set; } = new List<Hall>();
@@ -300,10 +299,10 @@ namespace DragonCon.Modeling.Models.Identities
         {
             public IList<DynamicSponsorItem> Sponsors { get; set; } = new List<DynamicSponsorItem>();
             public IList<DynamicSlideItem> Slides { get; set; } = new List<DynamicSlideItem>();
-            public IList<DynamicUpdateItem> UpdatesLimited { get; set; } = new List<DynamicUpdateItem>();
+            public IList<DynamicUpdateItem> Updates { get; set; } = new List<DynamicUpdateItem>();
             
             
-            public DynamicProgram Program { get; set; } = new DynamicProgram();
+            public DynamicLinkage Linkage { get; set; } = new DynamicLinkage();
             public DynamicLocation Location { get; set; } = new DynamicLocation();
             public DynamicEnglish English { get; set; } = new DynamicEnglish();
         }

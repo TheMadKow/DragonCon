@@ -3,14 +3,18 @@
 @if (Actor.HasDisplayConvention)
 {
     var locationExtra = Actor.DisplayDynamics.Location;
-    <span class="text-bold">כתובת:</span> @Actor.DisplayConvention.Location
-
-    if (locationExtra.LocationDescription.IsNotEmptyString() ||
-        locationExtra.LocationWaysOfArrival.IsNotEmptyString() ||
-        locationExtra.LocationMap.IsNotEmptyString())
+    @if (locationExtra.LocationName.IsNotEmptyString())
     {
-        <br />
+        <span class="text-bold">כתובת:</span> @locationExtra.LocationName
+
+        if (locationExtra.LocationDescription.IsNotEmptyString() ||
+            locationExtra.LocationWaysOfArrival.IsNotEmptyString() ||
+            locationExtra.LocationMap.IsNotEmptyString())
+        {
+            <br />
+        }
     }
+
 
     if (Model.ShowDetails && locationExtra.LocationDescription.IsNotEmptyString())
     {
@@ -31,12 +35,20 @@
         </span>
         <br />
     }
+    if (Model.ShowImage && locationExtra.LocationImage.IsNotEmptyString())
+    {
+        <br />
+        <strong>תמונת המקום:</strong>
+        <br />
+        <img style="width: 100%" src="@locationExtra.LocationImage" />
+        <br />
+    }
     if (Model.ShowMap && locationExtra.LocationMap.IsNotEmptyString())
     {
         var height = Model.ShowTallMap ? "450px" : "200px";
 
         <br />
-
+        <strong>מפת הגעה:</strong>
         <iframe width="100%"
                 height="@height"
                 src="@locationExtra.LocationMap"></iframe>
@@ -49,6 +61,7 @@
         }
         <br />
     }
+
     if (Model.ShowLearnMore)
     {
         <br />

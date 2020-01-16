@@ -67,7 +67,7 @@ namespace DragonCon.Features.Participant.Account
         [Compare("Password", ErrorMessage = "הסיסמאות לא תואמות")]
         public string ConfirmPassword { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "נא להזין כתובת חוקית")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "נא להזין כתובת דואר חוקית")]
         [EmailAddress(ErrorMessage = "נא להזין כתובת חוקית")]
         public string Email { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "נא להזין מספר חוקי")]

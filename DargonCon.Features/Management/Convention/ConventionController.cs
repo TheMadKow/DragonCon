@@ -110,7 +110,7 @@ namespace DragonCon.Features.Management.Convention
                 builder.Days.SetTimeSlotStrategy(actualDay.Date, TimeSlotStrategy.StartEvery2Hours_Duration246Windows);
             }
 
-            builder.AddExtraDetails(viewmodel.Location, viewmodel.TagLine);
+            builder.AddTagLine(viewmodel.TagLine);
             builder.Save();
             return RedirectToAction("Manage");
         }
@@ -204,7 +204,7 @@ namespace DragonCon.Features.Management.Convention
 
                 builder.SetTimeSlotStrategy(viewmodel.TimeStrategy);
                 builder.ChangeName(viewmodel.Name);
-                builder.AddExtraDetails(viewmodel.Location, viewmodel.TagLine);
+                builder.AddTagLine(viewmodel.TagLine);
                 builder.Save();
             }
             catch (Exception e)

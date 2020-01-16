@@ -13,7 +13,6 @@ namespace DragonCon.Features.Management.Displays
 
         public DynamicLinkage Linkage = new DynamicLinkage();
         public DynamicEnglish English = new DynamicEnglish();
-        public DynamicProgram Program = new DynamicProgram();
         public DynamicLocation Location = new DynamicLocation();
     }
 }

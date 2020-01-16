@@ -77,8 +77,7 @@ namespace DragonCon.Features.Participant.Account
             }
             else
             {
-                var invalidProperty = ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
-                SetUserError("תקלה במידע שהתקבל", invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב");
+                SetUserError("תקלה במידע שהתקבל", ParseModelErrors());
                 return View("LoginOrRegister", returnModel);
 
             }
@@ -109,8 +108,7 @@ namespace DragonCon.Features.Participant.Account
             }
             else
             {
-                var invalidProperty = ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
-                SetUserError("תקלה במידע שהתקבל", invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב");
+                SetUserError("תקלה במידע שהתקבל", ParseModelErrors());
                 return View("LoginOrRegister", returnModel);
 
             }
@@ -154,8 +152,7 @@ namespace DragonCon.Features.Participant.Account
             }
             else
             {
-                var invalidProperty = ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
-                SetUserError("תקלה במידע שהתקבל", invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב");
+                SetUserError("תקלה במידע שהתקבל", ParseModelErrors());
                 return View();
             }
         }

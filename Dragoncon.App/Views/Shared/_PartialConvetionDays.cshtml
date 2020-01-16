@@ -1,7 +1,9 @@
 ﻿@using System.Globalization
 @using DragonCon.Modeling.Helpers
+@model DragonCon.App.Settings.DaysSettings
 @if (Actor.HasDisplayConvention)
 {
+    var linkage = Actor.DisplayDynamics.Linkage;
     var convention = Actor.DisplayConvention;
     var counter = 1;
 
@@ -15,5 +17,19 @@
         </span>
         <br />
         counter++;
+    }
+
+    @if (Model.ShowProgramImages && linkage.ProgramImage.IsNotEmptyString())
+    {
+        <img src="@linkage.ProgramImage" style="width: 100%" />
+        <br />
+    }
+
+
+    @if (Model.ShowProgramLink && linkage.ProgramLink.IsNotEmptyString())
+    {
+        <div class="text-center">
+            <a target="_blank" href="@linkage.ProgramLink" class="btn dragon-btn">להורדת התוכניה</a>
+        </div>
     }
 }

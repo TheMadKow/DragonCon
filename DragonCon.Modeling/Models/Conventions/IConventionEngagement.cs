@@ -16,6 +16,7 @@ namespace DragonCon.Modeling.Models.Conventions
         List<string> EventIds { get; }
         List<string> SuggestedEventIds { get; }
         List<ConventionRoles> Roles { get; }
+        string PersonalDescription { get; }
         Instant CreatedOn { get; }
     }
 }

@@ -59,7 +59,6 @@ namespace DragonCon.RavenDB.Gateways.Managements
             {
                 Name = convention.Name,
                 Id = convention.Id,
-                Location = convention.Location,
                 TagLine = convention.TagLine,
                 TimeStrategy = convention.TimeStrategy,
                 Days = days.Select(x => new DaysViewModel(x.Value)).ToList()

@@ -1,0 +1,63 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@model DragonCon.Features.Management.Participants.ParticipantCreateUpdateViewModel
+@{
+    ViewBag.Title = "הוספת משתתף";
+}
+
+
+@section Subheader {
+    @await  Html.PartialAsync("_PartialBackButton")
+}
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <form class="card-form"
+              asp-area="Management" asp-controller="Reception" asp-action="AddNewParticipant" method="post" style="padding: 10px;">
+            <input name="Id" value="@Model.Id" hidden />
+            <div class="col">
+                <div class="row">
+                    <div class="form-group col-8">
+                        <label class="required">שם מלא</label>
+                        <input asp-for="FullName" class="form-control" placeholder="שם מלא " required>
+                    </div>
+                    <div class="form-group col-4">
+                        <label class="required">שנת לידה </label>
+                        <br />
+                        <input class="form-control" asp-for="YearOfBirth" type="number" min="1900" max="@DateTime.Now.Year" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="form-group col-4">
+                        <label class="required">טלפון</label>
+                        <input asp-for="PhoneNumber" type="tel" class="form-control" placeholder="טלפון " required>
+                    </div>
+                    <div class="form-group col-8">
+                        <label>דואר אלקטרוני</label>
+                        <div class="input-group ">
+                            <input name="Email" value="@Model.Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <input type="checkbox" asp-for="IsAllowingPromotions.Value" aria-label="Checkbox for following text input">
+                                    <span class="toggle-text">צירוף לרשימת דיוור</span>
+                                </div>
+                            </div>
+                            <label class="text-primary" style="font-size: 0.85em">* לא חובה: בהזנת דואר אלקטרוני יווצר משתמש קבוע ותשלח סיסמת התחברות ראשונית. </label>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" 
+                                style="font-size: 1.1em"
+                                class="btn btn-success btn-save-just-margin"> שמירה ורישום לאירועים <i class="fa fa-fw fa-angle-double-left"></i></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

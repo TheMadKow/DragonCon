@@ -20,21 +20,18 @@
         <a id="nav-item-sponsors" class="nav-link" data-toggle="tab" href="#tab-pane-sponsors">חסויות</a>
     </li>
     <li class="nav-item">
-        <a id="nav-item-links" class="nav-link" data-toggle="tab" href="#tab-pane-location">קישורים</a>
-    </li>
-    <li class="nav-item">
-        <a id="nav-item-english" class="nav-link" data-toggle="tab" href="#tab-pane-english">אנגלית</a>
+        <a id="nav-item-linkage" class="nav-link" data-toggle="tab" href="#tab-pane-linkage">קישורי תוכן</a>
     </li>
     <li class="nav-item">
         <a id="nav-item-location" class="nav-link" data-toggle="tab" href="#tab-pane-location">מיקום</a>
     </li>
     <li class="nav-item">
-        <a id="nav-item-days" class="nav-link" data-toggle="tab" href="#tab-pane-days">תוכניה</a>
+        <a id="nav-item-english" class="nav-link" data-toggle="tab" href="#tab-pane-english">מיקום - אנגלית</a>
     </li>
 </ul>
 
 
-    <!-- Tab panes -->
+<!-- Tab panes -->
 <div class="tab-content">
     <div class="tab-pane container active" id="tab-pane-updates">
         <form asp-area="Management" asp-controller="Displays" asp-action="AddUpdate" method="post" class="right-to-left" style="padding: 10px;">
@@ -189,7 +186,7 @@
                     <input name="locId" value="@Model.Location.Id" class="form-control" placeholder="" hidden>
                     <div class="form-group col-12">
                         <label>כתובת</label>
-                        <input name="locAddress" class="form-control" value="@Model.Location.LocationName" placeholder="" />
+                        <input name="locName" class="form-control" value="@Model.Location.LocationName" placeholder="" />
                     </div>
                     <div class="form-group col-12">
                         <label>תיאור</label>
@@ -202,6 +199,10 @@
                     <div class="form-group col-12">
                         <label>קישור למפה</label>
                         <input name="locMap" value="@Model.Location.LocationMap" class="form-control" placeholder="">
+                    </div>
+                    <div class="form-group col-12">
+                        <label>תמונה להצגה</label>
+                        <input name="locImage" value="@Model.Location.LocationImage" class="form-control" placeholder="">
                     </div>
                     <div class="form-group col-2">
                         <label>&nbsp;</label>
@@ -217,22 +218,26 @@
         <form asp-area="Management" asp-controller="Displays" asp-action="SetLinkage" method="post" class="right-to-left" style="padding: 10px;">
             <div class="col">
                 <div class="row">
-                    <input name="locId" value="@Model.Linkage.SuggestGuidelinesLink" class="form-control" placeholder="" hidden>
+                    <input name="linkId" value="@Model.Linkage.Id" class="form-control" placeholder="" hidden>
                     <div class="form-group col-12">
-                        <label>כתובת</label>
-                        <input name="locAddress" class="form-control" value="@Model.Location.LocationName" placeholder="" />
+                        <label>טופס יד-2</label>
+                        <input name="linkYad2" class="form-control" value="@Model.Linkage.Yad2FormLink" placeholder="" />
                     </div>
                     <div class="form-group col-12">
-                        <label>תיאור</label>
-                        <textarea name="locDesc" class="form-control" placeholder="">@Model.Location.LocationDescription?.Trim()</textarea>
+                        <label>טופס מתנדבים</label>
+                        <input name="linkVolunteer" class="form-control" placeholder="" value="@Model.Linkage.VolunteerLink">
                     </div>
                     <div class="form-group col-12">
-                        <label>דרכי הגעה</label>
-                        <textarea name="locWays" class="form-control" placeholder="">@Model.Location.LocationWaysOfArrival?.Trim()</textarea>
+                        <label>מדריך הנחיה</label>
+                        <input name="linkSuggestGuide" class="form-control" placeholder="" value="@Model.Linkage.SuggestGuidelinesLink"/>
                     </div>
                     <div class="form-group col-12">
-                        <label>קישור למפה</label>
-                        <input name="locMap" value="@Model.Location.LocationMap" class="form-control" placeholder="">
+                        <label>תוכניה - קובץ PDF</label>
+                        <input name="linkProgram" value="@Model.Linkage.ProgramLink" class="form-control" placeholder="">
+                    </div>
+                    <div class="form-group col-12">
+                        <label>תוכניה - תמונה</label>
+                        <input name="linkProgramImage" value="@Model.Linkage.ProgramImage" class="form-control" placeholder="">
                     </div>
                     <div class="form-group col-2">
                         <label>&nbsp;</label>
@@ -242,29 +247,8 @@
             </div>
         </form>
     </div>
-    <div class="tab-pane container fade" id="tab-pane-days">
-        <form asp-area="Management" asp-controller="Displays" asp-action="SetDays" method="post" class="right-to-left" style="padding: 10px;">
-            <div class="col">
-                <div class="row">
-                    <input name="dayId" value="@Model.Program.Id" class="form-control" placeholder="" hidden>
-                    <div class="form-group col-12">
-                        <label>קישור לתוכניה</label>
-                        <input name="dayLink" value="@Model.Program.ProgramLink" class="form-control" placeholder="">
-                    </div>
-                    <div class="form-group col-12">
-                        <label>תמונות תוכניה - מופרדות ב-;</label>
-                        <input name="dayImages" value="@Model.Program.ProgramImages" class="form-control" placeholder="">
-                    </div>
-                    <div class="form-group col-2">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="form-control btn btn-success"> עדכון </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="tab-pane container fade" id="tab-pane-sponsors">
 
+    <div class="tab-pane container fade" id="tab-pane-sponsors">
         <form asp-area="Management" asp-controller="Displays" asp-action="AddSponsor" method="post" class="right-to-left" style="padding: 10px;">
             <div class="col">
                 <div class="row">

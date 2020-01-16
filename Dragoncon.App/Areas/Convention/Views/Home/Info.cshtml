@@ -145,6 +145,7 @@
                 ShowMap = true,
                 ShowTallMap = true,
                 ShowWays = true,
+                ShowImage = true,
                 ShowMapExternal = true,
             })
         </p>
@@ -165,7 +166,11 @@
             ימי הכנס
         </h3>
         <p class="card-paragraph">
-            @await Html.PartialAsync("_PartialConvetionDays")
+            @await Html.PartialAsync("_PartialConvetionDays", new DaysSettings()
+            {
+                ShowProgramLink = true,
+                ShowProgramImages = true
+            })
 
         </p>
     </div>
@@ -191,7 +196,11 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                הרישום המוקדם מבטיח את מקומכם באירועים שתרצו!
+                הרישום המוקדם מבטיח את מקומכם באירועים שתרצו וגם חוסך את התור וההמתנה בכנס עצמו!
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                ברישום המוקדם יהיה אפשר לשנות את ההרשמה בכל שלב, על בסיס מקום פנוי.
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
@@ -199,7 +208,7 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                אם ברצונך לרשום מספר אנשים ביחד לכנס, יש לבצע רישום לכל אדם בנפרד. <br />
+                ניתן לרשום מספר אנשים לכנס באמצעות אותו חשבון אישי באתר. <br />
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
@@ -243,17 +252,28 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                רוב הפעילויות של משחקי לוח ומיניאטורות פונות לגילאי 8 ומעלה.
+                רוב האירועים של משחקי לוח ומיניאטורות פונות לגילאי 8 ומעלה.
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                רוב הפעילויות של משחקי תפקידים פונות לגילאי 11 ומעלה.
+                רוב האירועים של משחקי תפקידים פונות לגילאי 11 ומעלה.
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                חלק מהמשחקים מוגבלים לטווח גילאים - על מנת לספק את החוויה הטובה ביותר לשחקנים.
+                חלק מהאירועים מוגבלים לפי גיל - על מנת לספק את החוויה הטובה ביותר לשחקנים.
             </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                טווח הגילאים המומלץ יצויין במפורש בכל אירוע.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                לרישום לאירועים להורים וילדים, או לא בטווח הגילאים -         <a asp-area="Convention" asp-controller="Home" asp-action="Index" asp-fragment="tag_contactus">אנא צרו איתנו קשר</a>!
+            </li>
+
         </ul>
+
+
         @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
         {
             {"מחירון", "tag_tickets"},
@@ -272,15 +292,15 @@
         <ul class="fa-ul card-list">
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <strong>כרטיס כניסה</strong> - מאפשר כניסה חופשית לכנס, ללא אירועים בתשלום.
+                <strong>כרטיס כניסה</strong> - מאפשר כניסה חופשית לכנס ולכל האירועים חופשיים.
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <strong>כרטיס מוגבל</strong> - מאפשר כניסה חופשית לכנס, עם הגבלה על מספר האירועים.
+                <strong>כרטיס מוגבל</strong> - מאפשר כניסה חופשית לכנס והשתתפות במספר האירועים הרשום.
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <strong>כרטיס לא מוגבל</strong> - מאפשר כניסה חופשית לכנס והשתתפות חופשית באירועים.
+                <strong>כרטיס לא מוגבל</strong> - מאפשר כניסה חופשית לכנס והשתתפות בכל האירועים בו.
             </li>
         </ul>
         @if (actor.HasDisplayConvention)
@@ -291,7 +311,7 @@
                     <tr class="dragon-light-orange-background">
                         <td>שם </td>
                         <td>עלות</td>
-                        <td>ימים</td>
+                        <td>ימי כנס</td>
                         <td>מספר פעילויות</td>
                     </tr>
                 </thead>
@@ -324,6 +344,10 @@
             <ul class="fa-ul card-list">
                 <li>
                     @await Html.PartialAsync("_PartialBulletin")
+                    לא ניתן להרשם לשני אירועים שמתקיימים במקביל.
+                </li>
+                <li>
+                    @await Html.PartialAsync("_PartialBulletin")
                     הכניסה להורה מלווה בודד של משתתף בכנס בתשלום - היא חינם.
                 </li>
                 <li>
@@ -335,7 +359,7 @@
     </div>
     <br />
     <div class="text-center">
-        <a asp-area="Convention" asp-controller="Home" asp-action="Register" class="btn dragon-btn">לחצו להרשמה</a>
+        <a asp-area="Participant" asp-controller="Personal" asp-action="Index" class="btn dragon-btn">לחצו להרשמה</a>
     </div>
 
     @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
@@ -360,15 +384,15 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <strong>עמדת איסוף כרטיסים שהוזמנו מראש</strong> - העמדה תפעל בשעות העומס בכנס, שתפעל בשעתיים הראשונות כל יום <br />
+                <strong>עמדת איסוף כרטיסים שהוזמנו מראש</strong> - העמדה תפעל בשעות העומס בכנס, בשעתיים הראשונות של כל יום. הגעתם מאוחר יותר? תוכלו לאסוף את הכרטיסים בעמדת הרכישה.
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <strong>עמדת מודיעין</strong> - העמדה תציע מידע והמלצות על האירועים, שתפעל בשעתיים הראשונות של היום.  <br />
+                <strong>עמדת מודיעין</strong> - העמדה תציע מידע והמלצות על האירועים ותפעל בשעתיים הראשונות של היום.  <br />
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <strong>עמדת שתיה ומזון</strong> - תהיה עמדת שתיה קלה וחמה זמינה במהלך כל הכנס.  <br />
+                <strong>עמדת שתיה</strong> - תהיה עמדת שתיה קלה וחמה זמינה במהלך כל הכנס, ללא תשלום.  <br />
             </li>
         </ul>
         @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
@@ -399,11 +423,11 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <a href="http://www.thekingdom.co.il/" target="_blank" class="text-bold">הממלכה</a> - חנות משחקי תחביב בהוד השרון, מוכרת מג'יק, משחקי לוח, קומיקס ומ"ת.<br />
+                <a href="http://www.thekingdom.co.il/" target="_blank" class="text-bold">הממלכה</a> - חנות משחקי תחביב בהוד השרון, מוכרת מג'יק, משחקי לוח ומשחקי תפקידים.<br />
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                <a href="https://www.facebook.com/pg/mamootastudio/" target="_blank" class="text-bold">ממותה</a> - סטודיו לעיצוב אישי ופנטזיה, המתחתה בעבודות יד מעולמות הפנטזיה והמדע-בדיוני.<br />
+                <a href="https://www.facebook.com/pg/mamootastudio/" target="_blank" class="text-bold">ממותה</a> - סטודיו לעיצוב אישי ופנטזיה, המתמחה בעבודות יד מעולמות הפנטזיה והמדע-בדיוני.<br />
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
@@ -427,7 +451,7 @@
             </li>
         </ul>
         <p class="card-paragraph">
-            רוצים להפעיל דוכן בכנס? נשמח לארח אתכם <a asp-controller="Home" asp-action="Contact">אנא צרו איתנו קשר</a>!
+            רוצים להפעיל דוכן בכנס? נשמח לארח אתכם <a asp-area="Convention" asp-controller="Home" asp-action="Index" asp-fragment="tag_contactus">אנא צרו איתנו קשר</a>!
         </p>
     </div>
 </div>
@@ -442,7 +466,7 @@
         </h3>
         <p class="card-paragraph">
             יש לכם דרקון ספייר בבוידעם? קיבלתם ביום הולדת עוד חרב קסומה? <br />
-            יש לנו פיתרון בשבילכם! בדוכן יד שנייה נעזור לכם למצוא אוצרות, ולהרוויח כסף על המשחקים הישנים שלכם בדוכן.<br />
+            יש לנו פיתרון בשבילכם! בדוכן יד שנייה נעזור לכם למצוא אוצרות חדשים, ולהרוויח כסף על המשחקים הישנים שלכם.<br />
         </p>
         <ul class="fa-ul card-list">
             <li>
@@ -459,7 +483,7 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                הדוכן ממוקם במתחם הכנס והשימוש בדוכן יד-2 הוא רק למשתתפי הכנס בעלי כרטיס בלבד. <br />
+                הדוכן ממוקם במתחם הכנס והשימוש בדוכן יד-2 הוא למשתתפי הכנס בעלי כרטיס בלבד. <br />
             </li>
 
         </ul>
@@ -497,7 +521,11 @@
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
-                יש למלא את הטופס לפני מסירת המשחקים למכירה. מומלץ להוריד את הטופס ולמלא אותו מראש, עם זאת ניתן להביא את המשחקים לכנס ולמלא טופס במקום. במידה שטופס אחד אינו מספיק, ניתן למלא מספר טפסים.
+                יש למלא את הטופס לפני מסירת המשחקים למכירה. מומלץ להוריד את הטופס ולמלא אותו מראש, עם זאת ניתן להביא את המשחקים לכנס ולמלא טופס במקום.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                במידה שטופס אחד אינו מספיק, ניתן למלא מספר טפסים.
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
@@ -512,10 +540,13 @@
                 יש לחתום על הטופס, לאחר שקראת והבנת את התנאים לשימוש בדוכן.
             </li>
         </ul>
-        <div class="text-center">
-            <a href="" class="btn dragon-btn">הורדת טופס דוכן יד-2</a>
-        </div>
-        <br />
+        @if (Actor.DisplayDynamics.Linkage.Yad2FormLink.IsNotEmptyString())
+        {
+            <div class="text-center">
+                <a href="@Actor.DisplayDynamics.Linkage.Yad2FormLink" target="_blank" class="btn dragon-btn">הורדת טופס דוכן יד-2</a>
+            </div>
+            <br />
+        }
 
         @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
         {
@@ -535,29 +566,44 @@
         <p class="card-paragraph">
             כל המשתתפים בכנס דרקוניקון מוזמנים לשחק במגוון רחב של פעילויות חופשיות שלא מצריכות רכישת כרטיס מיוחד או רישום מראש - <strong>ללא עלות ולכל דורש.</strong>
         </p>
+        <br />
         <h4 class="text-bold">הדרכה של משחקי לוח</h4>
         <p class="card-paragraph">
             במתחם משחקי הלוח של דרקוניקון תמצאו את המדריכים המיומנים שלנו, שישמחו להדגים לכם, לחברים ולמשפחה מגוון משחקים. המשחקים המודרכים כוללים שילוב בין משחקים משפחתיים לצד המשחקים הלוהטים של אותה שנה, שנבחרים בידי צוות משחקי הלוח שלנו ומיועדים לשחקנים מנוסים יותר.
         </p>
+        <br />
         <h4 class="text-bold">ספריית משחקי הלוח</h4>
         <p class="card-paragraph">
-            במתחם משחקי הלוח תמצאו גם את ספריית משחקי הלוח שלנו, שכולל מגוון רחב של משחקים. בהמשך, בערך הספרייה - תמצאו את רשימת המשחקים המלאה - אז בואו לשחק ולהכיר משחקים חדשים או ליהנות ממשחקים מוכרים.
+            במתחם משחקי הלוח תמצאו גם את ספריית משחקי הלוח שלנו, הכוללת מגוון רחב של משחקים. במידע על הספריה - תמצאו את רשימת המשחקים המלאה - אז בואו לשחק ולהכיר משחקים חדשים או ליהנות ממשחקים מוכרים.
         </p>
+        <div class="text-center">
+            <a href="#tag_library" class="btn dragon-btn">לצפיה במשחקים המוצעים בספריה</a>
+        </div>
+        <br />
         <h4 class="text-bold">שולחנות משחק חופשי</h4>
         <p class="card-paragraph">
-            בדרקוניקון תמצאו גם אזור רחב ידיים עם שולחנות בו תוכלו לשבת ולשחק בכל זמן שתחפצו, לא נדרש להירשם למשחק באזור. ניתן לשחק במשחקים שהבאתם מהבית, השאלתם מספריית משחקי הלוח או רכשתם במתחם הדוכנים שלנו - השולחנות יהיו זמינים לכל אורך הכנס. שימו לב שמתחם זה אינו מיועד למשחקי תפקידים.
+            בדרקוניקון תמצאו גם אזור רחב ידיים עם שולחנות בו תוכלו לשבת ולשחק בכל זמן שתחפצו, לא נדרש להירשם למשחק באזור. ניתן לשחק במשחקים שהבאתם מהבית, השאלתם מספריית המשחקים או רכשתם במתחם הדוכנים שלנו. השולחנות יהיו זמינים לכל אורך הכנס. שימו לב שמתחם זה אינו מיועד למשחקי תפקידים.
         </p>
+        <br />
         <h4 class="text-bold">מתחם הדוכנים</h4>
         <p class="card-paragraph">
-            במתחם הדוכנים של דרקוניקון תמצאו תריסר דוכנים שונים ומגוונים, של החברות המובילות בישראל למשחקים שולחניים - משחקי תפקידים, משחקי לוח, קלפים, אביזרים ועוד. בנוסף תמצאו במתחם גם את דוכן יד-2  החופשי לשימוש לכל מי שרכש כרטיס לכנס, ללא עמלות.
+            במתחם הדוכנים של דרקוניקון תמצאו דוכנים שונים ומגוונים, של החברות המובילות בישראל למשחקים שולחניים - משחקי תפקידים, משחקי לוח, קלפים, אביזרים ועוד. בנוסף תמצאו במתחם גם את דוכן יד-2.
         </p>
-
+        <div class="text-center">
+            <a href="#tag_stands" class="btn dragon-btn">למידע על מתחם הדוכנים</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="#tag_yad2" class="btn dragon-btn">למידע על דוכן יד 2</a>
+        </div>
+        <br />
+        <br />
         @await Html.PartialAsync("_PartialRelatedTopics", new Dictionary<string, string>()
         {
             {"הרישום לאירועים", "tag_register"},
             {"הספרייה", "tag_library"},
+            {"דוכן יד-2", "tag_yad2"},
+            {"מתחם הדוכנים", "tag_shops"},
             {"עמדות לקהל", "tag_stands"}
-        })
+            })
 
 
     </div>
@@ -574,16 +620,19 @@
         <ul class="fa-ul card-list">
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
+                <strong>
+                    השאלת משחקים מהספריה היא ללא עלות למשתתפי הכנס
+                </strong>
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
                 בספרייה תוכלו לבחור משחק לשחק בו עם חברים, ולהחליף למשחקים אחרים כאוות נפשכם - אין מגבלה על כמות המשחקים שתשאילו או משך הזמן שתבלו בספרייה.
             </li>
             <li>
                 @await Html.PartialAsync("_PartialBulletin")
                 בספריה גם תמצאו את המדגימים שלנו, שיציגו בפניכם משחקים חדשים ויסבירו לכם את החוקים שלהם וכיצד לשחק בהם - הזדמנות מושלמת ללמוד משחק חדש.
             </li>
-            <li>
-                @await Html.PartialAsync("_PartialBulletin")
-                השימוש בספריה חינם לבאי הכנס.
-            </li>
+
         </ul>
         <iframe src="https://geekgroup.app/users/wandering_library/collection" style="width: 100%; height: 600px;"></iframe>
         <ul class="fa-ul card-list">
@@ -607,8 +656,7 @@
 </div>
 
 
-<button
-    style="
+<button style="
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 display: none; /* Hidden by default */
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 position: fixed; /* Fixed/sticky position */
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 bottom: 20px; /* Place the button at the bottom of the page */
@@ -623,8 +671,9 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 border-radius: 10px; /* Rounded corners */
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 font-size: 18px; /* Increase font size */
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             "
-    
-    onclick="scrollToTop()" id="scroll-top-top" title="חזרה מעלה">חזרה מעלה</button>
+        onclick="scrollToTop()" id="scroll-top-top" title="חזרה מעלה">
+    חזרה מעלה
+</button>
 
 @section scripts {
     <script>

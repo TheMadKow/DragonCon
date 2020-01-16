@@ -60,7 +60,7 @@ namespace DragonCon.Features.Management.Dashboard
 
             vm.Major = majorActivity;
             vm.EventTime = localDateTime;
-            vm.TotalSeats = conEvent.Size.Max.HasValue ? (int) conEvent.Size.Max.Value : 0;
+            vm.TotalSeats = (int) conEvent.Size.Max;
         }
 
         public void AddEventTakenSeat(string eventId)

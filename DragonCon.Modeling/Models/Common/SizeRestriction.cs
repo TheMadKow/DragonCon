@@ -2,7 +2,7 @@
 {
     public class SizeRestriction
     {
-        public uint? Min { get;set; }
-        public uint? Max { get;set; }
+        public uint Min { get;set; }
+        public uint Max { get;set; }
     }
 }

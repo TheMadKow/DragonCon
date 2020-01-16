@@ -114,7 +114,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
             throw new Exception("Unknown Me Term or Me not found");
         }
 
-        public Answer UpdateRoles(string participantId, string[] sysKeys, string[] conKeys)
+        public Answer UpdateRoles(string participantId, string description, string[] sysKeys, string[] conKeys)
         {
             LongTermParticipant asLongTerm = null;
             if (participantId.StartsWith("LongTerm"))
@@ -152,6 +152,15 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 {
                     engagement.RemoveRole(conRole);
                 }
+            }
+
+            if (description.IsEmptyString())
+            {
+                engagement.PersonalDescription = "סגל כנס";
+            }
+            else
+            {
+                engagement.PersonalDescription = description;
             }
 
             Session.Store(engagement);
@@ -197,7 +206,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
             {
                 if (participant is LongTermParticipant longTerm)
                 {
-                    longTerm.IsAllowingPromotions = viewmodel.IsAllowingPromotions;
+                    longTerm.IsAllowingPromotions = viewmodel.IsAllowingPromotions ?? false;
                 }
 
                 participant.FullName = viewmodel.FullName;
@@ -244,7 +253,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 {
                     UserName = viewmodel.Email,
                     Email = viewmodel.Email,
-                    IsAllowingPromotions = viewmodel.IsAllowingPromotions,
+                    IsAllowingPromotions = viewmodel.IsAllowingPromotions ?? false,
                 };
                 engagement.IsLongTerm = true;
             }

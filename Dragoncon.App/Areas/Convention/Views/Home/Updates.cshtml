@@ -1,0 +1,22 @@
+﻿@model List<DragonCon.Modeling.Models.UserDisplay.DynamicUpdateItem>
+@{
+    ViewData["Title"] = "עדכוני כנס";
+}
+
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            עדכוני כנס
+        </h3>
+        @await Html.PartialAsync("_PartialUpdates", Actor.DisplayDynamics.Updates.ToList())
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-home")
+    </script>
+}

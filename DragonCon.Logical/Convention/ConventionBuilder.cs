@@ -60,9 +60,8 @@ namespace DragonCon.Logical.Convention
             return this;
         }
 
-        public ConventionBuilder AddExtraDetails(string location, string tagLine)
+        public ConventionBuilder AddTagLine(string tagLine)
         {
-            _convention.Inner.Location = location;
             _convention.Inner.TagLine = tagLine;
             return this;
         }
