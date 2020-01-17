@@ -218,15 +218,25 @@
                     </td>
                 </tr>
                 <tr id="extra-data-@participantId.GetNumberFromId()"
-                    class="collapse" data-parent="#accordion">
+                    class="collapse extension-panel" data-parent="#accordion">
                     <td colspan="100%">
                         <table class="table table-no-border table-no-background">
                             @if (engage.SuggestedEvents.Any())
                             {
                                 <tr>
                                     <td>
-                                        <strong>מנחה - </strong>
-                                        @String.Join(" | ", engage.SuggestedEvents.Select(x => x.Event.Name))
+                                        <strong>מנחה:&nbsp;&nbsp;</strong>
+
+                                        @foreach (var sEvent in engage.SuggestedEvents)
+                                        {
+                                            <a asp-area="Management"
+                                               asp-controller="Events"
+                                               asp-action="CreateUpdateEvent"
+                                               asp-route-eventId="@sEvent.Event.Id.GetNumberFromId()">
+                                                <i class="fa fa-fw fa-edit"></i> @sEvent.Event.Name
+                                            </a>
+                                            <span>&nbsp;&nbsp;&nbsp;</span>
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -234,49 +244,49 @@
                             {
                                 <tr>
                                     <td>
-                                        <strong>משתתפ/ת - </strong>
+                                        <strong>משתתפ/ת: &nbsp;&nbsp;</strong>
                                         @String.Join(" | ", engage.Events.Select(x => x.Event.Name))
                                     </td>
                                 </tr>
                             }
                         </table>
-        </td>
-        </tr>
-    }
-            </tbody>
-            </table>
-        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 
-        @section Scripts {
-            <script>
+@section Scripts {
+    <script>
 
-                function ResetParticipantPassword(participantId, participantName) {
-                    Swal.fire({
-                        title: `האם לאפס סיסמה למשתמש <br/>?${participantName}`,
-                        text: 'שימו לב - לא ניתן לשחזר סיסמה קודמת לאחר איפוס',
-                        type: 'warning',
-                        showCancelButton: true,
-                        cancelButtonColor: '#d33',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'אישור',
-                        cancelButtonText: 'ביטול'
-                    }).then((result) => {
-                        if (result.value) {
-                            $.ajax({
-                                type: "POST",
-                                url: "/Management/Mes/ResetPassword?id=" + participantId,
-                                data: CreateDefaultPostData(),
-                                success: function () {
-                                    Swal.fire('סיסמה שונתה בהצלחה - נשלח דואל למשתתפ/ת');
-                                },
-                                error: function () {
-                                    Swal.fire('תקלה באיפוס הסיסמה');
-                                }
-                            });
+        function ResetParticipantPassword(participantId, participantName) {
+            Swal.fire({
+                title: `האם לאפס סיסמה למשתמש <br/>?${participantName}`,
+                text: 'שימו לב - לא ניתן לשחזר סיסמה קודמת לאחר איפוס',
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'אישור',
+                cancelButtonText: 'ביטול'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Management/Mes/ResetPassword?id=" + participantId,
+                        data: CreateDefaultPostData(),
+                        success: function () {
+                            Swal.fire('סיסמה שונתה בהצלחה - נשלח דואל למשתתפ/ת');
+                        },
+                        error: function () {
+                            Swal.fire('תקלה באיפוס הסיסמה');
                         }
                     });
                 }
-
-            </script>
+            });
         }
+
+    </script>
+}

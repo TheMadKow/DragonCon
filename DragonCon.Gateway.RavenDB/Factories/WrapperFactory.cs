@@ -61,7 +61,7 @@ namespace DragonCon.RavenDB.Factories
                 SubActivity = item.SubActivityId.IsNotEmptyString()
                     ? _session.Load<Activity>(item.SubActivityId)
                     : Activity.General,
-                GameMasters =
+                GameHosts =
                     _session.Load<LongTermParticipant>(item.GameHostIds)
                         .Select(y => y.Value).ToList<IParticipant>(),
                 Hall = _session.Load<Hall>(item.HallId),

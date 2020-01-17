@@ -17,13 +17,12 @@ using Raven.Client.Documents;
 
 namespace DragonCon.RavenDB.Gateways.Managements
 {
-    public class RavenManagementParticipantsGateway : RavenGateway, IManagementParticipantsGateway
+    public class RavenManagementParticipantsGateway : EngagementRavenGateway, IManagementParticipantsGateway
     {
         public RavenManagementParticipantsGateway(IServiceProvider provider) :
             base(provider)
         {
         }
-
 
         public ParticipantCreateUpdateViewModel GetParticipantViewModel(string participantId)
         {
@@ -93,7 +92,6 @@ namespace DragonCon.RavenDB.Gateways.Managements
                     result.ConventionRoles = roles;
                     return result;
                 }
-
             }
 
             if (participantId.StartsWith("ShortTerm"))
@@ -107,9 +105,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                     result.ConventionRoles = roles;
                     return result;
                 }
-
             }
-
 
             throw new Exception("Unknown Me Term or Me not found");
         }
@@ -184,104 +180,6 @@ namespace DragonCon.RavenDB.Gateways.Managements
 
         }
 
-        public async Task<Answer> UpdateParticipant(ParticipantCreateUpdateViewModel viewmodel)
-        {
-            var answer = ValidateParticipantFields(viewmodel);
-            if (answer.AnswerType != AnswerType.Success)
-                return answer;
-
-            var participantId = viewmodel.Id;
-            IParticipant participant = null;
-            if (participantId.StartsWith("ShortTerm"))
-            {
-                participant = Session.Load<ShortTermParticipant>(participantId);
-            }
-
-            if (participantId.StartsWith("LongTerm"))
-            {
-                participant = Session.Load<LongTermParticipant>(participantId);
-            }
-
-            if (participant != null)
-            {
-                if (participant is LongTermParticipant longTerm)
-                {
-                    longTerm.IsAllowingPromotions = viewmodel.IsAllowingPromotions ?? false;
-                }
-
-                participant.FullName = viewmodel.FullName;
-                participant.PhoneNumber = viewmodel.PhoneNumber ?? string.Empty;
-                participant.YearOfBirth = viewmodel.YearOfBirth;
-
-                Session.Store(participant, participant.Id);
-                Session.SaveChanges();
-
-                return await Task.FromResult(Answer.Success);
-            }
-            else
-            {
-                return await Task.FromResult(Answer.Error("Can't find participant"));
-            }
-        }
-
-        public async Task<Answer> CreateParticipant(ParticipantCreateUpdateViewModel viewmodel)
-        {
-            var answer = ValidateParticipantFields(viewmodel);
-            if (answer.AnswerType != AnswerType.Success)
-                return answer;
-
-            IParticipant model;
-            UserEngagement engagement = new UserEngagement
-            {
-                ConventionId = Actor.ManagedConvention.ConventionId,
-                ConventionStartDate = Actor.ManagedConvention.Days
-                    .Min(x => x.Date)
-                    .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                Payment = new PaymentInvoice()
-            };
-
-            if (viewmodel.Email.IsEmptyString())
-            {
-                model = new ShortTermParticipant
-                {
-                    CreatedById = Actor.Me.Id
-                };
-            }
-            else
-            {
-                model = new LongTermParticipant
-                {
-                    UserName = viewmodel.Email,
-                    Email = viewmodel.Email,
-                    IsAllowingPromotions = viewmodel.IsAllowingPromotions ?? false,
-                };
-                engagement.IsLongTerm = true;
-            }
-
-            model.FullName = viewmodel.FullName;
-            model.PhoneNumber = viewmodel.PhoneNumber ?? string.Empty;
-            model.YearOfBirth = viewmodel.YearOfBirth;
-
-            var result = await Identities.AddNewParticipant(model);
-
-            engagement.ParticipantId = model.Id;
-            if (result.IsSuccess)
-            {
-                Session.Store(engagement);
-                Session.SaveChanges();
-            }
-
-            if (result.IsSuccess && result.IsLongTerm)
-            {
-                await Hub.SendCreationPasswordAsync(model as LongTermParticipant, result.Token);
-            }
-
-            if (result.IsSuccess == false)
-                return Answer.Error(result.Errors?.AsJson());
-
-            return Answer.Success;
-        }
-
         public async Task<Answer> ResetPassword(string id)
         {
             var participant = Session.Load<LongTermParticipant>(id);
@@ -299,20 +197,6 @@ namespace DragonCon.RavenDB.Gateways.Managements
             else
                 return Answer.Error("Can't find participant");
         }
-
-        private Answer ValidateParticipantFields(ParticipantCreateUpdateViewModel viewmodel)
-        {
-            if (viewmodel.FullName.IsEmptyString())
-                return Answer.Error("No Me Name");
-
-            if (viewmodel.YearOfBirth < (DateTime.Today.Year - 120) ||
-                viewmodel.YearOfBirth > DateTime.Today.Year)
-                return Answer.Error("Illegal Year of Birth");
-
-
-            return Answer.Success;
-        }
-
         public ParticipantsManagementViewModel BuildIndex(IDisplayPagination pagination,
             bool allowHistory = false,
             ParticipantsManagementViewModel.Filters? filters = null)
@@ -339,8 +223,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
 
             return result;
         }
-
-
+        
         public ParticipantsManagementViewModel BuildSearchIndex(IDisplayPagination pagination, bool allowHistory = false, string searchWords = "")
         {
             if (searchWords.IsEmptyString())
@@ -376,6 +259,5 @@ namespace DragonCon.RavenDB.Gateways.Managements
             };
             return viewModel;
         }
-
     }
 }

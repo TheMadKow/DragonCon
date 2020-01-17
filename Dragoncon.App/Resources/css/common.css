@@ -2,6 +2,11 @@
     font-family: "Open Sans Hebrew", "cursive"
 }
 
+.extension-panel {
+    border-right: 1px dashed grey;
+    border-left: 1px dashed grey;
+}
+
 .table-sparse {
     line-height: 1.75;
 }

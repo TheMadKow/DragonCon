@@ -7,9 +7,7 @@ using DragonCon.Features.Management.Events;
 using DragonCon.Features.Shared;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
-using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
-using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.RavenDB.Factories;
 using DragonCon.RavenDB.Index;
@@ -79,7 +77,6 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 if (exisitingSubActivities.MissingKey(subActivity.Id))
                 {
                     removedSubActivities.Add(subActivity);
-                    ;
                     Session.Delete(subActivity.Id);
                 }
                 else

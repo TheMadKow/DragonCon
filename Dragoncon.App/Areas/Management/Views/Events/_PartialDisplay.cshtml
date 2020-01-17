@@ -6,7 +6,7 @@
 
 <div class="text-right" style="padding: 15px;">
     <a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEvent" class="card-semibutton">
-            <i class="fa fa-fw fa-plus-square"></i> הוספת אירוע
+        <i class="fa fa-fw fa-plus-square"></i> הוספת אירוע
     </a>
 </div>
 
@@ -145,10 +145,10 @@
 
                     <br />
 
-                    @if (evnt.GameMasters.Any())
+                    @if (evnt.GameHosts.Any())
                     {
                         <strong>הנחיה: </strong>
-                        @foreach (var master in evnt.GameMasters)
+                        @foreach (var master in evnt.GameHosts)
                         {
                             @if (master == null)
                             {
@@ -248,24 +248,25 @@
                                     <a class="dropdown-item" asp-area="Management" asp-controller="Events" aria-checkedasp-action="CloneEvent">
                                         <i class="fa fa-fw fa-clone"></i> שכפול אירוע
                                     </a>
-                                    @if (evnt.GameMasters.Any(x => x != null))
+                                    @if (evnt.GameHosts.Any(x => x != null))
                                     {
                                         <div class="dropdown-divider"></div>
-                                        <div class="text-center text-bold">
+                                        <div class="text-center text-bold" style="    background: #ffcd6e;">
                                             <a>עריכת מנחים</a>
                                         </div>
                                         <div class="dropdown-divider"></div>
                                     }
-                                    @foreach (var gm in evnt.GameMasters)
+                                    @foreach (var gameHost in evnt.GameHosts)
                                     {
-                                        if (gm == null)
+                                        if (gameHost == null)
                                         {
                                             continue;
                                         }
 
-                                        <a class="dropdown-item" asp-area="Management" asp-controller="Displays"
-                                           asp-action="UpdateEventAgeRestriction">
-                                            <i class="fa fa-fw fa-user-edit"></i> @gm?.FirstName
+                                        <a class="dropdown-item" asp-area="Management" asp-controller="Participants"
+                                           asp-action="CreateUpdateParticipant"
+                                           asp-route-collection="@gameHost.Id.GetCollectionFromId()" asp-route-id="@gameHost.Id.GetNumberFromId()">
+                                            <i class="fa fa-fw fa-user-edit"></i> @gameHost?.FirstName
                                         </a>
                                     }
 
@@ -276,7 +277,7 @@
                 </td>
             </tr>
             <tr id="extra-data-@evnt.Inner.Id.GetNumberFromId()"
-                class="collapse" data-parent="#accordion">
+                class="collapse extension-panel" data-parent="#accordion">
                 <td colspan="100%">
                     <table class="table table-no-border table-no-background">
                         <tr>

@@ -104,7 +104,7 @@ namespace DragonCon.Features.Management.Participants
             if (viewmodel.Id.IsNotEmptyString())
                 answer = await Gateway.UpdateParticipant(viewmodel);
             else
-                answer = await Gateway.CreateParticipant(viewmodel);
+                answer = await Gateway.AddParticipant(viewmodel);
 
             if (answer.AnswerType == AnswerType.Success)
                 return RedirectToAction("Manage");
@@ -124,7 +124,7 @@ namespace DragonCon.Features.Management.Participants
         UpdateRolesViewModel GetRolesViewModel(string participantId);
         Answer UpdateRoles(string viewmodelParticipantId, string description, string[] sysKeys, string[] conKeys);
         Task<Answer> UpdateParticipant(ParticipantCreateUpdateViewModel viewmodel);
-        Task<Answer> CreateParticipant(ParticipantCreateUpdateViewModel viewmodel);
+        Task<Answer> AddParticipant(ParticipantCreateUpdateViewModel viewmodel);
         Task<Answer> ResetPassword(string id);
     }
 }
