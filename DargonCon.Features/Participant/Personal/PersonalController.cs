@@ -84,8 +84,7 @@ namespace DragonCon.Features.Participant.Personal
                     IsAllowingPromotions = user.IsAllowingPromotions,
                     PhoneNumber = user.PhoneNumber
                 };
-                var invalidProperty = ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
-                SetUserError("תקלה במידע שהתקבל", invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב");
+                SetUserError("תקלה במידע שהתקבל", ParseModelErrors());
                 return View("UpdateAccount", updateViewModel);
             }
         }
@@ -117,8 +116,7 @@ namespace DragonCon.Features.Participant.Personal
                 }
                 else
                 {
-                    var invalidProperty = ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
-                    SetUserError("תקלה בעדכון פרטים", invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב");
+                    SetUserError("תקלה בעדכון פרטים", ParseModelErrors());
                     return View("UpdateAccount", updateViewModel);
                 }
             }
@@ -130,8 +128,7 @@ namespace DragonCon.Features.Participant.Personal
                     Details = viewModel
                 };
 
-                var invalidProperty = ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
-                SetUserError("תקלה במידע שהתקבל", invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב");
+                SetUserError("תקלה בעדכון פרטים", ParseModelErrors());
                 return View("UpdateAccount", updateViewModel);
             }
         }
@@ -146,23 +143,35 @@ namespace DragonCon.Features.Participant.Personal
             return View(new SuggestEventViewModel());
         }
 
+        public IActionResult SuggestEventPairing()
+        {
+            return View();
+        }
+
+        public IActionResult SuggestEventComplete()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult SuggestEvent(SuggestEventViewModel viewmodel)
         {
             if (ModelState.IsValid)
             {
-                Answer ans = Gateway.AddSuggestedEvent(viewmodel);
+                var ans = Gateway.AddSuggestedEvent(viewmodel);
                 if (ans.AnswerType == AnswerType.Error)
-                    //TODO implement error shower
-                    // TODO Log..
+                {
+                    SetUserError("תקלה בעדכון פרטים", ParseModelErrors());
                     return View(viewmodel);
+                } 
                 else
-                    return RedirectToAction("Index");
+                {
+                    return RedirectToAction("SuggestEventComplete");
+                }
             }
             else
             {
-                var invalidProperty = ModelState.First(x => x.Value.ValidationState == ModelValidationState.Invalid);
-                SetUserError("תקלה במידע שהתקבל", invalidProperty.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "אנא נסו שוב");
+                SetUserError("תקלה בעדכון פרטים", ParseModelErrors());
                 return View(viewmodel);
             }
         }

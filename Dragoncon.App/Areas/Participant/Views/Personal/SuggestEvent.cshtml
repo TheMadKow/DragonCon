@@ -6,14 +6,40 @@
 }
 
 @await Html.PartialAsync("_PartialBack")
-@if (Actor.DisplayDynamics.Linkage.SuggestGuidelinesLink.IsNotEmptyString())
-{
-    <div class="text-center">
-        <a href="@Actor.DisplayDynamics.Linkage.SuggestGuidelinesLink" target="_blank" class="btn dragon-btn">הנחיות להגשת קדימונים</a>
-    </div>
-    <br />
 
-}
+<div class="card card-gray-float">
+    <div class="card-form">
+        <h3 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            הנחיית משחקים
+        </h3>
+        <ul class="fa-ul card-list">
+
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                מומלץ להגיש אירועים מוקדם ככל הניתן - מספר השולחנות בכנס מוגבל.
+            </li>
+            @if (Actor.DisplayDynamics.Linkage.SuggestGuidelinesLink.IsNotEmptyString())
+            {
+                <li>
+                    @await Html.PartialAsync("_PartialBulletin")
+                    מומלץ לעבור על
+                    <a class="dragon-organge-link" href="@Actor.DisplayDynamics.Linkage.SuggestGuidelinesLink" target="_blank">ההנחיות להגשת קדימונים.</a>
+                </li>
+            }
+            @if (Actor.DisplayDynamics.Linkage.SuggestGuidelinesLink.IsNotEmptyString())
+            {
+                <li>
+                    @await Html.PartialAsync("_PartialBulletin")
+                    רוצים להריץ משחק תפקידים, אבל אין לכם הרפתקה כתובה?
+                    <a class="dragon-organge-link" href="@Actor.DisplayDynamics.Linkage.SuggestPairingLink" target="_blank">כתבו לנו וננסה לעזור.</a>
+                </li>
+            }
+
+        </ul>
+    </div>
+</div>
 
 <div class="card card-gray-float">
     <div class="card-form">
@@ -39,7 +65,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label>פעילות</label>
-                        <select class="form-control chosen-select" asp-for="ActivityId"
+                        <select class="form-control chosen-select" asp-for="ActivitySelector"
                                 asp-items="Actor.DisplayDropDowns.Activities()">
                             <option value="" disabled selected>בחירת אפשרות</option>
                         </select>
@@ -77,7 +103,7 @@
                 <div class="col-5">
                     <div class="form-group">
                         <label>שעת התחלה</label>
-                        <select id="event-start-time" class="form-control chosen-select" asp-for="StartTime"
+                        <select id="event-start-time" class="form-control chosen-select" asp-for="StartTimeSelector"
                                 asp-items="Actor.DisplayDropDowns.BuildDaysTimes()" onchange="ChangedEventDay(this)">
                             <option value="" disabled selected>בחירת שעת התחלה</option>
                         </select>

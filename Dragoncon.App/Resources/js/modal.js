@@ -6,7 +6,8 @@
         url: url,
         success: function (data) {
             $(modalId).html(data);
-            $(modalId).modal({ backdrop: 'static', keyboard: false });
+            $(modalId).modal({
+                backdrop: 'static', container: "#data-container", keyboard: false });
             $("#modal-placeholder").hide();
         },
         error: function (xhr, textStatus, error) {

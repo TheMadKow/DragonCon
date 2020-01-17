@@ -12,8 +12,7 @@ namespace DragonCon.Modeling.Models.Identities.Policy
             public const string ManagementAreaManager = "Management/Manager";
 
             public const string ReceptionManagement = "Reception/Manager";
-            public const string EventsManagement = "Events/Manager";
-            public const string UsersManagement = "Users/Manager";
+            public const string ContentManagement = "Events/Manager";
             public const string ConventionManagement = "Convention/Manager";
         }
 
@@ -21,12 +20,11 @@ namespace DragonCon.Modeling.Models.Identities.Policy
         {
             var result = new Dictionary<string, IAuthorizationRequirement>
             {
-                {Types.ManagementAreaViewer, new RolesRequirement(SystemRoles.ReceptionManager, SystemRoles.ContentManager, SystemRoles.UsersManager, SystemRoles.ConventionManager)},
-                {Types.ManagementAreaManager, new RolesRequirement(SystemRoles.ContentManager, SystemRoles.UsersManager, SystemRoles.ConventionManager)},
+                {Types.ManagementAreaViewer, new RolesRequirement(SystemRoles.ReceptionManager, SystemRoles.ContentManager, SystemRoles.ConventionManager)},
+                {Types.ManagementAreaManager, new RolesRequirement(SystemRoles.ContentManager, SystemRoles.ConventionManager)},
 
                 {Types.ReceptionManagement, new RolesRequirement(SystemRoles.ReceptionManager, SystemRoles.ConventionManager)},
-                {Types.EventsManagement, new RolesRequirement(SystemRoles.ContentManager, SystemRoles.ConventionManager)},
-                {Types.UsersManagement, new RolesRequirement(SystemRoles.UsersManager, SystemRoles.ConventionManager)},
+                {Types.ContentManagement, new RolesRequirement(SystemRoles.ContentManager, SystemRoles.ConventionManager)},
                 {Types.ConventionManagement, new RolesRequirement(SystemRoles.ConventionManager)},
             };
             return result;

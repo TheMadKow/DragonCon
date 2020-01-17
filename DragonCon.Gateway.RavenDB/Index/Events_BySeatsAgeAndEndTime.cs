@@ -11,6 +11,7 @@ namespace DragonCon.RavenDB.Index
         public class Result
         {
             public string ConventionId { get; set; } = string.Empty;
+            public EventStatus Status { get; set; } = EventStatus.Pending;
 
             public string EventId { get; set; } = string.Empty;
             public string DayId { get; set; } = string.Empty;
@@ -40,6 +41,7 @@ namespace DragonCon.RavenDB.Index
                     SeatsCapacity = evnt.Size.Max,
                     MinAge = ageGroup.MinAge,
                     MaxAge = ageGroup.MaxAge,
+                    Status = evnt.Status,
                     SeatsTaken = 0
                 });
 
@@ -55,6 +57,7 @@ namespace DragonCon.RavenDB.Index
                        DayId = "",
                        EndTime = "",
                        SeatsCapacity = "",
+                        Status = EventStatus.Approved,
                        SeatsTaken = 1
                    });
 
@@ -64,6 +67,7 @@ namespace DragonCon.RavenDB.Index
                                 select new
                                 {
                                     ConventionId = realFirst.ConventionId,
+                                    Status = realFirst.Status,
                                     EventId = realFirst.EventId,
                                     MinAge = realFirst.MinAge,
                                     MaxAge = realFirst.MaxAge,

@@ -1,10 +1,4 @@
-﻿.modal-dialog {
-    max-width: 100%;
-    margin-left: 30px;
-    margin-right: 30px;
-}
-
-.modal-header .close {
+﻿.modal-header .close {
     margin: -1rem auto -1rem -1rem;
     float: left;
 }

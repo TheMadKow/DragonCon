@@ -31,8 +31,8 @@
 <div class="modal fade" id="event-history-ajax" tabindex="-1" role="dialog"></div>
 
 <div class="modal fade" id="quick-event-update-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog mw-100 w-50 modal-dialog-centered" role="document">
+        <div class="modal-content model-content-admin">
             <div class="modal-header">
                 <div class="right-to-left">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="סגור חלון">
@@ -44,7 +44,7 @@
             </div>
 
             <div class="modal-body right-to-left">
-                <form asp-area="Management" asp-controller="Personal" asp-action="QuickUpdate">
+                <form asp-area="Management" asp-controller="Events" asp-action="QuickUpdate">
                     <input type="text" name="Id" id="quick-event-update-id" hidden/>
                     <div class="form-group">
                         <label>סטטוס</label>

@@ -3,10 +3,13 @@
     display: table-cell;
 }
 
+.tw-0 {
+    width: 0% !important;
+    display: table-cell;
+}
 .tw-1 {
     width: 8.333333333% !important;
     display: table-cell;
-
 }
 .tw-2 {
     width: 16.66666667% !important;

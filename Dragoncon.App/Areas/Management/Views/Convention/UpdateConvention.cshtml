@@ -13,31 +13,36 @@
     }
 }
 
-<div class="right-to-left">
-    <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link active" id="nav-item-days" data-toggle="tab" href="#tab-pane-days" role="tab" aria-controls="tab-pane-days" aria-selected="true">מידע בסיסי</a>
-            <a class="nav-item nav-link" id="nav-item-settings" data-toggle="tab" href="#tab-pane-settings" role="tab" aria-controls="tab-pane-settings" aria-selected="true">הגדרות</a>
-            <a class="nav-item nav-link" id="nav-item-halls" data-toggle="tab" href="#tab-pane-halls" role="tab" aria-controls="tab-pane-halls" aria-selected="false">אולמות</a>
-            <a class="nav-item nav-link" id="nav-item-tickets" data-toggle="tab" href="#tab-pane-tickets" role="tab" aria-controls="tab-pane-tickets" aria-selected="false">כרטיסים</a>
-        </div>
-    </nav>
-    <div class="tab-content">
 
-        <div class="tab-pane fade show active" id="tab-pane-days" role="tabpanel" aria-labelledby="nav-days-tab">
-            @await Html.PartialAsync("CreateUpdateNameDates", Model.NameDate)
-        </div>
+<div class="card card-gray-float">
+    <div class="card-body">
+        <div class="right-to-left">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-item-days" data-toggle="tab" href="#tab-pane-days" role="tab" aria-controls="tab-pane-days" aria-selected="true">מידע בסיסי</a>
+                    <a class="nav-item nav-link" id="nav-item-settings" data-toggle="tab" href="#tab-pane-settings" role="tab" aria-controls="tab-pane-settings" aria-selected="true">הגדרות</a>
+                    <a class="nav-item nav-link" id="nav-item-halls" data-toggle="tab" href="#tab-pane-halls" role="tab" aria-controls="tab-pane-halls" aria-selected="false">אולמות</a>
+                    <a class="nav-item nav-link" id="nav-item-tickets" data-toggle="tab" href="#tab-pane-tickets" role="tab" aria-controls="tab-pane-tickets" aria-selected="false">כרטיסים</a>
+                </div>
+            </nav>
+            <div class="tab-content">
 
-        <div class="tab-pane fade show" id="tab-pane-settings" role="tabpanel" aria-labelledby="nav-days-settings">
-            @await Html.PartialAsync("CreateUpdateSettings", Model.Settings)
-        </div>
+                <div class="tab-pane fade show active" id="tab-pane-days" role="tabpanel" aria-labelledby="nav-days-tab">
+                    @await Html.PartialAsync("CreateUpdateNameDates", Model.NameDate)
+                </div>
 
-        <div class="tab-pane fade" id="tab-pane-tickets" role="tabpanel" aria-labelledby="nav-tickets-tab">
-            @await Html.PartialAsync("CreateUpdateTickets", Model.Tickets)
-        </div>
+                <div class="tab-pane fade show" id="tab-pane-settings" role="tabpanel" aria-labelledby="nav-days-settings">
+                    @await Html.PartialAsync("CreateUpdateSettings", Model.Settings)
+                </div>
 
-        <div class="tab-pane fade" id="tab-pane-halls" role="tabpanel" aria-labelledby="nav-halls-tab">
-            @await Html.PartialAsync("CreateUpdateHalls", Model.Halls)
+                <div class="tab-pane fade" id="tab-pane-tickets" role="tabpanel" aria-labelledby="nav-tickets-tab">
+                    @await Html.PartialAsync("CreateUpdateTickets", Model.Tickets)
+                </div>
+
+                <div class="tab-pane fade" id="tab-pane-halls" role="tabpanel" aria-labelledby="nav-halls-tab">
+                    @await Html.PartialAsync("CreateUpdateHalls", Model.Halls)
+                </div>
+            </div>
         </div>
     </div>
 </div>

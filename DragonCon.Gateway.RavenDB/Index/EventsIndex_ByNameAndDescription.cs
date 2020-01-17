@@ -37,7 +37,7 @@ namespace DragonCon.RavenDB.Index
 
                     ConventionDayId = conEvent.ConventionDayId,
                     ConventionId = conEvent.ConventionId,
-                    GameMasterIds = conEvent.GameMasterIds,
+                    GameMasterIds = conEvent.GameHostIds,
                     HallId = conEvent.HallId,
                     AgeId = conEvent.AgeId
                 };

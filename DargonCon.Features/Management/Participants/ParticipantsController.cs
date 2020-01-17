@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DragonCon.Features.Management.Events;
 using DragonCon.Features.Shared;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
@@ -13,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Management.Participants
 {
     [Area("Management")]
-    [Authorize(Policies.Types.UsersManagement)]
+    [Authorize(Policies.Types.ContentManagement)]
     public class ParticipantsController : DragonController<IManagementParticipantsGateway>
     {
         public ParticipantsController(IServiceProvider service) : base(service)
@@ -30,7 +28,7 @@ namespace DragonCon.Features.Management.Participants
         }
 
 
-        [Authorize(Policies.Types.EventsManagement)]
+        [Authorize(Policies.Types.ContentManagement)]
         [HttpPost]
         public async Task<Answer> ResetPassword(string id)
         {
@@ -60,7 +58,7 @@ namespace DragonCon.Features.Management.Participants
 
         #endregion
 
-        [Authorize(Policies.Types.EventsManagement)]
+        [Authorize(Policies.Types.ContentManagement)]
         [HttpPost]
         public IActionResult UpdateRoles(UpdateRolesViewModel viewmodel, string officerDesc)
         {
@@ -77,7 +75,7 @@ namespace DragonCon.Features.Management.Participants
             return RedirectToAction("Manage");
         }
 
-        [Authorize(Policies.Types.EventsManagement)]
+        [Authorize(Policies.Types.ContentManagement)]
         [HttpGet]
         public IActionResult UpdateRoles(string collection, string id)
         {

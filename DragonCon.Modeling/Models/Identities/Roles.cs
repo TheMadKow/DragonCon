@@ -5,9 +5,7 @@ namespace DragonCon.Modeling.Models.Identities
 
     public enum SystemRoles
     {
-        [Description("ניהול משתמשים")]
-        UsersManager,
-        [Description("ניהול אירועים")]
+        [Description("ניהול תכנים")]
         ContentManager,
         [Description("ניהול כנסים")]
         ConventionManager,

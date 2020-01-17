@@ -6,300 +6,306 @@
     ViewBag.Title = "ניהול תצוגות";
 }
 
-<br />
+<div class="card card-gray-float">
+    <div clas="card-body">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-fill">
+            <li class="nav-item">
+                <a id="nav-item-updates" class="nav-link active" data-toggle="tab" href="#tab-pane-updates">עדכונים</a>
+            </li>
+            <li class="nav-item">
+                <a id="nav-item-slides" class="nav-link" data-toggle="tab" href="#tab-pane-slides">תמונות</a>
+            </li>
+            <li class="nav-item">
+                <a id="nav-item-sponsors" class="nav-link" data-toggle="tab" href="#tab-pane-sponsors">חסויות</a>
+            </li>
+            <li class="nav-item">
+                <a id="nav-item-linkage" class="nav-link" data-toggle="tab" href="#tab-pane-linkage">קישורי תוכן</a>
+            </li>
+            <li class="nav-item">
+                <a id="nav-item-location" class="nav-link" data-toggle="tab" href="#tab-pane-location">מיקום</a>
+            </li>
+            <li class="nav-item">
+                <a id="nav-item-english" class="nav-link" data-toggle="tab" href="#tab-pane-english">מיקום - אנגלית</a>
+            </li>
+        </ul>
 
-<!-- Nav tabs -->
-<ul class="nav nav-tabs nav-fill">
-    <li class="nav-item">
-        <a id="nav-item-updates" class="nav-link active" data-toggle="tab" href="#tab-pane-updates">עדכונים</a>
-    </li>
-    <li class="nav-item">
-        <a id="nav-item-slides" class="nav-link" data-toggle="tab" href="#tab-pane-slides">תמונות</a>
-    </li>
-    <li class="nav-item">
-        <a id="nav-item-sponsors" class="nav-link" data-toggle="tab" href="#tab-pane-sponsors">חסויות</a>
-    </li>
-    <li class="nav-item">
-        <a id="nav-item-linkage" class="nav-link" data-toggle="tab" href="#tab-pane-linkage">קישורי תוכן</a>
-    </li>
-    <li class="nav-item">
-        <a id="nav-item-location" class="nav-link" data-toggle="tab" href="#tab-pane-location">מיקום</a>
-    </li>
-    <li class="nav-item">
-        <a id="nav-item-english" class="nav-link" data-toggle="tab" href="#tab-pane-english">מיקום - אנגלית</a>
-    </li>
-</ul>
 
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane container active" id="tab-pane-updates">
+                <form asp-area="Management" asp-controller="Displays" asp-action="AddUpdate" method="post" class="right-to-left" style="padding: 10px;">
+                    <div class="col">
+                        <div class="row">
+                            <div class="form-group col-3">
+                                <label>תאריך</label>
+                                <input name="updateDate" type="date" class="form-control">
+                            </div>
+                            <div class="form-group col-5">
+                                <label>כותרת</label>
+                                <input name="updateTitle" class="form-control" placeholder="אירוע האירועים">
+                            </div>
+                            <div class="form-group col-4">
+                                <label>קישור</label>
+                                <input name="updateLink" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-8">
+                                <label>תיאור</label>
+                                <textarea name="updateDesc" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group col-4">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="form-control btn btn-success"> הוספה </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
 
-<!-- Tab panes -->
-<div class="tab-content">
-    <div class="tab-pane container active" id="tab-pane-updates">
-        <form asp-area="Management" asp-controller="Displays" asp-action="AddUpdate" method="post" class="right-to-left" style="padding: 10px;">
-            <div class="col">
-                <div class="row">
-                    <div class="form-group col-3">
-                        <label>תאריך</label>
-                        <input name="updateDate" type="date" class="form-control">
-                    </div>
-                    <div class="form-group col-5">
-                        <label>כותרת</label>
-                        <input name="updateTitle" class="form-control" placeholder="אירוע האירועים">
-                    </div>
-                    <div class="form-group col-4">
-                        <label>קישור</label>
-                        <input name="updateLink" class="form-control">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-8">
-                        <label>תיאור</label>
-                        <textarea name="updateDesc" class="form-control"></textarea>
-                    </div>
-                    <div class="form-group col-4">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="form-control btn btn-success"> הוספה </button>
-                    </div>
-                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td>תאריך</td>
+                            <td>כותרת</td>
+                            <td>תיאור</td>
+                            <td>קישור</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    @foreach (var update in Model.Updates)
+                    {
+                        <tr>
+                            <td>
+                                @update.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+                            </td>
+                            <td>
+                                @update.Title
+                            </td>
+                            <td>
+                                @update.Description
+                            </td>
+                            <td>
+                                @if (update.Link.IsNotEmptyString())
+                                {
+                                    <a target="_blank" href="@update.Link">קישור</a>
+                                }
+                            </td>
+                            <td>
+                                <form asp-area="Management" asp-controller="Displays" asp-action="RemoveUpdate">
+                                    <input name="updateId" value="@update.Id" hidden />
+                                    <button type="submit" class="btn text-danger"><i class="fa fa-fw fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </table>
             </div>
-        </form>
+            <div class="tab-pane container fade" id="tab-pane-slides">
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <td>תאריך</td>
-                    <td>כותרת</td>
-                    <td>תיאור</td>
-                    <td>קישור</td>
-                    <td></td>
-                </tr>
-            </thead>
-            @foreach (var update in Model.Updates)
-            {
-                <tr>
-                    <td>
-                        @update.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
-                    </td>
-                    <td>
-                        @update.Title
-                    </td>
-                    <td>
-                        @update.Description
-                    </td>
-                    <td>
-                        @if (update.Link.IsNotEmptyString())
-                        {
-                            <a target="_blank" href="@update.Link">קישור</a>
-                        }
-                    </td>
-                    <td>
-                        <form asp-area="Management" asp-controller="Displays" asp-action="RemoveUpdate">
-                            <input name="updateId" value="@update.Id" hidden />
-                            <button type="submit" class="btn text-danger"><i class="fa fa-fw fa-trash"></i></button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </table>
-    </div>
-    <div class="tab-pane container fade" id="tab-pane-slides">
+                <form asp-area="Management" asp-controller="Displays" asp-action="AddSlide" method="post" class="right-to-left" style="padding: 10px;">
+                    <div class="col">
+                        <div class="row">
+                            <div class="form-group col-6">
+                                <label>תמונה</label>
+                                <input name="imageLink" class="form-control" placeholder="https://mypicture.path ">
+                            </div>
+                            <div class="form-group col-4">
+                                <label>כיתוב</label>
+                                <input name="imageTitle" class="form-control" placeholder="משחקים מלא ">
+                            </div>
+                            <div class="form-group col-2">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="form-control btn btn-success"> הוספה </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
 
-        <form asp-area="Management" asp-controller="Displays" asp-action="AddSlide" method="post" class="right-to-left" style="padding: 10px;">
-            <div class="col">
-                <div class="row">
-                    <div class="form-group col-6">
-                        <label>תמונה</label>
-                        <input name="imageLink" class="form-control" placeholder="https://mypicture.path ">
-                    </div>
-                    <div class="form-group col-4">
-                        <label>כיתוב</label>
-                        <input name="imageTitle" class="form-control" placeholder="משחקים מלא ">
-                    </div>
-                    <div class="form-group col-2">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="form-control btn btn-success"> הוספה </button>
-                    </div>
-                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td>תמונה</td>
+                            <td>כיתוב</td>
+                            <td></td>
+
+                        </tr>
+                    </thead>
+                    @foreach (var slide in Model.Slides.OrderBy(x => x.Id))
+                    {
+                        <tr>
+                            <td>
+
+                                <img alt="@slide.ImageUrl" src="@slide.ImageUrl" style="max-height: 150px;" />
+                            </td>
+                            <td>@slide.Caption</td>
+                            <td>
+                                <form asp-area="Management" asp-controller="Displays" asp-action="RemoveSlide">
+                                    <input name="slideId" value="@slide.Id" hidden />
+                                    <button type="submit" class="btn text-danger"><i class="fa fa-fw fa-trash"></i></button>
+                                </form>
+
+                            </td>
+
+                        </tr>
+                    }
+                </table>
             </div>
-        </form>
+            <div class="tab-pane container fade" id="tab-pane-english">
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <td>תמונה</td>
-                    <td>כיתוב</td>
-                    <td></td>
-
-                </tr>
-            </thead>
-            @foreach (var slide in Model.Slides.OrderBy(x => x.Id))
-            {
-                <tr>
-                    <td>
-
-                        <img alt="@slide.ImageUrl" src="@slide.ImageUrl" style="max-height: 150px;" />
-                    </td>
-                    <td>@slide.Caption</td>
-                    <td>
-                        <form asp-area="Management" asp-controller="Displays" asp-action="RemoveSlide">
-                            <input name="slideId" value="@slide.Id" hidden />
-                            <button type="submit" class="btn text-danger"><i class="fa fa-fw fa-trash"></i></button>
-                        </form>
-
-                    </td>
-
-                </tr>
-            }
-        </table>
-    </div>
-    <div class="tab-pane container fade" id="tab-pane-english">
-
-        <form asp-area="Management" asp-controller="Displays" asp-action="SetEnglish" method="post" style="padding: 10px; direction: ltr;">
-            <div class="col">
-                <div class="row text-left">
-                    <input name="englishId" value="@Model.English.Id" class="form-control" placeholder="" hidden>
-                    <div class="form-group col-12">
-                        <label>Location Name</label>
-                        <input name="engLocName" value="@Model.English.Location" class="form-control" placeholder="">
+                <form asp-area="Management" asp-controller="Displays" asp-action="SetEnglish" method="post" style="padding: 10px; direction: ltr;">
+                    <div class="col">
+                        <div class="row text-left">
+                            <input name="englishId" value="@Model.English.Id" class="form-control" placeholder="" hidden>
+                            <div class="form-group col-12">
+                                <label>Location Name</label>
+                                <input name="engLocName" value="@Model.English.Location" class="form-control" placeholder="">
+                            </div>
+                            <div class="form-group col-12">
+                                <label>Location Description</label>
+                                <textarea name="engLocDesc" class="form-control" placeholder="">@Model.English.LocationDescription?.Trim()</textarea>
+                            </div>
+                            <div class="form-group col-10">
+                                <label>Location Link</label>
+                                <input name="engLocLink" value="@Model.English.LocationMap" class="form-control" placeholder="">
+                            </div>
+                            <div class="form-group col-2">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="form-control btn btn-success"> Update </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group col-12">
-                        <label>Location Description</label>
-                        <textarea name="engLocDesc" class="form-control" placeholder="">@Model.English.LocationDescription?.Trim()</textarea>
-                    </div>
-                    <div class="form-group col-10">
-                        <label>Location Link</label>
-                        <input name="engLocLink" value="@Model.English.LocationMap" class="form-control" placeholder="">
-                    </div>
-                    <div class="form-group col-2">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="form-control btn btn-success"> Update </button>
-                    </div>
-                </div>
+                </form>
+
             </div>
-        </form>
 
-    </div>
-
-    <div class="tab-pane container fade" id="tab-pane-location">
-        <form asp-area="Management" asp-controller="Displays" asp-action="SetLocation" method="post" class="right-to-left" style="padding: 10px;">
-            <div class="col">
-                <div class="row">
-                    <input name="locId" value="@Model.Location.Id" class="form-control" placeholder="" hidden>
-                    <div class="form-group col-12">
-                        <label>כתובת</label>
-                        <input name="locName" class="form-control" value="@Model.Location.LocationName" placeholder="" />
+            <div class="tab-pane container fade" id="tab-pane-location">
+                <form asp-area="Management" asp-controller="Displays" asp-action="SetLocation" method="post" class="right-to-left" style="padding: 10px;">
+                    <div class="col">
+                        <div class="row">
+                            <input name="locId" value="@Model.Location.Id" class="form-control" placeholder="" hidden>
+                            <div class="form-group col-12">
+                                <label>כתובת</label>
+                                <input name="locName" class="form-control" value="@Model.Location.LocationName" placeholder="" />
+                            </div>
+                            <div class="form-group col-12">
+                                <label>תיאור</label>
+                                <textarea name="locDesc" class="form-control" placeholder="">@Model.Location.LocationDescription?.Trim()</textarea>
+                            </div>
+                            <div class="form-group col-12">
+                                <label>דרכי הגעה</label>
+                                <textarea name="locWays" class="form-control" placeholder="">@Model.Location.LocationWaysOfArrival?.Trim()</textarea>
+                            </div>
+                            <div class="form-group col-12">
+                                <label>קישור למפה</label>
+                                <input name="locMap" value="@Model.Location.LocationMap" class="form-control" placeholder="">
+                            </div>
+                            <div class="form-group col-12">
+                                <label>תמונה להצגה</label>
+                                <input name="locImage" value="@Model.Location.LocationImage" class="form-control" placeholder="">
+                            </div>
+                            <div class="form-group col-2">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="form-control btn btn-success"> עדכון </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group col-12">
-                        <label>תיאור</label>
-                        <textarea name="locDesc" class="form-control" placeholder="">@Model.Location.LocationDescription?.Trim()</textarea>
-                    </div>
-                    <div class="form-group col-12">
-                        <label>דרכי הגעה</label>
-                        <textarea name="locWays" class="form-control" placeholder="">@Model.Location.LocationWaysOfArrival?.Trim()</textarea>
-                    </div>
-                    <div class="form-group col-12">
-                        <label>קישור למפה</label>
-                        <input name="locMap" value="@Model.Location.LocationMap" class="form-control" placeholder="">
-                    </div>
-                    <div class="form-group col-12">
-                        <label>תמונה להצגה</label>
-                        <input name="locImage" value="@Model.Location.LocationImage" class="form-control" placeholder="">
-                    </div>
-                    <div class="form-group col-2">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="form-control btn btn-success"> עדכון </button>
-                    </div>
-                </div>
+                </form>
             </div>
-        </form>
-    </div>
 
 
-    <div class="tab-pane container fade" id="tab-pane-linkage">
-        <form asp-area="Management" asp-controller="Displays" asp-action="SetLinkage" method="post" class="right-to-left" style="padding: 10px;">
-            <div class="col">
-                <div class="row">
-                    <input name="linkId" value="@Model.Linkage.Id" class="form-control" placeholder="" hidden>
-                    <div class="form-group col-12">
-                        <label>טופס יד-2</label>
-                        <input name="linkYad2" class="form-control" value="@Model.Linkage.Yad2FormLink" placeholder="" />
+            <div class="tab-pane container fade" id="tab-pane-linkage">
+                <form asp-area="Management" asp-controller="Displays" asp-action="SetLinkage" method="post" class="right-to-left" style="padding: 10px;">
+                    <div class="col">
+                        <div class="row">
+                            <input name="linkId" value="@Model.Linkage.Id" class="form-control" placeholder="" hidden>
+                            <div class="form-group col-12">
+                                <label>טופס יד-2</label>
+                                <input name="linkYad2" class="form-control" value="@Model.Linkage.Yad2FormLink" placeholder="" />
+                            </div>
+                            <div class="form-group col-12">
+                                <label>טופס מתנדבים</label>
+                                <input name="linkVolunteer" class="form-control" placeholder="" value="@Model.Linkage.VolunteerLink">
+                            </div>
+                            <div class="form-group col-12">
+                                <label>טופס שידוך מנחים</label>
+                                <input name="linkSuggestPair" class="form-control" placeholder="" value="@Model.Linkage.SuggestPairingLink" />
+                            </div>
+                            <div class="form-group col-12">
+                                <label>מדריך הנחיה</label>
+                                <input name="linkSuggestGuide" class="form-control" placeholder="" value="@Model.Linkage.SuggestGuidelinesLink" />
+                            </div>
+                            <div class="form-group col-12">
+                                <label>תוכניה - קובץ PDF</label>
+                                <input name="linkProgram" value="@Model.Linkage.ProgramLink" class="form-control" placeholder="">
+                            </div>
+                            <div class="form-group col-12">
+                                <label>תוכניה - תמונה</label>
+                                <input name="linkProgramImage" value="@Model.Linkage.ProgramImage" class="form-control" placeholder="">
+                            </div>
+                            <div class="form-group col-2">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="form-control btn btn-success"> עדכון </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group col-12">
-                        <label>טופס מתנדבים</label>
-                        <input name="linkVolunteer" class="form-control" placeholder="" value="@Model.Linkage.VolunteerLink">
-                    </div>
-                    <div class="form-group col-12">
-                        <label>מדריך הנחיה</label>
-                        <input name="linkSuggestGuide" class="form-control" placeholder="" value="@Model.Linkage.SuggestGuidelinesLink"/>
-                    </div>
-                    <div class="form-group col-12">
-                        <label>תוכניה - קובץ PDF</label>
-                        <input name="linkProgram" value="@Model.Linkage.ProgramLink" class="form-control" placeholder="">
-                    </div>
-                    <div class="form-group col-12">
-                        <label>תוכניה - תמונה</label>
-                        <input name="linkProgramImage" value="@Model.Linkage.ProgramImage" class="form-control" placeholder="">
-                    </div>
-                    <div class="form-group col-2">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="form-control btn btn-success"> עדכון </button>
-                    </div>
-                </div>
+                </form>
             </div>
-        </form>
-    </div>
 
-    <div class="tab-pane container fade" id="tab-pane-sponsors">
-        <form asp-area="Management" asp-controller="Displays" asp-action="AddSponsor" method="post" class="right-to-left" style="padding: 10px;">
-            <div class="col">
-                <div class="row">
-                    <div class="form-group col-4">
-                        <label>שם</label>
-                        <input name="sponsorName" class="form-control" placeholder="אשפי החוף">
+            <div class="tab-pane container fade" id="tab-pane-sponsors">
+                <form asp-area="Management" asp-controller="Displays" asp-action="AddSponsor" method="post" class="right-to-left" style="padding: 10px;">
+                    <div class="col">
+                        <div class="row">
+                            <div class="form-group col-4">
+                                <label>שם</label>
+                                <input name="sponsorName" class="form-control" placeholder="אשפי החוף">
+                            </div>
+                            <div class="form-group col-4">
+                                <label>תמונה</label>
+                                <input name="sponsorImage" class="form-control" placeholder="https://mypicture.path">
+                            </div>
+                            <div class="form-group col-4">
+                                <label>אתר</label>
+                                <input name="sponsorUrl" class="form-control" placeholder="https://mysite.path ">
+                            </div>
+                            <div class="form-group col-2">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="form-control btn btn-success"> הוספה </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group col-4">
-                        <label>תמונה</label>
-                        <input name="sponsorImage" class="form-control" placeholder="https://mypicture.path">
-                    </div>
-                    <div class="form-group col-4">
-                        <label>אתר</label>
-                        <input name="sponsorUrl" class="form-control" placeholder="https://mysite.path ">
-                    </div>
-                    <div class="form-group col-2">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="form-control btn btn-success"> הוספה </button>
-                    </div>
-                </div>
+                </form>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td>שם / תמונה</td>
+                            <td>אתר בית</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    @foreach (var sponsor in Model.Sponsors.OrderBy(x => x.Id))
+                    {
+                        <tr>
+                            <td>
+                                <strong>@sponsor.Caption</strong>
+                                <br />
+                                <img alt="@sponsor.ImageUrl" src="@sponsor.ImageUrl" style="max-height: 150px;" />
+                            </td>
+                            <td>@sponsor.SponsorUrl</td>
+                            <td>
+                                <form asp-area="Management" asp-controller="Displays" asp-action="RemoveSponsor">
+                                    <input name="sponsorId" value="@sponsor.Id" hidden />
+                                    <button type="submit" class="btn text-danger"><i class="fa fa-fw fa-trash"></i></button>
+                                </form>
+
+                            </td>
+
+                        </tr>
+                    }
+                </table>
             </div>
-        </form>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <td>שם / תמונה</td>
-                    <td>אתר בית</td>
-                    <td></td>
-                </tr>
-            </thead>
-            @foreach (var sponsor in Model.Sponsors.OrderBy(x => x.Id))
-            {
-                <tr>
-                    <td>
-                        <strong>@sponsor.Caption</strong>
-                        <br />
-                        <img alt="@sponsor.ImageUrl" src="@sponsor.ImageUrl" style="max-height: 150px;" />
-                    </td>
-                    <td>@sponsor.SponsorUrl</td>
-                    <td>
-                        <form asp-area="Management" asp-controller="Displays" asp-action="RemoveSponsor">
-                            <input name="sponsorId" value="@sponsor.Id" hidden />
-                            <button type="submit" class="btn text-danger"><i class="fa fa-fw fa-trash"></i></button>
-                        </form>
-
-                    </td>
-
-                </tr>
-            }
-        </table>
+        </div>
     </div>
-
 </div>

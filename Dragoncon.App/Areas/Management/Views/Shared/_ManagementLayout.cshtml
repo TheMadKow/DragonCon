@@ -6,53 +6,45 @@
     <title>דרקוניקון ניהול - @ViewBag.Title</title>
 
     @await Html.PartialAsync("_PartialSharedStyles")
+
     @RenderSection("Styles", required: false)
 </head>
 <body style="">
-@await Html.PartialAsync("_PartialErrorResult")
-@await Html.PartialAsync("_PartialAntiForgery")
-    <div class="right-to-left">
-        <div class="text-right d-xs-block d-sm-block d-md-none">
-            <button id="sidebar-toggle" class="btn toggle-button" onclick="ToggleSideMenu()">
-                <div class="text-close"> <i class="fa fa-fw fa-bars"></i> אזור הניהול </div>
-                <div class="text-open"> <i class="fa fa-fw fa-times"></i> </div>
-            </button>
-        </div>
+    @await Html.PartialAsync("_PartialErrorResult")
+    @await Html.PartialAsync("_PartialAntiForgery")
 
-        <ul class="right-to-left admin-navbar bg-dark d-none d-md-block" padding-top: 0;padding-bottom: 0;>
-            <li class="d-none d-md-block">
-                <img src="/images/logos/Logo_100_BW.png" style="width: 135px;" />
-            </li>
-            <li class="admin-navbar-brand text-center" style="margin-top: -25px;">
-                <span class="admin-navbar-brand-link" style="color: white;">אזור הניהול</span>
-            </li>
-            <li class="list-divider"></li>
-            <li>
-                <a asp-area="Management" asp-controller="Dashboard" asp-action="Index">מידע כללי</a>
-            </li>
-            @if (Actor.HasSystemRole(SystemRoles.ConventionManager) ||
-            Actor.HasSystemRole(SystemRoles.ReceptionManager))
-            {
-                <li>
-                    <a asp-area="Management" asp-controller="Reception" asp-action="Manage">דלפק קבלה</a>
+    <div class="right-to-left d-flex">
+        <div>
+            <div class="text-right d-xs-block d-sm-block d-md-none">
+                <button id="sidebar-toggle" class="btn toggle-button" onclick="ToggleSideMenu()">
+                    <div class="text-close"> <i class="fa fa-fw fa-bars"></i> אזור הניהול </div>
+                    <div class="text-open"> <i class="fa fa-fw fa-times"></i> </div>
+                </button>
+            </div>
+
+            <ul class="right-to-left admin-navbar bg-dark d-none d-md-block" padding-top: 0;padding-bottom: 0;>
+                <li class="d-none d-md-block">
+                    <img src="/images/logos/Logo_100_BW.png" style="width: 135px;" />
                 </li>
-            }
-            @if (Actor.HasSystemRole(SystemRoles.ContentManager) ||
-           Actor.HasSystemRole(SystemRoles.ConventionManager) ||
-           Actor.HasSystemRole(SystemRoles.UsersManager))
-            {
+                <li class="admin-navbar-brand text-center" style="margin-top: -25px;">
+                    <span class="admin-navbar-brand-link" style="color: white;">אזור הניהול</span>
+                </li>
                 <li class="list-divider"></li>
-                @if (Actor.HasSystemRole(SystemRoles.ConventionManager) ||
-               Actor.HasSystemRole(SystemRoles.ContentManager))
+                <li>
+                    <a asp-area="Management" asp-controller="Dashboard" asp-action="Index">מידע כללי</a>
+                </li>
+                @if (Actor.HasSystemRole(SystemRoles.ConventionManager) || Actor.HasSystemRole(SystemRoles.ReceptionManager))
                 {
+                    <li>
+                        <a asp-area="Management" asp-controller="Reception" asp-action="Manage">דלפק קבלה</a>
+                    </li>
+                }
+                @if (Actor.HasSystemRole(SystemRoles.ContentManager) || Actor.HasSystemRole(SystemRoles.ConventionManager))
+                {
+                    <li class="list-divider"></li>
                     <li>
                         <a asp-area="Management" asp-controller="Participants" asp-action="Manage">ניהול - משתתפים</a>
                     </li>
-                }
-
-                @if (Actor.HasSystemRole(SystemRoles.ConventionManager) ||
-               Actor.HasSystemRole(SystemRoles.ContentManager))
-                {
                     <li>
                         <a asp-area="Management" asp-controller="Events" asp-action="Manage">ניהול - אירועים</a>
                     </li>
@@ -68,19 +60,23 @@
                         <a asp-area="Management" asp-controller="Convention" asp-action="Manage">ניהול - כנסים</a>
                     </li>
                 }
+
+                @if (Actor.HasSystemRole(SystemRoles.ContentManager) || Actor.HasSystemRole(SystemRoles.ConventionManager))
+                {
+                    <li class="list-divider"></li>
+                    <li>
+                        <a asp-area="Management" asp-controller="Statistics" asp-action="Index">סטטיסיטיקות</a>
+                    </li>
+                }
                 <li class="list-divider"></li>
                 <li>
-                    <a asp-area="Management" asp-controller="Statistics" asp-action="Index">סטטיסיטיקות</a>
+                    <a href="/"><i class="fa fa-fw fa-angle-right"></i>חזרה</a>
                 </li>
+            </ul>
+        </div>
 
-            }
-            <li class="list-divider"></li>
-            <li>
-                <a href="/"><i class="fa fa-fw fa-angle-right"></i>חזרה</a>
-            </li>
-        </ul>
-        <div class="container">
-            <div class="container-admin">
+        <div id="data-container" class="container">
+            <div class="">
                 <h4 class="Title-Text">
                     @ViewBag.Title
                     <small class="text-secondary">
@@ -121,6 +117,7 @@
         <input id="helper-tab" value="@ViewBag.HelperTab" />
     </div>
     @await Html.PartialAsync("_PartialSharedScripts")
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

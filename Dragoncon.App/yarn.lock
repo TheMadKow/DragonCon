@@ -27,11 +27,6 @@ bootstrap@4.4.1:
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.4.1.tgz#8582960eea0c5cd2bede84d8b0baf3789c3e8b01"
   integrity sha512-tbx5cHubwE6e2ZG7nqM3g/FZ5PQEDMWmMGNrCUBVRPHXTJaH7CBDdsLeu3eCh3B1tzAxTnAbtmrzvWEvT2NNEA==
 
-bootstrap@~3:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.4.1.tgz#c3a347d419e289ad11f4033e3c4132b87c081d72"
-  integrity sha512-yN5oZVmRCwe5aKwzRj6736nSmKDX7pLYwsXiCj/EYmo16hODaBiT4En5btW/jhBF/seV+XMx3aYwukYC3A49DA==
-
 chosen-js@1.8.7:
   version "1.8.7"
   resolved "https://registry.yarnpkg.com/chosen-js/-/chosen-js-1.8.7.tgz#9bfa5597f5081d602ff4ae904af9aef33265bb1d"
@@ -72,7 +67,7 @@ jquery@1.11.1:
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-1.11.1.tgz#b6ec928590112ebed69e1e49cbfd0025ccd60ddb"
   integrity sha1-tuyShZARLr7Wnh5Jy/0AJczWDds=
 
-jquery@3.4.1, "jquery@>= 1.8.3", jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.8:
+jquery@3.4.1, jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.8:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
@@ -81,14 +76,6 @@ jschr-bootstrap-modal@2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/jschr-bootstrap-modal/-/jschr-bootstrap-modal-2.2.5.tgz#d8f500a9316d169a1996c7b97a85170283f833cb"
   integrity sha1-2PUAqTFtFpoZlse5eoUXAoP4M8s=
-
-magicsuggest@2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/magicsuggest/-/magicsuggest-2.1.4.tgz#9cf1223b06cf398287fe2baf62c073a5e6b67f58"
-  integrity sha1-nPEiOwbPOYKH/iuvYsBzpea2f1g=
-  dependencies:
-    bootstrap "~3"
-    jquery ">= 1.8.3"
 
 moment@2.24.0:
   version "2.24.0"
@@ -113,6 +100,11 @@ pretty-json-string@1.0.3:
   integrity sha1-VYc2sF4STmd9nvOQSzRz38KF3WM=
   dependencies:
     jquery "1.11.1"
+
+select2@4.0.12:
+  version "4.0.12"
+  resolved "https://registry.yarnpkg.com/select2/-/select2-4.0.12.tgz#9c0492d4d06948f2bd079f6e14718a41c7eaa60e"
+  integrity sha512-mbXC05AvjCboZcRlgJqN4mlI2qmqshpRC76sKNAdxS1lPLOh2m/NTyfL6xsvGoY6eIhjaya4dbumN99MudVQ2w==
 
 sweetalert2@7.33.1:
   version "7.33.1"

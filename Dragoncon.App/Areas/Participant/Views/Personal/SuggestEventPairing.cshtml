@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "התנדבות בכנס";
+}
+
+<h4>
+    <a asp-area="Participant" asp-controller="Personal" asp-action="SuggestEvent">
+        <i class="fa fa-fw fa-chevron-circle-right"></i>
+        חזרה 
+    </a>
+</h4>
+
+<br />
+
+<div class="card card-gray-float">
+    <div class="card-body">
+        <div>
+            <iframe style="display: block;border: 0;
+                                      height: 100vh;
+                                      width: 100%;"
+                    src="@Actor.DisplayDynamics.Linkage.SuggestPairingLink">
+                טוען...
+            </iframe>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-personal")
+    </script>
+}

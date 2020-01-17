@@ -2,6 +2,10 @@
     font-family: "Open Sans Hebrew", "cursive"
 }
 
+.table-sparse {
+    line-height: 1.75;
+}
+
 .sponsor-image {
     cursor: pointer;
     background: #ffffff;

@@ -4,7 +4,7 @@
 
 <br />
 <h3>גילאים</h3>
-<a asp-area="Management" asp-controller="Personal" asp-action="CreateUpdateEventAgeRestriction">
+<a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventAgeRestriction" class="card-semibutton">
     <i class="fa fa-fw fa-plus-square"></i> הוספת קבוצת גיל
 </a>
 
@@ -23,7 +23,7 @@
                     <span>עד גיל @ageRestriction.MaxAge</span>
                 }
                 @if (ageRestriction.MaxAge.HasValue == false &&
-                    ageRestriction.MinAge.HasValue == false)
+                 ageRestriction.MinAge.HasValue == false)
                 {
                     <span class="text-info">ללא הגבלת גיל</span>
                 }
@@ -34,7 +34,7 @@
                         <i class="fa fa-fw fa-ellipsis-h"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" asp-area="Management" asp-controller="Personal"
+                        <a class="dropdown-item" asp-area="Management" asp-controller="Events"
                            asp-action="UpdateEventAgeRestriction" asp-route-restrictionId="@ageRestriction.Id.GetNumberFromId()">
                             <i class="fa fa-fw fa-edit"></i> עדכון קבוצת גיל
                         </a>
@@ -50,8 +50,8 @@
 
 <br />
 <h3>פעילויות</h3>
-<a asp-area="Management" asp-controller="Personal" asp-action="CreateUpdateEventActivity">
-    <i class="fa fa-fw fa-plus-square"></i> הוספת פעילות ושיטות
+<a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEventActivity" class="card-semibutton">
+    <i class="fa fa-fw fa-plus-square"></i> הוספת פעילות
 </a>
 @foreach (var activity in Actor.System.Activities.OrderBy(x => x.Name))
 {
@@ -64,7 +64,7 @@
                     <i class="fa fa-fw fa-ellipsis-h"></i>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" asp-area="Management" asp-controller="Personal"
+                    <a class="dropdown-item" asp-area="Management" asp-controller="Events"
                        asp-action="UpdateEventActivity" asp-route-activityId="@activity.Id.GetNumberFromId()">
                         <i class="fa fa-fw fa-edit"></i> עדכון פעילות
                     </a>

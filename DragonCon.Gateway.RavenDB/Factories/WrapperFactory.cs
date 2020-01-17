@@ -50,7 +50,7 @@ namespace DragonCon.RavenDB.Factories
             WarnIfNotLoaded(item.ActivityId);
             if (item.SubActivityId.IsNotEmptyString())
                 WarnIfNotLoaded(item.SubActivityId);
-            WarnIfNotLoaded(item.GameMasterIds);
+            WarnIfNotLoaded(item.GameHostIds);
             WarnIfNotLoaded(item.HallId);
             WarnIfNotLoaded(item.AgeId);
 
@@ -62,7 +62,7 @@ namespace DragonCon.RavenDB.Factories
                     ? _session.Load<Activity>(item.SubActivityId)
                     : Activity.General,
                 GameMasters =
-                    _session.Load<LongTermParticipant>(item.GameMasterIds)
+                    _session.Load<LongTermParticipant>(item.GameHostIds)
                         .Select(y => y.Value).ToList<IParticipant>(),
                 Hall = _session.Load<Hall>(item.HallId),
                 AgeGroup = _session.Load<AgeGroup>(item.AgeId)

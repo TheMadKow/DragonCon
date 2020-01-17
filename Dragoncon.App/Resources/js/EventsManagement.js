@@ -27,7 +27,6 @@ function ToggleEventSpecialPrice() {
 
 
 function QuickEventUpdate(jsonData) {
-    console.log(jsonData);
     var data = JSON.parse(jsonData);
     var $modal = $("#quick-event-update-modal");
     $("#quick-event-update-id").val(data.Id);

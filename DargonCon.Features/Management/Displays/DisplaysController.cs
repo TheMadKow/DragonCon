@@ -202,7 +202,8 @@ namespace DragonCon.Features.Management.Displays
             string linkProgramImage,
             string linkYad2,
             string linkVolunteer,
-            string linkSuggestGuide)
+            string linkSuggestGuide,
+            string linkSuggestPair)
         {
             var days = new DynamicLinkage
             {
@@ -210,6 +211,7 @@ namespace DragonCon.Features.Management.Displays
                 ProgramImage = linkProgramImage,
                 ProgramLink = linkProgram,
                 SuggestGuidelinesLink = linkSuggestGuide,
+                SuggestPairingLink = linkSuggestPair,
                 VolunteerLink = linkVolunteer,
                 Yad2FormLink = linkYad2,
                 ConventionId = Actor.ManagedConvention.ConventionId

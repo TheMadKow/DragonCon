@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using DragonCon.Features.Convention.Home;
 using DragonCon.Features.Participant.Account;
 using DragonCon.Features.Participant.Personal;
 using DragonCon.Logical;
@@ -12,9 +11,8 @@ using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.RavenDB.Factories;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Razor.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using NodaTime;
 using Raven.Client.Documents;
 
 namespace DragonCon.RavenDB.Gateways.Participants
@@ -30,46 +28,78 @@ namespace DragonCon.RavenDB.Gateways.Participants
 
         public Answer AddSuggestedEvent(SuggestEventViewModel viewmodel)
         {
-            throw new NotImplementedException();
-            //try
-            //{
-            //    var lazyAge = Session.Advanced.Lazily.Load<AgeGroup>(viewmodel.AgeRestrictionId);
-            //    var conEvent = new Event()
-            //    {
+            try
+            {
+                var conEvent = new Event
+                {
+                    Status = EventStatus.Pending,
+                    Name = viewmodel.Name,
+                    Description = viewmodel.Description,
+                    SpecialRequests = viewmodel.Requests ?? string.Empty,
+                    ConventionDayId = viewmodel.ConventionDayId,
+                    ConventionId = Actor.DisplayConvention.ConventionId,
+                    AgeId = viewmodel.AgeRestrictionId,
+                    ActivityId = viewmodel.ActivityId,
+                    SubActivityId = viewmodel.SubActivityId,
+                    Size = new SizeRestriction()
+                    {
+                        Max = viewmodel.Max,
+                        Min = viewmodel.Min
+                    },
+                    GameHostIds = new List<string> { Actor.Me.Id },
+                    HallId = string.Empty,
+                    HallTable = null,
+                };
 
-            //        Name = viewmodel.Name,
-            //        Description = viewmodel.Description,
-            //        SpecialRequests = viewmodel.Requests,
-            //        ActivityId = viewmodel.ActivityId,
-            //        //TimeSlot = new TimeSlot
-            //        //{
-            //        //    From = viewmodel.StartTime,
-            //        //    To = viewmodel.StartTime.Plus(viewmodel.Period)
-            //        //},
-            //        //Size = viewmodel.SizeRestrictions,
-            //        GameMasterIds = new List<string> { Actor.Me.Id },
-            //        Status = EventStatus.Pending,
-            //        HallId = string.Empty,
-            //        HallTable = null,
-            //    };
+                var timeSplit = viewmodel.StartTime.Split(':');
+                var hours = int.Parse(timeSplit[0]);
+                var minutes = int.Parse(timeSplit[1]);
+                var num = (int)viewmodel.Duration / 1;
+                var denum = (int)viewmodel.Duration % 1;
 
-            //    Session.Advanced.Eagerly.ExecuteAllPendingLazyOperations();
-            //    conEvent.AgeId = lazyAge.Value.Id;
+                var startTime = new LocalTime(hours, minutes);
+                var endTime = startTime.PlusHours(num).PlusMinutes(denum);
 
-            //    Session.Store(conEvent);
-            //    Session.SaveChanges();
+                var tempTimeSlot = new TimeSlot
+                {
+                    From = startTime,
+                    To = endTime,
+                    Duration = viewmodel.Duration
+                };
+                conEvent.TimeSlot = tempTimeSlot;
 
-            //    return new Answer(AnswerType.Success);
+                Session.Store(conEvent);
 
-            //}
-            //catch (Exception e)
-            //{
-            //    return new Answer(AnswerType.Error)
-            //    {
-            //        InternalException = e
-            //    };
-            //    // TODO maybe log
-            //}
+                var engagement = Session.Query<UserEngagement>().FirstOrDefault(x =>
+                    x.ConventionId == Actor.DisplayConvention.ConventionId &&
+                    x.ParticipantId == Actor.Me.Id);
+
+                if (engagement == null)
+                {
+                    engagement = new UserEngagement
+                    {
+                        CreatorId = Actor.Me.Id,
+                        ParticipantId = Actor.Me.Id,
+                        ConventionId = Actor.DisplayConvention.ConventionId,
+                        ConventionStartDate = Actor.DisplayConvention.Days
+                            .Min(x => x.Date)
+                            .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+
+                        IsLongTerm = true,
+                    };
+                    Session.Store(engagement);
+                }
+
+                engagement.SuggestedEventIds.Add(conEvent.Id);
+                Session.Store(engagement);
+
+                Session.SaveChanges();
+                return Answer.Success;
+            }
+            catch (Exception e)
+            {
+                return Answer.Error(e.Message);
+            }
         }
 
         public PersonalViewModel BuildPersonalViewModel()
@@ -109,7 +139,7 @@ namespace DragonCon.RavenDB.Gateways.Participants
                 Session.SaveChanges();
             }
 
-            var allEvents = myEngagement.EventIds;
+            var allEvents = new List<string>(myEngagement.EventIds);
             allEvents.AddRange(myEngagement.SuggestedEventIds);
 
             var allParticipants = new List<string>();

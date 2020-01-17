@@ -7,11 +7,11 @@
 
 <div class="card card-gray-float right-to-left">
     <div class="text-right" style="padding:15px;">
-        <a asp-area="Management" asp-controller="Convention" asp-action="CreateConvention">
+        <a asp-area="Management" asp-controller="Convention" asp-action="CreateConvention" class="card-semibutton">
             <i class="fa fa-fw fa-plus-square"></i> הוספת כנס חדש
         </a>
     </div>
-    <table class="table table-hover table-stripped text-right">
+    <table class="table table-hover table-stripped table-sparse text-right">
         <thead>
             <tr class="text-bold">
                 <td class="tw-1">מצב</td>
@@ -32,7 +32,7 @@
                             </span>
                         }
                         @if (Actor.System.DisplayConventionId == con.Inner.Id &&
-                           Actor.System.ManagersConventionId == con.Inner.Id)
+                        Actor.System.ManagersConventionId == con.Inner.Id)
                         {
                             <br />
                         }
@@ -51,19 +51,19 @@
                         <well>
                             @if (con.Inner.Settings.AllowEventsSuggestions)
                             {
-                                <span>אפשר הגשת אירועים</span>
+                                <span><i class="fa fa-fw fa-check"></i> אפשר הגשת אירועים</span>
                             }
                             @if (con.Inner.Settings.AllowEventsRegistration)
                             {
-                                <span>אפשר רישום לאירועים</span>
+                                <span><i class="fa fa-fw fa-check"></i> אפשר רישום לאירועים</span>
                             }
                             @if (con.Inner.Settings.AllowPayments)
                             {
-                                <span>אפשר רכישת כרטיס</span>
+                                <span><i class="fa fa-fw fa-check"></i> אפשר רכישת כרטיס</span>
                             }
                             @if (con.Inner.Settings.AllowManagementTests)
                             {
-                                <span>אפשר בדיקות מנהלים</span>
+                                <span><i class="fa fa-fw fa-check"></i> אפשר בדיקות מנהלים</span>
                             }
                         </well>
                     </td>

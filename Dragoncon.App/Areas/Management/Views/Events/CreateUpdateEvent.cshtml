@@ -15,186 +15,193 @@
 
 
 @section Subheader {
-    <a class="text-info" asp-area="Management" asp-controller="Personal" asp-action="Manage"><i class="fa fa-fw fa-chevron-circle-right"></i> חזרה לניהול אירועים</a>
+    <a class="text-info" asp-area="Management" asp-controller="Events" asp-action="Manage"><i class="fa fa-fw fa-chevron-circle-right"></i> חזרה לניהול אירועים</a>
 }
 
-<form asp-area="Management" asp-controller="Personal" asp-action="CreateUpdateEvent" method="post" class="right-to-left" style="padding: 10px;">
-    <input asp-for="Id" hidden />
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-                <label>שם האירוע</label>
-                <input asp-for="Name" class="form-control" placeholder="שם האירוע ">
-            </div>
-        </div>
-        <div class="col-2">
-            <div class="form-group">
-                <label>סטטוס</label>
-                <select class="form-control chosen-select" asp-for="Status" data-placeholder="סטטוס אירוע">
-                    @foreach (var type in Enums.AsSelectListItem<EventStatus>())
-                    {
-                        <option value="@type.Value">@type.Text</option>
-                    }
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-                <label>תיאור האירוע</label>
-                <textarea class="form-control" rows="5"
-                          asp-for="Description" placeholder="תיאור האירוע"></textarea>
-            </div>
-        </div>
-    </div>
-    @*<div class="row">
-        <div class="col">
-            <div class="form-group">
-                <label>תגיות</label>
-                <input asp-for="Tags" class="form-control" placeholder="תגיות אירוע">
-            </div>
-        </div>
-    </div>*@
-
-    <br />
-
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-                <label>פעילות</label>
-                <select class="form-control chosen-select" asp-for="ActivitySelector"
-                        asp-items="Actor.ManagedDropDowns.Activities()">
-                    <option value="" disabled selected>בחירת אפשרות</option>
-                </select>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-                <label>קבוצת גיל</label>
-                <select class="form-control chosen-select" asp-for="AgeId"
-                        asp-items="Actor.ManagedDropDowns.BuildAgeGroups()">
-                    <option value="" disabled selected>בחירת אפשרות</option>
-                </select>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <label>מספר שחקנים מינימלי</label>
-                <input type="number" min="1" max="99" asp-for="Size.Min" placeholder="ריק - ללא הגבלה" class="form-control">
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <label>מספר שחקנים מקסימלי</label>
-                <input type="number" min="1" max="99" asp-for="Size.Max" placeholder="ריק - ללא הגבלה" class="form-control">
-            </div>
-        </div>
-    </div>
-
-    <br />
-
-    <div class="row">
-        <div class="col-5">
-            <div class="form-group">
-                <label>מועד</label>
-                <select id="event-start-time" class="form-control chosen-select" asp-for="StartTimeSelector"
-                        asp-items="Actor.ManagedDropDowns.BuildDaysTimes()" onchange="ChangedEventDay(this)">
-                    <option value="" disabled selected>בחירת מועד</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="form-group">
-                <label>משך</label>
-                <div id="event-duration">
-                    <select class="form-control chosen-select" asp-for="Duration">
-                        <option value="" disabled selected>יש לבחור שעת התחלה</option>
-                    </select>
+<div class="card card-gray-float">
+    <div class="card-body">
+        <form asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEvent" 
+              method="post" class="right-to-left card-form" style="padding: 10px;">
+            <input asp-for="Id" hidden />
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>שם האירוע</label>
+                        <input asp-for="Name" class="form-control" placeholder="שם האירוע ">
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label>סטטוס</label>
+                        <select class="form-control chosen-select" asp-for="Status" data-placeholder="סטטוס אירוע">
+                            @foreach (var type in Enums.AsSelectListItem<EventStatus>())
+                            {
+                                <option value="@type.Value">@type.Text</option>
+                            }
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-4">
-            <div class="form-group">
-                <label>אולם ושולחן</label>
-                <select class="form-control chosen-select" asp-for="HallTableSelector"
-                        asp-items="Actor.ManagedDropDowns.BuildHalls()">
-                    <option value="" disabled selected>בחירת אולם שולחן</option>
-                </select>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>תיאור האירוע</label>
+                        <textarea class="form-control" rows="5"
+                                  asp-for="Description" placeholder="תיאור האירוע"></textarea>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-                <label>מנחים</label>
-                <input asp-for="GameMasterIds" class="form-control" placeholder="שמות המנחים">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>פעילות</label>
+                        <select class="form-control chosen-select" asp-for="ActivitySelector"
+                                asp-items="Actor.ManagedDropDowns.Activities()">
+                            <option value="" disabled selected>בחירת אפשרות</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <br />
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-                <label>בקשות מיוחדות</label>
-                <textarea class="form-control" asp-for="SpecialRequests" placeholder="בקשות מיוחד מהכנס - ציוד, מיקום וכיוצא בזאת"></textarea>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>קבוצת גיל</label>
+                        <select class="form-control chosen-select" asp-for="AgeId"
+                                asp-items="Actor.ManagedDropDowns.BuildAgeGroups()">
+                            <option value="" disabled selected>בחירת אפשרות</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>מספר שחקנים מינימלי</label>
+                        <input type="number" min="1" max="99" asp-for="MinSize" placeholder="לפחות 1" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>מספר שחקנים מקסימלי</label>
+                        <input type="number" min="1" max="99" asp-for="MaxSize" placeholder="עד כמה שחקנים?" class="form-control">
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="row" style="padding-bottom: 5px;">
-        <div class="col-3">
-            <div class="checkbox toggle-padding text-right">
-                <label class="label-control">
-                    <input class="bootstrap-toggle" asp-for="IsSpecialPrice"
-                           onchange="ToggleEventSpecialPrice()"
-                           data-toggle="toggle"
-                           type="checkbox"
-                           data-on="<i class='fa fa-fw fa-check'></i>"
-                           data-off="<i class='fa fa-fw fa-times'></i>"
-                           data-offstyle="secondary"
-                           data-onstyle="primary"
-                           data-width="50">
-                </label>
-                &nbsp;&nbsp;מחיר מיוחד
-            </div>
-        </div>
-        <div class="col-3">
-            @{
-                var isSpecialPrice = Model.IsSpecialPrice;
-                if (isSpecialPrice == false)
-                {
-                    <div class="col input-group">
-                        <input id="is-special-price" type="number" min="0" class="form-control" asp-for="SpecialPrice" disabled />
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="">@Html.Raw(@DragonConstants.NIS_SYMBOL)</span>
+
+            <br />
+
+            <div class="row">
+                <div class="col-5">
+                    <div class="form-group">
+                        <label>מועד</label>
+                        <select id="event-start-time" class="form-control chosen-select" asp-for="StartTimeSelector"
+                                asp-items="Actor.ManagedDropDowns.BuildDaysTimes()" onchange="ChangedEventDay(this)">
+                            <option value="" disabled selected>בחירת מועד</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>משך</label>
+                        <div id="event-duration">
+                            <select class="form-control chosen-select" asp-for="Duration">
+                                <option value="" disabled selected>יש לבחור שעת התחלה</option>
+                            </select>
                         </div>
                     </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>אולם ושולחן</label>
+                        <select class="form-control chosen-select" asp-for="HallTableSelector"
+                                asp-items="Actor.ManagedDropDowns.BuildHalls()">
+                            <option value="" disabled selected>בחירת אולם שולחן</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-                }
-                else
-                {
-                    <div class="col input-group">
-                        <input id="is-special-price" type="number" min="0" asp-for="SpecialPrice" class="form-control" />
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="">@Html.Raw(@DragonConstants.NIS_SYMBOL)</span>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>מנחים</label>
+                        <select class="select2-hosts form-control" name="HostIds[]" multiple="multiple">
+                            @foreach (var host in Model.HostsSelected)
+                            {
+                                <option value="@host.Id" selected>@host.Text (@host.Brackets)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>בקשות מיוחדות</label>
+                        <textarea class="form-control" asp-for="SpecialRequests" placeholder="בקשות מיוחד מהכנס - ציוד, מיקום וכיוצא בזאת"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-bottom: 5px;">
+                <div class="col">
+                    <label>תוספת מחיר או אירוע חינמי</label>
+                    <div class="form-group row">
+                        <div class="col-4">
+                            @{
+                                var isFree = Model.IsFree;
+                                if (isFree)
+                                {
+                                    <div class="input-group">
+                                        <input id="is-special-price" type="number" min="0" class="form-control" asp-for="ExtraCharge" disabled />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" style="">@Html.Raw(@DragonConstants.NIS_SYMBOL)</span>
+                                        </div>
+                                    </div>
+
+                                }
+                                else
+                                {
+                                    <div class="input-group">
+                                        <input id="is-special-price" type="number" min="0" asp-for="ExtraCharge" class="form-control" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" style="">@Html.Raw(@DragonConstants.NIS_SYMBOL)</span>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                        <div class="col-4">
+                            <div class="checkbox toggle-padding text-right">
+                                <label class="label-control">
+                                    <input class="bootstrap-toggle" asp-for="IsFree"
+                                           onchange="ToggleEventSpecialPrice()"
+                                           data-toggle="toggle"
+                                           type="checkbox"
+                                           data-on="<i class='fa fa-fw fa-check'></i>"
+                                           data-off="<i class='fa fa-fw fa-times'></i>"
+                                           data-offstyle="secondary"
+                                           data-onstyle="success"
+                                           data-width="70"
+                                           data-height="35">
+                                </label>
+                                &nbsp;&nbsp;אירוע חינמי
+                            </div>
                         </div>
                     </div>
-                }
-            }
+                </div>
+            </div>
+            <br />
+            <div class="btn-save-container">
+                <button type="submit" class="btn btn-primary btn-save">שמירת אירוע </button>
+            </div>
 
-        </div>
-    </div>
-    <br />
-    <div class="btn-save-container">
-        <button type="submit" class="btn btn-primary btn-save">שמירת אירוע </button>
-    </div>
+        </form>
 
-</form>
+    </div>
+</div>
 
 
 <div hidden>
@@ -211,9 +218,32 @@
 
 @if (Model.StartTimeSelector.IsNotEmptyString())
 {
-    @section Scripts  {
+    @section Scripts {
         <script>
             SetupEventDay();
+            $(document).ready(function () {
+                $('.select2-hosts').select2({
+                    ajax: {
+                        delay: 500,
+                        url: '/Management/Events/GetParticipants',
+                        dataType: 'json'
+                    },
+                    placeholder: 'בחירת מנחים',
+                    templateResult: formatHost,
+                    dir: "rtl",
+
+                });
+            });
+
+
+            function formatHost(host) {
+                if (!host.id) {
+                    return host.text;
+                }
+
+                return $('<span>' + host.text + ' (' + host.brackets + ') </span>');
+            };
+
         </script>
     }
 }

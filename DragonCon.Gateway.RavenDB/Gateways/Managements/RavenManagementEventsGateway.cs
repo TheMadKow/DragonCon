@@ -198,31 +198,36 @@ namespace DragonCon.RavenDB.Gateways.Managements
             if (eventId.IsNotEmptyString())
             {
                 eventId = eventId.FixRavenId("Events");
-                var existing = Session.Load<Event>(eventId);
+                var existing = Session
+                    .Include<Event>(x => x.GameHostIds)
+                    .Load<Event>(eventId);
                 viewModel.Duration = existing.TimeSlot?.Duration;
                 viewModel.Name = existing.Name;
-                viewModel.GameMasterIds = existing.GameMasterIds;
                 viewModel.SpecialRequests = existing.SpecialRequests;
                 viewModel.Status = existing.Status;
-                viewModel.Tags = existing.Tags;
                 viewModel.AgeId = existing.AgeId;
-                viewModel.Size = existing.Size;
+                viewModel.MinSize = existing.Size.Min;
+                viewModel.MaxSize = existing.Size.Max;
                 viewModel.Description = existing.Description;
                 viewModel.Id = existing.Id;
-                viewModel.IsSpecialPrice = existing.IsSpecialPrice;
-                viewModel.SpecialPrice = existing.SpecialPrice;
+                viewModel.ExtraCharge = existing.ExtraCharge;
+                viewModel.IsFree = existing.IsFree;
                 viewModel.HallTableSelector = $"{existing.HallId},{existing.HallTable}";
                 viewModel.ActivitySelector = $"{existing.ActivityId},{existing.SubActivityId}";
                 viewModel.StartTimeSelector = $"{existing.ConventionDayId},{existing.TimeSlot?.From.ToString("HH:mm", CultureInfo.InvariantCulture)}";
+
+                var hosts = Session.Load<LongTermParticipant>(existing.GameHostIds);
+                viewModel.HostsSelected = hosts.Values
+                    .Where(x => x != null)
+                    .Select(x => new Select2Option()
+                    {
+                        Id = x.Id,
+                        Text = x.FullName,
+                        Brackets = x.Email
+                    }).ToList();
             }
             else
             {
-                if (viewModel.GameMasterIds == null)
-                    viewModel.GameMasterIds = new List<string>();
-                if (viewModel.Size == null)
-                    viewModel.Size = new SizeRestriction();
-                if (viewModel.Tags == null)
-                    viewModel.Tags = new List<string>();
                 viewModel.Status = EventStatus.Pending;
             }
 
@@ -248,33 +253,41 @@ namespace DragonCon.RavenDB.Gateways.Managements
             }
 
             model.UpdatedOn = SystemClock.Instance.GetCurrentInstant();
-            model.IsSpecialPrice = viewmodel.IsSpecialPrice;
-            model.SpecialPrice = viewmodel.SpecialPrice;
+            model.IsFree = viewmodel.IsFree;
+            model.ExtraCharge = viewmodel.ExtraCharge;
             model.Name = viewmodel.Name;
             model.Description = viewmodel.Description;
             model.ConventionDayId = viewmodel.ConventionDayId;
+            model.ConventionId = Actor.ManagedConvention.ConventionId;
             model.Status = viewmodel.Status;
-            model.GameMasterIds = viewmodel.GameMasterIds;
-            model.Size = viewmodel.Size;
+            model.GameHostIds = viewmodel.HostIds;
+            model.Size = new SizeRestriction()
+            {
+                Max = viewmodel.MaxSize,
+                Min = viewmodel.MinSize
+            };
             model.AgeId = viewmodel.AgeId;
-            model.Tags = viewmodel.Tags;
             model.SpecialRequests = viewmodel.SpecialRequests;
             model.ActivityId = viewmodel.ActivityId;
             model.SubActivityId = viewmodel.SubActivityId;
-            model.HallId = viewmodel.HallId;
-            model.HallTable = int.Parse(viewmodel.HallTable);
-            
+
+            if (viewmodel.HallTableSelector != null)
+            {
+                model.HallId = viewmodel.HallId;
+                model.HallTable = int.Parse(viewmodel.HallTable);
+            }
+
             if (viewmodel.StartTimeSelector.IsNotEmptyString() && viewmodel.Duration.HasValue)
             {
                 var timeSplit = viewmodel.StartTime.Split(':');
                 var hours = int.Parse(timeSplit[0]);
                 var minutes = int.Parse(timeSplit[1]);
-                var num = (int) viewmodel.Duration.Value / 1;
-                var denum = (int) viewmodel.Duration.Value % 1;
-                
+                var num = (int)viewmodel.Duration.Value / 1;
+                var denum = (int)viewmodel.Duration.Value % 1;
+
                 var startTime = new LocalTime(hours, minutes);
                 var endTime = startTime.PlusHours(num).PlusMinutes(denum);
-                
+
                 var tempTimeSlot = new TimeSlot
                 {
                     From = startTime,
@@ -392,9 +405,9 @@ namespace DragonCon.RavenDB.Gateways.Managements
                     var value1AsJson = value1.AsJson();
                     var value2AsJson = value2.AsJson();
 
-                    if ((value1 is null && value2 is {}) ||
-                        (value1 is {} && value2 is null) ||
-                        (value1 is {} && value2 is {} && value1AsJson != value2AsJson))
+                    if ((value1 is null && value2 is { }) ||
+                        (value1 is { } && value2 is null) ||
+                        (value1 is { } && value2 is { } && value1AsJson != value2AsJson))
                     {
 
                         result.Add(new UserAction
@@ -424,29 +437,29 @@ namespace DragonCon.RavenDB.Gateways.Managements
             {
                 CreatedOn = SystemClock.Instance.GetCurrentInstant(),
                 ConventionId = Actor.ManagedConvention.ConventionId,
-                IsSpecialPrice = viewmodel.IsSpecialPrice,
-                SpecialPrice = viewmodel.SpecialPrice,
-                Name = viewmodel.Name,
+                //IsSpecialPrice = viewmodel.IsSpecialPrice,
+                //SpecialPrice = viewmodel.SpecialPrice,
+                //Name = viewmodel.Name,
                 Description = viewmodel.Description,
                 ConventionDayId = viewmodel.ConventionDayId,
                 Status = viewmodel.Status,
-                GameMasterIds = viewmodel.GameMasterIds,
-                Size = viewmodel.Size,
-                AgeId = viewmodel.AgeId,
-                Tags = viewmodel.Tags,
+                //GameHostIds = viewmodel.GameMasterIds,
+                //Size = viewmodel.Size,
+                //AgeId = viewmodel.AgeId,
+                //Tags = viewmodel.Tags,
                 SpecialRequests = viewmodel.SpecialRequests
             };
 
             if (viewmodel.ActivitySelector.IsNotEmptyString())
             {
-                var activity = viewmodel.ActivitySelector.Split(new[] {','}, StringSplitOptions.None);
+                var activity = viewmodel.ActivitySelector.Split(new[] { ',' }, StringSplitOptions.None);
                 model.ActivityId = activity[0];
                 model.SubActivityId = activity[1];
             }
 
             if (viewmodel.HallTableSelector.IsNotEmptyString())
             {
-                var hall = viewmodel.HallTableSelector.Split(new[] {','}, StringSplitOptions.None);
+                var hall = viewmodel.HallTableSelector.Split(new[] { ',' }, StringSplitOptions.None);
                 model.HallId = hall[0];
                 model.HallTable = int.Parse(hall[1]);
             }
@@ -459,13 +472,13 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 var timeSplit = time.Split(':');
                 var hours = int.Parse(timeSplit[0]);
                 var minutes = int.Parse(timeSplit[1]);
-                var num = (int) viewmodel.Duration.Value / 1;
-                var denum = (int) viewmodel.Duration.Value % 1;
-                
+                var num = (int)viewmodel.Duration.Value / 1;
+                var denum = (int)viewmodel.Duration.Value % 1;
+
                 model.ConventionDayId = day;
                 var startTime = new LocalTime(hours, minutes);
                 var endTime = startTime.PlusHours(num).PlusMinutes(denum);
-                
+
                 model.TimeSlot = new TimeSlot
                 {
                     From = startTime,
@@ -493,8 +506,8 @@ namespace DragonCon.RavenDB.Gateways.Managements
 
         private static Answer ValidateEventFields(EventCreateUpdateViewModel viewmodel)
         {
-            if (viewmodel.IsSpecialPrice && viewmodel.SpecialPrice == null)
-                return Answer.Error("אי אפשר להגדיר מחיר מיוחד ריק");
+            if (viewmodel.IsFree && viewmodel.ExtraCharge == null)
+                return Answer.Error("אי אפשר להגדיר תוספת מחיר לאירוע חינם");
             if (viewmodel.Name.IsEmptyString())
                 return Answer.Error("אי אפשר להגדיר אירוע ללא שם");
             if (viewmodel.Status == EventStatus.Approved)
@@ -508,7 +521,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 if (viewmodel.StartTimeSelector.IsNotEmptyString() || viewmodel.Duration.HasValue == false ||
                     viewmodel.Duration <= 0)
                     return Answer.Error("אי אפשר לאשר אירוע ללא מסגרת זמן");
-                if (viewmodel.GameMasterIds.Any() == false)
+                if (viewmodel.HostIds.Any() == false)
                     return Answer.Error("אי אפשר לאשר אירוע ללא הנחיה");
             }
 
@@ -554,14 +567,14 @@ namespace DragonCon.RavenDB.Gateways.Managements
             var tempEvents = Session.Query<Event>()
                 .Statistics(out var stats)
                 .Include(x => x.ConventionDayId)
-                .Include(x => x.GameMasterIds)
+                .Include(x => x.GameHostIds)
                 .Include(x => x.HallId)
                 .Include(x => x.ActivityId)
                 .Include(x => x.SubActivityId)
                 .Include(x => x.AgeId)
                 .Where(x => x.ConventionId == Actor.ManagedConvention.ConventionId);
 
-            if (filters is {})
+            if (filters is { })
             {
                 if (filters.AgeGroup.IsNotEmptyString())
                 {
@@ -625,11 +638,22 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 .Where(x => x.DocumentId == eventId)
                 .OrderByDescending(x => x.TimeStamp)
                 .ToList();
- 
+
             return new EventHistoryViewModel()
             {
                 Actions = actions
             };
+        }
+
+        public List<LongTermParticipant> SearchParticipants(string query)
+        {
+            var anyLongTermengaged = Session.Query<Participants_BySearchQuery.Result, Participants_BySearchQuery>()
+                .Include(x => x.ParticipantId)
+                .Where(x => x.IsLongTerm)
+                .Search(x => x.SearchText, query)
+                .ToList();
+
+            return Session.Load<LongTermParticipant>(anyLongTermengaged.Select(x => x.ParticipantId)).Values.ToList();
         }
     }
 }

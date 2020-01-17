@@ -124,6 +124,14 @@
     padding-right: 10px;
 }
 
+.card .nav-item {
+    font-size: 1.25rem;
+}
+
+.card .card-semibutton {
+    font-size: 1.25rem;
+}
+
 .card.card-gray-float {
     border: none;
     -ms-border-radius: 0;

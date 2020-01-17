@@ -21,7 +21,7 @@ namespace DragonCon.Features.Management.Events
             {"ConventionDayId",  "יום אירוע"},
             {"ActivityId",  "סוג פעילות"},
             {"SubActivityId",  "תת-סוג פעילות"},
-            {"GameMasterIds",  "מנחים"},
+            {"GameHostIds",  "מנחים"},
             {"AgeId",  "קבוצת גיל"},
             {"Status",  "סטטוס"},
             {"TimeSlot",  "התחלה ומשך"},

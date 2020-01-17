@@ -1,0 +1,38 @@
+﻿@using DragonCon.Modeling.Helpers
+@using DragonCon.Modeling.Models.Events
+@model DragonCon.Features.Participant.Personal.SuggestEventViewModel
+@{
+    ViewBag.Title = "הגשת אירוע";
+}
+
+@await Html.PartialAsync("_PartialBack")
+
+<div class="card card-gray-float">
+    <div class="card-form">
+        <h1 class="card-title text-bold">
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            &nbsp;
+            תודה על ההגשה!
+        </h1>
+        <ul class="fa-ul card-list">
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                מנהלי התוכן של דרקוניקון יעברו על ההגשה שלכם, ויצרו איתכם קשר במידה ותהיינה שאלות נוספות.
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                תמיד תוכלו לראות באזור האישי שלכם את מצב ההגשה!
+            </li>
+            <li>
+                @await Html.PartialAsync("_PartialBulletin")
+                אל תהססו לפנות אלינו בכל שאלה!
+            </li>
+        </ul>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        SetActiveMenu("nav-personal")
+    </script>
+}

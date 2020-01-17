@@ -14,16 +14,15 @@ namespace DragonCon.Modeling.Models.Events
         public string ActivityId { get; set; }
         public string SubActivityId { get;set; }
 
-        public List<string> GameMasterIds { get; set; }
+        public List<string> GameHostIds { get; set; } = new List<string>();
 
         public string AgeId { get; set; }
         public EventStatus Status { get; set; }
         public TimeSlot TimeSlot { get;set; }
-        public bool IsSpecialPrice { get; set; }
-        public double? SpecialPrice { get; set; }
+        public bool IsFree { get; set; }
+        public double? ExtraCharge { get; set; }
         public SizeRestriction Size { get;set; }
 
-        public List<string> Tags { get;set; }
         public string HallId { get; set; }
         public int? HallTable { get; set; }
         

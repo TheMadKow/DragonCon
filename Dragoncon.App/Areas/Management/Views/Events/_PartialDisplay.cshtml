@@ -5,14 +5,14 @@
 @model DragonCon.Features.Management.Events.EventsManagementViewModel
 
 <div class="text-right" style="padding: 15px;">
-    <a asp-area="Management" asp-controller="Personal" asp-action="CreateUpdateEvent">
-        <i class="fa fa-fw fa-plus-square"></i> הוספת אירוע
+    <a asp-area="Management" asp-controller="Events" asp-action="CreateUpdateEvent" class="card-semibutton">
+            <i class="fa fa-fw fa-plus-square"></i> הוספת אירוע
     </a>
 </div>
 
 <div class="filter-container">
     <strong>חיפוש חופשי</strong>
-    <form asp-area="Management" asp-controller="Personal" asp-action="ManageSearch">
+    <form asp-area="Management" asp-controller="Events" asp-action="ManageSearch">
         <div class="row">
             <div class="col-10">
                 <input name="searchWords" class="form-control" placeholder="חיפוש לפי שם אירוע או שם מנחה" />
@@ -25,7 +25,7 @@
 </div>
 
 <div class="filter-container">
-    <form asp-area="Management" asp-controller="Personal" asp-action="Manage">
+    <form asp-area="Management" asp-controller="Events" asp-action="Manage">
         <strong>סינון לפי</strong>
         <br />
 
@@ -97,7 +97,7 @@
 
             <div class="col-3">
                 <button class="btn btn-filter btn-info" type="submit"><i class="fa fa-fw fa-filter"></i> סינון </button>
-                <a class="btn btn-danger" asp-area="Management" asp-controller="Personal" asp-action="Manage">
+                <a class="btn btn-danger" asp-area="Management" asp-controller="Events" asp-action="Manage">
                     <i class="fa fa-fw fa-times"></i>
                     איפוס
 
@@ -106,53 +106,48 @@
         </div>
     </form>
 </div>
-<table id="accordion" class="table table-couple-striped text-right">
+<table id="accordion" class="table table-couple-striped table-sparse text-right">
     <tbody>
         @foreach (var evnt in Model.Events.OrderByDescending(x => x.Inner.Name))
         {
             var statusColor = "";
             switch (evnt.Inner.Status)
             {
-                case EventStatus.Approved:
-                    statusColor = "text-success";
-                    break;
                 case EventStatus.Pending:
-                    statusColor = "text-info";
+                    statusColor = "dragon-organge-color  text-bold";
                     break;
                 case EventStatus.Canceled:
                 case EventStatus.Declined:
-                    statusColor = "text-danger";
+                    statusColor = "text-danger text-bold";
                     break;
             }
 
-
-            <tr>
-                <td>
+            <tr class="row">
+                <td class="tw-4">
                     <a class="text-black" data-toggle="collapse" href="#extra-data-@evnt.Inner.Id.GetNumberFromId()" title="הצגת פרטים מלאים">
-                        <strong>@evnt.Inner.Name</strong><i class="fa fa-fw fa-caret-down"></i>
+                        <strong>@evnt.Inner.Name</strong>&nbsp;<i class="fa fa-fw fa-caret-down"></i>
                     </a>
                     <br />
 
-
                     @if (evnt.Activity == null)
                     {
-                        <span class="text-danger">חסר סוג פעילות</span>
+                        <strong class="text-danger">חסר סוג פעילות</strong>
                     }
                     else
                     {
-                        <span class="text-primary text-light-bold">@evnt.Activity?.Name</span>
+                        <strong class="text-primary">@evnt.Activity?.Name</strong>
                     }
 
                     @if (evnt.SubActivity != null)
                     {
-                        <span class="text-light-bold"> - @evnt.SubActivity?.Name</span>
+                        <strong> - @evnt.SubActivity?.Name</strong>
                     }
 
-
-
                     <br />
+
                     @if (evnt.GameMasters.Any())
                     {
+                        <strong>הנחיה: </strong>
                         @foreach (var master in evnt.GameMasters)
                         {
                             @if (master == null)
@@ -162,13 +157,13 @@
                             }
                             else
                             {
-                                <strong class="text-secondary">@master?.FullName</strong>
+                                <span>@master?.FullName</span>
                             }
                         }
                     }
                     else
                     {
-                        <span class="text-danger">חסרה הנחיה</span>
+                        <strong class="text-danger">חסרה הנחיה</strong>
                     }
 
                     @if (evnt.Inner.SpecialRequests.IsNotEmptyString())
@@ -178,7 +173,7 @@
 
                     }
                 </td>
-                <td class="tw-3">
+                <td class="tw-4">
                     <strong>@evnt.Day?.GetDescription()</strong>
                     @if (evnt.Activity == null)
                     {
@@ -210,66 +205,74 @@
                         </span>
                     }
                 </td>
-                <td>
-                    <strong class="@statusColor">@evnt.Inner.Status.ToTextual()</strong>
+                <td class="tw-1">
+                    <span class="@statusColor">@evnt.Inner.Status.ToTextual()</span>
                 </td>
-                <td>
-                    <div class="dropdown pull-left">
-                        <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm" title="אפשרויות נוספות">
-                            <i class="fa fa-fw fa-ellipsis-h"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-
-                            <a class="dropdown-item" asp-area="Management" asp-controller="Personal"
-                               asp-action="CreateUpdateEvent"
-                               asp-route-eventId="@evnt.Inner.Id.GetNumberFromId()">
-                                <i class="fa fa-fw fa-edit"></i> עדכון
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" onclick="ViewEventHistory('@evnt.Inner.Id')">
-                                <i class="fa fa-fw fa-history"></i> היסטוריה
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" asp-area="Management" asp-controller="Personal" aria-checkedasp-action="CloneEvent">
-                                <i class="fa fa-fw fa-clone"></i> שכפול אירוע
-                            </a>
-                            @if (evnt.GameMasters.Any(x => x != null))
-                            {
-                                <div class="dropdown-divider"></div>
-                                <div class="text-center">
-                                    <a>עריכת מנחים</a>
-                                </div>
-                            }
-                            @foreach (var gm in evnt.GameMasters)
-                            {
-                                if (gm == null)
+                <td class="tw-1">
+                    <div class="row">
+                        <div class="col-5">
+                            @{
+                                var quickUpdate = new
                                 {
-                                    continue;
-                                }
-
-                                <a class="dropdown-item" asp-area="Management" asp-controller="Personal"
-                                   asp-action="UpdateEventAgeRestriction">
-                                    <i class="fa fa-fw fa-user-edit"></i> @gm?.FirstName
-                                </a>
+                                    Id = evnt.Inner.Id,
+                                    Name = evnt.Inner.Name,
+                                    Status = evnt.Inner.Status.ToString(),
+                                    Location = $"{evnt.Inner.HallId},{evnt.Inner.HallTable}",
+                                }.AsJson();
                             }
+                            <a class="btn btn-sm btn-primary" onclick="QuickEventUpdate('@quickUpdate')"
+                               title="עדכון מהיר" style="color: white;">
+                                <i class="fa fa-fw fa-pencil-alt"></i>
+                            </a>
+                        </div>
+                        <div class="col-5">
+                            <div class="dropdown">
+                                <a href="#" role="button" id="dropdownMenuLink"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                   class="btn btn-sm btn-warning" title="אפשרויות נוספות">
+                                    <i class="fa fa-fw fa-cog"></i>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 
+                                    <a class="dropdown-item" asp-area="Management"
+                                       asp-controller="Events"
+                                       asp-action="CreateUpdateEvent"
+                                       asp-route-eventId="@evnt.Inner.Id.GetNumberFromId()">
+                                        <i class="fa fa-fw fa-edit"></i> עדכון
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#" onclick="ViewEventHistory('@evnt.Inner.Id')">
+                                        <i class="fa fa-fw fa-history"></i> היסטוריה
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="Management" asp-controller="Events" aria-checkedasp-action="CloneEvent">
+                                        <i class="fa fa-fw fa-clone"></i> שכפול אירוע
+                                    </a>
+                                    @if (evnt.GameMasters.Any(x => x != null))
+                                    {
+                                        <div class="dropdown-divider"></div>
+                                        <div class="text-center text-bold">
+                                            <a>עריכת מנחים</a>
+                                        </div>
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    @foreach (var gm in evnt.GameMasters)
+                                    {
+                                        if (gm == null)
+                                        {
+                                            continue;
+                                        }
+
+                                        <a class="dropdown-item" asp-area="Management" asp-controller="Displays"
+                                           asp-action="UpdateEventAgeRestriction">
+                                            <i class="fa fa-fw fa-user-edit"></i> @gm?.FirstName
+                                        </a>
+                                    }
+
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    @{
-                        var quickUpdate = new
-                        {
-                            Id = evnt.Inner.Id,
-                            Name = evnt.Inner.Name,
-                            Status = evnt.Inner.Status.ToString(),
-                            Location = $"{evnt.Inner.HallId},{evnt.Inner.HallTable}",
-                        }.AsJson();
-                    }
-
-                    <a class="pull-left clickable" onclick="QuickEventUpdate('@quickUpdate')"
-                       title="עדכון מהיר">
-                        <i class="fa fa-fw fa-pencil-alt"></i>
-                    </a>
-
                 </td>
             </tr>
             <tr id="extra-data-@evnt.Inner.Id.GetNumberFromId()"
@@ -332,14 +335,25 @@
                                 }
                             </td>
                         </tr>
-                        @if (evnt.Inner.IsSpecialPrice)
+                        @if (evnt.Inner.IsFree)
                         {
                             <tr>
                                 <td>
                                     <strong>מחיר מיוחד</strong>
                                 </td>
                                 <td>
-                                    <span>@evnt.Inner.SpecialPrice @Html.Raw(DragonConstants.NIS_SYMBOL)</span>
+                                    <span>אירוע חינמי</span>
+                                </td>
+                            </tr>
+                        }
+                        @if (evnt.Inner.ExtraCharge.HasValue)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>תוספת מחיר</strong>
+                                </td>
+                                <td>
+                                    <span>@evnt.Inner.ExtraCharge @Html.Raw(DragonConstants.NIS_SYMBOL)</span>
                                 </td>
                             </tr>
                         }
