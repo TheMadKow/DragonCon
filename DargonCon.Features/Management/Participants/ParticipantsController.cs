@@ -68,7 +68,7 @@ namespace DragonCon.Features.Management.Participants
             var answer = Gateway.UpdateRoles(viewmodel.ParticipantId, personalDesc, sysKeys, conKeys);
             if (answer.AnswerType != AnswerType.Success)
             {
-                // TODO Add Error Message
+                SetUserError("תקלה", answer.Message);
                 return View("CreateUpdateParticipant", viewmodel);
             }
 
@@ -110,6 +110,7 @@ namespace DragonCon.Features.Management.Participants
                 return RedirectToAction("Manage");
             else
             {
+                SetUserError("תקלה", answer.Message);
                 return View("CreateUpdateParticipant", viewmodel);
             }
         }

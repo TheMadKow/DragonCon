@@ -12,7 +12,7 @@ namespace DragonCon.Modeling.Models.Identities.Policy
             public const string ManagementAreaManager = "Management/Manager";
 
             public const string ReceptionManagement = "Reception/Manager";
-            public const string ContentManagement = "Events/Manager";
+            public const string ContentManagement = "Content/Manager";
             public const string ConventionManagement = "Convention/Manager";
         }
 

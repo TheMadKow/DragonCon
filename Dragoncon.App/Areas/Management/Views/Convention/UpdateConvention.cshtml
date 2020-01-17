@@ -7,10 +7,6 @@
 
 @{
     ViewBag.Title = $"עדכון כנס {Model.NameDate.Name} ({Model.NameDate.Id.GetNumberFromId()})";
-    if (string.IsNullOrWhiteSpace(Model.ErrorMessage) == false)
-    {
-        <div class="alert alert-danger">תקלה: @Model.ErrorMessage</div>
-    }
 }
 
 

@@ -1,4 +1,5 @@
 ﻿using DragonCon.Features.Shared;
+using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.System;
 
@@ -8,8 +9,8 @@ namespace DragonCon.Features.Management.Convention
     {
         ConventionManagementViewModel BuildConventionList(IDisplayPagination pagination);
         ConventionUpdateViewModel BuildConventionUpdate(string conId);
-        void SetAsManaged(string id);
-        void SetAsDisplay(string id);
-        void UpdateSettings(string conventionId, ConventionSettings settings);
+        Answer SetAsManaged(string id);
+        Answer SetAsDisplay(string id);
+        Answer UpdateSettings(string conventionId, ConventionSettings settings);
     }
 }

@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Management.Events
 {
     [Area("Management")]
-    [Authorize(policy: Policies.Types.ContentManagement)]
+    [Authorize(Policies.Types.ContentManagement)]
     public class EventsController : DragonController<IManagementEventsGateway>
     {
         public EventsController(IServiceProvider service) : base(service)
@@ -47,7 +47,6 @@ namespace DragonCon.Features.Management.Events
 
         #region Display
         [HttpGet]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult Manage(int page = 0, int perPage = ResultsPerPage, string tab = null)
         {
             ViewBag.HelperTab = tab;
@@ -56,7 +55,6 @@ namespace DragonCon.Features.Management.Events
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult Manage(EventsManagementViewModel.Filters ActiveFilters,
                                     int page = 0, int perPage = ResultsPerPage)
         {
@@ -66,7 +64,6 @@ namespace DragonCon.Features.Management.Events
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult ManageSearch(string searchWords, int page = 0, int perPage = ResultsPerPage)
         {
             var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage), searchWords);
@@ -77,7 +74,6 @@ namespace DragonCon.Features.Management.Events
 
         #region Activity
         [HttpPost]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public Answer DeleteEventActivity(string activityId)
         {
             var answer = Gateway.DeleteActivity(activityId);
@@ -85,7 +81,6 @@ namespace DragonCon.Features.Management.Events
         }
 
         [HttpGet]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult UpdateEventActivity(string activityId)
         {
             var viewModel = Gateway.GetActivityViewModel(activityId);
@@ -94,7 +89,6 @@ namespace DragonCon.Features.Management.Events
 
 
         [HttpGet]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult CreateUpdateEventActivity(ActivityCreateUpdateViewModel viewModel = null)
         {
             if (viewModel == null)
@@ -114,7 +108,6 @@ namespace DragonCon.Features.Management.Events
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult CreateUpdateEventActivityPost(ActivityCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Id))
@@ -123,7 +116,6 @@ namespace DragonCon.Features.Management.Events
                 return UpdateEventActivity(viewmodel);
         }
 
-        [Authorize(policy: Policies.Types.ContentManagement)]
         private IActionResult UpdateEventActivity(ActivityCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
@@ -146,7 +138,6 @@ namespace DragonCon.Features.Management.Events
             });
         }
 
-        [Authorize(policy: Policies.Types.ContentManagement)]
         private IActionResult CreateEventActivity(ActivityCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
@@ -172,7 +163,6 @@ namespace DragonCon.Features.Management.Events
 
         #region Age Restriction
         [HttpGet]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult UpdateEventAgeRestriction(string restrictionId)
         {
             var viewModel = Gateway.GetAgeRestrictionViewModel(restrictionId);
@@ -180,7 +170,6 @@ namespace DragonCon.Features.Management.Events
         }
 
         [HttpGet]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult CreateUpdateEventAgeRestriction(AgeSystemCreateUpdateViewModel viewModel = null)
         {
             if (viewModel == null)
@@ -192,7 +181,6 @@ namespace DragonCon.Features.Management.Events
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult CreateUpdateEventAgeRestrictionPost(AgeSystemCreateUpdateViewModel viewmodel)
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
@@ -215,7 +203,6 @@ namespace DragonCon.Features.Management.Events
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public Answer DeleteAgeRestriction(string restrictionId)
         {
             return Gateway.DeleteAgeRestriction(restrictionId);
@@ -224,7 +211,6 @@ namespace DragonCon.Features.Management.Events
 
         #region Create Update
         [HttpGet]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult CreateUpdateEvent(string eventId = null)
         {
             var viewModel = Gateway.GetEventViewModel(eventId);
@@ -232,7 +218,6 @@ namespace DragonCon.Features.Management.Events
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult CreateUpdateEvent(EventCreateUpdateViewModel viewmodel)
         {
             var answer = Answer.Error();
@@ -245,27 +230,24 @@ namespace DragonCon.Features.Management.Events
                 return RedirectToAction("Manage");
             else
             {
+                SetUserError("תקלה", answer.Message);
                 return View("CreateUpdateEvent", viewmodel);
             }
         }
 
         [HttpPost]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult QuickUpdate(string id, string status, string hall)
         {
             var answer = Gateway.QuickUpdate(id, status, hall);
 
             if (answer.AnswerType != AnswerType.Success)
-            {
-                // TODO Popup on failure.
-            }
+                SetUserError("תקלה", answer.Message);
 
             return RedirectToAction("Manage");
         }
         #endregion
 
         [HttpGet]
-        [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult ViewEventHistory(string eventId)
         {
             var vm = Gateway.CreateEventHistory(eventId);

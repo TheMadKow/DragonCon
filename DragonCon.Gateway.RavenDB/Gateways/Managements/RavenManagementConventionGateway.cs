@@ -3,6 +3,7 @@ using System.Linq;
 using DragonCon.Features.Management.Convention;
 using DragonCon.Features.Shared;
 using DragonCon.Modeling.Helpers;
+using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.System;
@@ -101,28 +102,31 @@ namespace DragonCon.RavenDB.Gateways.Managements
             return config;
         }
 
-        public void SetAsManaged(string id)
+        public Answer SetAsManaged(string id)
         {
             var config = LoadOrCreateConfiguration();
             config.ManagedConventionId = id;
             Session.Store(config, SystemConfiguration.Id);
             Session.SaveChanges();
+            return Answer.Success;
         }
 
-        public void SetAsDisplay(string id)
+        public Answer SetAsDisplay(string id)
         {
             var config = LoadOrCreateConfiguration();
             config.DisplayConventionId = id;
             Session.Store(config, SystemConfiguration.Id);
             Session.SaveChanges();
+            return Answer.Success;
         }
 
-        public void UpdateSettings(string convetionId, ConventionSettings settings)
+        public Answer UpdateSettings(string convetionId, ConventionSettings settings)
         {
             var convention = Session.Load<Convention>(convetionId);
             convention.Settings = settings;
             Session.Store(convention);
             Session.SaveChanges();
+            return Answer.Success;
         }
     }
 }

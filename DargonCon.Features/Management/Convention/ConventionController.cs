@@ -44,15 +44,19 @@ namespace DragonCon.Features.Management.Convention
         [HttpPost]
         public Answer SetAsManaged(string id)
         {
-            Gateway.SetAsManaged(id);
-            return Answer.Success;
+            var answer = Gateway.SetAsManaged(id);
+            if (answer.AnswerType == AnswerType.Error)
+                SetUserError("כשלון", answer.Message);
+            return answer;
         }
 
         [HttpPost]
         public Answer SetAsDisplay(string id)
         {
-            Gateway.SetAsDisplay(id);
-            return Answer.Success;
+            var answer = Gateway.SetAsDisplay(id);
+            if (answer.AnswerType == AnswerType.Error)
+                SetUserError("כשלון", answer.Message);
+            return answer;
         }
 
         #region Name & Days
@@ -84,6 +88,7 @@ namespace DragonCon.Features.Management.Convention
                 From = "09:00",
                 To = "21:00"
             });
+
             return View("CreateUpdateNameDates", viewmodel);
         }
 
@@ -93,12 +98,14 @@ namespace DragonCon.Features.Management.Convention
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
             {
+                SetUserError("תקלה", "אין שם לכנס");
                 return CreateConvention(viewmodel);
             }
 
             var filteredList = viewmodel.Days.Where(x => x.IsDeleted == false).ToList();
             if (filteredList.Any() == false)
             {
+                SetUserError("תקלה", "אין ימים לכנס");
                 return CreateConvention(viewmodel);
             }
 
@@ -138,7 +145,9 @@ namespace DragonCon.Features.Management.Convention
         {
             SetActiveTab(activeTab);
             var conUpdateViewModel = Gateway.BuildConventionUpdate(conId);
-            conUpdateViewModel.ErrorMessage = errorMessage;
+            if (errorMessage.IsNotEmptyString())
+                SetUserError("תקלה", errorMessage);
+
             return View("UpdateConvention", conUpdateViewModel);
         }
 
