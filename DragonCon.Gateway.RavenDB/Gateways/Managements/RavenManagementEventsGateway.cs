@@ -314,7 +314,23 @@ namespace DragonCon.RavenDB.Gateways.Managements
             Session.SaveChanges();
             return Answer.Success;
         }
+        private Answer CanSetAsApproves(EventCreateUpdateViewModel viewModel)
+        {
+            if (viewModel.MaxSize < viewModel.MinSize)
+                return Answer.Error("מקסימום משתתפים קטן ממינימום משתתפים");
+            if (viewModel.Duration.HasValue == false)
+                return Answer.Error("לא נבחר משך");
+            if (viewModel.ActivitySelector.IsEmptyString())
+                return Answer.Error("לא נבחרה פעילות");
+            if (viewModel.AgeId.IsEmptyString())
+                return Answer.Error("לא נבחרה קבוצת גיל");
+            if (viewModel.ConventionDayId.IsEmptyString())
+                return Answer.Error("לא נבחר יום כנס");
+            if (viewModel.StartTimeSelector.IsEmptyString())
+                return Answer.Error("לא נבחרה שעת התחלה");
 
+            return Answer.Success;
+        }
         public Answer QuickUpdate(string id, string status, string hall)
         {
             var model = Session.Load<Event>(id);

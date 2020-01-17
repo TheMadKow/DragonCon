@@ -17,7 +17,5 @@ namespace DragonCon.Features.Management.Events
         
         [Range(minimum:1, maximum:99, ErrorMessage = "גיל חייב להיות בין 1 ל-99")]
         public int? MaxAge { get;set; }
-        
-        public string ErrorMessage { get; set; }
     }
 }

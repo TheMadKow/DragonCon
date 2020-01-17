@@ -21,6 +21,7 @@ namespace DragonCon.Features.Management.Events
         {
         }
 
+        #region Hosts Selector
         [HttpGet]
         [IgnoreAntiforgeryToken]
         public string GetParticipants(string term)
@@ -30,18 +31,19 @@ namespace DragonCon.Features.Management.Events
 
             var participants = Gateway.SearchParticipants(term);
 
-            return new Select2ViewModel{
+            return new Select2ViewModel
+            {
                 Results = participants
                     .Where(x => x != null)
                     .Select(x => new Select2Option
-                {
-                    Id = x.Id,
-                    Text = x.FullName,
-                    Brackets = x.Email
-                }).ToList()
+                    {
+                        Id = x.Id,
+                        Text = x.FullName,
+                        Brackets = x.Email
+                    }).ToList()
             }.AsJson();
         }
-
+        #endregion
 
         #region Display
         [HttpGet]
@@ -55,7 +57,7 @@ namespace DragonCon.Features.Management.Events
 
         [HttpPost]
         [Authorize(policy: Policies.Types.ContentManagement)]
-        public IActionResult Manage(EventsManagementViewModel.Filters ActiveFilters, 
+        public IActionResult Manage(EventsManagementViewModel.Filters ActiveFilters,
                                     int page = 0, int perPage = ResultsPerPage)
         {
             var viewModel = Gateway.BuildIndex(DisplayPagination.BuildForGateway(page, perPage), ActiveFilters);
@@ -117,7 +119,7 @@ namespace DragonCon.Features.Management.Events
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Id))
                 return CreateEventActivity(viewmodel);
-            else 
+            else
                 return UpdateEventActivity(viewmodel);
         }
 
@@ -126,7 +128,7 @@ namespace DragonCon.Features.Management.Events
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
             {
-                viewmodel.ErrorMessage = "שם פעילות ריק";
+                SetUserError("תקלה", "שם פעילות ריק");
                 return CreateUpdateEventActivity(viewmodel);
             }
 
@@ -134,7 +136,7 @@ namespace DragonCon.Features.Management.Events
             var answer = Gateway.UpdateExistingActivity(viewmodel.Id, viewmodel.Name, filteredList);
             if (answer.AnswerType != AnswerType.Success)
             {
-                viewmodel.ErrorMessage = answer.Message;
+                SetUserError("תקלה", answer.Message);
                 return CreateUpdateEventActivity(viewmodel);
             }
 
@@ -149,7 +151,7 @@ namespace DragonCon.Features.Management.Events
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
             {
-                viewmodel.ErrorMessage = "שם פעילות ריק";
+                SetUserError("תקלה", "שם פעילות ריק");
                 return CreateUpdateEventActivity(viewmodel);
             }
 
@@ -157,7 +159,7 @@ namespace DragonCon.Features.Management.Events
             var answer = Gateway.AddNewActivity(viewmodel.Name, filteredList);
             if (answer.AnswerType != AnswerType.Success)
             {
-                viewmodel.ErrorMessage = answer.Message;
+                SetUserError("תקלה", answer.Message);
                 return CreateUpdateEventActivity(viewmodel);
             }
 
@@ -195,14 +197,14 @@ namespace DragonCon.Features.Management.Events
         {
             if (string.IsNullOrWhiteSpace(viewmodel.Name))
             {
-                viewmodel.ErrorMessage = "שם קבוצת גיל ריק";
+                SetUserError("תקלה", "שם קבוצה ריק");
                 return CreateUpdateEventAgeRestriction(viewmodel);
             }
 
             var answer = Gateway.AddOrUpdateAgeRestriction(viewmodel);
             if (answer.AnswerType != AnswerType.Success)
             {
-                viewmodel.ErrorMessage = answer.Message;
+                SetUserError("תקלה", answer.Message);
                 return CreateUpdateEventAgeRestriction(viewmodel);
             }
 
@@ -220,6 +222,7 @@ namespace DragonCon.Features.Management.Events
         }
         #endregion
 
+        #region Create Update
         [HttpGet]
         [Authorize(policy: Policies.Types.ContentManagement)]
         public IActionResult CreateUpdateEvent(string eventId = null)
@@ -259,7 +262,7 @@ namespace DragonCon.Features.Management.Events
 
             return RedirectToAction("Manage");
         }
-
+        #endregion
 
         [HttpGet]
         [Authorize(policy: Policies.Types.ContentManagement)]
@@ -268,7 +271,6 @@ namespace DragonCon.Features.Management.Events
             var vm = Gateway.CreateEventHistory(eventId);
             return View(vm);
         }
-
     }
 
     public interface IManagementEventsGateway : IGateway
@@ -280,7 +282,7 @@ namespace DragonCon.Features.Management.Events
         Answer UpdateExistingActivity(string viewmodelId, string viewmodelName, List<SubActivityViewModel> filteredList);
         Answer DeleteActivity(string activityId);
         ActivityCreateUpdateViewModel GetActivityViewModel(string activityId);
-        
+
 
         Answer AddOrUpdateAgeRestriction(AgeSystemCreateUpdateViewModel viewmodel);
         AgeSystemCreateUpdateViewModel GetAgeRestrictionViewModel(string restrictionId);

@@ -13,7 +13,6 @@
     <a class="text-info" asp-area="Management" asp-controller="Participants" asp-action="Manage"><i class="fa fa-fw fa-chevron-circle-right"></i> חזרה לניהול משתתפים</a>
 }
 
-
 <div class="card card-gray-float">
     <div class="card-body">
         <form asp-area="Management" asp-controller="Participants" asp-action="CreateUpdateParticipant"
@@ -25,51 +24,45 @@
                     <input asp-for="FullName" class="form-control" placeholder="שם מלא ">
                 </div>
             </div>
-            <div class="col">
-                <div class="form-group">
+            <div class="row">
+                <div class="form-group col-6">
                     <label>טלפון</label>
                     <input asp-for="PhoneNumber" type="tel" class="form-control" placeholder="טלפון ">
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>שנת לידה </label>
+                <div class="form-group col-6">
+                    <label class="required">שנת לידה </label>
                     <br />
-                    <input class="combo-date" asp-for="YearOfBirth" value="@Model.YearOfBirth"
-                           data-custom-class="form-control form-control-inline"
-                           data-first-item="empty"
-                           data-format="YYYY"
-                           data-template="YYYY">
+                    <input class="form-control" asp-for="YearOfBirth" type="number" min="1900" max="@DateTime.Now.Year" required />
                 </div>
             </div>
             @if (isUpdated == false || iShortTerm == false)
             {
-                    <div class="col">
-                        <br />
-                        <div class="input-group">
-                            @{
-                                var isLocked = isUpdated ? "readonly" : "";
-                            }
+                <div class="col">
+                    <br />
+                    <div class="input-group">
+                        @{
+                            var isLocked = isUpdated ? "readonly" : "";
+                        }
 
-                            <input @isLocked name="Email" value="@Model.Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <input type="checkbox" asp-for="IsAllowingPromotions.Value" aria-label="Checkbox for following text input">
-                                    <span class="toggle-text">צירוף לרשימת דיוור</span>
-                                </div>
+                        <input @isLocked name="Email" value="@Model.Email" type="email" class="form-control" aria-label="Checkbox for following text input" placeholder="דואר אלקטרוני ">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" asp-for="IsAllowingPromotions.Value" aria-label="Checkbox for following text input">
+                                <span class="toggle-text">צירוף לרשימת דיוור</span>
                             </div>
                         </div>
-                        @if (isUpdated)
-                        {
-                            <lable class="text-danger">* לא ניתן לשנות כתובת דואר אלקטרוני של משתתף</lable>
-                        }
-                        else
-                        {
-                            <lable class="text-danger">* בהזנת דואר אלקטרוני יווצר משתמש קבוע ותשלח סיסמת התחברות ראשונית</lable>
-                        }
-                        <br />
-                        <br />
                     </div>
+                    @if (isUpdated)
+                    {
+                        <lable class="text-danger">* לא ניתן לשנות כתובת דואר אלקטרוני של משתתף</lable>
+                    }
+                    else
+                    {
+                        <lable class="text-danger">* בהזנת דואר אלקטרוני יווצר משתמש קבוע ותשלח סיסמת התחברות ראשונית</lable>
+                    }
+                    <br />
+                    <br />
+                </div>
                 <br />
             }
 

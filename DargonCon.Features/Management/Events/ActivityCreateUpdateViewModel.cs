@@ -11,7 +11,6 @@ namespace DragonCon.Features.Management.Events
         [Required(AllowEmptyStrings = false, ErrorMessage = "חובה להזין שם לפעילות")]
         public string Name { get; set; }
         public List<SubActivityViewModel> SubActivities {get; set; }
-        public string ErrorMessage { get; set; }
     }
 
     public class SubActivityViewModel
