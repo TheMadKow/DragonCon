@@ -145,13 +145,19 @@
                             </div>
                         }
 
-                        @if (longTerm != null && Model.TryGetSystemRoles(longTerm.Id).Any())
+                        @if (longTerm != null && longTerm.SystemRoles.Any())
                         {
+                            var sysRoles = longTerm.SystemRoles;
                             <div title="תפקידי מערכת">
                                 <i class="fa fa-fw fa-user-lock"></i>
-                                @foreach (var role in Model.TryGetSystemRoles(longTerm.Id))
+                                @for (int i = 0; i < sysRoles.Count; i++)
                                 {
-                                    <span>@role.ToTextual(). &nbsp; </span>
+                                    <span>@sysRoles[i].ToTextual()</span>
+                                    @if (i + 1 < sysRoles.Count)
+                                    {
+                                        <span> | </span>
+                                    }
+
                                 }
                             </div>
 
@@ -159,11 +165,26 @@
 
                         @if (engage.Inner.Roles.Any())
                         {
+                            var roles = engage.Inner.Roles;
                             <div title="תפקידי כנס">
-                                <i class="fa fa-fw fa-id-card-alt"></i>
-                                @foreach (var role in engage.Inner.Roles)
+                                <i class="fa fa-fw fa-user-shield"></i>
+                                @for (int i = 0; i < roles.Count; i++)
                                 {
-                                    <span>@role.ToTextual(). &nbsp; </span>
+                                    var role = roles[i];
+                                    <span>
+                                        @role.ToTextual()
+                                        @if (role == ConventionRoles.Officer)
+                                        {
+                                            <span>
+                                                - @engage.Inner.RoleDescription
+                                            </span>
+                                        }
+                                        @if (i + 1 < roles.Count)
+                                        {
+                                            <span> | </span>
+                                        }
+
+                                    </span>
                                 }
                             </div>
                         }

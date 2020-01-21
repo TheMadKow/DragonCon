@@ -158,6 +158,7 @@ namespace DragonCon.App.Helpers
                     .Include<EmailIdentity>(x => x.LongTermId)
                     .Load<EmailIdentity>
                     ($"EmailIdentities/{httpContext.User.Identity.Name}");
+               
                 var participant = session.Load<LongTermParticipant>(ident.LongTermId);
 
                 if (ident != null)
@@ -165,8 +166,9 @@ namespace DragonCon.App.Helpers
                     return new Actor.ActorParticipant
                     {
                         Id = participant.Id,
+                        IdentityId = ident.Id,
                         FullName = participant.FullName,
-                        SystemRoles = ident.SystemRoles
+                        SystemRoles = participant.SystemRoles
                     };
                 }
             }

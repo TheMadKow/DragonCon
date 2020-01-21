@@ -97,8 +97,7 @@ namespace DragonCon.Logical.Identities
         // Participant
         Task<IdentityResults.AddParticipantResult> AddNewParticipant(IParticipant user, string password = "");
         Task<IdentityResults.UpdateParticipantResult> UpdateParticipant(IParticipant user);
-        Task<IdentityResults.UpdateParticipantResult> UpdateLongTermRoles(LongTermParticipant user, IEnumerable<SystemRoles> roles);
-        Task<IEnumerable<SystemRoles>> GetRolesForLongTerm(LongTermParticipant user);
+        Task<IdentityResults.UpdateParticipantResult> UpdateLongTermRoles(string participantId, IEnumerable<SystemRoles> roles);
 
 
         // Passwords

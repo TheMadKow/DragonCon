@@ -91,17 +91,11 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 var longTerm = Session.Load<LongTermParticipant>(participantId);
                 if (longTerm != null)
                 {
-                    var sysRoles = Identities.GetRolesForLongTerm(longTerm).GetAwaiter().GetResult();
-                    if (sysRoles != null)
-                    {
-                        result.SystemRoles = sysRoles.ToList();
-
+                        result.SystemRoles = longTerm.SystemRoles;
                         result.IsLongTerm = true;
                         result.ParticipantName = longTerm.FullName;
                         result.ConventionRoles = roles;
                         return result;
-
-                    }
                 }
             }
 
@@ -182,7 +176,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                     }
                 }
 
-                Identities.UpdateLongTermRoles(asLongTerm, sysRoles).GetAwaiter().GetResult();
+                Identities.UpdateLongTermRoles(asLongTerm.Id, sysRoles).GetAwaiter().GetResult();
             }
 
             Session.SaveChanges();

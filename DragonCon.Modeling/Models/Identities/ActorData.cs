@@ -275,6 +275,7 @@ namespace DragonCon.Modeling.Models.Identities
         {
             public string Id { get; set; } = string.Empty;
             public string FullName { get; set; } = string.Empty;
+            public string IdentityId { get; set; } = string.Empty;
             public IList<SystemRoles> SystemRoles { get; set; } = new List<SystemRoles>();
         }
 

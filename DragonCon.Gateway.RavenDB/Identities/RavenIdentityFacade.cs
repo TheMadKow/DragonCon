@@ -187,29 +187,14 @@ namespace DragonCon.RavenDB.Identities
         }
 
         public async Task<IdentityResults.UpdateParticipantResult> UpdateLongTermRoles(
-            LongTermParticipant user,
+            string partId,
             IEnumerable<SystemRoles> roles)
         {
-            var identity = await _userManager.FindByEmailAsync(user.Email.ToLower());
-            identity.SystemRoles.Clear();
-            identity.SystemRoles.AddRange(roles);
-            var result = await _userManager.UpdateAsync(identity);
-            if (result.Succeeded)
-            {
-                return IdentityResults.UpdateParticipantResult.Success(true, false);
-            }
-            else
-            {
-                return IdentityResults.UpdateParticipantResult.Fail(TranslateErrors(result));
-
-            }
-        }
-
-        public async Task<IEnumerable<SystemRoles>> GetRolesForLongTerm(LongTermParticipant user)
-        {
-            var identity = await _userManager.FindByEmailAsync(user.Email.ToLower());
-            return identity.SystemRoles;
-
+            var user = await _session.LoadAsync<LongTermParticipant>(partId);
+            user.SystemRoles.Clear();
+            user.SystemRoles.AddRange(roles);
+            await _session.SaveChangesAsync();
+            return IdentityResults.UpdateParticipantResult.Success(true, false);
         }
 
         #endregion

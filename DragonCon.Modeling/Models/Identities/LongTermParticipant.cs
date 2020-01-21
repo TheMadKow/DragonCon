@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DragonCon.Modeling.Models.Identities
 {
@@ -7,10 +8,10 @@ namespace DragonCon.Modeling.Models.Identities
         public string Id { get; }
         public bool IsAllowingPromotions { get; set; }
         public int YearOfBirth { get; set; }
+        public IList<SystemRoles> SystemRoles { get; } = new List<SystemRoles>();
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
-
         public string FirstName
         {
             get
