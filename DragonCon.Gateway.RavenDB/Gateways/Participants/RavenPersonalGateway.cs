@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DragonCon.Features.Participant.Account;
 using DragonCon.Features.Participant.Personal;
 using DragonCon.Logical;
+using DragonCon.Logical.Identities;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
@@ -168,25 +169,26 @@ namespace DragonCon.RavenDB.Gateways.Participants
 
         public async Task<Answer> ChangePassword(PasswordChangeViewModel viewmodel)
         {
-            var user = await _facade.GetUserByUserIdAsync(Actor.Me.Id);
+            var user = await _facade.GetParticipantByIdAsync(Actor.Me.Id);
             var result = await _facade.ChangePasswordAsync(user, viewmodel.OldPassword, viewmodel.newPassword);
-            return result.IsSuccess ? Answer.Success : Answer.Error(result.Errors.FirstOrDefault());
+            return result.IsSuccess ? Answer.Success : Answer.Error(result.Details);
         }
 
         public async Task<Answer> UpdateDetails(DetailsUpdateViewModel viewModel)
         {
-            var user = await _facade.GetUserByUserIdAsync(Actor.Me.Id);
+            var user = await _facade.GetParticipantByIdAsync(Actor.Me.Id);
             user.YearOfBirth = viewModel.YearOfBirth;
             user.FullName = viewModel.FullName;
+            user.PhoneNumber = viewModel.PhoneNumber;
             user.IsAllowingPromotions = viewModel.IsAllowingPromotions;
-            bool emailReplace = user.Email.ToLower() != viewModel.Email.ToLower();
             user.Email = viewModel.Email;
 
             var result = await _facade.UpdateParticipant(user);
             var message = "";
-            if (result.IsSuccess && emailReplace)
+
+            if (result.IsSuccess && result.IsEmailChange)
             {
-                await _facade.LogoutAsync(user.UserName);
+                await _facade.LogoutAsync();
                 message = "Logout";
             }
 
@@ -195,7 +197,7 @@ namespace DragonCon.RavenDB.Gateways.Participants
                 {
                     Message = message
                 }
-                : Answer.Error(result.Errors.FirstOrDefault());
+                : Answer.Error(result.Details);
         }
     }
 }

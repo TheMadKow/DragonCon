@@ -13,15 +13,18 @@ using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Payment;
 using DragonCon.RavenDB.Factories;
 using DragonCon.RavenDB.Index;
+using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 
 namespace DragonCon.RavenDB.Gateways.Managements
 {
     public class RavenManagementParticipantsGateway : EngagementRavenGateway, IManagementParticipantsGateway
     {
+        private readonly IIdentityFacade Identities;
         public RavenManagementParticipantsGateway(IServiceProvider provider) :
             base(provider)
         {
+            Identities = provider.GetRequiredService<IIdentityFacade>();
         }
 
         public ParticipantCreateUpdateViewModel GetParticipantViewModel(string participantId)
@@ -77,7 +80,9 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 ParticipantId = participantId
             };
 
-            var engagement = Session.Query<UserEngagement>()
+            var engagement = Session
+                .Query<UserEngagement>()
+                .Include(x => x.ParticipantId)
                 .SingleOrDefault(x => x.ParticipantId == participantId &&
                                                      x.ConventionId == Actor.ManagedConvention.ConventionId);
             var roles = engagement != null ? engagement.Roles : new List<ConventionRoles>();
@@ -86,11 +91,17 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 var longTerm = Session.Load<LongTermParticipant>(participantId);
                 if (longTerm != null)
                 {
-                    result.IsLongTerm = true;
-                    result.ParticipantName = longTerm.FullName;
-                    result.SystemRoles = longTerm.SystemRoles;
-                    result.ConventionRoles = roles;
-                    return result;
+                    var sysRoles = Identities.GetRolesForLongTerm(longTerm).GetAwaiter().GetResult();
+                    if (sysRoles != null)
+                    {
+                        result.SystemRoles = sysRoles.ToList();
+
+                        result.IsLongTerm = true;
+                        result.ParticipantName = longTerm.FullName;
+                        result.ConventionRoles = roles;
+                        return result;
+
+                    }
                 }
             }
 
@@ -127,7 +138,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
 
             if (engagement == null)
             {
-                engagement = new UserEngagement()
+                engagement = new UserEngagement
                 {
                     ConventionId = Actor.ManagedConvention.ConventionId,
                     ConventionStartDate = Actor.ManagedConvention.Days
@@ -162,17 +173,16 @@ namespace DragonCon.RavenDB.Gateways.Managements
             Session.Store(engagement);
             if (isLongTerm)
             {
+                var sysRoles = new List<SystemRoles>();
                 foreach (SystemRoles system in Enum.GetValues(typeof(SystemRoles)))
                 {
                     if (sysKeys.Contains(system.ToString()))
                     {
-                        asLongTerm.AddRole(system);
-                    }
-                    else
-                    {
-                        asLongTerm.RemoveRole(system);
+                        sysRoles.Add(system);
                     }
                 }
+
+                Identities.UpdateLongTermRoles(asLongTerm, sysRoles).GetAwaiter().GetResult();
             }
 
             Session.SaveChanges();
@@ -206,6 +216,7 @@ namespace DragonCon.RavenDB.Gateways.Managements
                 .Include(x => x.ParticipantId)
                 .Include(x => x.EventIds)
                 .AsQueryable();
+
             if (allowHistory == false)
             {
                 query = query.Where(x => x.ConventionId == currentConvention);

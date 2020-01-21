@@ -1,5 +1,6 @@
 ﻿@using System.Globalization
 @using DragonCon.App.Settings
+@using DragonCon.Features.Convention.Home
 @using DragonCon.Modeling.Helpers
 @{
     ViewData["Title"] = "דף הבית";
@@ -23,7 +24,7 @@
             הכנס מאורגן בהתנדבות ומתקיים כל שנה במהלך אוגוסט מ-2007 ועד היום. <br />
             בכנס תמצאו את כל סוגי המשחקים: משחקי-תפקידים שולחניים וחיים, משחקי לוח, משחקי מיניאטורות, טורנירים ועוד.<br />
             הכנס מיועד לכל הגילאים, שחקנים וותיקים וחדשים, מבוגרים ומשפחות. <br />
-            <span class="dragon-organge-color text-bold">אז בואו לשחק בדרקוניקון - פיגשו חברים, צאו להרפתקאות וגלו עולמות חדשים!</span>
+            <span class="dragon-orange-color text-bold">אז בואו לשחק בדרקוניקון - פיגשו חברים, צאו להרפתקאות וגלו עולמות חדשים!</span>
         </p>
     </div>
 </div>
@@ -33,7 +34,7 @@
 <div class="card card-gray-float">
     <div class="card-body">
         <h3 class="card-title text-bold">
-            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-orange-color"></i>
             &nbsp;
             איפה ומתי הכנס?
         </h3>
@@ -63,7 +64,7 @@
 <div class="card card-gray-float">
     <div class="card-body">
         <h3 class="card-title text-bold">
-            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-orange-color"></i>
             &nbsp;
             שאלות נוספות?
         </h3>
@@ -76,7 +77,7 @@
 <div class="card card-gray-float">
     <div class="card-body">
         <h3 class="card-title text-bold">
-            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-orange-color"></i>
             &nbsp;
             עדכונים אחרונים
         </h3>
@@ -100,7 +101,7 @@
 <div class="card card-gray-float">
     <div class="card-body">
         <h3 class="card-title text-bold">
-            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-orange-color"></i>
             &nbsp;
             רשימת הדיוור שלנו
         </h3>
@@ -124,7 +125,7 @@
     </div>
 </div>
 
-@await Html.PartialAsync("_PartialContactUs")
+@await Html.PartialAsync("_PartialContactUs", new ContactUsViewModel())
 
 @section scripts {
     <script>

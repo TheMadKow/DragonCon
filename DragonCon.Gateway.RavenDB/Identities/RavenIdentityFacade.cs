@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using DragonCon.Logical;
 using DragonCon.Logical.Identities;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Identities;
 using Microsoft.AspNetCore.Identity;
-using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 
 namespace DragonCon.RavenDB.Identities
@@ -15,12 +13,12 @@ namespace DragonCon.RavenDB.Identities
     public class RavenIdentityFacade : IIdentityFacade, IDisposable
     {
         private readonly IAsyncDocumentSession _session;
-        private readonly UserManager<LongTermParticipant> _userManager;
-        private readonly SignInManager<LongTermParticipant> _signInManager;
+        private readonly UserManager<EmailIdentity> _userManager;
+        private readonly SignInManager<EmailIdentity> _signInManager;
 
         public RavenIdentityFacade(
-            UserManager<LongTermParticipant> userManager,
-            SignInManager<LongTermParticipant> signInManager,
+            UserManager<EmailIdentity> userManager,
+            SignInManager<EmailIdentity> signInManager,
             IAsyncDocumentSession session)
         {
             _session = session;
@@ -28,24 +26,57 @@ namespace DragonCon.RavenDB.Identities
             _signInManager = signInManager;
         }
 
-        #region User
-
-        public async Task<IdentityResults.Password> UpdateParticipant(LongTermParticipant user)
+        #region Basic Getters
+        private async Task<string> GetParticipantIdByUsername(string username)
         {
-            var result = await _userManager.UpdateAsync(user);
-            return result.Succeeded
-                ? new IdentityResults.Password()
-                {
-                    IsSuccess = true
-                }
-                : new IdentityResults.Password()
-                {
-                    IsSuccess = false,
-                    Errors = result.Errors.Select(x => x.Description).ToArray()
-                };
+            var identity = await _userManager.FindByEmailAsync(username);
+            return identity?.LongTermId ?? string.Empty;
         }
 
-        public async Task<IdentityResults.Password> AddNewParticipant(IParticipant user, string password = "")
+        public async Task<LongTermParticipant> GetParticipantByUsernameAsync(string username)
+        {
+            return await GetParticipantByIdAsync(await GetParticipantIdByUsername(username));
+        }
+
+        public async Task<LongTermParticipant> GetParticipantByIdAsync(string id)
+        {
+            return await _session.LoadAsync<LongTermParticipant>(id);
+        }
+        #endregion
+
+        #region Translators
+        private string TranslateErrors(SignInResult result)
+        {
+            var sb = new StringBuilder();
+            if (result.IsLockedOut)
+            {
+                sb.AppendLine("Locked Out");
+            }
+            if (result.IsNotAllowed)
+            {
+                sb.AppendLine("Not Allowed");
+            }
+            if (result.RequiresTwoFactor)
+            {
+                sb.AppendLine("Two Factor Required");
+            }
+            return sb.ToString();
+        }
+        private string TranslateErrors(IdentityResult result)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var identityError in result.Errors)
+            {
+                sb.AppendLine($"{identityError.Code}: {identityError.Description}");
+            }
+
+            return sb.ToString();
+        }
+        #endregion
+
+        #region Add Participants
+        public async Task<IdentityResults.AddParticipantResult> AddNewParticipant(IParticipant user, string password = "")
         {
             if (user is ShortTermParticipant shortP)
             {
@@ -57,185 +88,225 @@ namespace DragonCon.RavenDB.Identities
                 return await AddLongTermParticipant(longP, password);
             }
 
-            throw new Exception("Unknown Me Type");
+            throw new Exception("Unknown Type");
         }
 
-        private async Task<IdentityResults.Password> AddLongTermParticipant(LongTermParticipant user, string password = "")
+        private async Task<IdentityResults.AddParticipantResult> AddLongTermParticipant(LongTermParticipant user,
+            string password = "")
         {
             if ((await HasUserWithEmail(user.Email)).IsSuccess)
-                return new IdentityResults.Password()
-                {
-                    IsSuccess = false,
-                    Errors = new[] { "קיים משתמש עם כתובת הדואר הזו" }
-                };
+                return IdentityResults.AddParticipantResult.Fail("קיים משתמש עם כתובת דואר אלקטרוני זו");
 
             if (password.IsEmptyString())
             {
-                password = new RandomPasswordGenerator(12).Generate();
+                password = new RandomPasswordGenerator(8).Generate();
             }
 
-            //await _session.StoreAsync(user);
-            var createUserResult = await _userManager.CreateAsync(user, password);
-
-            if (createUserResult.Succeeded == false)
+            await _session.StoreAsync(user);
+            var ident = new EmailIdentity()
             {
-                return new IdentityResults.Password
-                {
-                    IsSuccess = false,
-                    Errors = createUserResult.Errors.Select(x => $"{x.Code}: {x.Description}").ToArray()
-                };
-            }
-
-            await _session.SaveChangesAsync();
-            return new IdentityResults.Password()
-            {
-                IsLongTerm = true,
-                IsSuccess = true,
-                Token = password
+                LongTermId = user.Id,
+                Email = user.Email.ToLowerInvariant(),
+                UserName = user.Email.ToLowerInvariant(),
             };
+
+            var createUserResult = await _userManager.CreateAsync(ident, password);
+            if (createUserResult.Succeeded)
+            {
+                return IdentityResults.AddParticipantResult.Success(true, password);
+            }
+            else
+            {
+                return IdentityResults.AddParticipantResult.Fail(TranslateErrors(createUserResult));
+
+            }
+
         }
 
-        private async Task<IdentityResults.Password> AddShortTermParticipant(ShortTermParticipant user)
+        private async Task<IdentityResults.SignInResult> HasUserWithEmail(string userEmail)
+        {
+            var storeUser = await _userManager.FindByEmailAsync(userEmail);
+            return storeUser == null ? IdentityResults.SignInResult.Fail() : IdentityResults.SignInResult.Success();
+        }
+
+        private async Task<IdentityResults.AddParticipantResult> AddShortTermParticipant(ShortTermParticipant user)
         {
             await _session.StoreAsync(user);
             await _session.SaveChangesAsync();
-            return new IdentityResults.Password()
+            return IdentityResults.AddParticipantResult.Success(false, string.Empty);
+        }
+
+        public async Task<IdentityResults.UpdateParticipantResult> UpdateParticipant(IParticipant user)
+        {
+            if (user is ShortTermParticipant shortP)
             {
-                IsSuccess = true
-            };
-        }
+                return await UpdateShortTermParticipant(shortP);
+            }
 
-
-        protected async Task<LongTermParticipant?> GetStoreUser(LongTermParticipant user)
-        {
-            return await GetStoreUser(user.UserName);
-        }
-
-        private async Task<LongTermParticipant?> GetStoreUser(string id)
-        {
-            var fetchedUser = await GetUserByUsernameAsync(id);
-            if (fetchedUser is LongTermParticipant user)
-                return user;
-            return null;
-        }
-
-        public async Task<LongTermParticipant> GetUserByUsernameAsync(string username)
-        {
-            return await _session.Query<LongTermParticipant>()
-                .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(60)))
-                .FirstOrDefaultAsync(x => x.UserName == username);
-        }
-
-
-        public async Task<LongTermParticipant> GetUserByUserIdAsync(string id)
-        {
-            return await _session.Query<LongTermParticipant>()
-                .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(60)))
-                .FirstOrDefaultAsync(x => x.Id == id);
-        }
-        #endregion
-
-        #region Translators
-
-        private IdentityResults.Password ToPassword(IdentityResult result)
-        {
-            var errors = result.Errors?.Select(x => $"{x.Code} : {x.Description}") ?? new List<string>();
-            return new IdentityResults.Password
+            if (user is LongTermParticipant longP)
             {
-                IsSuccess = result.Succeeded,
-                Errors = errors.ToArray()
-            };
+                return await UpdateLongTermParticipant(longP);
+            }
+
+            throw new Exception("Unknown Type");
         }
 
-        private IdentityResults.SignIn ToSignIn(SignInResult result)
+        private async Task<IdentityResults.UpdateParticipantResult> UpdateShortTermParticipant(ShortTermParticipant user)
         {
-            return new IdentityResults.SignIn
-            {
-                IsSuccess = result.Succeeded,
-            };
+            var shortTerm = await _session.LoadAsync<ShortTermParticipant>(user.Id);
+            shortTerm.YearOfBirth = user.YearOfBirth;
+            shortTerm.FullName = user.FullName;
+            shortTerm.PhoneNumber = user.PhoneNumber;
+            await _session.StoreAsync(shortTerm);
+            await _session.SaveChangesAsync();
+            return IdentityResults.UpdateParticipantResult.Success(false, false);
         }
+
+        private async Task<IdentityResults.UpdateParticipantResult> UpdateLongTermParticipant(LongTermParticipant user)
+        {
+            var longTerm = await _session.LoadAsync<LongTermParticipant>(user.Id);
+
+            longTerm.YearOfBirth = user.YearOfBirth;
+            longTerm.FullName = user.FullName;
+            longTerm.PhoneNumber = user.PhoneNumber;
+            longTerm.IsAllowingPromotions = user.IsAllowingPromotions;
+
+            if (longTerm.Email.ToLowerInvariant() != user.Email.ToLowerInvariant())
+            {
+                var identity = await _userManager.FindByEmailAsync(user.Email.ToLower());
+                identity.Email = user.Email.ToLowerInvariant();
+                await _userManager.UpdateAsync(identity);
+                return IdentityResults.UpdateParticipantResult.Success(true, true);
+            }
+            else
+            {
+                await _session.StoreAsync(longTerm);
+                await _session.SaveChangesAsync();
+                return IdentityResults.UpdateParticipantResult.Success(true, false);
+            }
+        }
+
+        public async Task<IdentityResults.UpdateParticipantResult> UpdateLongTermRoles(
+            LongTermParticipant user,
+            IEnumerable<SystemRoles> roles)
+        {
+            var identity = await _userManager.FindByEmailAsync(user.Email.ToLower());
+            identity.SystemRoles.Clear();
+            identity.SystemRoles.AddRange(roles);
+            var result = await _userManager.UpdateAsync(identity);
+            if (result.Succeeded)
+            {
+                return IdentityResults.UpdateParticipantResult.Success(true, false);
+            }
+            else
+            {
+                return IdentityResults.UpdateParticipantResult.Fail(TranslateErrors(result));
+
+            }
+        }
+
+        public async Task<IEnumerable<SystemRoles>> GetRolesForLongTerm(LongTermParticipant user)
+        {
+            var identity = await _userManager.FindByEmailAsync(user.Email.ToLower());
+            return identity.SystemRoles;
+
+        }
+
         #endregion
 
         #region Password
-        public async Task<IdentityResults.Password> GeneratePasswordResetTokenAsync(LongTermParticipant user)
+        public async Task<IdentityResults.PasswordResults> GeneratePasswordResetTokenAsync(LongTermParticipant user)
         {
-            var storeUser = await GetStoreUser(user);
+            var storeUser = await _userManager.FindByEmailAsync(user.Email);
             if (storeUser is null)
-                return new IdentityResults.Password { IsSuccess = false };
+                return IdentityResults.PasswordResults.Fail("Missing Identity");
 
             var result = await _userManager.GeneratePasswordResetTokenAsync(storeUser);
             await _session.SaveChangesAsync();
 
-            return new IdentityResults.Password
-            {
-                IsSuccess = true,
-                Token = result
-            };
+            return IdentityResults.PasswordResults.Success(result);
         }
 
-        public async Task<IdentityResults.Password> ChangePasswordAsync(LongTermParticipant user, string currentPassword,
+        public async Task<IdentityResults.PasswordResults> ChangePasswordAsync(LongTermParticipant user, string currentPassword,
             string newPassword)
         {
-            var storeUser = await GetStoreUser(user);
+            var storeUser = await _userManager.FindByEmailAsync(user.Email);
             if (storeUser is null)
-                return new IdentityResults.Password { IsSuccess = false };
+                return IdentityResults.PasswordResults.Fail("Missing Identity");
 
             var result = await _userManager.ChangePasswordAsync(storeUser, currentPassword, newPassword);
-            await _session.SaveChangesAsync();
-            return ToPassword(result);
+
+            if (result.Succeeded)
+            {
+                await _session.SaveChangesAsync();
+                return IdentityResults.PasswordResults.Success();
+            }
+            else
+                return IdentityResults.PasswordResults.Fail(TranslateErrors(result));
         }
 
-        public async Task<IdentityResults.Password> SetPasswordAsync(LongTermParticipant user, string newPassword)
+        public async Task<IdentityResults.PasswordResults> SetPasswordAsync(LongTermParticipant user, string newPassword)
         {
-            var storeUser = await GetStoreUser(user);
+            var storeUser = await _userManager.FindByEmailAsync(user.Email);
             if (storeUser is null)
-                return new IdentityResults.Password { IsSuccess = false };
+                return IdentityResults.PasswordResults.Fail("Missing Identity");
 
-            await _session.SaveChangesAsync();
             var result = await _userManager.RemovePasswordAsync(storeUser);
+            if (result.Succeeded == false)
+                return IdentityResults.PasswordResults.Fail(TranslateErrors(result));
+
             result = await _userManager.AddPasswordAsync(storeUser, newPassword);
-            await _session.SaveChangesAsync();
-            return ToPassword(result);
+            if (result.Succeeded)
+            {
+                await _session.SaveChangesAsync();
+                return IdentityResults.PasswordResults.Success();
+            }
+            else
+                return IdentityResults.PasswordResults.Fail(TranslateErrors(result));
         }
 
-        public async Task<IdentityResults.Password> ResetPasswordAsync(LongTermParticipant user, string token, string newPassword)
+        public async Task<IdentityResults.PasswordResults> ResetPasswordAsync(LongTermParticipant user, string token, string newPassword)
         {
-            var storeUser = await GetStoreUser(user);
+            var storeUser = await _userManager.FindByEmailAsync(user.Email);
             if (storeUser is null)
-                return new IdentityResults.Password { IsSuccess = false };
+                return IdentityResults.PasswordResults.Fail("Missing Identity");
+
 
             var result = await _userManager.ResetPasswordAsync(storeUser, token, newPassword);
             await _session.SaveChangesAsync();
-            return ToPassword(result);
+            if (result.Succeeded)
+            {
+                await _session.SaveChangesAsync();
+                return IdentityResults.PasswordResults.Success();
+            }
+            else
+                return IdentityResults.PasswordResults.Fail(TranslateErrors(result));
         }
 
 
         #endregion
 
         #region Sign-In
-
-        public async Task<IdentityResults.SignIn> LoginAsync(string username, string password, bool rememberMe)
+        public async Task<IdentityResults.SignInResult> LoginAsync(string username, string password, bool rememberMe)
         {
-            var user = await GetStoreUser(username);
-            if (user == null)
-            {
-                return IdentityResults.SignIn.Fail();
-            }
+            var storeUser = await _userManager.FindByEmailAsync(username);
+            if (storeUser is null)
+                return IdentityResults.SignInResult.Fail("Missing Identity");
 
-            var signinResult = await _signInManager.PasswordSignInAsync(user, password, rememberMe, false);
-            return ToSignIn(signinResult);
+            var signinResult = await _signInManager.PasswordSignInAsync(storeUser, password, rememberMe, false);
+            if (signinResult.Succeeded)
+            {
+                await _session.SaveChangesAsync();
+                return IdentityResults.SignInResult.Success();
+            }
+            else
+                return IdentityResults.SignInResult.Fail(TranslateErrors(signinResult));
         }
 
-        public async Task LogoutAsync(string username)
+        public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
             await _session.SaveChangesAsync();
-        }
-
-        public async Task<IdentityResults.SignIn> HasUserWithEmail(string userEmail)
-        {
-            var result = await GetUserByUsernameAsync(userEmail);
-            return result == null ? IdentityResults.SignIn.Fail() : IdentityResults.SignIn.Success();
         }
         #endregion
 

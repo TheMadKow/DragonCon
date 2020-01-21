@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DragonCon.Features.Management.Events;
 using DragonCon.Features.Shared;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
-using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Identities.Policy;
 using Microsoft.AspNetCore.Authorization;

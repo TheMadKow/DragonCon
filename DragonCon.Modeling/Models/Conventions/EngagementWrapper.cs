@@ -33,5 +33,8 @@ namespace DragonCon.Modeling.Models.Conventions
         }
 
         public Day Day { get; set; }
+
+        public string Hall { get; set; }
+        public int Table { get; set; }
     }
 }

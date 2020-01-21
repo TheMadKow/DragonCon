@@ -6,7 +6,6 @@ namespace DragonCon.Modeling.Models.Identities
 {
     public interface IParticipant
     {
-        
         string Id { get;  }
         string FirstName { get; }
         string FullName { get; set; }

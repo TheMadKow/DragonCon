@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using DragonCon.Features.Shared;
-using DragonCon.Logical;
 using DragonCon.Logical.Communication;
+using DragonCon.Logical.Identities;
 using DragonCon.Modeling.Models.Identities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragonCon.Features.Participant.Account
@@ -45,20 +43,23 @@ namespace DragonCon.Features.Participant.Account
                 var participant = new LongTermParticipant
                 {
                     YearOfBirth = model.YearOfBirth,
-                    UserName = model.Email,
                     FullName = model.FullName,
                     Email = model.Email,
                     IsAllowingPromotions = model.IsAllowingPromotions,
                     PhoneNumber = model.PhoneNumber,
                 };
                 var addResult = await Identities.AddNewParticipant(participant, model.Password);
+                if (addResult.IsSuccess && addResult.IsLongTerm == false)
+                {
+                    SetUserError("כשלון ביצירת משתמש ארוך טווח", addResult.Details);
+                    return View("LoginOrRegister", returnModel);
+                }
                 if (addResult.IsSuccess)
                 {
                     await Communication.SendWelcomeMessageAsync(participant);
                     var signInResult = await Identities.LoginAsync(model.Email, model.Password, true);
                     if (signInResult.IsSuccess)
                     {
-
                         var cookieConsent = HttpContext.Features.Get<ITrackingConsentFeature>();
                         cookieConsent.GrantConsent();
                         return RedirectToAction("Index", "Personal", new { area = "Participant" });
@@ -71,7 +72,7 @@ namespace DragonCon.Features.Participant.Account
                 }
                 else
                 {
-                    SetUserError("תקלה ביצירת משתתף", addResult.Errors.FirstOrDefault());
+                    SetUserError("תקלה ביצירת משתתף", addResult.Details);
                     return View("LoginOrRegister", returnModel);
                 }
             }
@@ -124,7 +125,7 @@ namespace DragonCon.Features.Participant.Account
             var myCookies = Request.Cookies.Keys;
             foreach (var cookie in myCookies)
                 Response.Cookies.Delete(cookie);
-            await Identities.LogoutAsync(Actor.Me.Id);
+            await Identities.LogoutAsync();
             return RedirectToAction("Login");
         }
 
@@ -139,7 +140,7 @@ namespace DragonCon.Features.Participant.Account
         {
             if (ModelState.IsValid)
             {
-                var user = await Identities.GetUserByUsernameAsync(email);
+                var user = await Identities.GetParticipantByUsernameAsync(email);
                 if (user == null)
                     return RedirectToAction("ForgotPasswordConfirm");
 

@@ -30,8 +30,8 @@ namespace DragonCon.Features.Management.Convention
 
             Id = day.Id;
             Date = day.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
-            From = $"{day.StartTime.Hour}:{day.StartTime.Minute}";
-            To = $"{day.EndTime.Hour}:{day.EndTime.Minute}";
+            From = day.StartTime.ToString("HH:mm", CultureInfo.InvariantCulture);
+            To = day.EndTime.ToString("HH:mm", CultureInfo.InvariantCulture);
         }
 
         public string Id { get; set; }

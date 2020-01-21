@@ -7,16 +7,16 @@
     var actor = Actor;
 }
 
-<div class="card card card-gray-float">
+<div class="card card card-gray-float d-print-none">
     <h3 class="card-title text-bold">
-        <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+        <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-orange-color"></i>
         &nbsp;
         במה אפשר לעזור?
     </h3>
     <div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
         <div class="card-deck">
             @if (Actor.DisplayConvention.Settings.AllowEventsRegistration ||
-            (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
+           (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
             {
                 <div class="card  col-3 clickable " onclick="">
                     <div class="card-body text-center ">
@@ -26,28 +26,28 @@
             }
 
             @if (Actor.DisplayConvention.Settings.AllowEventsRegistration ||
-            (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
+           (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
             {
                 <div class="card clickable  col-3">
                     <div class="card-body text-center ">
-                        <i class="fa fa-2x fa-fw fa-ticket-alt"  style="padding-bottom: 10px;"></i><br /><strong class="h4"> רכישת<br />כרטיס</strong>
+                        <i class="fa fa-2x fa-fw fa-ticket-alt" style="padding-bottom: 10px;"></i><br /><strong class="h4"> רכישת<br />כרטיס</strong>
                     </div>
                 </div>
             }
 
             @if (Actor.DisplayConvention.Settings.AllowEventsSuggestions ||
-            (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
+           (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
             {
                 <div class="card clickable  col-3" onclick="SuggestEvent()">
                     <div class="card-body text-center ">
-                        <i class="fa fa-2x fa-fw fa-shield-alt"  style="padding-bottom: 10px;"></i><br /><strong class="h4"> הגשת<br />אירוע</strong>
+                        <i class="fa fa-2x fa-fw fa-shield-alt" style="padding-bottom: 10px;"></i><br /><strong class="h4"> הגשת<br />אירוע</strong>
                     </div>
                 </div>
             }
 
             <div class="card col-3">
                 <div class="card-body text-center clickable" onclick="UpdateAccount()">
-                    <i class="fa fa-2x fa-fw fa-user-cog"  style="padding-bottom: 10px;"></i><br /> <strong class="h4"> עדכון<br />פרטים</strong>
+                    <i class="fa fa-2x fa-fw fa-user-cog" style="padding-bottom: 10px;"></i><br /> <strong class="h4"> עדכון<br />פרטים</strong>
                 </div>
             </div>
 
@@ -56,7 +56,7 @@
                 <div class="card col-3 dragon-management-btn">
                     <div class="card-body text-center clickable" onclick="ViewManagement()">
                         <a asp-area="Management" asp-controller="Dashboard" asp-action="Index" style="color:white">
-                            <i class="fa fa-2x  fa-fw fa-tools"  style="padding-bottom: 10px;"></i><br />  <strong class="h4"> איזור <br />הניהול</strong>
+                            <i class="fa fa-2x  fa-fw fa-tools" style="padding-bottom: 10px;"></i><br />  <strong class="h4"> איזור <br />הניהול</strong>
                         </a>
                     </div>
                 </div>
@@ -75,9 +75,15 @@
     @await Html.PartialAsync("_PartialEngagement", rel)
 }
 
-<div class="card card card-gray-float">
+<div class="text-center d-print-none">
+    <a class="btn dragon-btn" onclick="window.print();">
+        <i class="fa fa-fw fa-print"></i> הדפסת המידע שלי
+    </a>
+</div>
+
+<div class="card card card-gray-float d-print-none">
     <h3 class="card-title text-bold">
-        <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+        <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-orange-color"></i>
         &nbsp;
         איך עובד האיזור האישי?
     </h3>
@@ -117,7 +123,7 @@
             window.location.href = "/Management";
         }
 
-       
+
 
         SetActiveMenu("nav-personal");
     </script>

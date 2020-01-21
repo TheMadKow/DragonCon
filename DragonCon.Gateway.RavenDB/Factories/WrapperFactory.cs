@@ -144,10 +144,12 @@ namespace DragonCon.RavenDB.Factories
         private EngagedEvent WrapJustDate(Event item)
         {
             WarnIfNotLoaded(item.ConventionDayId);
-            
+            WarnIfNotLoaded(item.HallId);
+
             return new EngagedEvent(item)
             {
                 Day = _session.Load<Day>(item.ConventionDayId),
+
             };
         }
         #endregion

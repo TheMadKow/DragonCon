@@ -1,17 +1,21 @@
-﻿<div class="card card-gray-float right-to-left" id="tag_contactus">
+﻿@model DragonCon.Features.Convention.Home.ContactUsViewModel
+
+<div class="card card-gray-float right-to-left" id="tag_contactus">
     <div class="card-body">
         <h3 class="card-title text-bold">
-            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-organge-color"></i>
+            <i class="fa fa-fw fa-dragon fa-flip-horizontal dragon-orange-color"></i>
             &nbsp;
             שלחו לנו שאלה
         </h3>
         <hr />
         <form class="card-form">
+            <input asp-for="IsEnglish" type="checkbox" hidden=""/>
+      
             <div class="row">
                 <div class="col">
                     <div class="form-group">
                         <label>שם מלא</label>
-                        <input type="text" class="form-control" placeholder="ישראלה ישראלי" />
+                        <input asp-for="FullName" type="text" class="form-control" placeholder="ישראלה ישראלי" />
                     </div>
                 </div>
             </div>
@@ -20,7 +24,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label>דואר אלקטרוני</label>
-                        <input type="email" class="form-control" placeholder="Israela@@israeli.com" />
+                        <input asp-for="Email" type="email" class="form-control" placeholder="Israela@@israeli.com" />
                     </div>
                 </div>
             </div>
@@ -28,7 +32,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label>טלפון</label>
-                        <input type="tel" class="form-control" placeholder="050-123456789" />
+                        <input asp-for="Telephone" type="tel" class="form-control" placeholder="050-123456789" />
                     </div>
                 </div>
             </div>
@@ -37,7 +41,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label>שאלה</label>
-                        <textarea type="text" class="form-control" placeholder="מה אנחנו צריכים לדעת?"></textarea>
+                        <textarea asp-for="Request"  type="text" class="form-control" placeholder="מה אנחנו צריכים לדעת?"></textarea>
                     </div>
                 </div>
             </div>

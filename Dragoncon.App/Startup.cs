@@ -15,6 +15,7 @@ using DragonCon.Logical.Communication;
 using DragonCon.Logical.Convention;
 using DragonCon.Logical.Factories;
 using DragonCon.Logical.Gateways;
+using DragonCon.Logical.Identities;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.Identities.Policy;
 using DragonCon.Modeling.TimeSlots;
@@ -129,7 +130,7 @@ namespace DragonCon.App
             services.AddSingleton(holder);
             services
                 .AddRavenDbAsyncSession(holder.Store) 
-                .AddIdentity<LongTermParticipant, IdentityRole>(identityOptions =>
+                .AddIdentity<EmailIdentity, IdentityRole>(identityOptions =>
                 {
                     // Password settings
                     identityOptions.Password.RequireDigit = true;
@@ -147,7 +148,7 @@ namespace DragonCon.App
                     // User settings
                     identityOptions.User.RequireUniqueEmail = true;
                 })// Adds an identity system to ASP.NET Core
-                .AddRavenDbIdentityStores<LongTermParticipant>()
+                .AddRavenDbIdentityStores<EmailIdentity>()
                 .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>
@@ -207,7 +208,7 @@ namespace DragonCon.App
             }
             else
             {
-                app.UseExceptionHandler("/Convention/Error");
+                app.UseExceptionHandler("/Convention/Home/Error");
             }
 
             app.UseHsts();

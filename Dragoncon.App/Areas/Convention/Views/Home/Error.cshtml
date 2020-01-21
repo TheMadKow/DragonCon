@@ -1,1 +1,42 @@
-﻿
+﻿@{
+    ViewData["Title"] = "תקלה";
+    var actor = Actor;
+}
+
+<div class="card card card-gray-float">
+    <h1 class="card-title text-bold">
+        התרחשה תקלה
+    </h1>
+    <h2 class="card-title text-bold text-center">
+        <i class="fa fa-fw fa-dice-d20 fa-flip-horizontal dragon-orange-color"></i>
+        &nbsp;
+        הו לא - גילגלנו 1 טבעי
+        &nbsp;
+        <i class="fa fa-fw fa-dice-d20 fa-flip-horizontal dragon-orange-color"></i>
+    </h2>
+
+    <div class="card-body">
+        <p class="card-paragraph">
+            התרחשה תקלה בחוות השרתים הדרקונית וחלקם ברחו לחופשי, אנא נסו שנית לגשת לחלק שחיפשתם.
+            <br/>
+            באם התקלה חוזרת על עצמה, אפשר לנסות מספר פתרונות כללים ולדווח לנו איזה דרקונים אנחנו מחפשים.
+        </p>
+        <ul class="card-list">
+            <li>
+                אם הבעיה גרפית אפשר לנסות להכריח את הדפדפן להוריד מחדש - בחלונות ובלינוקס על ידי CTRL+F5. במק על ידי SHIFT וללחוץ על Reload.
+            </li>
+            <li>אפשר לנסות להתנתק מהמערכת, ולהתחבר בשנית על מנת לנקות את העוגיות.</li>
+            <li>אפשר לנסות להתחבר מדפדפן אחר ולראות האם הבעיה נקודתית לדפדפן.</li>
+        </ul>
+        <p class="card-paragraph text-center">
+            <i class="fa fa-fw fa-dice-one"></i>
+            <i class="fa fa-fw fa-dice-two"></i>
+            <i class="fa fa-fw fa-dice-three"></i>
+            <i class="fa fa-fw fa-dice-four"></i>
+            <i class="fa fa-fw fa-dice-five"></i>
+            <i class="fa fa-fw fa-dice-six"></i>
+        </p>
+    </div>
+</div>
+@await Html.PartialAsync("_PartialContactUs")
+

@@ -1,4 +1,5 @@
 ﻿@using DragonCon.App.Settings
+@using DragonCon.Features.Convention.Home
 @{
     var actor = Actor;
     Layout = "_LandingLayout";
@@ -96,7 +97,7 @@
         </ul>
         <p class="card-paragraph">
             <h3 class="text-center">
-                <strong class="dragon-organge-color">אז בואו לשחק בדרקוניקון!</strong>
+                <strong class="dragon-orange-color">אז בואו לשחק בדרקוניקון!</strong>
             </h3>
         </p>
     </div>
@@ -116,4 +117,4 @@
     </div>
 </div>
 
-@await Html.PartialAsync("_PartialContactUs")
+@await Html.PartialAsync("_PartialContactUs", new ContactUsViewModel())

@@ -11,7 +11,7 @@
     @await Html.PartialAsync("_PartialErrorResult")
     @await Html.PartialAsync("_PartialAntiForgery")
 
-    <div class="d-none d-md-block">
+    <div class="d-none d-md-block d-print-none">
         <div id="mySidenav" class="sidenav">
             <a href="#" id="side-news">חדשות כנס &nbsp;<i class="fa fa-fw fa-rss"></i></a>
             <a href="#" id="side-facebook">דף פייסבוק &nbsp;<i class="fab fa-fw fa-facebook"></i></a>
@@ -25,7 +25,7 @@
 
     <nav class="navbar navbar-dragon navbar-expand-md" style="padding-top: 0;padding-bottom: 0;">
         <a class="navbar-brand" href="/"><img src="/images/logos/Logo_100.png" style="height: 80px;" /></a>
-        <h2 class="text-bold dragon-organge-color d-block d-md-none">דרקוניקון</h2>
+        <h2 class="text-bold dragon-orange-color d-block d-md-none">דרקוניקון</h2>
         <button class="navbar-toggler" type="button"
                 data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@
     </nav>
 
     <div class="container">
-        <h1 class="Title-Text dragon-organge-color text-bold text-center">
+        <h1 class="Title-Text dragon-orange-color text-bold text-center">
             @if (Actor.HasDisplayConvention)
             {
                 <div class="row">

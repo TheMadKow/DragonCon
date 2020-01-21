@@ -21,8 +21,18 @@ namespace DragonCon.Features.Management.Participants
 
         public IDisplayPagination Pagination { get; set; }
         public Filters filters { get; set; }
+        
+        public Dictionary<string, List<SystemRoles>> SystemRolesMap { get; set; } = new Dictionary<string, List<SystemRoles>>();
         public List<EngagementWrapper> Engagements { get; set; } = new List<EngagementWrapper>();
 
         public bool AllowHistoryParticipants { get; set; } = false;
+
+        public List<SystemRoles> TryGetSystemRoles(string longTermId)
+        {
+            if (SystemRolesMap.ContainsKey(longTermId))
+                return SystemRolesMap[longTermId];
+
+            return new List<SystemRoles>();
+        }
     }
 }

@@ -18,9 +18,6 @@
 	  <PackageReference Include="NodaTime.Serialization.JsonNet" Version="2.2.0" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\submodules\RavenDB.Identity\RavenDB.Identity\RavenDB.Identity.csproj" />
-	</ItemGroup>
-	<ItemGroup>
 	  <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
 	    <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.dependencyinjection.abstractions\2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
 	  </Reference>

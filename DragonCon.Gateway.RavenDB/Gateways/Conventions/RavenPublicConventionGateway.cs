@@ -3,6 +3,7 @@ using System.Linq;
 using DragonCon.Features.Convention;
 using DragonCon.Features.Convention.Home;
 using DragonCon.Features.Convention.Landing;
+using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.Modeling.Models.UserDisplay;
@@ -33,6 +34,11 @@ namespace DragonCon.RavenDB.Gateways.Conventions
                         Name = Session.Load<LongTermParticipant>(x.ParticipantId).FullName
                     }).ToList()
             };
+        }
+
+        public Answer SendContactUs(ContactUsViewModel viewModel)
+        {
+            throw new NotImplementedException();
         }
     }
 }

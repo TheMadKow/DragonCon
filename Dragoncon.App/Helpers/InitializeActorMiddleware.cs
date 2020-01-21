@@ -12,6 +12,7 @@ using DragonCon.Modeling.Models.Tickets;
 using DragonCon.Modeling.Models.UserDisplay;
 using DragonCon.Modeling.TimeSlots;
 using DragonCon.RavenDB;
+using DragonCon.RavenDB.Identities;
 using DragonCon.RavenDB.Index;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -152,15 +153,20 @@ namespace DragonCon.App.Helpers
         {
             if (httpContext.User.Identity.IsAuthenticated)
             {
-                var user = session.Query<LongTermParticipant>()
-                    .FirstOrDefault(x => x.Email == httpContext.User.Identity.Name);
-                if (user != null)
+
+                var ident = session
+                    .Include<EmailIdentity>(x => x.LongTermId)
+                    .Load<EmailIdentity>
+                    ($"EmailIdentities/{httpContext.User.Identity.Name}");
+                var participant = session.Load<LongTermParticipant>(ident.LongTermId);
+
+                if (ident != null)
                 {
                     return new Actor.ActorParticipant
                     {
-                        Id = user.Id,
-                        FullName = user.FullName,
-                        SystemRoles = user.SystemRoles
+                        Id = participant.Id,
+                        FullName = participant.FullName,
+                        SystemRoles = ident.SystemRoles
                     };
                 }
             }

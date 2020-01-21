@@ -1,6 +1,7 @@
 ﻿using System;
 using DragonCon.Logical;
 using DragonCon.Logical.Communication;
+using DragonCon.Logical.Identities;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Identities;

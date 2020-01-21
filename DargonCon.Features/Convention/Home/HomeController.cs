@@ -1,5 +1,6 @@
 ﻿using System;
 using DragonCon.Features.Shared;
+using DragonCon.Modeling.Models.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragonCon.Features.Convention.Home
@@ -35,6 +36,36 @@ namespace DragonCon.Features.Convention.Home
         public IActionResult Events()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult ContactUs(ContactUsViewModel viewModel)
+        {
+            var answer = Gateway.SendContactUs(viewModel);
+            if (answer.AnswerType != AnswerType.Success)
+            {
+                if (viewModel.IsEnglish)
+                {
+                    SetUserError("Failure to Contact", answer.Message);
+                    return RedirectToAction("English");
+                } 
+                else
+                {
+                    SetUserError("לא יכול ליצור קשר", answer.Message);
+                    return RedirectToAction("Index");
+                }
+            }
+
+            if (viewModel.IsEnglish)
+            {
+                SetUserSuccess("Contact Established", "Your request was sent");
+                return RedirectToAction("English");
+            }
+            else
+            {
+                SetUserSuccess("נוצר קשר", "הבקשה שלך נשלחה");
+                return RedirectToAction("Index");
+            }
         }
 
         public IActionResult About()

@@ -103,7 +103,6 @@ namespace DragonCon.RavenDB.Gateways
             {
                 model = new LongTermParticipant
                 {
-                    UserName = viewmodel.Email,
                     Email = viewmodel.Email,
                     IsAllowingPromotions = viewmodel.IsAllowingPromotions ?? false,
                 };
@@ -125,11 +124,11 @@ namespace DragonCon.RavenDB.Gateways
 
             if (result.IsSuccess && result.IsLongTerm)
             {
-                await Hub.SendCreationPasswordAsync(model as LongTermParticipant, result.Token);
+                await Hub.SendCreationPasswordAsync(model as LongTermParticipant, result.InitialPassword);
             }
 
             if (result.IsSuccess == false)
-                return Answer.Error(result.Errors?.AsJson());
+                return Answer.Error(result.Details);
 
             return new Answer(AnswerType.Success)
             {
