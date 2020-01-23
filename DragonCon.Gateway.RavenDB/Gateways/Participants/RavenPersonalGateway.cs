@@ -5,13 +5,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using DragonCon.Features.Participant.Account;
 using DragonCon.Features.Participant.Personal;
+using DragonCon.Features.Shared;
 using DragonCon.Logical;
 using DragonCon.Logical.Identities;
+using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.Identities;
 using DragonCon.RavenDB.Factories;
+using DragonCon.RavenDB.Index;
 using Microsoft.Extensions.DependencyInjection;
 using NodaTime;
 using Raven.Client.Documents;
@@ -198,6 +201,71 @@ namespace DragonCon.RavenDB.Gateways.Participants
                     Message = message
                 }
                 : Answer.Error(result.Details);
+        }
+
+        public DisplaySelectableEventsViewModel BuildEvents(string forUserId, IDisplayPagination pagination, DisplayEventsViewModel.Filters filters)
+        {
+            var events = Session.Query<Events_BySeatsAgeAndEndTime.Result, Events_BySeatsAgeAndEndTime>()
+         .Include(x => x.DayId)
+         .Include(x => x.EventId)
+         .Where(x => x.Status == EventStatus.Approved)
+         .AsQueryable();
+            if (filters != null)
+            {
+                if (filters.HideCompleted)
+                {
+                    // TODO
+                }
+
+                if (filters.HideTaken)
+                {
+                    events = events.Where(x => x.SeatsAvailable > 1);
+                }
+
+                if (filters.StartTime.IsNotEmptyString())
+                {
+                    // TODO
+                }
+
+                if (filters.ActivitySelection.IsNotEmptyString())
+                {
+                    // TODO
+                }
+            }
+
+            events = events.Skip(pagination.SkipCount).Take(pagination.ResultsPerPage);
+            var result = events.ToList();
+
+            var realEvents = Session
+                .Include<Event>(x => x.ConventionId)
+                .Include<Event>(x => x.ActivityId)
+                .Include<Event>(x => x.AgeId)
+                .Include<Event>(x => x.GameHostIds)
+                .Include<Event>(x => x.SubActivityId)
+                .Include<Event>(x => x.HallId)
+                .Load<Event>(result.Select(x => x.EventId))
+                .Where(x => x.Value != null)
+                .Select(x => x.Value)
+                .ToList();
+
+            var wrappers = new WrapperFactory(Session).Wrap(realEvents);
+            var stats = events.ToDictionary(x => x.EventId, x => x);
+
+            var viewModel = new DisplaySelectableEventsViewModel();
+            viewModel.Pagination =
+                DisplayPagination.BuildForView(result.Count, pagination.SkipCount, pagination.ResultsPerPage);
+            foreach (var eventWrapper in wrappers)
+            {
+                var seats = stats[eventWrapper.Inner.Id];
+                viewModel.Events.Add(new DisplayEventViewModel(eventWrapper, seats.SeatsCapacity, seats.SeatsTaken));
+            }
+
+            var engagement = Session.Query<UserEngagement>().FirstOrDefault(x =>
+                x.ConventionId == Actor.DisplayConvention.ConventionId &&
+                x.ParticipantId == Actor.Me.Id);
+
+            viewModel.EventIdsSelected = engagement.EventIds;
+            return viewModel;
         }
     }
 }

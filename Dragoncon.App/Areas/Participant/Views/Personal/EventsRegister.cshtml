@@ -1,6 +1,6 @@
 ﻿@using System.Globalization
 @using DragonCon.Modeling.Helpers
-@model DragonCon.Features.Shared.DisplayEventsViewModel
+@model DragonCon.Features.Shared.DisplaySelectableEventsViewModel
 
 @{
     ViewData["Title"] = "אירועי הכנס";
@@ -32,6 +32,15 @@
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
+
+        function checkbox(id) {
+            if ($("#event-check-" + id).is(':checked')) {
+
+                $(".event-row-" + id).addClass("selected");
+            } else {
+                $(".event-row-" + id).removeClass("selected");
+            }
+        }
     </script>
 
 }

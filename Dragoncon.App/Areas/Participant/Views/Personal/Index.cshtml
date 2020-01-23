@@ -18,7 +18,7 @@
             @if (Actor.DisplayConvention.Settings.AllowEventsRegistration ||
            (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
             {
-                <div class="card  col-3 clickable " onclick="">
+                <div class="card  col-3 clickable " onclick="RegisterEvents()">
                     <div class="card-body text-center ">
                         <i class="fa fa-2x fa-fw fa-dice-d20" style="padding-bottom: 10px;"></i><br /><strong class="h4"> הרשמה<br />לאירועים</strong>
                     </div>
@@ -113,6 +113,10 @@
     <script>
         function UpdateAccount() {
             window.location.href = "/Participant/Personal/UpdateAccount";
+        }
+
+        function RegisterEvents() {
+            window.location.href = "/Participant/Personal/EventsRegister";
         }
 
         function SuggestEvent() {

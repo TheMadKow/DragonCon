@@ -1,5 +1,4 @@
 ﻿using System;
-using DragonCon.Features.Convention.Shared;
 using DragonCon.Features.Shared;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +22,6 @@ namespace DragonCon.Features.Convention.Events
         {
             var viewModel = Gateway.BuildEvents(DisplayPagination.BuildForGateway(page, perPage), ActiveFilters);
             return View(viewModel);
-
         }
 
 

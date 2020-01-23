@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DragonCon.Features.Convention.Events;
-using DragonCon.Features.Convention.Shared;
 using DragonCon.Features.Shared;
 using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Events;

@@ -15,5 +15,8 @@ namespace DragonCon.Features.Participant.Personal
         // Account
         Task<Answer> ChangePassword(PasswordChangeViewModel viewmodel);
         Task<Answer> UpdateDetails(DetailsUpdateViewModel viewModel);
+
+        // Register Events
+        DisplaySelectableEventsViewModel BuildEvents(string forUserId, IDisplayPagination buildForGateway, DisplayEventsViewModel.Filters activeFilters = null);
     }
 }

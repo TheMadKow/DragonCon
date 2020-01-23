@@ -1,5 +1,4 @@
-﻿using DragonCon.Features.Convention.Shared;
-using DragonCon.Features.Shared;
+﻿using DragonCon.Features.Shared;
 
 namespace DragonCon.Features.Convention.Events
 {

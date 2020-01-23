@@ -71,6 +71,22 @@
     }
 
 
+.dragon-readmore-btn {
+    min-width: 200px;
+    background: #efefef;
+    color: black;
+    font-weight: bold;
+    border-radius: 0;
+}
+
+    .dragon-readmore-btn:hover {
+        background: #9b9b9b;
+        color: black;
+        text-decoration: underline white !important;
+    }
+
+
+
 .dragon-btn {
     min-width: 200px;
     font-size: 1.2em;
@@ -220,6 +236,12 @@ a.dragon-organge-link {
     color: red;
 }
 
+.table-events tr.selected > td {
+    background: #ebfff0;
+    -webkit-transition: background 500ms ease;
+    transition: background 500ms ease;
+}
+
 .table-events {
     border-collapse: separate;
     border-spacing: 0 0;
@@ -230,11 +252,11 @@ a.dragon-organge-link {
         background-color: white;
         padding-top: 6px;
         padding-bottom: 6px;
-}
+    }
 
 
 .text-middle {
-    vertical-align:  middle !important;
+    vertical-align: middle !important;
 }
 
 .table-events th {
@@ -242,10 +264,10 @@ a.dragon-organge-link {
 }
 
 
-    .table-events tr.top-row > td {
-        border-top: 1px solid #a8a8a8 !important;
-        border-bottom: 1px dashed #a8a8a8 !important;
-    }
+.table-events tr.top-row > td {
+    border-top: 1px solid #a8a8a8 !important;
+    border-bottom: 1px dashed #a8a8a8 !important;
+}
 
 .table-events tr.bottom-row > td {
     border-bottom: 1px solid #a8a8a8 !important;

@@ -33,10 +33,6 @@ namespace DragonCon.Features.Convention.Home
         {
             return View();
         }
-        public IActionResult Events()
-        {
-            return View();
-        }
 
         [HttpPost]
         public IActionResult ContactUs(ContactUsViewModel viewModel)

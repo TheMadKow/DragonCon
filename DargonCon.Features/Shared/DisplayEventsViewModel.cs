@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using DragonCon.Features.Shared;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
 using DragonCon.Modeling.Models.HallsTables;
 using DragonCon.Modeling.Models.Identities;
 
-namespace DragonCon.Features.Convention.Shared
+namespace DragonCon.Features.Shared
 {
     public class DisplayEventsViewModel
     {
