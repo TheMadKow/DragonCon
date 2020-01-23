@@ -11,9 +11,9 @@ using Raven.Client.Documents;
 
 namespace DragonCon.RavenDB.Gateways.Conventions
 {
-    public class RavenPublicConventionGateway : RavenGateway, IConventionPublicGateway
+    public class RavenPublicDisplayGateway : RavenGateway, IDisplayPublicGateway
     {
-        public RavenPublicConventionGateway(IServiceProvider provider) : base(provider)
+        public RavenPublicDisplayGateway(IServiceProvider provider) : base(provider)
         {
         }
 

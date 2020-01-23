@@ -219,3 +219,35 @@ a.dragon-organge-link {
     content: " *";
     color: red;
 }
+
+.table-events {
+    border-collapse: separate;
+    border-spacing: 0 0;
+}
+
+    .table-events td {
+        border-top: none !important;
+        background-color: white;
+        padding-top: 6px;
+        padding-bottom: 6px;
+}
+
+
+.text-middle {
+    vertical-align:  middle !important;
+}
+
+.table-events th {
+    border-top: none !important;
+}
+
+
+    .table-events tr.top-row > td {
+        border-top: 1px solid #a8a8a8 !important;
+        border-bottom: 1px dashed #a8a8a8 !important;
+    }
+
+.table-events tr.bottom-row > td {
+    border-bottom: 1px solid #a8a8a8 !important;
+    border-top: 1px dashed #a8a8a8 !important;
+}

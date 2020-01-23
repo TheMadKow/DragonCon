@@ -1,0 +1,163 @@
+﻿@using System.Globalization
+@using DragonCon.Modeling.Helpers
+@model DragonCon.Features.Convention.Shared.DisplayEventsViewModel
+
+@{
+    ViewData["Title"] = "אירועי הכנס";
+    var actor = Actor;
+}
+<div class="card card-gray-float" style="padding: 0;">
+    <div class="card-body text-center">
+        @if (Actor.DisplayConvention.Settings.AllowEventsRegistration)
+        {
+            <h2 class="text-bold text-success"><i class="fa fa-fw fa-ticket-alt"></i>&nbsp;&nbsp; הרישום המוקדם פתוח!</h2>
+        }
+
+        <h4>
+
+            סמל לא מובן<i class="fa fa-fw fa-question"></i> אין בעיה - עברו עם העכבר או לחצו עליו.
+        </h4>
+
+        <table class="table table-events" style="line-height: 1.75">
+            @foreach (var approved in Model.Events.OrderBy(x => x.TimeSlot.From))
+            {
+                if (approved == null)
+                {
+                    continue;
+                }
+
+                <tr><th colspan="100%"></th></tr>
+                <tr class="top-row" style="font-size: 1.5em;">
+                    <td colspan="2" class="text-right text-middle tw-8">
+                        <span class="text-bold">
+                            @approved.Name
+                        </span>
+
+                        @if (approved.IsFree)
+                        {
+                            <br />
+                            <span class="badge badge-success" data-toggle="tooltip" title="אירוע זה לא נספר במכסת האירוע של הכרטיס">אירוע חופשי</span>
+                        }
+                        @if (approved.ExtraCharge > 0)
+                        {
+                            <br />
+                            <span class="badge badge-info" data-toggle="tooltip" title="אירוע זה בתשלום נוסף">אירוע בתשלום נוסף - @approved.ExtraCharge ש"ח</span>
+                        }
+                    </td>
+                    <td class="tw-2 text-left">
+                        <span>
+                            <i class="fa fa-fw fa-dice-d20 text-primary" data-toggle="tooltip" title="סוג הפעילות והתת סוג שלה"></i>
+                            @if (approved.Activity != null)
+                            {
+                                <span class="text-primary text-bold">
+                                    @approved.Activity.Name
+                                </span>
+                            }
+
+                            @if (approved.SubActivity != null)
+                            {
+                                <br />
+                                @approved.SubActivity.Name
+                            }
+
+                        </span>
+                    </td>
+                </tr>
+                <tr class="text-right" style="font-size: 1.25em;">
+                    <td class="tw-4">
+                        @if (approved.Day != null)
+                        {
+                            <span>
+                                <i class="far fa-fw fa-calendar-alt" data-toggle="tooltip" title="יום האירוע"></i>
+                                @approved.Day?.Date.DayOfWeek.InHebrew(),
+                                ה-@approved.Day?.Date.ToString("dd/MM", CultureInfo.InvariantCulture)
+                                <br />
+                            </span>
+                        }
+
+                        @if (approved.TimeSlot != null)
+                        {
+                            <span>
+                                <i class="far fa-fw fa-clock" data-toggle="tooltip" title="שעות האירוע"></i>
+                                @approved.TimeSlot?.From.ToString("H:mm", CultureInfo.InvariantCulture)
+                                -@approved.TimeSlot?.To.ToString("H:mm", CultureInfo.InvariantCulture)
+                                <br />
+                            </span>
+                        }
+
+                        @if (approved.Hall != null)
+                        {
+                            <span>
+                                <i class="fa fa-fw fa-dungeon" data-toggle="tooltip" title="המיקום בכנס"></i> @approved.Hall?.Name - שולחן @approved.HallTable
+                                <br />
+                            </span>
+                        }
+                    </td>
+                    <td class="tw-4">
+                        <i class="fa fa-fw fa-user-circle" data-toggle="tooltip" title="מנחי האירוע"></i>
+                        @foreach (var host in approved.GameHosts)
+                        {
+                            @host.FullName
+                        }
+
+
+                    </td>
+                    <td class="tw-4">
+
+                        @{
+                            var seatRatio = approved.SeatsAvailable / (double)approved.SeatsCapacity;
+                            var seatTitle = "נותרו מקומות פנויים";
+
+                            var seatColor = "text-success";
+                            if (seatRatio < 0.3)
+                            {
+                                seatTitle = "נותרו מקומות אחרונים";
+                                seatColor = "text-warning";
+                            }
+                            if (seatRatio == 0)
+                            {
+                                seatTitle = "אין מקומות פנויים";
+                                seatColor = "text-danger";
+                            }
+                        }
+                        <i class="fa fa-fw fa-circle @seatColor"
+                           data-toggle="tooltip" title="@seatTitle"></i> @approved.SeatsAvailable מקומות פנויים
+
+                        <br />
+                        <i data-toggle="tooltip" title="הגבלת הגיל לאירוע"
+                           class="fa fa-fw fa-child"></i> @approved.AgeGroup.GetDescription()
+                    </td>
+                </tr>
+                <tr class="bottom-row text-right" style="font-size: 1.25em;">
+                    <td colspan="100%" class="text-right">
+                        <div class="text-center"
+                              data-toggle="collapse" href="#details-@approved.Id.GetNumberFromId()"
+                              role="button" aria-expanded="false" aria-controls="details-@approved.Id.GetNumberFromId()">
+                            <div class="btn btn-sm btn-primary">
+                                <i class="fa fa-fw fa-info-circle"></i> תיאור האירוע
+                            </div>
+                        </div>
+                        <div class="card card-gray collapse" id="details-@approved.Id.GetNumberFromId()">
+                            <strong>@approved.Name: </strong>
+                            @approved.Description
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+}

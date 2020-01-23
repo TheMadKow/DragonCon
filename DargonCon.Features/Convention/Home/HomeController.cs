@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Convention.Home
 {
     [Area("Convention")]
-    public class HomeController : DragonController<IConventionPublicGateway>
+    public class HomeController : DragonController<IDisplayPublicGateway>
     {
         public HomeController(IServiceProvider service) : 
             base(service)  { }

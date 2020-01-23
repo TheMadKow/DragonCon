@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragonCon.Features.Convention.Landing
 {
     [Area("Convention")]
-    public class LandingController : DragonController<IConventionPublicGateway>
+    public class LandingController : DragonController<IDisplayPublicGateway>
     {
         public LandingController(IServiceProvider service) : 
             base(service)  { }

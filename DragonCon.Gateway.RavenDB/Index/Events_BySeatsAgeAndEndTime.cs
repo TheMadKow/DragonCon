@@ -2,6 +2,7 @@
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Conventions;
 using DragonCon.Modeling.Models.Events;
+using NodaTime;
 using Raven.Client.Documents.Indexes;
 
 namespace DragonCon.RavenDB.Index
@@ -15,7 +16,9 @@ namespace DragonCon.RavenDB.Index
 
             public string EventId { get; set; } = string.Empty;
             public string DayId { get; set; } = string.Empty;
-            public string EndTime { get; set; } = string.Empty;
+
+            public LocalTime EndTime { get; set; }
+            public LocalTime StartTime { get; set; }
 
             public int? MinAge { get; set; }
             public int? MaxAge { get; set; }
@@ -38,11 +41,13 @@ namespace DragonCon.RavenDB.Index
                     EventId = evnt.Id,
                     DayId = evnt.ConventionDayId,
                     EndTime = evnt.TimeSlot.To,
-                    SeatsCapacity = evnt.Size.Max,
+                    StartTime = evnt.TimeSlot.From,
                     MinAge = ageGroup.MinAge,
                     MaxAge = ageGroup.MaxAge,
                     Status = evnt.Status,
-                    SeatsTaken = 0
+                    SeatsCapacity = evnt.Size.Max,
+                    SeatsTaken = 0,
+                    SeatsAvailable = 0
                 });
 
             AddMap<UserEngagement>(engagements
@@ -56,9 +61,11 @@ namespace DragonCon.RavenDB.Index
                        MaxAge = 0,
                        DayId = "",
                        EndTime = "",
+                       StartTime = "",
                        SeatsCapacity = "",
-                        Status = EventStatus.Approved,
-                       SeatsTaken = 1
+                       SeatsTaken = 1,
+                       SeatsAvailable = 0,
+                       Status = EventStatus.Approved,
                    });
 
             Reduce = results => from result in results
@@ -73,8 +80,10 @@ namespace DragonCon.RavenDB.Index
                                     MaxAge = realFirst.MaxAge,
                                     DayId = realFirst.DayId,
                                     EndTime = realFirst.EndTime,
+                                    StartTime = realFirst.StartTime,
                                     SeatsCapacity = realFirst.SeatsCapacity,
-                                    SeatsTaken = g.Sum(x => x.SeatsTaken)
+                                    SeatsTaken = g.Sum(x => x.SeatsTaken),
+                                    SeatsAvailable = realFirst.SeatsCapacity - g.Sum(x => x.SeatsTaken)
                                 };
         }
     }
