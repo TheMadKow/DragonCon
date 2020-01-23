@@ -12,19 +12,8 @@ namespace DragonCon.Features.Convention.Events
 
         public IActionResult Index(int page = 0, int perPage = ResultsPerPage)
         {
-            var viewModel = Gateway.BuildEvents(DisplayPagination.BuildForGateway(page, perPage));
+            var viewModel = Gateway.BuildEvents();
             return View(viewModel);
         }
-
-        [HttpPost]
-        public IActionResult Index(DisplayEventsViewModel.Filters ActiveFilters, 
-            int page = 0, int perPage = ResultsPerPage)
-        {
-            var viewModel = Gateway.BuildEvents(DisplayPagination.BuildForGateway(page, perPage), ActiveFilters);
-            return View(viewModel);
-        }
-
-
-
     }
 }

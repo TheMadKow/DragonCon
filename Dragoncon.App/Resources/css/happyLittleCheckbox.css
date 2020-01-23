@@ -55,13 +55,14 @@
 }
 
     .checkboxes-container .check label .box {
-        background: rgba(0, 0, 0, 0.3);
+        background: rgba(220, 220, 220, 0.3);
         border-radius: 3px;
         position: relative;
         width: 50px;
         height: 70px;
         -webkit-transition: background 200ms ease;
         transition: background 200ms ease;
+        border: 1px solid gray;
     }
 
         .checkboxes-container .check label .box:hover {

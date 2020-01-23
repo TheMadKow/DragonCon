@@ -7,18 +7,69 @@
     var actor = Actor;
 }
 
+@if (Actor.DisplayConvention.Settings.AllowEventsRegistration)
+{
+    <div class="card card-gray-float" style="padding: 0;">
+        <div class="card-body">
+            <div class="text-center">
+                <h2 class="text-bold text-success"><i class="fa fa-fw fa-ticket-alt"></i>&nbsp;&nbsp; נפתח  <a asp-area="Participant" asp-controller="Personal" asp-action="Index">הרישום המוקדם לכנס</a>!</h2>
+            </div>
+        </div>
+    </div>
+}
 
 <div class="card card-gray-float" style="padding: 0;">
-    <div class="card-body text-center">
-        @if (Actor.DisplayConvention.Settings.AllowEventsRegistration)
-        {
-            <h2 class="text-bold text-success"><i class="fa fa-fw fa-ticket-alt"></i>&nbsp;&nbsp; הרישום המוקדם פתוח!</h2>
-        }
+    <div class="card-body">
+        <h3 class="card-title text-bold">
+            @await Html.PartialAsync("_PartialDragon")
+            אירועי הכנס
+        </h3>
 
-        <h4>
 
-            סמל לא מובן<i class="fa fa-fw fa-question"></i> אין בעיה - עברו עם העכבר או לחצו עליו.
-        </h4>
+        <div class="filter-container">
+            <form asp-area="Convention" asp-controller="Events" asp-action="Index">
+                <strong>סינון לפי</strong>
+                <br />
+
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <label> זמן התחלה</label>
+                    </div>
+                    <div class="col-4">
+                        <select class="form-control chosen-select"
+                                id="start-time-filter"
+                                name="start-time-filter"
+                                asp-items="Actor.DisplayDropDowns.BuildDaysTimes()"
+                                data-placeholder="מועד התחלה"
+                                onchange="ChangedEventFilter(this)">
+                            <option value="" selected>הכל</option>
+                        </select>
+                    </div>
+                    <div class="col-1 text-center">
+                        <label class="label-control">סוג פעילות</label>
+
+                    </div>
+                    <div class="col-4">
+                        <select class="form-control chosen-select"
+                                id="activities-filter"
+                                name="activities-filter"
+                                asp-items="Actor.DisplayDropDowns.Activities()"
+                                onchange="ChangedEventFilter(this)">
+                            data-placeholder="סוג פעילות">
+                            <option value="" selected>הכל</option>
+                        </select>
+                    </div>
+
+                    <div class="col-2">
+                        <button class="btn btn-danger" id="reset-filter" onclick="ChangedEventFilter(this)">
+                            <i class="fa fa-fw fa-times"></i>
+                            איפוס
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
 
         @await Html.PartialAsync("_PartialDisplayEventsTable", Model)
 
@@ -29,9 +80,54 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('[data-toggle="tooltip"]').tooltip();
         });
+
+
+        SetActiveMenu("nav-events");
+
+        function ChangedEventFilter(caller) {
+            if (caller.id === "reset-filter") {
+                $(".event-row").css("display", "");
+                $('#start-time-filter').val('').trigger('chosen:updated');
+                $('#activities-filter').val('').trigger('chosen:updated');
+
+            } else {
+
+                var dayFilter = $("#start-time-filter").chosen().val();
+                var activityFilter = $("#activities-filter").chosen().val();
+
+                dayFilter = dayFilter.toString().toUpperCase().trim();
+                activityFilter = activityFilter.toString().toUpperCase().trim();
+
+                var rows = $(".event-row-filter");
+                rows.each(function(idx, row) {
+                    var $row = $(row);
+
+                    var rowId = $row.data("event").toUpperCase().trim();
+                    var rowDay = $row.data("day").toUpperCase().trim();
+                    var rowActivity = $row.data("activity").toUpperCase().trim();
+
+                    var hiddenList = [];
+                    if (rowActivity.indexOf(activityFilter) > -1) {
+                        $(".event-row-" + rowId).css("display", "");
+                    } else {
+                        $(".event-row-" + rowId).css("display", "none");
+                        hiddenList.push(rowId);
+                    }
+
+                    if (rowDay.indexOf(dayFilter) > -1) {
+                        if (hiddenList.includes(rowId) === false) {
+                            $(".event-row-" + rowId).css("display", "");
+                        }
+                    } else {
+                        $(".event-row-" + rowId).css("display", "none");
+                    }
+
+                });
+            }
+        }
     </script>
 
 }

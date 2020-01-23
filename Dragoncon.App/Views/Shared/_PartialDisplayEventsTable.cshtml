@@ -20,50 +20,19 @@
             continue;
         }
 
-        <tr><th colspan="100%"></th></tr>
-        <tr class="top-row event-row-@approved.Id.GetNumberFromId()" style="font-size: 1.5em;">
-            <td colspan="2" class="text-right text-middle tw-9">
-                <div class="row">
-                    @if (isSelectable)
-                    {
-                        <div class="col-1">
-                            <div class="checkboxes-container">
-                                <div class="checkboxes">
-                                    <div class="check">
-                                        <input id="event-check-@approved.Id.GetNumberFromId()" type="checkbox" onChange="checkbox('@approved.Id.GetNumberFromId()')" />
-                                        <label for="event-check-@approved.Id.GetNumberFromId()">
-                                            <div class="box"><i class="fa fa-check"></i></div>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-
-                    <div class="col">
-                        <span class="text-bold">
-                            @approved.Name
-                        </span>
-
-                        @if (approved.IsFree)
-                        {
-                            <br />
-                            <span class="badge badge-info" data-toggle="tooltip" title="אירוע זה לא נספר במכסת האירוע של הכרטיס">אירוע חופשי</span>
-                        }
-                        @if (approved.ExtraCharge > 0)
-                        {
-                            <br />
-                            <span class="badge badge-info" data-toggle="tooltip" title="אירוע זה בתשלום נוסף">אירוע בתשלום נוסף - @approved.ExtraCharge ש"ח</span>
-                        }
-                    </div>
-                </div>
-            </td>
-            <td class="tw-3 text-left  event-row-@approved.Id.GetNumberFromId()">
-                <span>
-                    <i class="fa fa-fw fa-dice-d20 text-primary" data-toggle="tooltip" title="סוג הפעילות והתת סוג שלה"></i>
+        <tr class="event-row-filter" 
+            data-event="@approved.Id.GetNumberFromId()"
+            data-day="@approved.Day?.Id,@approved.TimeSlot?.From.ToString("H:mm", CultureInfo.InvariantCulture)"
+            data-activity="@approved.Activity?.Id,@approved.SubActivity?.Id">
+            <th colspan="100%"></th>
+        </tr>
+        <tr class="top-row event-row event-row-@approved.Id.GetNumberFromId()" style="font-size: 1.5em;">
+            <td colspan="3" class="text-right text-middle tw-10">
+                <span class="pull-left text-left">
                     @if (approved.Activity != null)
                     {
-                        <span class="text-primary text-bold">
+                        <span class="badge badge-dragon badge-offset-left text-bold">
+                            <i class="fa fa-fw fa-dice-d6" data-toggle="tooltip" title="סוג הפעילות"></i>
                             @approved.Activity.Name
                         </span>
                     }
@@ -71,14 +40,50 @@
                     @if (approved.SubActivity != null)
                     {
                         <br />
-                        @approved.SubActivity.Name
+                        <span class="badge badge-dragon badge-offset-left">
+                            <i class="fa fa-fw fa-dice-d6" data-toggle="tooltip" title="סוג פעילות משנה"></i>
+                            @approved.SubActivity.Name
+                        </span>
                     }
 
                 </span>
+                @if (isSelectable)
+                {
+                    <span class="checkboxes-container">
+                        <div class="checkboxes">
+                            <div class="check">
+                                <input id="event-check-@approved.Id.GetNumberFromId()" type="checkbox" onChange="checkbox('@approved.Id.GetNumberFromId()')" />
+                                <label for="event-check-@approved.Id.GetNumberFromId()">
+                                    <div class="box"><i class="fa fa-check"></i></div>
+                                </label>
+                            </div>
+                        </div>
+                    </span>
+                }
+                @{
+                    var moneyBadgeClass = isSelectable ? "" : "badge-offset-right";
+                }
+                @if (approved.IsFree)
+                {
+                    <span class="badge badge-dragon @moneyBadgeClass" data-toggle="tooltip" title="אירוע זה לא נספר במכסת האירוע של הכרטיס"><i class="fa fa-fw fa-shekel-sign"></i> אירוע חופשי</span>
+                    <br />
+                }
+                @if (approved.ExtraCharge > 0)
+                {
+                    <span class="badge badge-dragon @moneyBadgeClass" data-toggle="tooltip" title="אירוע זה בתשלום נוסף"><i class="fa fa-fw fa-shekel-sign"></i> אירוע בתשלום נוסף - @approved.ExtraCharge ש" ח</span>
+                    <br />
+                }
+
+                <span class="text-bold">
+                    @approved.Name
+                </span>
+
+
             </td>
+
         </tr>
-        <tr class="text-right event-row-@approved.Id.GetNumberFromId()" style="font-size: 1.25em;">
-            <td class="tw-4">
+        <tr class="event-row event-row-@approved.Id.GetNumberFromId()" style="font-size: 1.25em;">
+            <td class="tw-6 text-center">
                 @if (approved.Day != null)
                 {
                     <span>
@@ -107,17 +112,17 @@
                     </span>
                 }
             </td>
-            <td class="tw-4">
+            <td class="tw-6 text-center">
                 <i class="fa fa-fw fa-user-circle" data-toggle="tooltip" title="מנחי האירוע"></i>
                 @foreach (var host in approved.GameHosts)
                 {
-                    @host.FullName
+                    @host?.FullName
                 }
-
-
-            </td>
-            <td class="tw-4">
-
+                @if (approved.GameHosts.Any(x => x != null) == false)
+                {
+                    <span>טרם נקבע</span>
+                }
+                <br/>
                 @{
                     var seatRatio = approved.SeatsAvailable / (double)approved.SeatsCapacity;
                     var seatTitle = "נותרו מקומות פנויים";
@@ -142,7 +147,7 @@
                    class="fa fa-fw fa-child"></i> @approved.AgeGroup.GetDescription()
             </td>
         </tr>
-        <tr class="bottom-row text-right event-row-@approved.Id.GetNumberFromId()" style="font-size: 1.25em;">
+        <tr class="bottom-row text-right event-row event-row-@approved.Id.GetNumberFromId()" style="font-size: 1.25em;">
             <td colspan="100%" class="text-right">
                 <div class="text-center"
                      data-toggle="collapse" href="#details-@approved.Id.GetNumberFromId()"
@@ -151,7 +156,7 @@
                         <i class="fa fa-fw fa-info-circle"></i> תיאור האירוע
                     </div>
                 </div>
-                <div class="card card-gray collapse" id="details-@approved.Id.GetNumberFromId()">
+                <div class="card card-orange collapse" id="details-@approved.Id.GetNumberFromId()">
                     <strong>@approved.Name: </strong>
                     @approved.Description
                 </div>

@@ -17,6 +17,6 @@ namespace DragonCon.Features.Participant.Personal
         Task<Answer> UpdateDetails(DetailsUpdateViewModel viewModel);
 
         // Register Events
-        DisplaySelectableEventsViewModel BuildEvents(string forUserId, IDisplayPagination buildForGateway, DisplayEventsViewModel.Filters activeFilters = null);
+        DisplaySelectableEventsViewModel BuildEvents(string forUserId);
     }
 }

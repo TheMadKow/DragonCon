@@ -18,37 +18,14 @@ namespace DragonCon.RavenDB.Gateways.Conventions
         {
         }
 
-        public DisplayEventsViewModel BuildEvents(IDisplayPagination pagination, DisplayEventsViewModel.Filters filters = null)
+        public DisplayEventsViewModel BuildEvents()
         {
             var events = Session.Query<Events_BySeatsAgeAndEndTime.Result, Events_BySeatsAgeAndEndTime>()
                 .Include(x => x.DayId)
                 .Include(x => x.EventId)
                 .Where(x => x.Status == EventStatus.Approved)
                 .AsQueryable();
-            if (filters != null)
-            {
-                if (filters.HideCompleted)
-                {
-                    // TODO
-                }
-
-                if (filters.HideTaken)
-                {
-                    events = events.Where(x => x.SeatsAvailable > 1);
-                }
-
-                if (filters.StartTime.IsNotEmptyString())
-                {
-                    // TODO
-                }
-
-                if (filters.ActivitySelection.IsNotEmptyString())
-                {
-                    // TODO
-                }
-            }
-
-            events = events.Skip(pagination.SkipCount).Take(pagination.ResultsPerPage);
+         
             var result = events.ToList();
 
             var realEvents = Session
@@ -67,8 +44,7 @@ namespace DragonCon.RavenDB.Gateways.Conventions
             var stats = events.ToDictionary(x => x.EventId, x => x);
 
             var viewModel = new DisplayEventsViewModel();
-            viewModel.Pagination =
-                DisplayPagination.BuildForView(result.Count, pagination.SkipCount, pagination.ResultsPerPage);
+
             foreach (var eventWrapper in wrappers)
             {
                 var seats = stats[eventWrapper.Inner.Id];

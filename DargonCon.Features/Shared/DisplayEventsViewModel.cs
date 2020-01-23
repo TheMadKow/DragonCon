@@ -9,17 +9,6 @@ namespace DragonCon.Features.Shared
 {
     public class DisplayEventsViewModel
     {
-        public class Filters
-        {
-            public string StartTime { get; set; } = string.Empty;
-            public string ActivitySelection { get; set; } = string.Empty;
-            public bool HideCompleted { get; set; } = false;
-            public bool HideTaken { get; set; } = false;
-        }
-
-        public IDisplayPagination Pagination { get; set; } 
-        public Filters ActiveFilters { get; set; } = new Filters();
-
         public List<DisplayEventViewModel> Events { get; set; } = new List<DisplayEventViewModel>();
     }
 

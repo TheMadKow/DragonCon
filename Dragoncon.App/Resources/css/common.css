@@ -73,16 +73,15 @@
 
 .dragon-readmore-btn {
     min-width: 200px;
-    background: #efefef;
+    background: #ffd6b3;
     color: black;
     font-weight: bold;
     border-radius: 0;
 }
 
     .dragon-readmore-btn:hover {
-        background: #9b9b9b;
+        background: #ff7600;
         color: black;
-        text-decoration: underline white !important;
     }
 
 
@@ -253,6 +252,21 @@ a.dragon-organge-link {
         padding-top: 6px;
         padding-bottom: 6px;
     }
+
+
+.badge-dragon {
+    color: #fff;
+    background-color: #ff7600;
+}
+
+.badge-offset-left {
+    margin-left: -18px;
+}
+
+
+.badge-offset-right {
+    margin-right: -18px;
+}
 
 
 .text-middle {

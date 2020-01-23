@@ -4,6 +4,6 @@ namespace DragonCon.Features.Convention.Events
 {
     public interface IDisplayEventsGateway : IGateway
     {
-        DisplayEventsViewModel BuildEvents(IDisplayPagination pagination, DisplayEventsViewModel.Filters filters = null);
+        DisplayEventsViewModel BuildEvents();
     }
 }

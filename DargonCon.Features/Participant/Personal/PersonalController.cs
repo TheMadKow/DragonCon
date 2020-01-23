@@ -179,17 +179,9 @@ namespace DragonCon.Features.Participant.Personal
 
         #region RegisterEvents
 
-        public IActionResult EventsRegister(int page = 0, int perPage = ResultsPerPage)
+        public IActionResult EventsRegister()
         {
-            var viewModel = Gateway.BuildEvents(Actor.Me.Id, DisplayPagination.BuildForGateway(page, perPage));
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public IActionResult EventsRegister(DisplayEventsViewModel.Filters ActiveFilters,
-            int page = 0, int perPage = ResultsPerPage)
-        {
-            var viewModel = Gateway.BuildEvents(Actor.Me.Id, DisplayPagination.BuildForGateway(page, perPage), ActiveFilters);
+            var viewModel = Gateway.BuildEvents(Actor.Me.Id);
             return View(viewModel);
         }
         #endregion

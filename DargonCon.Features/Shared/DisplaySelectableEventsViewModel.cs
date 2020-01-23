@@ -6,11 +6,6 @@ namespace DragonCon.Features.Shared
     {
         public DisplaySelectableEventsViewModel()
         {
-            ActiveFilters = new Filters
-            {
-                HideCompleted = true,
-                HideTaken = true,
-            };
         }
 
         public List<string> EventIdsSelected = new List<string>();
