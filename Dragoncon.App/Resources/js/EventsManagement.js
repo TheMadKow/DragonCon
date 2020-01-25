@@ -42,3 +42,9 @@ function QuickEventUpdate(jsonData) {
 
     $modal.modal();
 }
+
+
+function ViewEventHistory(eventId) {
+    AjaxModal('#event-history-ajax', `/Management/Events/ViewEventHistory?eventId=${eventId}`);
+}
+

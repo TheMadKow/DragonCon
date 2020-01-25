@@ -20,7 +20,7 @@
             continue;
         }
 
-        <tr class="event-row-filter" 
+        <tr class="event-row-filter"
             data-event="@approved.Id.GetNumberFromId()"
             data-day="@approved.Day?.Id,@approved.TimeSlot?.From.ToString("H:mm", CultureInfo.InvariantCulture)"
             data-activity="@approved.Activity?.Id,@approved.SubActivity?.Id">
@@ -31,7 +31,7 @@
                 <span class="pull-left text-left">
                     @if (approved.Activity != null)
                     {
-                        <span class="badge badge-dragon badge-offset-left text-bold">
+                        <span class="badge event-badge badge-offset-left text-bold">
                             <i class="fa fa-fw fa-dice-d6" data-toggle="tooltip" title="סוג הפעילות"></i>
                             @approved.Activity.Name
                         </span>
@@ -40,7 +40,7 @@
                     @if (approved.SubActivity != null)
                     {
                         <br />
-                        <span class="badge badge-dragon badge-offset-left">
+                        <span class="badge event-badge badge-offset-left">
                             <i class="fa fa-fw fa-dice-d6" data-toggle="tooltip" title="סוג פעילות משנה"></i>
                             @approved.SubActivity.Name
                         </span>
@@ -65,12 +65,12 @@
                 }
                 @if (approved.IsFree)
                 {
-                    <span class="badge badge-dragon @moneyBadgeClass" data-toggle="tooltip" title="אירוע זה לא נספר במכסת האירוע של הכרטיס"><i class="fa fa-fw fa-shekel-sign"></i> אירוע חופשי</span>
+                    <span class="badge event-badge @moneyBadgeClass" data-toggle="tooltip" title="אירוע זה לא נספר במכסת האירוע של הכרטיס"><i class="fa fa-fw fa-shekel-sign"></i> אירוע חופשי</span>
                     <br />
                 }
                 @if (approved.ExtraCharge > 0)
                 {
-                    <span class="badge badge-dragon @moneyBadgeClass" data-toggle="tooltip" title="אירוע זה בתשלום נוסף"><i class="fa fa-fw fa-shekel-sign"></i> אירוע בתשלום נוסף - @approved.ExtraCharge ש" ח</span>
+                    <span class="badge event-badge @moneyBadgeClass" data-toggle="tooltip" title="אירוע זה בתשלום נוסף"><i class="fa fa-fw fa-shekel-sign"></i> אירוע בתשלום נוסף - @approved.ExtraCharge ש" ח</span>
                     <br />
                 }
 
@@ -83,7 +83,7 @@
 
         </tr>
         <tr class="event-row event-row-@approved.Id.GetNumberFromId()" style="font-size: 1.25em;">
-            <td class="tw-6 text-center">
+            <td class="tw-4 text-center">
                 @if (approved.Day != null)
                 {
                     <span>
@@ -104,15 +104,8 @@
                     </span>
                 }
 
-                @if (approved.Hall != null)
-                {
-                    <span>
-                        <i class="fa fa-fw fa-dungeon" data-toggle="tooltip" title="המיקום בכנס"></i> @approved.Hall?.Name - שולחן @approved.HallTable
-                        <br />
-                    </span>
-                }
             </td>
-            <td class="tw-6 text-center">
+            <td class="tw-4 text-center">
                 <i class="fa fa-fw fa-user-circle" data-toggle="tooltip" title="מנחי האירוע"></i>
                 @foreach (var host in approved.GameHosts)
                 {
@@ -122,7 +115,17 @@
                 {
                     <span>טרם נקבע</span>
                 }
-                <br/>
+                <br />
+                @if (approved.Hall != null)
+                {
+                    <span>
+                        <i class="fa fa-fw fa-dungeon" data-toggle="tooltip" title="המיקום בכנס"></i> @approved.Hall?.Name - שולחן @approved.HallTable
+                        <br />
+                    </span>
+                }
+            </td>
+            <td class="tw-4 text-center">
+
                 @{
                     var seatRatio = approved.SeatsAvailable / (double)approved.SeatsCapacity;
                     var seatTitle = "נותרו מקומות פנויים";
@@ -149,16 +152,60 @@
         </tr>
         <tr class="bottom-row text-right event-row event-row-@approved.Id.GetNumberFromId()" style="font-size: 1.25em;">
             <td colspan="100%" class="text-right">
-                <div class="text-center"
-                     data-toggle="collapse" href="#details-@approved.Id.GetNumberFromId()"
-                     role="button" aria-expanded="false" aria-controls="details-@approved.Id.GetNumberFromId()">
-                    <div class="btn dragon-readmore-btn">
-                        <i class="fa fa-fw fa-info-circle"></i> תיאור האירוע
+                <div class="row">
+                    <div class="col-6 text-right">
+                        <div class="btn toggle-content-btn toggle-content-btn btn-large"
+                             data-section="desc-@approved.Id.GetNumberFromId()">
+                            <i class="fa fa-fw fa-comment-alt"
+                               data-toggle="tooltip" title="הצגה והסתרה של תיאור האירוע"></i> תיאור האירוע
+                        </div>
+                    </div>
+                    <div class="col-6 text-left"> 
+                        <div class="btn toggle-content-btn toggle-content-btn btn-large"
+                             data-section="share-@approved.Id.GetNumberFromId()">
+                            <i class="fa fa-fw fa-share-alt"
+                               data-toggle="tooltip" title="הצגה והסתרה של אפשרויות השיתוף"></i> שיתוף האירוע
+                        </div>
                     </div>
                 </div>
-                <div class="card card-orange collapse" id="details-@approved.Id.GetNumberFromId()">
-                    <strong>@approved.Name: </strong>
+                <div class="card toggle-content toggle-content-hidden" id="desc-@approved.Id.GetNumberFromId()">
+                    <strong>תיאור האירוע</strong><br/>
                     @approved.Description
+                </div>
+                <div class="card toggle-content toggle-content-hidden" id="share-@approved.Id.GetNumberFromId()">
+                    <strong>שיתוף האירוע</strong><br/>
+                    <ul class="nav nav-pills">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fab fa-fw fa-facebook"></i>
+                                שיתוף בפייסבוק
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fab fa-fw fa-twitter"></i>
+                                שיתוף בטוויטר
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fab fa-fw fa-instagram"></i>
+                                שיתוף באינסטרגרם
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-fw fa-at"></i>
+                                שיתוף במייל
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-fw fa-copy"></i>
+                                העתקת הקישור
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </td>
         </tr>

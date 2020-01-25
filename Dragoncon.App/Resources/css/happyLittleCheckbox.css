@@ -24,7 +24,7 @@
     .checkboxes-container .check input:checked + label .box {
         -webkit-animation: animOnTransform 0.85s 1 forwards;
         animation: animOnTransform 0.85s 1 forwards;
-        background: #28a745;
+        background: #289eff;
     }
 
         .checkboxes-container .check input:checked + label .box i {
@@ -66,7 +66,7 @@
     }
 
         .checkboxes-container .check label .box:hover {
-            background: #28a74575;
+            background: #289eff75;
         }
 
         .checkboxes-container .check label .box i {

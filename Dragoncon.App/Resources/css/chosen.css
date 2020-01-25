@@ -71,13 +71,13 @@
  }
 
 .chosen-container .chosen-single .group-name, .chosen-container .search-choice .group-name {
-    font-weight: 500;
+    font-weight: 600;
     color: #1400b7;
 }
 
 .group-result {
     color: #1400b7;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
 }
 
 .chosen-container-single .chosen-single {

@@ -1,0 +1,80 @@
+﻿.table-events tr.selected > td {
+    background: #ebf6ff;
+    -webkit-transition: background 500ms ease;
+    transition: background 500ms ease;
+}
+
+.table-events {
+    border-collapse: separate;
+    border-spacing: 0 0;
+}
+
+.table-events td {
+    border-top: none !important;
+    background-color: white;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+
+.event-badge {
+    color: #fff;
+    border-radius: 0;
+    background-color: #ff7600;
+}
+
+.toggle-content-btn {
+    min-width: 200px;
+    color: #000;
+    border-radius: 0;
+    font-size: 0.9em;
+}
+
+.toggle-content-btn.btn-large {
+    min-width: 450px;
+}
+
+    .toggle-content-btn:hover {
+        background: #ff7600;
+        font-weight: bold;
+        color: white;
+    }
+
+    .toggle-content-btn.active {
+        background: #ff7600;
+        font-weight: bold;
+        color: white;
+    }
+
+.toggle-content-hidden {
+    display: none;
+}
+
+.toggle-content {
+    border: none;
+    -ms-border-radius: 0;
+    margin-bottom: 5px;
+    border-radius: 0;
+    padding: 15px;
+    border-top: #ff7600 2px solid;
+    background-color: #ff760005;
+}
+
+
+.card-gray-fixed-bottom {
+    -ms-border-radius: 0;
+    border-radius: 0;
+    background: #f7f7f7;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    border: 0;
+    border-top: 1px solid #a8a8a8;
+    margin: 0;
+}
+
+    .card-gray-fixed-bottom > .card-body {
+        padding-top: 0;
+        padding-bottom: 0;
+    }

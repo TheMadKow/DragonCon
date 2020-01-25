@@ -5,6 +5,7 @@
 @{
     ViewData["Title"] = "אירועי הכנס";
     var actor = Actor;
+    ViewBag.HideFooter = true;
 }
 
 
@@ -12,21 +13,44 @@
     <div class="card-body text-center">
         @if (Actor.DisplayConvention.Settings.AllowEventsRegistration)
         {
-            <h2 class="text-bold text-success"><i class="fa fa-fw fa-ticket-alt"></i>&nbsp;&nbsp; הרישום המוקדם פתוח!</h2>
+            <h2 class="text-bold">רישום אירועים עבור <span class="dragon-orange-color">@Model.RegisterForName</span></h2>
         }
 
-        <h4>
-
-            סמל לא מובן<i class="fa fa-fw fa-question"></i> אין בעיה - עברו עם העכבר או לחצו עליו.
-        </h4>
-
         @await Html.PartialAsync("_PartialDisplayEventsTable", Model)
+
+
 
     </div>
 </div>
 
+<div class="card card-gray-fixed-bottom" style="padding: 0;">
+    <div class="card-body text-center">
+
+        <div class="row">
+            <div class="col-4">
+                <button type="submit"
+                        style="font-size: 1.1em"
+                        class="btn btn-success btn-save-just-margin">
+                    שמירה
+                </button>
+
+            </div>
+            <div class="col-8">
+                <button type="submit"
+                        style="font-size: 1.1em"
+                        class="btn btn-success btn-save-just-margin text-bold">
+                    שמירה ומעבר לתשלום <i class="fa fa-fw fa-angle-double-left"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
+<br />
+<br />
+<br />
+<br />
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -41,6 +65,9 @@
                 $(".event-row-" + id).removeClass("selected");
             }
         }
+
+
+        SetActiveMenu("nav-personal");
     </script>
 
 }

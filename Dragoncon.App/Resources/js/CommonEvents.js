@@ -25,7 +25,7 @@ function SetupEventDay() {
     setupChosen();
 }
 
+function ToggleEventFeature(feature, ventId) {
 
-function ViewEventHistory(eventId) {
-    AjaxModal('#event-history-ajax', `/Management/Events/ViewEventHistory?eventId=${eventId}`);
+
 }

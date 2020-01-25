@@ -210,7 +210,7 @@ namespace DragonCon.RavenDB.Gateways.Participants
          .Include(x => x.EventId)
          .Where(x => x.Status == EventStatus.Approved)
          .AsQueryable();
-     
+
             var result = events.ToList();
 
             var realEvents = Session
@@ -229,6 +229,11 @@ namespace DragonCon.RavenDB.Gateways.Participants
             var stats = events.ToDictionary(x => x.EventId, x => x);
 
             var viewModel = new DisplaySelectableEventsViewModel();
+            if (forUserId == Actor.Me.Id)
+            {
+                viewModel.RegisterForId = Actor.Me.Id;
+                viewModel.RegisterForName = Actor.Me.FullName;
+            }
 
             foreach (var eventWrapper in wrappers)
             {

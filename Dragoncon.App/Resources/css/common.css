@@ -70,22 +70,7 @@
         text-decoration: underline white !important;
     }
 
-
-.dragon-readmore-btn {
-    min-width: 200px;
-    background: #ffd6b3;
-    color: black;
-    font-weight: bold;
-    border-radius: 0;
-}
-
-    .dragon-readmore-btn:hover {
-        background: #ff7600;
-        color: black;
-    }
-
-
-
+    
 .dragon-btn {
     min-width: 200px;
     font-size: 1.2em;
@@ -101,9 +86,7 @@
         color: black !important;
         text-decoration: underline white !important;
     }
-
-
-
+    
 .dragon-orange-color {
     color: #ff7600;
 }
@@ -233,30 +216,6 @@ a.dragon-organge-link {
 .required:after {
     content: " *";
     color: red;
-}
-
-.table-events tr.selected > td {
-    background: #ebfff0;
-    -webkit-transition: background 500ms ease;
-    transition: background 500ms ease;
-}
-
-.table-events {
-    border-collapse: separate;
-    border-spacing: 0 0;
-}
-
-    .table-events td {
-        border-top: none !important;
-        background-color: white;
-        padding-top: 6px;
-        padding-bottom: 6px;
-    }
-
-
-.badge-dragon {
-    color: #fff;
-    background-color: #ff7600;
 }
 
 .badge-offset-left {

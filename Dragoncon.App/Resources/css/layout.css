@@ -143,16 +143,6 @@
     box-shadow: 0px 7px 47px -21px rgba(0, 0, 0, 0.3);
 }
 
-.card.card-orange {
-    border: none;
-    -ms-border-radius: 0;
-    margin-bottom: 5px;
-    border-radius: 0;
-    padding: 15px;
-    border-top: #ffd6b3 1px solid;
-    border-bottom: #ffd6b3 1px solid;
-    background-color: #ffffff65;
-}
 
 
 .card-paragraph {
