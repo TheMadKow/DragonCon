@@ -1,0 +1,93 @@
+﻿@model DragonCon.Features.Participant.Account.AddShortTermParticipantViewModel
+
+@{
+    ViewData["Title"] = "אירועי הכנס";
+    var actor = Actor;
+    ViewBag.HideFooter = true;
+}
+
+@await Html.PartialAsync("_PartialBack")
+
+<div class="card card-gray-float" style="padding: 0; margin-top: 20px;">
+    <div class="card-body">
+        @if (Actor.DisplayConvention.Settings.AllowEventsRegistration)
+        {
+            <div class="text-center">
+                <h2 class="text-bold">רישום חברים או בני משפחה</h2>
+            </div>
+        }
+
+        <form id="add-short-term-form"
+              asp-area="Participant" asp-controller="Personal" asp-action="AddShortTermPost" method="post" class="card-form">
+            <div class="col">
+                <div class="row">
+                    <div class="form-group col-12">
+                        <label class="required">שם מלא</label>
+                        <input value="@Model.FullName" name="FullName" class="form-control" placeholder="שם מלא " required>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="form-group col-4">
+                        <label class="required">שנת לידה </label>
+                        <br />
+                        <input value="@Model.YearOfBirth" name="YearOfBirth" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" required />
+                    </div>
+                    <div class="form-group col-4">
+                        <label class="required">טלפון</label>
+                        <input value="@Model.PhoneNumber" name="PhoneNumber" type="tel" class="form-control" placeholder="טלפון ">
+                    </div>
+
+                </div>
+
+                <input id="should-continue" type="text" asp-for="ShouldContinue" />
+
+                <label class="required"></label>
+                <label>שדות חובה</label>
+
+
+            </div>
+        </form>
+
+
+
+    </div>
+</div>
+
+<div class="card card-gray-fixed-bottom" style="padding: 0;">
+    <div class="card-body text-center">
+
+        <div class="row">
+            <div class="col-4">
+                <button onclick="postForm('False')"
+                        style="font-size: 1.3em"
+                        class="btn btn-success btn-save-just-margin">
+                    שמירה
+                </button>
+
+            </div>
+            <div class="col-8">
+                <button onclick="postForm('True')"
+                        style="font-size: 1.3em"
+                        class="btn btn-success btn-save-just-margin text-bold">
+                    שמירה ומעבר לבחירת אירועים <i class="fa fa-fw fa-chevron-left"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="bottom-placeholder"></div>
+
+@section Scripts {
+    <script>
+        function postForm(toContinue) {
+            $("#should-continue").val(toContinue);
+            $("#add-short-term-form").submit();
+        }
+        SetActiveMenu("nav-personal");
+    </script>
+
+}

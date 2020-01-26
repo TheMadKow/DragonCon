@@ -8,6 +8,7 @@
     ViewBag.HideFooter = true;
 }
 
+@await Html.PartialAsync("_PartialBack")
 
 <div class="card card-gray-float" style="padding: 0;">
     <div class="card-body text-center">
@@ -29,7 +30,7 @@
         <div class="row">
             <div class="col-4">
                 <button type="submit"
-                        style="font-size: 1.1em"
+                        style="font-size: 1.3em"
                         class="btn btn-success btn-save-just-margin">
                     שמירה
                 </button>
@@ -37,9 +38,9 @@
             </div>
             <div class="col-8">
                 <button type="submit"
-                        style="font-size: 1.1em"
+                        style="font-size: 1.3em"
                         class="btn btn-success btn-save-just-margin text-bold">
-                    שמירה ומעבר לתשלום <i class="fa fa-fw fa-angle-double-left"></i>
+                    שמירה ומעבר לתשלום <i class="fa fa-fw fa-chevron-left"></i>
                 </button>
             </div>
         </div>
@@ -47,10 +48,9 @@
 </div>
 
 
-<br />
-<br />
-<br />
-<br />
+<div style="height: 100px;"></div>
+
+
 @section Scripts {
     <script>
         $(document).ready(function () {

@@ -1,4 +1,4 @@
-﻿@if (ViewBag.HideFooter !=  null && ViewBag.HideFooter == false)
+﻿@if (ViewBag.HideFooter == null || ViewBag.HideFooter == false)
 {
     <footer style="font-size: 1.1em;" class="d-print-none">
         <div class="right-to-left">
@@ -23,21 +23,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link dragon-organge-link"
+                    <a class="nav-link dragon-orange-link"
                        asp-area="Convention"
                        asp-controller="Home"
                        asp-action="Usage">תנאי שימוש ופרטיות</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link dragon-organge-link"
+                    <a class="nav-link dragon-orange-link"
                        asp-area="Convention"
                        asp-controller="Home"
                        asp-action="SiteMap">מפת האתר</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link dragon-organge-link"
+                    <a class="nav-link dragon-orange-link"
                        asp-area="Convention"
                        asp-controller="Home"
                        asp-action="Index"
@@ -46,7 +46,7 @@
                 @if (Actor.HasAnySystemRole)
                 {
                     <li class="nav-item">
-                        <a href="#" class="nav-link dragon-organge-link">זמן @Actor.LoadTimeInMs מ"ש</a>
+                        <a href="#" class="nav-link dragon-orange-link">זמן @Actor.LoadTimeInMs מ"ש</a>
                     </li>
 
                 }

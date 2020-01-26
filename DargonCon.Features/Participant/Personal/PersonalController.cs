@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DragonCon.Features.Participant.Account;
 using DragonCon.Features.Shared;
+using DragonCon.Modeling.Helpers;
 using DragonCon.Modeling.Models.Common;
 using DragonCon.Modeling.Models.Identities;
 using Microsoft.AspNetCore.Authorization;
@@ -177,17 +178,85 @@ namespace DragonCon.Features.Participant.Personal
         }
         #endregion
 
-        #region RegisterEvents
-
-        public IActionResult EventsRegister()
+        #region Add/Update Short Term
+        
+        [HttpGet]
+        public IActionResult AddOrUpdateShortTerm(AddShortTermParticipantViewModel viewModel = null)
         {
-            var viewModel = Gateway.BuildEvents(Actor.Me.Id);
+            if (viewModel == null)
+                viewModel = new AddShortTermParticipantViewModel();
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateShortTerm(string participantId)
+        {
+            var shortTrem = await Gateway.GetShortTerm(participantId);
+            var vm = new AddShortTermParticipantViewModel
+            {
+                CreatorId = shortTrem.CreatedById,
+                ParticipantId = shortTrem.Id,
+                YearOfBirth = shortTrem.YearOfBirth,
+                FullName = shortTrem.FullName,
+                PhoneNumber = shortTrem.PhoneNumber
+            };
+
+            return RedirectToAction("AddOrUpdateShortTerm", routeValues: vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddOrUpdateShortTermPost(AddShortTermParticipantViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var ans = await Gateway.AddOrUpdateShortTerm(viewModel);
+                if (ans.AnswerType == AnswerType.Error)
+                {
+                    SetUserError("תקלה בהוספה", ParseModelErrors());
+                    return View("AddOrUpdateShortTerm", viewModel);
+                }
+                else
+                {
+                    if (viewModel.ShouldContinue)
+                    {
+                        return RedirectToAction("EventsRegister", routeValues: new
+                        {
+                            forUserId = ans.Message
+                        });
+                    }
+                    else
+                    {
+                        return RedirectToAction("UpdateShortTerm", routeValues: new
+                        {
+                            participantId = ans.Message
+                        });
+                    }
+                }
+            }
+            else
+            {
+                SetUserError("תקלה בהוספה", ParseModelErrors());
+                return View("AddOrUpdateShortTerm", viewModel);
+            }
+        }
+        #endregion
+
+        #region Register Events
+
+        public IActionResult EventsRegister(string forUserId = null)
+        {
+            if (forUserId.IsEmptyString())
+                forUserId = Actor.Me.Id;
+
+            var viewModel = Gateway.BuildEvents(forUserId);
             return View(viewModel);
         }
         #endregion
 
+        #region Buy Tickets 
+        #endregion
+        
         // TODO
-        // Register (Me)
-        // Register (Guest)
     }
 }

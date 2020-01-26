@@ -86,14 +86,11 @@
             var topUpdates = Actor.DisplayDynamics.Updates.Take(maxUpdatesShown).ToList();
         }
         @await Html.PartialAsync("_PartialUpdates", topUpdates)
-        @if (Actor.DisplayDynamics.Updates.Count > maxUpdatesShown)
-        {
 
-            <hr />
-            <div class="text-center">
-                <a asp-area="Convention" asp-controller="Home" asp-action="Updates" class="btn dragon-btn">לצפיה בכל העדכונים</a>
-            </div>
-        }
+        <hr />
+        <div class="text-center">
+            <a asp-area="Convention" asp-controller="Home" asp-action="Updates" class="btn dragon-btn">לצפיה בכל העדכונים</a>
+        </div>
 
     </div>
 </div>

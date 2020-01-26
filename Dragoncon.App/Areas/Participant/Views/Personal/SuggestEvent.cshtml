@@ -3,6 +3,7 @@
 @model DragonCon.Features.Participant.Personal.SuggestEventViewModel
 @{
     ViewBag.Title = "הגשת אירוע";
+    ViewBag.HideFooter = true;
 }
 
 @await Html.PartialAsync("_PartialBack")
@@ -25,7 +26,7 @@
                 <li>
                     @await Html.PartialAsync("_PartialBulletin")
                     מומלץ לעבור על
-                    <a class="dragon-organge-link" href="@Actor.DisplayDynamics.Linkage.SuggestGuidelinesLink" target="_blank">ההנחיות להגשת קדימונים.</a>
+                    <a href="@Actor.DisplayDynamics.Linkage.SuggestGuidelinesLink" target="_blank">ההנחיות להגשת קדימונים.</a>
                 </li>
             }
             @if (Actor.DisplayDynamics.Linkage.SuggestGuidelinesLink.IsNotEmptyString())
@@ -33,7 +34,7 @@
                 <li>
                     @await Html.PartialAsync("_PartialBulletin")
                     רוצים להריץ משחק תפקידים, אבל אין לכם הרפתקה כתובה?
-                    <a class="dragon-organge-link" href="@Actor.DisplayDynamics.Linkage.SuggestPairingLink" target="_blank">כתבו לנו וננסה לעזור.</a>
+                    <a href="@Actor.DisplayDynamics.Linkage.SuggestPairingLink" target="_blank">כתבו לנו וננסה לעזור.</a>
                 </li>
             }
 

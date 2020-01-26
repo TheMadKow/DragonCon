@@ -56,6 +56,7 @@ namespace DragonCon.Features.Participant.Account
 
     }
 
+
     public class AccountRegisterViewModel
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "יש להזין שם מלא")]
@@ -77,5 +78,24 @@ namespace DragonCon.Features.Participant.Account
         [Range(1900, int.MaxValue, ErrorMessage = "ניתן להזין מספרים חיוביים מעל 1900")]
         public int YearOfBirth { get; set; }
         public bool IsAllowingPromotions { get; set; }
+    }
+
+
+    public class AddShortTermParticipantViewModel
+    {
+        public string ParticipantId { get; set; }
+        public string CreatorId { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "יש להזין שם מלא")]
+        public string FullName { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "נא להזין מספר חוקי")]
+        [Phone(ErrorMessage = "נא להזין מספר חוקי")]
+        public string PhoneNumber { get; set; }
+
+        [Range(1900, int.MaxValue, ErrorMessage = "ניתן להזין מספרים חיוביים מעל 1900")]
+        public int YearOfBirth { get; set; }
+
+        public bool ShouldContinue = false;
     }
 }

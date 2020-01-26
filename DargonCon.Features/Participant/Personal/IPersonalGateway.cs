@@ -16,6 +16,11 @@ namespace DragonCon.Features.Participant.Personal
         Task<Answer> ChangePassword(PasswordChangeViewModel viewmodel);
         Task<Answer> UpdateDetails(DetailsUpdateViewModel viewModel);
 
+        // Register Short Terms
+        Task<Answer> AddOrUpdateShortTerm(AddShortTermParticipantViewModel viewmodel);
+        Task<ShortTermParticipant> GetShortTerm(string participantId);
+
+
         // Register Events
         DisplaySelectableEventsViewModel BuildEvents(string forUserId);
     }

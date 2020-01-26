@@ -16,7 +16,7 @@
     <div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
         <div class="card-deck">
             @if (Actor.DisplayConvention.Settings.AllowEventsRegistration ||
-           (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
+         (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
             {
                 <div class="card  col-3 clickable " onclick="RegisterEvents()">
                     <div class="card-body text-center ">
@@ -26,7 +26,7 @@
             }
 
             @if (Actor.DisplayConvention.Settings.AllowEventsRegistration ||
-           (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
+         (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
             {
                 <div class="card clickable  col-3">
                     <div class="card-body text-center ">
@@ -36,7 +36,7 @@
             }
 
             @if (Actor.DisplayConvention.Settings.AllowEventsSuggestions ||
-           (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
+         (Actor.DisplayConvention.Settings.AllowManagementTests && Actor.HasAnySystemRole))
             {
                 <div class="card clickable  col-3" onclick="SuggestEvent()">
                     <div class="card-body text-center ">
@@ -76,9 +76,19 @@
 }
 
 <div class="text-center d-print-none">
-    <a class="btn dragon-btn" onclick="window.print();">
-        <i class="fa fa-fw fa-print"></i> הדפסת המידע שלי
-    </a>
+    <div class="row">
+        <span class="col-6">
+            <a class="btn dragon-btn" onclick="window.print();">
+                <i class="fa fa-fw fa-print"></i> הדפסת המידע שלי
+            </a>
+        </span>
+
+        <div class="col-6">
+            <a class="btn dragon-btn" asp-area="Participant" asp-controller="Personal" asp-action="AddOrUpdateShortTerm">
+                <i class="fa fa-fw fa-users"></i> רישום חברים או משפחה
+            </a>
+        </div>
+    </div>
 </div>
 
 <div class="card card card-gray-float d-print-none">
