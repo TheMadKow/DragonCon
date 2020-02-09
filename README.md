@@ -1,7 +1,7 @@
 # Welcome DragonCon project
 
 ## NOTE 
-Project got suspanded and isn't final.
+Project got suspended and isn't final - use with care.
 
 ## About DragonCon
 [DragonCon](http://dragoncon.co.il) is an Israeli convention for tabletop gaming.<br>
